@@ -1,0 +1,16 @@
+{
+  "title": "સભ્યોની ડિરેક્ટરી",
+  "title.communityMembers": "સમુદાય સભ્યોની ડિરેક્ટરી",
+  "search.placeholder": "નામ, શહેર, રાજ્ય અથવા પિનકોડથી શોધો",
+  "filters.state": "રાજ્ય",
+  "filters.city": "શહેર",
+  "filters.pincode": "પિનકોડ",
+  "sections.members": "સભ્યો",
+  "sections.communityMembers": "સભ્યો",
+  "actions.loadMore": "વધુ સભ્યો લોડ કરો",
+  "avatar.fallback": "સમુદાય સભ્ય",
+  "total.suffix": "કુલ",
+  "empty.title": "કોઈ સભ્યો મળ્યા નથી",
+  "empty.communityMembersTitle": "કોઈ સમુદાય સભ્યો મળ્યા નથી",
+  "empty.description": "બીજા શોધ અથવા ફિલ્ટર જોડાણ અજમાવો."
+}

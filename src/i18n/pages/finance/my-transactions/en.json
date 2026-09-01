@@ -1,0 +1,12 @@
+{
+  "title": "My Transactions",
+  "summary.title": "Total Contribution",
+  "summary.updated": "Last updated: {date}",
+  "summary.notUpdated": "No transactions yet",
+  "tabs.all": "All Activities",
+  "tabs.donations": "Donations",
+  "tabs.events": "Events",
+  "tabs.subscriptions": "Subscriptions",
+  "section.recent": "Recent Transactions",
+  "cta.receipt": "Receipt"
+}

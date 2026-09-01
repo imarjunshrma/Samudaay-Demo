@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#2e150b",
+              "surface-bright": "#fdf9f6",
+              "secondary-container": "#ff8928",
+              "surface-container-low": "#f7f3f0",
+              "on-surface": "#1c1b1a",
+              background: "#fdf9f6",
+              "surface-container-high": "#ebe7e4",
+              "on-tertiary-container": "#56c6bc",
+              "on-background": "#1c1b1a",
+              "inverse-surface": "#31302f",
+              "on-secondary-fixed-variant": "#723600",
+              secondary: "#964900",
+              error: "#ba1a1a",
+              "on-surface-variant": "#504441",
+              surface: "#fdf9f6",
+              "on-secondary-container": "#642f00",
+              "tertiary-fixed": "#87f5ea",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#f4f0ed",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#00504b",
+              "on-secondary-fixed": "#311300",
+              "surface-container-highest": "#e5e2df",
+              "on-primary-container": "#d9ab9b",
+              "on-tertiary": "#ffffff",
+              "surface-dim": "#ddd9d6",
+              "on-primary": "#ffffff",
+              "primary-fixed-dim": "#ebbcac",
+              "primary-container": "#603f33",
+              outline: "#827470",
+              "surface-container": "#f1edea",
+              "primary-fixed": "#ffdbcf",
+              primary: "#46291e",
+              "on-error-container": "#93000a",
+              "tertiary-fixed-dim": "#69d8ce",
+              "secondary-fixed-dim": "#ffb786",
+              "on-secondary": "#ffffff",
+              "secondary-fixed": "#ffdcc6",
+              "surface-variant": "#e5e2df",
+              "on-tertiary-fixed": "#00201d",
+              "on-error": "#ffffff",
+              tertiary: "#003733",
+              "outline-variant": "#d4c3be",
+              "on-primary-fixed-variant": "#603f33",
+              "inverse-primary": "#ebbcac",
+              "on-tertiary-fixed-variant": "#00504b",
+              "surface-tint": "#7a5649",
+            },
+            fontFamily: {
+              headline: ["Newsreader"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+        background-color: #fdf9f6;
+      }
+      h1,
+      h2,
+      h3,
+      .font-serif {
+        font-family: "Newsreader", serif;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-surface text-on-surface antialiased">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-md text-stone-800 dark:text-stone-100 bg-stone-200/20 dark:bg-stone-800/20 border-b border-transparent"
+    >
+      <div
+        class="flex items-center justify-between px-6 py-4 w-full max-w-screen-2xl mx-auto"
+      >
+        <div class="flex items-center gap-4">
+          <button
+            class="material-symbols-outlined p-2 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-colors rounded-full"
+            data-icon="arrow_back"
+          >
+            arrow_back
+          </button>
+          <h1
+            class="text-xl font-bold text-stone-900 dark:text-stone-50 tracking-tight font-serif"
+          >
+            Client Onboarding
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            class="material-symbols-outlined p-2 hover:bg-stone-200/50 dark:hover:bg-stone-800/50 transition-colors rounded-full"
+            data-icon="help"
+          >
+            help
+          </button>
+        </div>
+      </div>
+    </header>
+    <div class="flex pt-16">
+      <!-- NavigationDrawer -->
+      <aside
+        class="fixed left-0 top-0 h-full flex flex-col py-8 bg-stone-100 dark:bg-stone-950 h-screen w-72 border-r-0 mt-16 z-40"
+      >
+        <div class="px-6 mb-8">
+          <h2
+            class="text-lg font-black text-stone-900 dark:text-stone-100 uppercase tracking-tighter"
+          >
+            New Organization
+          </h2>
+        </div>
+        <nav class="flex-1 space-y-1">
+          <a
+            class="flex items-center gap-3 bg-stone-200 dark:bg-stone-800 text-stone-900 dark:text-stone-50 font-bold rounded-r-full px-6 py-3 translate-x-1 transition-transform"
+            href="#"
+          >
+            <span class="material-symbols-outlined" data-icon="domain"
+              >domain</span
+            >
+            <span class="text-sm">Organization Details</span>
+          </a>
+          <a
+            class="flex items-center gap-3 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 px-6 py-3 hover:bg-stone-200/30 dark:hover:bg-stone-800/30 transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined" data-icon="verified_user"
+              >verified_user</span
+            >
+            <span class="text-sm">Licensing &amp; Seats</span>
+          </a>
+          <a
+            class="flex items-center gap-3 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 px-6 py-3 hover:bg-stone-200/30 dark:hover:bg-stone-800/30 transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined" data-icon="palette"
+              >palette</span
+            >
+            <span class="text-sm">Brand Configuration</span>
+          </a>
+          <a
+            class="flex items-center gap-3 text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 px-6 py-3 hover:bg-stone-200/30 dark:hover:bg-stone-800/30 transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined" data-icon="rocket_launch"
+              >rocket_launch</span
+            >
+            <span class="text-sm">Review &amp; Launch</span>
+          </a>
+        </nav>
+      </aside>
+      <!-- Main Content Canvas -->
+      <main class="ml-72 flex-1 px-12 py-20 max-w-5xl mx-auto">
+        <header class="mb-16">
+          <p
+            class="text-secondary font-medium tracking-widest uppercase text-xs mb-2"
+          >
+            Step 1 of 4
+          </p>
+          <h2 class="text-5xl font-serif text-primary leading-tight">
+            Crafting a New Legacy
+          </h2>
+          <p class="text-on-surface-variant text-lg mt-4 max-w-2xl">
+            Initialize the digital presence for a new artisan partner. Every
+            detail here sets the foundation for their bespoke workshop
+            environment.
+          </p>
+        </header>
+        <form class="space-y-24">
+          <!-- Section 1: Organization Details -->
+          <section>
+            <div class="flex items-baseline justify-between mb-8 border-b-0">
+              <h3 class="text-2xl font-serif text-primary">
+                1. Organization Details
+              </h3>
+            </div>
+            <div class="grid grid-cols-2 gap-x-12 gap-y-10">
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                  >Organization Name</label
+                >
+                <input
+                  class="w-full bg-surface-container-low border-0 border-b border-outline-variant/20 px-4 py-4 focus:ring-0 focus:border-primary transition-colors placeholder:text-stone-400"
+                  placeholder="e.g. Heirloom Cordwainers"
+                  type="text"
+                />
+              </div>
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                  >Internal Domain</label
+                >
+                <div class="flex items-center">
+                  <input
+                    class="flex-1 bg-surface-container-low border-0 border-b border-outline-variant/20 px-4 py-4 focus:ring-0 focus:border-primary transition-colors placeholder:text-stone-400"
+                    placeholder="heirloom"
+                    type="text"
+                  />
+                  <span
+                    class="px-4 py-4 bg-surface-container-high text-on-surface-variant text-sm border-b border-outline-variant/20"
+                    >.artisan.studio</span
+                  >
+                </div>
+              </div>
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                  >Primary Contact Name</label
+                >
+                <input
+                  class="w-full bg-surface-container-low border-0 border-b border-outline-variant/20 px-4 py-4 focus:ring-0 focus:border-primary transition-colors placeholder:text-stone-400"
+                  placeholder="Full legal name"
+                  type="text"
+                />
+              </div>
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                  >Administrator Email</label
+                >
+                <input
+                  class="w-full bg-surface-container-low border-0 border-b border-outline-variant/20 px-4 py-4 focus:ring-0 focus:border-primary transition-colors placeholder:text-stone-400"
+                  placeholder="admin@domain.com"
+                  type="email"
+                />
+              </div>
+            </div>
+          </section>
+          <!-- Section 2: Licensing & Seats -->
+          <section class="bg-surface-container p-12 rounded-xl">
+            <div class="flex items-baseline justify-between mb-8">
+              <h3 class="text-2xl font-serif text-primary">
+                2. Licensing &amp; Seats
+              </h3>
+            </div>
+            <div class="grid grid-cols-2 gap-12">
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                  >License Type</label
+                >
+                <select
+                  class="w-full bg-surface-container-lowest border-0 border-b border-outline-variant/20 px-4 py-4 focus:ring-0 focus:border-primary transition-colors appearance-none"
+                >
+                  <option>Artisan Studio Pro</option>
+                  <option>Enterprise Tallow</option>
+                  <option>Master Guild Tier</option>
+                  <option>Legacy Workshop</option>
+                </select>
+              </div>
+              <div class="col-span-2 md:col-span-1">
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+                  >Max User Count</label
+                >
+                <input
+                  class="w-full bg-surface-container-lowest border-0 border-b border-outline-variant/20 px-4 py-4 focus:ring-0 focus:border-primary transition-colors"
+                  type="number"
+                  value="25"
+                />
+              </div>
+            </div>
+          </section>
+          <!-- Section 3: Feature Configuration -->
+          <section>
+            <div class="flex items-baseline justify-between mb-8 border-b-0">
+              <h3 class="text-2xl font-serif text-primary">
+                3. Feature Configuration
+              </h3>
+            </div>
+            <div
+              class="p-8 bg-surface-container-low border border-outline-variant/10 rounded-xl flex items-center justify-between"
+            >
+              <div class="max-w-md">
+                <span class="text-sm font-bold text-primary mb-1 block"
+                  >Allow Sub-communities</span
+                >
+                <p class="text-sm text-on-surface-variant">
+                  Enables the creation of independent nested guilds within this
+                  organization’s workspace.
+                </p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input
+                  checked=""
+                  class="sr-only peer"
+                  type="checkbox"
+                  value=""
+                />
+                <div
+                  class="w-14 h-7 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-secondary"
+                ></div>
+              </label>
+            </div>
+          </section>
+          <!-- Section 4: Brand & Identity -->
+          <section>
+            <div class="flex items-baseline justify-between mb-8 border-b-0">
+              <h3 class="text-2xl font-serif text-primary">
+                4. Brand &amp; Identity
+              </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+              <div>
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4"
+                  >Client Logo Placeholder</label
+                >
+                <div
+                  class="aspect-video bg-surface-container-high rounded-xl flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/40 group hover:border-primary/40 transition-colors cursor-pointer overflow-hidden relative"
+                >
+                  <img
+                    class="absolute inset-0 w-full h-full object-cover opacity-10 group-hover:opacity-20 transition-opacity"
+                    data-alt="Close-up texture of high quality vegetable tanned leather in warm brown tones with visible grain and natural imperfections"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0bjrv1TajvMT0xe_W1p11gOqE2F8rlC3rkH947Wb0URbRX-6Nxt2ItxsOa3x9KOAHcYbdXM7b9PpVx3NbG6ScIdhm2cl6hna6s_3Pol8k0wmAOg-kFpYGT8IVsLjTs-XtxDaIH8WwuXmqsFF1RolLh6csBjbkl04H1L9d6tDoF2vp_NYwApVzUxMNneL-oi4tCGkmVLFD50EG1mrNESZ_-o9ywxXhcRD3mMjCS0pG2DoP6gxwXYzFIwpNB1Pbl1x-HRealyXVpp7J"
+                  />
+                  <span
+                    class="material-symbols-outlined text-4xl text-primary mb-2"
+                    data-icon="upload_file"
+                    >upload_file</span
+                  >
+                  <span class="text-sm text-primary font-medium"
+                    >Click to upload brand asset</span
+                  >
+                  <span
+                    class="text-[10px] text-on-surface-variant uppercase mt-1"
+                    >SVG, PNG, JPG (Max 5MB)</span
+                  >
+                </div>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4"
+                  >Signature Color Palette</label
+                >
+                <div class="grid grid-cols-2 gap-4">
+                  <button
+                    class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-primary rounded-lg"
+                    type="button"
+                  >
+                    <div
+                      class="w-8 h-8 rounded-full bg-primary shadow-sm"
+                    ></div>
+                    <span class="text-xs font-bold uppercase tracking-tighter"
+                      >Artisan Brown</span
+                    >
+                  </button>
+                  <button
+                    class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-transparent hover:border-outline-variant rounded-lg transition-colors"
+                    type="button"
+                  >
+                    <div
+                      class="w-8 h-8 rounded-full bg-secondary shadow-sm"
+                    ></div>
+                    <span class="text-xs font-bold uppercase tracking-tighter"
+                      >Flame Tan</span
+                    >
+                  </button>
+                  <button
+                    class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-transparent hover:border-outline-variant rounded-lg transition-colors"
+                    type="button"
+                  >
+                    <div
+                      class="w-8 h-8 rounded-full bg-tertiary shadow-sm"
+                    ></div>
+                    <span class="text-xs font-bold uppercase tracking-tighter"
+                      >Iron Patina</span
+                    >
+                  </button>
+                  <button
+                    class="flex items-center gap-3 p-3 bg-surface-container-lowest border border-transparent hover:border-outline-variant rounded-lg transition-colors"
+                    type="button"
+                  >
+                    <div
+                      class="w-8 h-8 rounded-full bg-secondary-container shadow-sm"
+                    ></div>
+                    <span class="text-xs font-bold uppercase tracking-tighter"
+                      >Workshop Honey</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div
+            class="pt-12 border-t border-outline-variant/10 flex justify-between items-center"
+          >
+            <button
+              class="text-on-surface-variant font-bold uppercase tracking-widest text-xs hover:text-primary transition-colors flex items-center gap-2"
+              type="button"
+            >
+              <span class="material-symbols-outlined text-sm" data-icon="close"
+                >close</span
+              >
+              Discard Draft
+            </button>
+            <button
+              class="bg-primary text-on-primary px-10 py-5 rounded-lg font-bold uppercase tracking-[0.2em] text-sm flex items-center gap-4 shadow-xl shadow-primary/10 hover:shadow-primary/20 hover:-translate-y-0.5 transition-all"
+              type="submit"
+            >
+              Save &amp; Launch Organization
+              <span class="material-symbols-outlined" data-icon="rocket_launch"
+                >rocket_launch</span
+              >
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+    <!-- Footer -->
+    <footer
+      class="w-full border-t border-stone-200 dark:border-stone-800 bg-stone-50 dark:bg-stone-900 mt-auto"
+    >
+      <div
+        class="flex justify-between items-center px-12 py-6 w-full max-w-screen-2xl mx-auto"
+      >
+        <span
+          class="text-[10px] uppercase tracking-widest Manrope text-stone-500 dark:text-stone-400"
+          >© 2024 Artisan SaaS Platforms. Confidential Superadmin Console.</span
+        >
+        <div class="flex gap-8">
+          <a
+            class="text-[10px] uppercase tracking-widest Manrope text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 underline-offset-4 hover:underline transition-all"
+            href="#"
+            >Documentation</a
+          >
+          <a
+            class="text-[10px] uppercase tracking-widest Manrope text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 underline-offset-4 hover:underline transition-all"
+            href="#"
+            >Support</a
+          >
+          <a
+            class="text-[10px] uppercase tracking-widest Manrope text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 underline-offset-4 hover:underline transition-all"
+            href="#"
+            >System Status</a
+          >
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "title.loading": "Loading",
+  "subtitle.syncingSession": "{tagline} and syncing session state.",
+  "unlock.title": "Unlock your account",
+  "unlock.subtitle": "Continue with {method} or use your PIN instead.",
+  "unlock.useBiometric": "Use Face ID",
+  "unlock.usePin": "Use PIN",
+  "unlock.faceId": "Face ID",
+  "unlock.fingerprint": "Fingerprint",
+  "unlock.biometric": "Biometric",
+  "unlock.biometricCancelled": "Biometric unlock was cancelled.",
+  "unlock.biometricFailed": "Unable to unlock with biometrics."
+}

@@ -1,0 +1,23 @@
+{
+  "title": "વાર્ષિક કારગર મેળો",
+  "subtitle": "મુંબઈ અધ્યાય • ઑક્ટો 2023",
+  "sections.financialOverview": "આર્થિક સરવાળો",
+  "sections.attendanceRate": "હાજરી દર",
+  "sections.attendanceSubtitle": "વાસ્તવિક સામે નોંધાયેલ",
+  "sections.addOnUsage": "એડ-ઓન ઉપયોગ",
+  "actions.viewReport": "સંપૂર્ણ આર્થિક રિપોર્ટ જુઓ",
+  "metrics.revenue": "કુલ આવક",
+  "metrics.netProfit": "શુદ્ધ નફો",
+  "attendance.registered": "નોંધાયેલ",
+  "attendance.attended": "હાજર",
+  "addons.lunches": "લંચ સર્વ કરાયા",
+  "addons.lunchesFooter": "નોંધાયેલ વપરાશકર્તાઓના 75%",
+  "addons.kits": "ટૂલ કિટ્સ વિતરણ",
+  "addons.kitsFooter": "હાજર રહેનારા લોકોના 97%",
+  "addons.certificates": "પ્રમાણપત્રો જારી",
+  "addons.certificatesFooter": "હાજર રહેનારા દ્વારા ક્લેમ કરાયા",
+  "nav.dashboard": "ડેશબોર્ડ",
+  "nav.events": "ઇવેન્ટ્સ",
+  "nav.community": "સમુદાય",
+  "nav.profile": "પ્રોફાઇલ"
+}

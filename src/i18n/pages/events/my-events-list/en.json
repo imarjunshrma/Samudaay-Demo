@@ -1,0 +1,11 @@
+{
+  "title": "My Events",
+  "tabs.upcoming": "Upcoming",
+  "tabs.past": "Past",
+  "section.thisMonth": "This Month",
+  "section.nextMonth": "Next Month",
+  "section.past": "Past Events",
+  "actions.register": "Register",
+  "actions.viewPass": "View Pass",
+  "actions.details": "Event Details"
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Profile",
+  "loading": "Loading...",
+  "accountDetails": "Account Details",
+  "notifications": "Notifications",
+  "security": "Security",
+  "accountDetailsSubtitle": "Update personal information",
+  "notificationsSubtitle": "Manage alert preferences",
+  "securitySubtitle": "Password and access settings",
+  "language.label": "Language Preference",
+  "language.helper": "Choose your app language for labels and menus.",
+  "signOut": "Sign Out",
+  "fallbackName": "Admin Administrator"
+}

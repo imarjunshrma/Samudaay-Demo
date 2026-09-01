@@ -1,0 +1,395 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Cobbler Community Registration</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl overflow-x-hidden"
+    >
+      <!-- Step 1: Registration Header -->
+      <div class="flex items-center p-4 pb-2 justify-between">
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start"
+        >
+          <span class="material-symbols-outlined text-3xl">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12"
+        >
+          Registration
+        </h2>
+      </div>
+      <!-- Progress Indicator -->
+      <div class="flex w-full flex-row items-center justify-center gap-4 py-5">
+        <div class="h-2 w-12 rounded-full bg-primary"></div>
+        <div class="h-2 w-12 rounded-full bg-primary/20"></div>
+        <div class="h-2 w-12 rounded-full bg-primary/20"></div>
+      </div>
+      <!-- Form Content -->
+      <div class="px-4">
+        <h3
+          class="text-slate-900 dark:text-slate-100 tracking-tight text-2xl font-bold leading-tight pb-2 pt-5"
+        >
+          Welcome
+        </h3>
+        <p
+          class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal pb-6"
+        >
+          Join the Cobbler Community. Please enter your mobile number to get
+          started.
+        </p>
+        <div class="space-y-6">
+          <!-- Mobile Input -->
+          <div class="flex flex-col gap-2">
+            <label
+              class="text-slate-900 dark:text-slate-100 text-sm font-semibold uppercase tracking-wider"
+              >Mobile Number</label
+            >
+            <div class="relative flex items-center">
+              <span
+                class="absolute left-4 text-slate-500 font-medium border-r border-primary/20 pr-3"
+                >+91</span
+              >
+              <input
+                class="form-input flex w-full rounded-xl border border-primary/20 bg-white dark:bg-background-dark/50 h-14 pl-16 pr-4 text-lg font-medium focus:ring-primary focus:border-primary placeholder:text-slate-400"
+                placeholder="00000 00000"
+                type="tel"
+              />
+            </div>
+          </div>
+          <!-- OTP Section (Hidden by default in actual logic, shown here for design) -->
+          <div class="flex flex-col gap-2">
+            <label
+              class="text-slate-900 dark:text-slate-100 text-sm font-semibold uppercase tracking-wider"
+              >OTP Code</label
+            >
+            <div class="flex gap-2 justify-between">
+              <input
+                class="w-12 h-12 text-center rounded-lg border border-primary/20 bg-white dark:bg-background-dark/50 text-xl font-bold focus:ring-primary focus:border-primary"
+                maxlength="1"
+                value="4"
+              />
+              <input
+                class="w-12 h-12 text-center rounded-lg border border-primary/20 bg-white dark:bg-background-dark/50 text-xl font-bold focus:ring-primary focus:border-primary"
+                maxlength="1"
+                value="2"
+              />
+              <input
+                class="w-12 h-12 text-center rounded-lg border border-primary/20 bg-white dark:bg-background-dark/50 text-xl font-bold focus:ring-primary focus:border-primary"
+                maxlength="1"
+                value="0"
+              />
+              <input
+                class="w-12 h-12 text-center rounded-lg border border-primary/20 bg-white dark:bg-background-dark/50 text-xl font-bold focus:ring-primary focus:border-primary"
+                maxlength="1"
+                placeholder="-"
+              />
+              <input
+                class="w-12 h-12 text-center rounded-lg border border-primary/20 bg-white dark:bg-background-dark/50 text-xl font-bold focus:ring-primary focus:border-primary"
+                maxlength="1"
+                placeholder="-"
+              />
+              <input
+                class="w-12 h-12 text-center rounded-lg border border-primary/20 bg-white dark:bg-background-dark/50 text-xl font-bold focus:ring-primary focus:border-primary"
+                maxlength="1"
+                placeholder="-"
+              />
+            </div>
+            <p class="text-xs text-primary font-medium mt-2 text-right">
+              Resend OTP in 0:45
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="mt-auto p-4 space-y-4">
+        <button
+          class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg transition-colors"
+        >
+          Verify &amp; Continue
+        </button>
+        <p class="text-center text-xs text-slate-500 px-8">
+          By continuing, you agree to the community terms and privacy policy.
+        </p>
+      </div>
+      <div class="h-8"></div>
+    </div>
+    <!-- Step 2 Preview: Personal Details -->
+    <div
+      class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl overflow-x-hidden mt-12"
+    >
+      <div class="flex items-center p-4 pb-2 justify-between">
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start"
+        >
+          <span class="material-symbols-outlined text-3xl">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12"
+        >
+          Profile Details
+        </h2>
+      </div>
+      <div class="flex w-full flex-row items-center justify-center gap-4 py-5">
+        <div class="h-2 w-12 rounded-full bg-primary"></div>
+        <div class="h-2 w-12 rounded-full bg-primary"></div>
+        <div class="h-2 w-12 rounded-full bg-primary/20"></div>
+      </div>
+      <div class="px-4 pb-8 space-y-4">
+        <div class="flex flex-col gap-1">
+          <label class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+            >Full Name</label
+          >
+          <input
+            class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+            placeholder="Enter full name"
+            type="text"
+          />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+            >Father's / Guardian's Name</label
+          >
+          <input
+            class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+            placeholder="Enter father's name"
+            type="text"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label
+              class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+              >Gender</label
+            >
+            <select
+              class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+            >
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-1">
+            <label
+              class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+              >Date of Birth</label
+            >
+            <input
+              class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+              type="date"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+            >Full Address</label
+          >
+          <textarea
+            class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+            placeholder="Shop/House No, Street, Landmark"
+            rows="3"
+          ></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <label
+              class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+              >City</label
+            >
+            <input
+              class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+              placeholder="City name"
+              type="text"
+            />
+          </div>
+          <div class="flex flex-col gap-1">
+            <label
+              class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+              >Pincode</label
+            >
+            <input
+              class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+              placeholder="6 digits"
+              type="number"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-slate-700 dark:text-slate-300 text-sm font-medium"
+            >Occupation Type</label
+          >
+          <select
+            class="w-full rounded-lg border border-primary/10 bg-white dark:bg-background-dark/50 p-3"
+          >
+            <option>Traditional Repairer</option>
+            <option>Modern Shoe Maker</option>
+            <option>Wholesale Supplier</option>
+            <option>Other Leather Works</option>
+          </select>
+        </div>
+        <button
+          class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg mt-4"
+        >
+          Save &amp; Continue
+        </button>
+      </div>
+    </div>
+    <!-- Step 3 Preview: KYC Documentation -->
+    <div
+      class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl overflow-x-hidden mt-12 mb-12"
+    >
+      <div class="flex items-center p-4 pb-2 justify-between">
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start"
+        >
+          <span class="material-symbols-outlined text-3xl">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12"
+        >
+          KYC Verification
+        </h2>
+      </div>
+      <div class="flex w-full flex-row items-center justify-center gap-4 py-5">
+        <div class="h-2 w-12 rounded-full bg-primary"></div>
+        <div class="h-2 w-12 rounded-full bg-primary"></div>
+        <div class="h-2 w-12 rounded-full bg-primary"></div>
+      </div>
+      <div class="px-4 space-y-6 pb-10">
+        <div>
+          <h3 class="text-lg font-bold">Document Upload</h3>
+          <p class="text-sm text-slate-500">
+            Please upload clear photos of your documents for verification.
+          </p>
+        </div>
+        <!-- Aadhaar Card -->
+        <div
+          class="bg-white dark:bg-background-dark/50 rounded-xl border-2 border-dashed border-primary/30 p-6 flex flex-col items-center text-center gap-3"
+        >
+          <div
+            class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined">badge</span>
+          </div>
+          <div>
+            <h4 class="font-bold">Aadhaar Card</h4>
+            <p class="text-xs text-slate-500">
+              Upload Front &amp; Back (PDF/JPG)
+            </p>
+          </div>
+          <button
+            class="px-4 py-2 border border-primary text-primary text-sm font-semibold rounded-lg hover:bg-primary/5"
+          >
+            Select File
+          </button>
+        </div>
+        <!-- Caste Certificate -->
+        <div
+          class="bg-white dark:bg-background-dark/50 rounded-xl border-2 border-dashed border-primary/30 p-6 flex flex-col items-center text-center gap-3"
+        >
+          <div
+            class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined">description</span>
+          </div>
+          <div>
+            <h4 class="font-bold">Caste Certificate</h4>
+            <p class="text-xs text-slate-500">
+              Mandatory for community benefits
+            </p>
+          </div>
+          <button
+            class="px-4 py-2 border border-primary text-primary text-sm font-semibold rounded-lg hover:bg-primary/5"
+          >
+            Select File
+          </button>
+        </div>
+        <!-- Profile Photo -->
+        <div
+          class="bg-white dark:bg-background-dark/50 rounded-xl border-2 border-dashed border-primary/30 p-6 flex flex-col items-center text-center gap-3"
+        >
+          <div
+            class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary"
+          >
+            <span class="material-symbols-outlined">add_a_photo</span>
+          </div>
+          <div>
+            <h4 class="font-bold">Selfie / Profile Photo</h4>
+            <p class="text-xs text-slate-500">
+              Ensure your face is clearly visible
+            </p>
+          </div>
+          <button
+            class="px-4 py-2 border border-primary text-primary text-sm font-semibold rounded-lg hover:bg-primary/5"
+          >
+            Take Photo
+          </button>
+        </div>
+        <div class="pt-4">
+          <div class="flex items-start gap-3 mb-6">
+            <input
+              class="mt-1 rounded text-primary focus:ring-primary"
+              type="checkbox"
+            />
+            <p class="text-xs text-slate-600 dark:text-slate-400">
+              I hereby declare that all information and documents provided are
+              true and correct to the best of my knowledge.
+            </p>
+          </div>
+          <button
+            class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg"
+          >
+            Complete Registration
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

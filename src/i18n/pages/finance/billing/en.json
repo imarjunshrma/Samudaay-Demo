@@ -1,0 +1,14 @@
+{
+  "eyebrow": "Financial Ledger",
+  "title.prefix": "Billing &",
+  "title.italic": "Revenue",
+  "description": "Precision tracking of atelier subscriptions and service retainers. Managed with the same care as a hand-welted sole.",
+  "stats.renewals": "Upcoming Renewals",
+  "stats.renewals.window": "Next 7 Days",
+  "stats.outstanding": "Outstanding",
+  "stats.overdue": "3 Overdue Invoices",
+  "section.recentInvoices": "Recent Invoices",
+  "dates.one": "Oct 12, 2023",
+  "dates.two": "Oct 05, 2023",
+  "dates.three": "Sep 28, 2023"
+}

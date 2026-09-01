@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1086154976377",
+    "project_id": "samudaaay-demo",
+    "storage_bucket": "samudaaay-demo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1086154976377:android:550a56bcb8635611ef78a8",
+        "android_client_info": {
+          "package_name": "com.samudaaay.demo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXBRaj9wGaq2ULsYgh8OvRF43GUYOVAmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

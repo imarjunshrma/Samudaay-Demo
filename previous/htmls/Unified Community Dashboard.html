@@ -1,0 +1,515 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Atelier | Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed": "#2e150b",
+              "surface-tint": "#7a5649",
+              "primary-container": "#603f33",
+              "on-tertiary-fixed": "#00201d",
+              "on-secondary-container": "#642f00",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#87f5ea",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#ffffff",
+              background: "#fdf9f6",
+              "surface-container-low": "#f7f3f0",
+              "on-primary-container": "#d9ab9b",
+              "on-secondary-fixed": "#311300",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-bright": "#fdf9f6",
+              primary: "#46291e",
+              "outline-variant": "#d4c3be",
+              "secondary-container": "#ff8928",
+              secondary: "#964900",
+              "primary-fixed": "#ffdbcf",
+              "inverse-on-surface": "#f4f0ed",
+              "tertiary-container": "#00504b",
+              "on-error-container": "#93000a",
+              "primary-fixed-dim": "#ebbcac",
+              "on-primary-fixed-variant": "#603f33",
+              "inverse-primary": "#ebbcac",
+              "surface-variant": "#e5e2df",
+              "secondary-fixed": "#ffdcc6",
+              "inverse-surface": "#31302f",
+              surface: "#fdf9f6",
+              "error-container": "#ffdad6",
+              outline: "#827470",
+              "surface-dim": "#ddd9d6",
+              "on-secondary-fixed-variant": "#723600",
+              error: "#ba1a1a",
+              "on-tertiary-container": "#56c6bc",
+              "on-tertiary": "#ffffff",
+              "on-surface-variant": "#504441",
+              "surface-container-highest": "#e5e2df",
+              "on-surface": "#1c1b1a",
+              "surface-container": "#f1edea",
+              "secondary-fixed-dim": "#ffb786",
+              "on-secondary": "#ffffff",
+              "on-background": "#1c1b1a",
+              "surface-container-high": "#ebe7e4",
+              tertiary: "#003733",
+            },
+            fontFamily: {
+              headline: ["Newsreader", "serif"],
+              body: ["Manrope", "sans-serif"],
+              label: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 300,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .artisan-gradient {
+        background: linear-gradient(15deg, #46291e 0%, #603f33 100%);
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background font-body min-h-screen pb-24">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-[#f1edea]/80 backdrop-blur-md shadow-sm flex justify-between items-center px-6 py-4 w-full"
+    >
+      <div class="flex items-center gap-4">
+        <span class="material-symbols-outlined text-[#46291e]">menu</span>
+        <h1
+          class="text-2xl font-bold tracking-tight text-[#46291e] font-headline"
+        >
+          The Atelier
+        </h1>
+      </div>
+      <div
+        class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant/20 overflow-hidden"
+      >
+        <img
+          alt="Cobbler Profile Avatar"
+          class="w-full h-full object-cover"
+          data-alt="Close up portrait of an elderly craftsman"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoeFJG0ITg2ZVIKyJcnhVqwC4mjjEnC-zEJKHtEcXedHiROTP3cUw_RBCitQQ4wazO6FHevLUd0y7NqEgR5ZSQPuxmeZS8aHIBnPaX8hyo0-AMyZHmItCa3wv79HJnnj4aY3V_KmyQil1SdqJC5yjwAnWK0I_gIMqdCRkNfi1W8V3nFSQuzon3xRob4Wiwy9-Lz3V6ktNM8z3X7x99Kf_ivTA0_sfoZkbsJSWuwcl_14tMAmuREQVmWy51sUAWdHvykC6bciQHnBLb"
+        />
+      </div>
+    </header>
+    <main class="pt-24 px-6 max-w-5xl mx-auto space-y-12">
+      <!-- Profile Summary & Hero -->
+      <section class="mt-8">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6"
+        >
+          <div>
+            <span
+              class="text-secondary font-label font-bold uppercase tracking-widest text-xs"
+              >Master Artisan</span
+            >
+            <h2 class="text-5xl font-headline font-medium text-primary mt-2">
+              Arjun Varma
+            </h2>
+            <p class="text-on-surface-variant mt-2 max-w-md">
+              Overseeing the legacy of hand-stitched excellence across the
+              Indian Cobbler Community.
+            </p>
+          </div>
+          <div class="flex gap-4">
+            <div class="bg-surface-container-low p-6 rounded-xl min-w-[140px]">
+              <span
+                class="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider"
+                >Active Members</span
+              >
+              <p class="text-3xl font-headline text-primary mt-1">1,284</p>
+            </div>
+            <div
+              class="bg-surface-container-low p-6 rounded-xl min-w-[140px] border-l-4 border-secondary"
+            >
+              <span
+                class="text-on-surface-variant text-xs font-label font-bold uppercase tracking-wider"
+                >Pending Tasks</span
+              >
+              <p class="text-3xl font-headline text-primary mt-1">12</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Main Content: Quick Action Grid -->
+      <section>
+        <div class="flex items-center justify-between mb-8">
+          <h3 class="text-2xl font-headline text-primary">
+            Artisan Management
+          </h3>
+          <div class="h-[1px] flex-grow mx-8 bg-outline-variant/30"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Donation -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl"
+                >volunteer_activism</span
+              >
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Donation</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Community welfare fund</span
+              >
+            </div>
+          </button>
+          <!-- Event Management -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl"
+                >calendar_today</span
+              >
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Event Management</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Workshops &amp; Exhibitions</span
+              >
+            </div>
+          </button>
+          <!-- KYC Approvals -->
+          <button
+            class="group relative flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left border-l-2 border-secondary"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">verified</span>
+            </div>
+            <div
+              class="absolute top-4 right-4 w-2 h-2 bg-secondary rounded-full"
+            ></div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >KYC Approvals</span
+              >
+              <span class="text-xs text-secondary font-bold"
+                >4 Pending verification</span
+              >
+            </div>
+          </button>
+          <!-- Matrimony Approvals -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">favorite</span>
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Matrimony</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Community matchmaking</span
+              >
+            </div>
+          </button>
+          <!-- Expense Tracking -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl"
+                >receipt_long</span
+              >
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Expense Tracking</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Workshop overheads</span
+              >
+            </div>
+          </button>
+          <!-- Monthly Publication -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">newspaper</span>
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Publication</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >The Cobbler's Journal</span
+              >
+            </div>
+          </button>
+          <!-- Advertisements -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">campaign</span>
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Advertisements</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Promote artisan tools</span
+              >
+            </div>
+          </button>
+          <!-- Notifications -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl"
+                >notifications</span
+              >
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Notifications</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Broadcast alerts</span
+              >
+            </div>
+          </button>
+          <!-- Role Management -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">person_pin</span>
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Role Management</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Assign master status</span
+              >
+            </div>
+          </button>
+          <!-- User Permissions -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">lock_open</span>
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Permissions</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Access level control</span
+              >
+            </div>
+          </button>
+          <!-- Community Chat -->
+          <button
+            class="group flex items-center p-5 bg-surface-container hover:bg-surface-container-high transition-colors rounded-xl text-left"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-surface-bright text-secondary mr-5 shadow-sm"
+            >
+              <span class="material-symbols-outlined text-2xl">forum</span>
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-primary text-sm uppercase tracking-wide"
+                >Community Chat</span
+              >
+              <span class="text-xs text-on-surface-variant"
+                >Guild discussions</span
+              >
+            </div>
+          </button>
+          <!-- Analytics Dashboard -->
+          <button
+            class="group flex items-center p-5 artisan-gradient transition-all active:scale-95 rounded-xl text-left shadow-lg"
+          >
+            <div
+              class="w-12 h-12 flex items-center justify-center rounded-lg bg-[#ffffff]/10 text-[#ffffff] mr-5"
+            >
+              <span class="material-symbols-outlined text-2xl"
+                >trending_up</span
+              >
+            </div>
+            <div>
+              <span
+                class="block font-label font-bold text-[#ffffff] text-sm uppercase tracking-wide"
+                >Analytics</span
+              >
+              <span class="text-xs text-[#d9ab9b]">Performance insights</span>
+            </div>
+          </button>
+        </div>
+      </section>
+      <!-- Asymmetric Detail Section -->
+      <section class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <div
+          class="md:col-span-7 bg-tertiary-container p-8 rounded-2xl relative overflow-hidden group"
+        >
+          <div class="relative z-10">
+            <span
+              class="text-on-tertiary-container text-xs font-bold uppercase tracking-widest"
+              >Featured Guild</span
+            >
+            <h4 class="text-3xl font-headline text-on-tertiary mt-2">
+              Dharavi Master Craftsmen
+            </h4>
+            <p class="text-on-tertiary/70 mt-4 leading-relaxed">
+              Recognized for their exceptional bridle leather work and
+              sustainable practices. A collaborative of 45 artisans.
+            </p>
+            <button
+              class="mt-6 px-6 py-2 bg-[#ffffff]/10 hover:bg-[#ffffff]/20 border border-[#ffffff]/20 rounded-full text-on-tertiary text-sm transition-all"
+            >
+              View Profile
+            </button>
+          </div>
+          <div
+            class="absolute -right-12 -bottom-12 w-64 h-64 bg-tertiary opacity-20 rounded-full blur-3xl"
+          ></div>
+        </div>
+        <div class="md:col-span-5 space-y-4">
+          <div
+            class="bg-surface-container-low p-6 rounded-xl border-b-2 border-secondary/20"
+          >
+            <h5 class="font-headline text-xl text-primary">Regional Growth</h5>
+            <p class="text-sm text-on-surface-variant mt-1">
+              North Zone is seeing a 12% increase in new apprentices this month.
+            </p>
+          </div>
+          <div
+            class="bg-surface-container-low p-6 rounded-xl border-b-2 border-secondary/20"
+          >
+            <h5 class="font-headline text-xl text-primary">
+              Craft Preservation
+            </h5>
+            <p class="text-sm text-on-surface-variant mt-1">
+              New digital archive for Kolhapuri patterns is now 80% complete.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#f1edea] dark:bg-[#1b100b] rounded-t-[0.5rem] shadow-[0_-4px_24px_rgba(70,41,41,0.06)]"
+    >
+      <a
+        class="flex flex-col items-center justify-center bg-[#46291e] text-[#ffffff] rounded-lg px-4 py-1.5 transition-all"
+        href="#"
+      >
+        <span class="material-symbols-outlined">home_app_logo</span>
+        <span
+          class="font-['Manrope'] text-[11px] font-semibold uppercase tracking-wider mt-1"
+          >Home</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#603f33] dark:text-[#a1887f] px-4 py-1.5 hover:text-[#964900] transition-all"
+        href="#"
+      >
+        <span class="material-symbols-outlined">import_contacts</span>
+        <span
+          class="font-['Manrope'] text-[11px] font-semibold uppercase tracking-wider mt-1"
+          >Directory</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#603f33] dark:text-[#a1887f] px-4 py-1.5 hover:text-[#964900] transition-all"
+        href="#"
+      >
+        <span class="material-symbols-outlined">analytics</span>
+        <span
+          class="font-['Manrope'] text-[11px] font-semibold uppercase tracking-wider mt-1"
+          >Analytics</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#603f33] dark:text-[#a1887f] px-4 py-1.5 hover:text-[#964900] transition-all"
+        href="#"
+      >
+        <span class="material-symbols-outlined">settings</span>
+        <span
+          class="font-['Manrope'] text-[11px] font-semibold uppercase tracking-wider mt-1"
+          >Settings</span
+        >
+      </a>
+    </nav>
+  </body>
+</html>

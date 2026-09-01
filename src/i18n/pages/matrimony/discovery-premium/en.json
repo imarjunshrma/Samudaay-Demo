@@ -1,0 +1,21 @@
+{
+  "title": "Cobbler Matrimony",
+  "hero.title": "Hand-picked Matches for Your Family",
+  "hero.subtitle": "Celebrating heritage and craftsmanship through intentional connections. Find a partner who shares your values and your story.",
+  "chips.new": "Newly Joined",
+  "chips.compatible": "Highly Compatible",
+  "chips.nearby": "Nearby Masters",
+  "filters.age": "Age",
+  "filters.education": "Education",
+  "filters.city": "City",
+  "empty.title": "No matches found",
+  "empty.description": "Try changing the filters or reset them.",
+  "actions.reset": "Reset Filters",
+  "filter.title": "Filter Matches",
+  "filter.subtitle": "Tune the premium discovery results.",
+  "filter.apply": "Show Matches",
+  "nav.discover": "Discover",
+  "nav.requests": "Requests",
+  "nav.messages": "Messages",
+  "nav.account": "Account"
+}

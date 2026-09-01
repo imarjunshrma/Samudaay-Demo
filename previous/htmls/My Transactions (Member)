@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Transactions</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center p-4 pb-2 justify-between sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md"
+      >
+        <div
+          class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors cursor-pointer"
+        >
+          <span
+            class="material-symbols-outlined text-slate-900 dark:text-slate-100"
+            >arrow_back</span
+          >
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight flex-1 text-center pr-10"
+        >
+          My Transactions
+        </h2>
+      </div>
+      <!-- Summary Section -->
+      <div class="p-4">
+        <div
+          class="flex flex-col gap-2 rounded-xl p-6 bg-primary/10 border border-primary/20"
+        >
+          <p
+            class="text-slate-600 dark:text-slate-400 text-sm font-medium uppercase tracking-wider"
+          >
+            Total Contribution
+          </p>
+          <p class="text-primary text-3xl font-bold leading-tight">$1,250.00</p>
+          <div class="mt-2 flex items-center gap-2 text-xs text-slate-500">
+            <span class="material-symbols-outlined text-sm">verified</span>
+            <span>Last updated: Oct 24, 2023</span>
+          </div>
+        </div>
+      </div>
+      <!-- Filter Tabs -->
+      <div
+        class="px-4 sticky top-[60px] z-10 bg-background-light dark:bg-background-dark"
+      >
+        <div
+          class="flex border-b border-primary/10 gap-4 overflow-x-auto no-scrollbar"
+        >
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 pt-4 px-2 whitespace-nowrap"
+            href="#"
+          >
+            <p class="text-sm font-bold tracking-wide">All Activities</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 hover:text-primary pb-3 pt-4 px-2 whitespace-nowrap"
+            href="#"
+          >
+            <p class="text-sm font-bold tracking-wide">Donations</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 hover:text-primary pb-3 pt-4 px-2 whitespace-nowrap"
+            href="#"
+          >
+            <p class="text-sm font-bold tracking-wide">Events</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 hover:text-primary pb-3 pt-4 px-2 whitespace-nowrap"
+            href="#"
+          >
+            <p class="text-sm font-bold tracking-wide">Subscriptions</p>
+          </a>
+        </div>
+      </div>
+      <!-- Transaction List -->
+      <div class="flex flex-col gap-1 p-4 pb-24">
+        <h3
+          class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest pb-3"
+        >
+          Recent Transactions
+        </h3>
+        <!-- Entry 1: Donation -->
+        <div
+          class="flex items-center justify-between p-4 mb-2 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600"
+            >
+              <span class="material-symbols-outlined">volunteer_activism</span>
+            </div>
+            <div class="flex flex-col">
+              <p class="text-slate-900 dark:text-slate-100 font-bold">
+                Annual Charity Fund
+              </p>
+              <p class="text-slate-500 text-xs font-medium">
+                Oct 22, 2023 • Donation
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <p class="text-slate-900 dark:text-slate-100 font-bold">-$500.00</p>
+            <button
+              class="flex items-center gap-1 text-primary text-xs font-bold hover:underline"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >picture_as_pdf</span
+              >
+              Receipt
+            </button>
+          </div>
+        </div>
+        <!-- Entry 2: Event -->
+        <div
+          class="flex items-center justify-between p-4 mb-2 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="flex size-12 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600"
+            >
+              <span class="material-symbols-outlined">event_available</span>
+            </div>
+            <div class="flex flex-col">
+              <p class="text-slate-900 dark:text-slate-100 font-bold">
+                Gala Night 2023
+              </p>
+              <p class="text-slate-500 text-xs font-medium">
+                Oct 15, 2023 • Event Registration
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <p class="text-slate-900 dark:text-slate-100 font-bold">-$150.00</p>
+            <button
+              class="flex items-center gap-1 text-primary text-xs font-bold hover:underline"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >picture_as_pdf</span
+              >
+              Receipt
+            </button>
+          </div>
+        </div>
+        <!-- Entry 3: Matrimony -->
+        <div
+          class="flex items-center justify-between p-4 mb-2 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"
+            >
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <div class="flex flex-col">
+              <p class="text-slate-900 dark:text-slate-100 font-bold">
+                Premium Membership
+              </p>
+              <p class="text-slate-500 text-xs font-medium">
+                Oct 01, 2023 • Matrimony Sub.
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <p class="text-slate-900 dark:text-slate-100 font-bold">-$299.00</p>
+            <button
+              class="flex items-center gap-1 text-primary text-xs font-bold hover:underline"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >picture_as_pdf</span
+              >
+              Receipt
+            </button>
+          </div>
+        </div>
+        <!-- Entry 4: Donation -->
+        <div
+          class="flex items-center justify-between p-4 mb-2 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="flex size-12 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600"
+            >
+              <span class="material-symbols-outlined">volunteer_activism</span>
+            </div>
+            <div class="flex flex-col">
+              <p class="text-slate-900 dark:text-slate-100 font-bold">
+                Community Kitchen
+              </p>
+              <p class="text-slate-500 text-xs font-medium">
+                Sep 28, 2023 • Donation
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col items-end gap-2">
+            <p class="text-slate-900 dark:text-slate-100 font-bold">-$301.00</p>
+            <button
+              class="flex items-center gap-1 text-primary text-xs font-bold hover:underline"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >picture_as_pdf</span
+              >
+              Receipt
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Navigation Bar -->
+      <div
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-4 pt-2 flex justify-around"
+      >
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">home</span>
+          <p class="text-[10px] font-medium">Home</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-primary"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >account_balance_wallet</span
+          >
+          <p class="text-[10px] font-bold">Transactions</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">person</span>
+          <p class="text-[10px] font-medium">Profile</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <p class="text-[10px] font-medium">Settings</p>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

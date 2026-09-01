@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Digital Atelier | Client Management</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#fdf9f6",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#ebbcac",
+              outline: "#827470",
+              "inverse-primary": "#ebbcac",
+              surface: "#fdf9f6",
+              "surface-variant": "#e5e2df",
+              error: "#ba1a1a",
+              "outline-variant": "#d4c3be",
+              primary: "#46291e",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#00504b",
+              "surface-container": "#f1edea",
+              "on-primary-fixed-variant": "#603f33",
+              "inverse-on-surface": "#f4f0ed",
+              "on-error-container": "#93000a",
+              tertiary: "#003733",
+              "inverse-surface": "#31302f",
+              "tertiary-fixed": "#87f5ea",
+              "on-secondary-container": "#642f00",
+              "on-surface-variant": "#504441",
+              "on-tertiary-container": "#56c6bc",
+              "on-error": "#ffffff",
+              "surface-dim": "#ddd9d6",
+              "on-background": "#1c1b1a",
+              "on-surface": "#1c1b1a",
+              background: "#fdf9f6",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-primary-container": "#d9ab9b",
+              "surface-tint": "#7a5649",
+              "surface-container-high": "#ebe7e4",
+              "primary-fixed": "#ffdbcf",
+              "secondary-container": "#ff8928",
+              secondary: "#964900",
+              "on-secondary-fixed-variant": "#723600",
+              "secondary-fixed": "#ffdcc6",
+              "primary-container": "#603f33",
+              "on-tertiary-fixed": "#00201d",
+              "on-primary-fixed": "#2e150b",
+              "surface-container-highest": "#e5e2df",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#ffb786",
+              "on-tertiary-fixed-variant": "#00504b",
+              "surface-container-low": "#f7f3f0",
+              "on-secondary-fixed": "#311300",
+            },
+            fontFamily: {
+              headline: ["Newsreader"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+        background-color: #fdf9f6;
+      }
+      h1,
+      h2,
+      h3,
+      .serif-italic {
+        font-family: "Newsreader", serif;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="text-on-surface antialiased mb-24 md:mb-0 md:pt-20">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-stone-50/80 dark:bg-stone-900/80 backdrop-blur-md"
+    >
+      <div
+        class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto"
+      >
+        <div class="flex items-center gap-4">
+          <button
+            class="p-2 hover:bg-stone-200/50 transition-colors active:scale-95 duration-150 rounded-full"
+          >
+            <span
+              class="material-symbols-outlined text-[#46291e]"
+              data-icon="grid_view"
+              >grid_view</span
+            >
+          </button>
+          <h1 class="text-2xl font-serif italic text-[#46291e]">
+            The Digital Atelier
+          </h1>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+          <a
+            class="text-[#964900] font-bold text-sm tracking-wide transition-colors"
+            href="#"
+            >Clients</a
+          >
+          <a
+            class="text-[#46291e]/60 text-sm tracking-wide hover:text-[#964900] transition-colors"
+            href="#"
+            >Configs</a
+          >
+          <a
+            class="text-[#46291e]/60 text-sm tracking-wide hover:text-[#964900] transition-colors"
+            href="#"
+            >Billing</a
+          >
+          <a
+            class="text-[#46291e]/60 text-sm tracking-wide hover:text-[#964900] transition-colors"
+            href="#"
+            >Audit</a
+          >
+        </nav>
+        <div class="flex items-center gap-3">
+          <div
+            class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/20"
+          >
+            <img
+              alt="Superadmin Profile"
+              data-alt="professional portrait of a creative director in a minimalist studio setting with soft natural lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWvEoIhDQJv3HUjk3_eimjlmV2Z37P5Nbm2mi6gEY_772cIcZkPTxzGg0N3i1cpJGtk8TZjBiLzTQPIzlkpQMS1fxKr-FqV-hHTnlquU2NPjLBKYwWXMgXzoxQOLyvaKeFQklIyocdqUZjVwwSN2VteAxHHp4lWsfIHQiLYBE3583k1b6uhIu668qKSIiEYIVbGDF82mh59A8y8CcEvQQYadu9VSjP5jW1_U19o_U4JZoNZ4Ubf3bXGHTrm8VBIDdNunRMfzn9UZNE"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="max-w-7xl mx-auto px-6 py-12">
+      <!-- Hero Section & Search -->
+      <section class="mb-20 pt-8">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-8"
+        >
+          <div class="max-w-2xl">
+            <span
+              class="text-secondary text-sm font-bold tracking-[0.2em] uppercase mb-4 block"
+              >Registry</span
+            >
+            <h2
+              class="text-6xl md:text-7xl font-serif text-primary leading-tight"
+            >
+              Master Directory of <span class="italic">Client Guilds</span>
+            </h2>
+            <p
+              class="text-on-surface-variant text-lg mt-6 max-w-lg leading-relaxed"
+            >
+              Oversee the artisanal communities flourishing within the
+              ecosystem. Monitor scale, status, and integrity across the
+              collective.
+            </p>
+          </div>
+          <div class="w-full md:w-96">
+            <div class="relative group">
+              <span
+                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant group-focus-within:text-secondary transition-colors"
+                data-icon="search"
+                >search</span
+              >
+              <input
+                class="w-full bg-surface-container-low border-0 border-b border-outline-variant/30 focus:ring-0 focus:border-secondary py-4 pl-12 pr-4 text-primary font-body placeholder:text-outline-variant/60 transition-all"
+                placeholder="Search communities..."
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Client Grid (Asymmetric Editorial Style) -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+        <!-- Featured Large Card -->
+        <div class="md:col-span-8 group">
+          <div
+            class="bg-surface-container-lowest p-8 rounded-xl shadow-sm border border-transparent hover:border-outline-variant/10 transition-all relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-secondary/5 -mr-16 -mt-16 rounded-full blur-3xl"
+            ></div>
+            <div class="flex justify-between items-start mb-12">
+              <div class="flex gap-4">
+                <div
+                  class="h-16 w-16 bg-primary-container rounded-lg flex items-center justify-center text-on-primary-container"
+                >
+                  <span
+                    class="material-symbols-outlined text-3xl"
+                    data-icon="token"
+                    >token</span
+                  >
+                </div>
+                <div>
+                  <h3 class="text-3xl font-serif text-primary">
+                    Stitch &amp; Sole Collective
+                  </h3>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="h-2 w-2 rounded-full bg-tertiary"></span>
+                    <span
+                      class="text-xs font-bold text-tertiary uppercase tracking-widest"
+                      >Active Community</span
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  class="p-2 hover:bg-surface-container rounded-full text-primary transition-colors"
+                >
+                  <span class="material-symbols-outlined" data-icon="edit"
+                    >edit</span
+                  >
+                </button>
+                <button
+                  class="p-2 hover:bg-error-container/20 rounded-full text-error transition-colors"
+                >
+                  <span class="material-symbols-outlined" data-icon="block"
+                    >block</span
+                  >
+                </button>
+              </div>
+            </div>
+            <div
+              class="grid grid-cols-3 gap-8 mb-8 border-t border-outline-variant/10 pt-8"
+            >
+              <div>
+                <p
+                  class="text-[10px] font-bold text-outline-variant uppercase tracking-widest mb-1"
+                >
+                  Total Artisans
+                </p>
+                <p class="text-3xl font-headline text-primary">1,284</p>
+              </div>
+              <div>
+                <p
+                  class="text-[10px] font-bold text-outline-variant uppercase tracking-widest mb-1"
+                >
+                  Last Sync
+                </p>
+                <p class="text-xl font-body text-on-surface-variant">2h ago</p>
+              </div>
+              <div>
+                <p
+                  class="text-[10px] font-bold text-outline-variant uppercase tracking-widest mb-1"
+                >
+                  Tier
+                </p>
+                <p class="text-xl font-body text-secondary">Foundry Pro</p>
+              </div>
+            </div>
+            <div
+              class="h-48 w-full rounded-lg overflow-hidden grayscale hover:grayscale-0 transition-all duration-700"
+            >
+              <img
+                class="w-full h-full object-cover"
+                data-alt="aerial view of a bright modern open-plan workshop space with wooden tables and large windows"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqXIpGhlS-Qj06EHXe381vEy8WZtrFa7n9Sam9x3WA38GiXrJC5WGGLcvU0o0TgXV3Nqzg1ZWwKBCYHCkRdRSZ5filnHqFtqZvFHx6RvWScW6D4rOUYcSejRcfTr2Yyk0C2TbyC1SeSHjPfcPZca-fxYCOcXYicX8GiisMptpLJmDB1O6BLXhwvEZqLm_oiytpoIoFiSo7k9oMl1oVBdwgxf5hMQ57quUHhMCI9qXZqpVnNc3dY-ubG9UEGrEVK2ubr0inxZ33fKYq"
+              />
+            </div>
+          </div>
+        </div>
+        <!-- Side Card Stack -->
+        <div class="md:col-span-4 flex flex-col gap-6">
+          <!-- Card 2 -->
+          <div
+            class="bg-surface-container p-6 rounded-xl hover:bg-surface-container-high transition-colors group"
+          >
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-serif text-primary">
+                The Tanner's Guild
+              </h3>
+              <span
+                class="bg-tertiary-container/30 text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter"
+                >Verified</span
+              >
+            </div>
+            <div class="flex justify-between items-end">
+              <div>
+                <p class="text-2xl font-headline text-primary">
+                  842
+                  <span
+                    class="text-sm font-body text-on-surface-variant/60 italic font-normal"
+                    >users</span
+                  >
+                </p>
+                <div class="flex gap-3 mt-4">
+                  <button
+                    class="text-[10px] font-bold text-primary border-b border-primary/20 pb-0.5"
+                  >
+                    Edit Guild
+                  </button>
+                  <button
+                    class="text-[10px] font-bold text-error border-b border-error/20 pb-0.5"
+                  >
+                    Inactivate
+                  </button>
+                </div>
+              </div>
+              <div
+                class="h-12 w-12 bg-surface-container-lowest rounded-full flex items-center justify-center text-outline shadow-sm group-hover:scale-110 transition-transform"
+              >
+                <span class="material-symbols-outlined" data-icon="groups"
+                  >groups</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div
+            class="bg-surface-container p-6 rounded-xl hover:bg-surface-container-high transition-colors group"
+          >
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-xl font-serif text-primary">Waxed Thread Co.</h3>
+              <span
+                class="bg-error-container/30 text-on-error-container text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter"
+                >Inactive</span
+              >
+            </div>
+            <div class="flex justify-between items-end opacity-60">
+              <div>
+                <p class="text-2xl font-headline text-primary">
+                  0
+                  <span
+                    class="text-sm font-body text-on-surface-variant/60 italic font-normal"
+                    >users</span
+                  >
+                </p>
+                <div class="flex gap-3 mt-4">
+                  <button
+                    class="text-[10px] font-bold text-primary border-b border-primary/20 pb-0.5"
+                  >
+                    Reactivate
+                  </button>
+                  <button
+                    class="text-[10px] font-bold text-on-surface-variant/40 border-b border-transparent pb-0.5"
+                  >
+                    Settings
+                  </button>
+                </div>
+              </div>
+              <div
+                class="h-12 w-12 bg-surface-container-lowest rounded-full flex items-center justify-center text-outline shadow-sm"
+              >
+                <span class="material-symbols-outlined" data-icon="lock"
+                  >lock</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Row 3: More clients as a list -->
+        <div class="md:col-span-12 mt-8">
+          <div class="flex items-center justify-between mb-8">
+            <h4
+              class="text-xs font-bold text-outline uppercase tracking-[0.3em]"
+            >
+              All Communities
+            </h4>
+            <div class="h-[1px] flex-grow bg-outline-variant/20 mx-6"></div>
+            <div class="flex gap-2">
+              <button
+                class="text-xs font-bold text-primary hover:text-secondary"
+              >
+                View All
+              </button>
+              <span
+                class="material-symbols-outlined text-sm text-outline"
+                data-icon="chevron_right"
+                >chevron_right</span
+              >
+            </div>
+          </div>
+          <div class="space-y-4">
+            <!-- List Item -->
+            <div
+              class="grid grid-cols-2 md:grid-cols-5 items-center p-6 bg-surface-container-low rounded-xl hover:bg-surface-container transition-colors group"
+            >
+              <div class="flex items-center gap-4 col-span-1 md:col-span-2">
+                <div
+                  class="h-10 w-10 bg-white rounded-lg flex items-center justify-center border border-outline-variant/10"
+                >
+                  <span
+                    class="material-symbols-outlined text-secondary"
+                    data-icon="palette"
+                    >palette</span
+                  >
+                </div>
+                <span class="text-lg font-headline text-primary"
+                  >Bespoke Finishes Ltd</span
+                >
+              </div>
+              <div class="hidden md:block">
+                <span
+                  class="text-xs font-bold text-outline-variant uppercase tracking-widest block mb-1"
+                  >Users</span
+                >
+                <span class="font-body text-on-surface">312</span>
+              </div>
+              <div class="hidden md:block">
+                <span
+                  class="text-xs font-bold text-outline-variant uppercase tracking-widest block mb-1"
+                  >Status</span
+                >
+                <span
+                  class="px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold"
+                  >ACTIVE</span
+                >
+              </div>
+              <div class="text-right flex justify-end gap-4">
+                <button
+                  class="text-primary hover:text-secondary transition-colors group-hover:translate-x-[-4px] transition-transform"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    data-icon="settings_input_component"
+                    >settings_input_component</span
+                  >
+                </button>
+                <button
+                  class="text-primary hover:text-secondary transition-colors group-hover:translate-x-[-4px] transition-transform"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    data-icon="open_in_new"
+                    >open_in_new</span
+                  >
+                </button>
+              </div>
+            </div>
+            <!-- List Item -->
+            <div
+              class="grid grid-cols-2 md:grid-cols-5 items-center p-6 bg-surface-container-low rounded-xl hover:bg-surface-container transition-colors group"
+            >
+              <div class="flex items-center gap-4 col-span-1 md:col-span-2">
+                <div
+                  class="h-10 w-10 bg-white rounded-lg flex items-center justify-center border border-outline-variant/10"
+                >
+                  <span
+                    class="material-symbols-outlined text-secondary"
+                    data-icon="auto_fix"
+                    >auto_fix</span
+                  >
+                </div>
+                <span class="text-lg font-headline text-primary"
+                  >The Lasting Studio</span
+                >
+              </div>
+              <div class="hidden md:block">
+                <span
+                  class="text-xs font-bold text-outline-variant uppercase tracking-widest block mb-1"
+                  >Users</span
+                >
+                <span class="font-body text-on-surface">194</span>
+              </div>
+              <div class="hidden md:block">
+                <span
+                  class="text-xs font-bold text-outline-variant uppercase tracking-widest block mb-1"
+                  >Status</span
+                >
+                <span
+                  class="px-2 py-0.5 rounded-full bg-tertiary-container text-on-tertiary-container text-[10px] font-bold"
+                  >ACTIVE</span
+                >
+              </div>
+              <div class="text-right flex justify-end gap-4">
+                <button
+                  class="text-primary hover:text-secondary transition-colors"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    data-icon="settings_input_component"
+                    >settings_input_component</span
+                  >
+                </button>
+                <button
+                  class="text-primary hover:text-secondary transition-colors"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    data-icon="open_in_new"
+                    >open_in_new</span
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Floating Action Button -->
+    <button
+      class="fixed bottom-24 right-8 md:bottom-12 md:right-12 h-16 w-16 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center group hover:scale-105 active:scale-95 transition-all z-50"
+    >
+      <span
+        class="material-symbols-outlined text-3xl transition-transform group-hover:rotate-90"
+        data-icon="add"
+        >add</span
+      >
+      <span
+        class="absolute right-full mr-4 bg-primary text-on-primary px-4 py-2 rounded-lg text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-lg"
+        >Add New Client</span
+      >
+    </button>
+    <!-- BottomNavBar (Mobile only) -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 w-full bg-stone-100 dark:bg-stone-950 flex justify-around items-center px-4 pb-4 pt-2 z-50 rounded-t-xl border-t border-stone-200/30 shadow-[0_-4px_24px_rgba(70,41,30,0.06)]"
+    >
+      <a
+        class="flex flex-col items-center justify-center bg-[#603f33] text-stone-50 rounded-lg px-4 py-1.5 translate-y-0.5 transition-transform"
+        href="#"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="corporate_fare"
+          >corporate_fare</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase"
+          >Clients</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#d7ccc8]/40 px-4 py-1.5 hover:text-[#964900] transition-colors"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined mb-1"
+          data-icon="settings_input_component"
+          >settings_input_component</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase"
+          >Configs</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#d7ccc8]/40 px-4 py-1.5 hover:text-[#964900] transition-colors"
+        href="#"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="payments"
+          >payments</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase"
+          >Billing</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#d7ccc8]/40 px-4 py-1.5 hover:text-[#964900] transition-colors"
+        href="#"
+      >
+        <span class="material-symbols-outlined mb-1" data-icon="receipt_long"
+          >receipt_long</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase">Audit</span>
+      </a>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "title": "Family Management",
+  "empty.title": "No family members yet",
+  "empty.description": "Add the first family member to keep this section organized.",
+  "empty.action": "Add Member",
+  "summary.totalMembers": "Total Members",
+  "sections.yourFamily": "Your Family",
+  "fields.bloodGroup": "Blood Group",
+  "actions.uploadMarksheet": "Upload Marksheet",
+  "actions.edit": "Edit",
+  "actions.delete": "Delete"
+}

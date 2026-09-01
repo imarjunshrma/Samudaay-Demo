@@ -1,0 +1,20 @@
+{
+  "title": "Super Admin",
+  "subtitle": "Provision clients and manage elevated access",
+  "hero.title": "Choose a provisioning path",
+  "hero.description": "Start with client onboarding, then manage tenants, configure branding, or assign elevated access.",
+  "hero.entryPoint": "Entry Point",
+  "hero.routes": "Routes",
+  "hero.actionsCount": "5 actions",
+  "section.flow": "Super Admin Flow",
+  "action.createClient": "Create New Client Organization",
+  "action.createClient.description": "Onboard a new trust, set the primary admin, and launch a fresh tenant.",
+  "action.clientManagement": "Client Management",
+  "action.clientManagement.description": "Review active communities, trial accounts, and client health.",
+  "action.clientConfiguration": "Client Configuration",
+  "action.clientConfiguration.description": "Adjust branding, modules, billing, and access settings for a client.",
+  "action.createAdmin": "Create Admin",
+  "action.createAdmin.description": "Invite a new admin and route them into the proper workspace.",
+  "action.assignRole": "Assign User Role",
+  "action.assignRole.description": "Grant scoped access for a member, community support, or trustee."
+}

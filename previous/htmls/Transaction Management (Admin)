@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Admin Dashboard - All Transactions</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <!-- Header Section -->
+      <header
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800"
+      >
+        <div
+          class="flex size-10 shrink-0 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+        >
+          <span
+            class="material-symbols-outlined text-slate-900 dark:text-slate-100"
+            >arrow_back</span
+          >
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-2"
+        >
+          All Transactions
+        </h2>
+        <div class="flex gap-2">
+          <button
+            class="flex size-10 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-slate-900 dark:text-slate-100"
+              >search</span
+            >
+          </button>
+          <button
+            class="flex size-10 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+          >
+            <span
+              class="material-symbols-outlined text-slate-900 dark:text-slate-100"
+              >download</span
+            >
+          </button>
+        </div>
+      </header>
+      <!-- Admin Profile & Access Level -->
+      <div class="p-4 @container">
+        <div
+          class="flex w-full flex-col gap-4 p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm"
+        >
+          <div class="flex gap-4 items-center">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-16 w-16 border-2 border-primary"
+              data-alt="Professional headshot of male national administrator"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCw_iYs0EGRQJlYd8jjqmW3Q0w7klzelxnH78o89iTA_krrE0DmWWuVp1Ox6Spu4OEdvN7S3BuuOokOPbRlQeNHZXy9_EqNf_YSfFnUJd5J_i7Lr4kX959yagpTOBo7ls_Q4laObHpgk-tGb9XvKt0fLATzSj0Z8txdCE9kMHJXwMjiwI8skaQ2YNj6UMsj0X5wOQ_uv7f_aqgWKpv0FHIlIg3WQ1HtOzaTv3pJ7i1tq9LhyPwUHQZYKijJheJvY4cqrJcC3LAjRYSI&quot;);
+              "
+            ></div>
+            <div class="flex flex-col justify-center">
+              <div class="flex items-center gap-2">
+                <p class="text-slate-900 dark:text-slate-100 text-lg font-bold">
+                  Alex Johnson
+                </p>
+                <span
+                  class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider"
+                  >National Admin</span
+                >
+              </div>
+              <p class="text-slate-500 dark:text-slate-400 text-sm">
+                Full Platform Visibility • Global Access
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Filters Section -->
+      <div class="px-4 pb-2">
+        <h3
+          class="text-slate-900 dark:text-slate-100 text-base font-bold mb-3 flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-sm">filter_list</span>
+          Filters
+        </h3>
+        <div class="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+          <button
+            class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 shadow-sm active:bg-slate-50"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >location_on</span
+            >
+            <p class="text-slate-700 dark:text-slate-300 text-sm font-medium">
+              All Cities
+            </p>
+            <span class="material-symbols-outlined text-slate-400 text-lg"
+              >expand_more</span
+            >
+          </button>
+          <button
+            class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 shadow-sm"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >category</span
+            >
+            <p class="text-slate-700 dark:text-slate-300 text-sm font-medium">
+              All Types
+            </p>
+            <span class="material-symbols-outlined text-slate-400 text-lg"
+              >expand_more</span
+            >
+          </button>
+          <button
+            class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 shadow-sm"
+          >
+            <span class="material-symbols-outlined text-primary text-xl"
+              >calendar_today</span
+            >
+            <p class="text-slate-700 dark:text-slate-300 text-sm font-medium">
+              Last 30 Days
+            </p>
+            <span class="material-symbols-outlined text-slate-400 text-lg"
+              >expand_more</span
+            >
+          </button>
+        </div>
+      </div>
+      <!-- Transactions List -->
+      <main class="flex-1 px-4 py-2 flex flex-col gap-3">
+        <!-- Row 1 -->
+        <div
+          class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary"
+            >
+              <span class="material-symbols-outlined">volunteer_activism</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">
+                Sarah Williams
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                New York, 10001 • Donation
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-slate-900 dark:text-slate-100">$250.00</p>
+            <span
+              class="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded uppercase"
+              >Completed</span
+            >
+          </div>
+        </div>
+        <!-- Row 2 -->
+        <div
+          class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+            >
+              <span class="material-symbols-outlined">event</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">
+                Michael Chen
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                San Francisco, 94105 • Event Ticket
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-slate-900 dark:text-slate-100">$45.00</p>
+            <span
+              class="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded uppercase"
+              >Completed</span
+            >
+          </div>
+        </div>
+        <!-- Row 3 -->
+        <div
+          class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary"
+            >
+              <span class="material-symbols-outlined">volunteer_activism</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">
+                Jessica Smith
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Chicago, 60601 • Donation
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-slate-900 dark:text-slate-100">
+              $1,200.00
+            </p>
+            <span
+              class="text-[10px] font-bold text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-900/30 px-1.5 py-0.5 rounded uppercase"
+              >Pending</span
+            >
+          </div>
+        </div>
+        <!-- Row 4 -->
+        <div
+          class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400"
+            >
+              <span class="material-symbols-outlined">card_membership</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">
+                David Miller
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Austin, 73301 • Membership
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-slate-900 dark:text-slate-100">$150.00</p>
+            <span
+              class="text-[10px] font-bold text-green-600 dark:text-green-400 bg-green-100 dark:bg-green-900/30 px-1.5 py-0.5 rounded uppercase"
+              >Completed</span
+            >
+          </div>
+        </div>
+        <!-- Row 5 -->
+        <div
+          class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-100 dark:border-slate-800 flex items-center justify-between shadow-sm opacity-60"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400"
+            >
+              <span class="material-symbols-outlined">error</span>
+            </div>
+            <div>
+              <p class="font-bold text-slate-900 dark:text-slate-100 text-sm">
+                Robert Brown
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Seattle, 98101 • Donation
+              </p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-bold text-slate-900 dark:text-slate-100">$50.00</p>
+            <span
+              class="text-[10px] font-bold text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 px-1.5 py-0.5 rounded uppercase"
+              >Failed</span
+            >
+          </div>
+        </div>
+      </main>
+      <!-- Spacer for nav -->
+      <div class="h-20"></div>
+      <!-- Bottom Navigation -->
+      <nav
+        class="fixed bottom-0 w-full border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pb-4 pt-2 flex items-center justify-between z-20"
+      >
+        <a
+          class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">dashboard</span>
+          <p class="text-[10px] font-medium">Dashboard</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center gap-1 text-primary"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >list_alt</span
+          >
+          <p class="text-[10px] font-medium">Transactions</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <p class="text-[10px] font-medium">Members</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <p class="text-[10px] font-medium">Settings</p>
+        </a>
+      </nav>
+    </div>
+    <style>
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </body>
+</html>

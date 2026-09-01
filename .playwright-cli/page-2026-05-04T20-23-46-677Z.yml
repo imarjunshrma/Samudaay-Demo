@@ -1,0 +1,31 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e7]: Log 1 of 1
+    - generic [ref=e8]:
+      - generic [ref=e10]: Server Error
+      - generic [ref=e11]: "Unable to resolve module ./components/ImageItem/ImageItem from /Users/bridgestonetec/Codebase/upwork-stitch/frontend/node_modules/react-native-image-viewing/dist/ImageViewing.js: None of these files exist: * node_modules/react-native-image-viewing/dist/components/ImageItem/ImageItem(.web.ts|.ts|... See More"
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e16]: Source
+        - generic [ref=e18]:
+          - generic [ref=e21]:
+            - generic [ref=e22]:
+              - generic [ref=e24]: 1 |
+              - generic [ref=e25]: /**
+            - generic [ref=e26]:
+              - generic [ref=e28]: 2 |
+              - generic [ref=e29]: "* Copyright (c) JOB TODAY S.A. and its affiliates."
+            - generic [ref=e30]:
+              - generic [ref=e32]: 3 |
+              - generic [ref=e33]: "*"
+          - generic [ref=e36] [cursor=pointer]: node_modules/react-native-image-viewing/dist/ImageViewing.js (0:1)
+      - generic [ref=e37]:
+        - generic [ref=e39]: Call Stack
+        - generic [ref=e40]:
+          - generic [ref=e43] [cursor=pointer]:
+            - generic [ref=e44]: <unknown>
+            - generic [ref=e45]: node_modules/react-native-image-viewing/dist/ImageViewing.js:0
+          - generic [ref=e49] [cursor=pointer]: Collapse 1 frame
+    - generic [ref=e52]: This error cannot be dismissed.
+  - generic:
+    - img

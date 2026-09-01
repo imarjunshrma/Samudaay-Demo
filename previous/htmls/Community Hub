@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen pb-24"
+  >
+    <!-- Header -->
+    <header
+      class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10"
+    >
+      <div class="flex items-center p-4 justify-between max-w-2xl mx-auto">
+        <div
+          class="text-primary flex size-10 shrink-0 items-center justify-center"
+        >
+          <span class="material-symbols-outlined text-3xl">menu</span>
+        </div>
+        <h1
+          class="text-lg font-bold leading-tight tracking-tight flex-1 text-center"
+        >
+          Indian Cobbler Community
+        </h1>
+        <div class="flex w-10 items-center justify-end">
+          <button
+            class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary/10 text-primary"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="max-w-2xl mx-auto">
+      <!-- Story/Category Circles -->
+      <div class="flex w-full overflow-x-auto px-4 py-6 no-scrollbar">
+        <div class="flex flex-row items-start justify-start gap-6">
+          <div class="flex flex-col items-center gap-2 min-w-[72px]">
+            <div
+              class="w-16 h-16 bg-primary/20 p-1 rounded-full border-2 border-primary"
+            >
+              <div
+                class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full"
+                data-alt="Artisanal leather tools on a workbench"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCCYR1r5xiKDrFmjKq_8fNpQPl1tM3ahYxQoE13qCA4XzlxCkeWLiE7Z-2PzDdgDD9y2LOQnOziHHANe1GFOHxhKnHBhs7nw7TCDkvFX_3jUYW6wo-oncUaGJlxouQxdtSiEeATEZEoe1P3Zwwul7Z5vccyLg7VZBhrpNrTmTjitcNUOl0t09hx4vWJR6rsCRey3Pw_eq02jOMJYxLVzufxQi8mQnq4UJbhq5cQXKwGV5dfrizQPQ-72JDisszc-AHYZT7PguBwtHOs&quot;);
+                "
+              ></div>
+            </div>
+            <p class="text-[12px] font-semibold">Spotlight</p>
+          </div>
+          <div class="flex flex-col items-center gap-2 min-w-[72px]">
+            <div
+              class="w-16 h-16 bg-primary/5 p-1 rounded-full border border-primary/20"
+            >
+              <div
+                class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full"
+                data-alt="Traditional shoemaking tools and hammers"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuD-6pwwJA9oeY1QWdiDG22Fw1Md20kgwmzRyQ6nSLlnDB8dQSAOIJkMlx060jajEkBHjQrUCwKqLYtcDkNoW_92oBEiBZQ3UrFLwzdoh0nxT70SBsN1Ml9Z7qgMEFYX0trovmZcKL_GlqWlh7FgxP3p2M5FXLBGvL_QWhZYU3H7Td00uQtNmzfZBhMC_-RLCOjZmDP-EG1hr0s6xcX8iBdy1Z7g5ip8JWoNVdKZmWKdLIFPo9A1Yr6WujNJ_CLUmd45pG3BT6C7f9jF&quot;);
+                "
+              ></div>
+            </div>
+            <p
+              class="text-[12px] font-medium text-slate-600 dark:text-slate-400"
+            >
+              Tools
+            </p>
+          </div>
+          <div class="flex flex-col items-center gap-2 min-w-[72px]">
+            <div
+              class="w-16 h-16 bg-primary/5 p-1 rounded-full border border-primary/20"
+            >
+              <div
+                class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full"
+                data-alt="Close up of leather stitching techniques"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBEM-yTQhNHOuATvdVo28aFwxDUwyFTJzMOjkkPRmbBdnFAehl2FlS5266CE8KjAubfmnpBiM7Tp7s4cVSx8NFjjzOuM8qd_jzF3iEQkAYJGaMJjdwGzQaIHK7FBiK4IaBSTJrcfAjDYNsqE04b9pRE7Tes7-y6Ab07WnDr-HIBX0CLWEWT5vwlS4QZrL64RKVVtZB1CUf_ZtFriN7le2nrznyRTFmgvHeQRcHn_cD1gylCyPRxfRSGFqJaYWe_CqOCLxu1jd_ddmeE&quot;);
+                "
+              ></div>
+            </div>
+            <p
+              class="text-[12px] font-medium text-slate-600 dark:text-slate-400"
+            >
+              Techniques
+            </p>
+          </div>
+          <div class="flex flex-col items-center gap-2 min-w-[72px]">
+            <div
+              class="w-16 h-16 bg-primary/5 p-1 rounded-full border border-primary/20"
+            >
+              <div
+                class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full"
+                data-alt="High quality tanned brown leather sheets"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDG7eCF0_czDeXYl4gD-byX6q82lu5rpM4eExX7LJlj8nU0Pqxjav3oSLRVe6W14tUFUrJe1OB011MPcZMhYH3nqFIzAkcAvksgEb2-hlxnVaUKPJ2ftaj_KE6k706_yzPqOHkKVJmdLC9WFFXJRVGyLyzUu-hqCRzVv9mcv-uNngr6qwgf6Kj7euoE5mPCVqiE0SF4mHrum44tLzXFrwEh34cNjfWQHJkn3HvrY4V3oWlUzXH6123Lhulo-zjsMeg3rtQ-pI0vYLgB&quot;);
+                "
+              ></div>
+            </div>
+            <p
+              class="text-[12px] font-medium text-slate-600 dark:text-slate-400"
+            >
+              Leather
+            </p>
+          </div>
+          <div class="flex flex-col items-center gap-2 min-w-[72px]">
+            <div
+              class="w-16 h-16 bg-primary/5 p-1 rounded-full border border-primary/20"
+            >
+              <div
+                class="w-full h-full bg-center bg-no-repeat bg-cover rounded-full"
+                data-alt="A group of people sitting at a table"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDH5A8LScecInJTHKrImpHBPTbtKo6iKqy-iwW9L_Q1MbkhuslE7qxCL9jNd1nDXLM69psnhwc47tMoxq0iCsAf_mbMQOlQdCuqch9cIHge-Er6pmVN4r2oMR_K4T1KjhRPDAC2ryJsltfNw8tOrXqnIoNyt5nK7UyH8Jn1WrQ5HG_LsXGfhl9S0KOPIiks6Mc5Bb0S9acjIwTVkI785NVW8UHwypufU7H1blXg0avMyn6ADYST8j_clcZHogJJWta7p5c84YiyetLs&quot;);
+                "
+              ></div>
+            </div>
+            <p
+              class="text-[12px] font-medium text-slate-600 dark:text-slate-400"
+            >
+              Meetup
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Monthly Publication Section -->
+      <section class="px-4 py-4">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold tracking-tight">Monthly Publication</h2>
+          <span class="text-primary text-sm font-semibold">View Archive</span>
+        </div>
+        <div
+          class="bg-primary/5 dark:bg-primary/10 rounded-xl p-4 border border-primary/10 flex gap-4"
+        >
+          <div
+            class="w-24 h-32 flex-shrink-0 bg-white rounded shadow-md overflow-hidden border border-slate-200"
+          >
+            <div
+              class="w-full h-full bg-center bg-no-repeat bg-cover"
+              data-alt="Front cover of a craft magazine"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBbBZ6bAL9pTFyxGIHQ_srbVSot6-GKwIANSU6vI44LzBOQubHnbv_H7izcQUxSqkS2yHylvTMrnwhu2XzIkhv_-aMg2XyJHAN2Dpq9dLcTVBr7H-V2BzC7iejtRlRqq2RExrv8w-Ciur2OKaEx_h-D5onO5e4tyrkE08Asab_NxDdXyJ800oOlxHkmlUdGyphyOnuX47j17Uj2o93LS5mkhb3Ny5YXxHdX8-YQFQxMMGaAXUnuAnZxrWRkkZxo-JHr_wHyMvq4gAWc&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex flex-col justify-center flex-1">
+            <span
+              class="text-[10px] font-bold uppercase tracking-widest text-primary mb-1"
+              >Issue #42 • October 2023</span
+            >
+            <h3 class="text-base font-bold mb-2">
+              The Future of Sustainable Soling
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400 mb-3">
+              Featuring interviews with master craftsmen from Kanpur and
+              Kolhapur.
+            </p>
+            <button
+              class="bg-primary text-white text-xs font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 self-start"
+            >
+              <span class="material-symbols-outlined text-sm">download</span>
+              Download PDF
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Upcoming Events Section -->
+      <section class="py-6">
+        <div class="px-4 flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold tracking-tight">Upcoming Events</h2>
+          <span class="material-symbols-outlined text-slate-400"
+            >calendar_month</span
+          >
+        </div>
+        <div class="flex overflow-x-auto px-4 gap-4 no-scrollbar">
+          <!-- Event Card 1 -->
+          <div
+            class="flex-shrink-0 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden"
+          >
+            <div
+              class="h-40 bg-center bg-no-repeat bg-cover relative"
+              data-alt="A large convention hall in Delhi"
+              data-location="Delhi"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDwZcm8cDIBRfpAe6OIKwUo5HZEyFLazuqY4maBb2jMluJAPsuwC8R0Vv44B9lULLq2zWJsOW5e7BvGyjk-g4u-ixiO5hc_IvLAnCVtyc78sTEznfLpjRMD9DlJhPoyz5hmZVWkQcjPM9a-DiiEz2UUWghnfsRSYRr6HardHkQZuUHbLo-zxKQLOmUqTlzBPQvJY_8zXK8JCxHRj0ICmmbhk2erOSr44aQmCGQyX4ThGIKyt3dfaqdKaYg3Bc27wH6seQ3sHrX5K9Nq&quot;);
+              "
+            >
+              <div
+                class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 rounded-lg px-2 py-1 text-center min-w-[45px]"
+              >
+                <p
+                  class="text-[10px] font-bold uppercase text-primary leading-none"
+                >
+                  Oct
+                </p>
+                <p class="text-lg font-bold leading-none">15</p>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-base mb-1">National Meetup Delhi</h3>
+              <div
+                class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs mb-3"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >location_on</span
+                >
+                <span>Pragati Maidan, New Delhi</span>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span
+                  class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[12px]"
+                    >restaurant</span
+                  >
+                  Lunch Included
+                </span>
+                <span
+                  class="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[12px]"
+                    >workspace_premium</span
+                  >
+                  Certificate
+                </span>
+              </div>
+              <button
+                class="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary font-bold rounded-lg transition-colors"
+              >
+                Register Now
+              </button>
+            </div>
+          </div>
+          <!-- Event Card 2 -->
+          <div
+            class="flex-shrink-0 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden"
+          >
+            <div
+              class="h-40 bg-center bg-no-repeat bg-cover relative"
+              data-alt="Modern workshop hub in Mumbai"
+              data-location="Mumbai"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuB3Z2_AMI_a7iPZnmfyAvrlvJVx3KI7ZNR0jIwpgQHPT_JwOS8puLdw3BX0t-bayb8W6zIazxrePFdFyRtYdI98geX-KzanP3SvXh0mLvYScVu12ZGktvaJPuqips9qAeUijnh518Q_6SjdZm_Ww9WLpK0biBCHZrYfHhkfeKmK6i1xfmXug8_SoE9vr0Te5tgNLIfoX4t_saQq9lgvEsqfv5tT55Le-t9McWnHHpIa2M3veuhecv3sCooSezxobuw1ZRVlkiO4DXA8&quot;);
+              "
+            >
+              <div
+                class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 rounded-lg px-2 py-1 text-center min-w-[45px]"
+              >
+                <p
+                  class="text-[10px] font-bold uppercase text-primary leading-none"
+                >
+                  Oct
+                </p>
+                <p class="text-lg font-bold leading-none">22</p>
+              </div>
+            </div>
+            <div class="p-4">
+              <h3 class="font-bold text-base mb-1">Workshop Mumbai</h3>
+              <div
+                class="flex items-center gap-1 text-slate-500 dark:text-slate-400 text-xs mb-3"
+              >
+                <span class="material-symbols-outlined text-sm"
+                  >location_on</span
+                >
+                <span>Dharavi Design Hub</span>
+              </div>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span
+                  class="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[12px]"
+                    >dinner_dining</span
+                  >
+                  Dinner Gala
+                </span>
+              </div>
+              <button
+                class="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary font-bold rounded-lg transition-colors"
+              >
+                Register Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Community News Feed -->
+      <section class="px-4 py-4">
+        <h2 class="text-xl font-bold tracking-tight mb-4">Community News</h2>
+        <div class="space-y-6">
+          <!-- News Item 1 -->
+          <div class="flex gap-4">
+            <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+              <img
+                class="w-full h-full object-cover"
+                data-alt="Close up of a luxury leather watch strap"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQ_-zobhxSf-3C7kXlAixZEfay89qZndbMXjaHIfeGUBnnZyOLQJi_-afIpQrCD7rl3onysp7GcxSNaAE-uSc368EPTVPhq7bk99xUpwjySN8bQNz8bLtuMU3BXE6O8IDZ25Ku-0YinocGHxHYPCGeyLN48xe825OWwv0fOdnPqbpop-IVY3msKnBTX4U6W4cg7ZgnsRztfJYZCga7MolFPh7nC6kvA9XEKz2CTWXt6aTqX13ahxKnhhsEV5QKmsa-EOXyKlv5u7Tg"
+              />
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] font-bold text-primary uppercase"
+                  >Innovation</span
+                >
+                <span class="text-[10px] text-slate-400">2 hours ago</span>
+              </div>
+              <h4 class="text-sm font-bold leading-snug mb-1">
+                New export guidelines for handmade leather accessories announced
+                by Ministry.
+              </h4>
+              <p
+                class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2"
+              >
+                The new policy aims to double exports from small-scale artisanal
+                clusters by 2025...
+              </p>
+            </div>
+          </div>
+          <!-- News Item 2 -->
+          <div
+            class="flex gap-4 border-t border-slate-100 dark:border-slate-800 pt-6"
+          >
+            <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+              <img
+                class="w-full h-full object-cover"
+                data-alt="Group of workers in a leather factory"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDexiqcJL8WlMg223SsF-3lQB1_BoH9GwWfWhpej3A22OEw1LwEcSapZKB86lBeuxMfhYYQ7PAGOfxS1IkUKB5X1Ebqt9E7vetFmgk1gKAJ_e_mwZudupF1pI1nRIeQpxv0riuk1NdnS_6AzJJ5HuGvV9MxJ66mHt8aXOu5kBLnxg3yZP75-5gKRKIV-AoSsJATvGt-6_ByFqTDfnPdyizJpxxibvPpvidCZ0nA-Po4gmyQxmwtcnSoR3QljBlcAcInQ-6XKi60iuXP"
+              />
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] font-bold text-primary uppercase"
+                  >Success Story</span
+                >
+                <span class="text-[10px] text-slate-400">Yesterday</span>
+              </div>
+              <h4 class="text-sm font-bold leading-snug mb-1">
+                Kolhapur Chappal cooperative expands to international European
+                markets.
+              </h4>
+              <p
+                class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2"
+              >
+                A local group of 50 cobblers has successfully fulfilled their
+                first order to Paris...
+              </p>
+            </div>
+          </div>
+          <!-- News Item 3 -->
+          <div
+            class="flex gap-4 border-t border-slate-100 dark:border-slate-800 pt-6"
+          >
+            <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+              <img
+                class="w-full h-full object-cover"
+                data-alt="Old leather ledger and pen"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOZgHsrboLrlHOYEyG8oDRREw2RZd2ZnwLqylLJllEjnSgmkjGHXAVX58shSUHn0D_WtzCEuAeNi3LgLXt8eHNC8F-B7QOCI1Jne0ky6XQsNNDuefO5gS4H5kyRQt1rLiDdhqCX-5zOKWfSYHPo3BZfophCgcMfMmKpHpB5s3X6x1LxSydRCV7Pau0hTo4OdA1XzSpmWKfQzTmrIR1Wx_cQSUjzvOZC3ecX5kUO197uT5fO05fAtEMnmISoKa8sJlO2Hn-Jb50ujwu"
+              />
+            </div>
+            <div class="flex-1">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] font-bold text-primary uppercase"
+                  >Education</span
+                >
+                <span class="text-[10px] text-slate-400">2 days ago</span>
+              </div>
+              <h4 class="text-sm font-bold leading-snug mb-1">
+                Digital Literacy Program for senior cobblers starts next month.
+              </h4>
+              <p
+                class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2"
+              >
+                Learn how to manage your business orders using WhatsApp and UPI
+                safely...
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          class="w-full mt-8 py-3 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-lg text-sm"
+        >
+          Load More News
+        </button>
+      </section>
+    </main>
+    <!-- Bottom Navigation -->
+    <nav
+      class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-slate-100 dark:border-slate-800 pb-safe z-50"
+    >
+      <div
+        class="flex justify-between items-center max-w-2xl mx-auto px-4 py-2"
+      >
+        <a
+          class="flex flex-col items-center gap-1 text-primary p-2 flex-1"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >home</span
+          >
+          <span class="text-[10px] font-bold">Home</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 p-2 flex-1"
+          href="#"
+        >
+          <span class="material-symbols-outlined">event</span>
+          <span class="text-[10px] font-medium">Events</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 p-2 flex-1"
+          href="#"
+        >
+          <span class="material-symbols-outlined">forum</span>
+          <span class="text-[10px] font-medium">Forum</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 p-2 flex-1"
+          href="#"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <span class="text-[10px] font-medium">Directory</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 p-2 flex-1"
+          href="#"
+        >
+          <span class="material-symbols-outlined">person</span>
+          <span class="text-[10px] font-medium">Profile</span>
+        </a>
+      </div>
+    </nav>
+    <style>
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .pb-safe {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+    </style>
+  </body>
+</html>

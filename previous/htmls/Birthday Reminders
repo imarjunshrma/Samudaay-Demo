@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex min-h-screen w-full flex-col overflow-x-hidden max-w-md mx-auto border-x border-primary/10 shadow-xl bg-background-light dark:bg-background-dark"
+    >
+      <header
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10 sticky top-0 z-10"
+      >
+        <div
+          class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center"
+        >
+          Birthday Reminders
+        </h2>
+        <div class="flex w-10 items-center justify-end">
+          <button
+            class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-transparent text-primary"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+        </div>
+      </header>
+      <main class="flex-1 overflow-y-auto">
+        <!-- Hero Section -->
+        <div class="px-4 py-6 bg-gradient-to-br from-primary/10 to-transparent">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="material-symbols-outlined text-primary"
+              >celebration</span
+            >
+            <h2
+              class="text-slate-900 dark:text-slate-100 text-2xl font-bold leading-tight tracking-[-0.015em]"
+            >
+              Today's Birthdays
+            </h2>
+          </div>
+          <p class="text-slate-600 dark:text-slate-400 text-sm">
+            Don't forget to wish your fellow community members!
+          </p>
+        </div>
+        <!-- Today's Birthdays List -->
+        <div class="px-4 space-y-3 mt-4">
+          <div
+            class="flex items-center gap-4 bg-white dark:bg-primary/5 p-4 rounded-xl border border-primary/5 shadow-sm"
+          >
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 shrink-0 border-2 border-primary/20"
+              data-alt="Portrait of a middle aged Indian man"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAZfdAmOTNalNfxkdL4xLeeyTbDHVT1HbevK9a0oYXpQxKiTXgjYJCVR3yQmXJL3gJe-JsE-T3jC9Mi4bnerjF9GxyXQzcSEkIBVsDsn9bTxoGsE3YAPYOporC8AE9HXRebQqNFk5rsz42i1HWbsGIUlkSQaDUix8Csy3h8OpJpUENGPpLIle84ju_-mxboSw_z0YmvhHGTDq8pbOPZkuBWxv8d0MtDyJpDEzsbzsN5G-BzS-WBtR5vGn7uJ0pxBF2ae8KuPXoxvKXz&quot;);
+              "
+            ></div>
+            <div class="flex flex-col flex-1">
+              <p
+                class="text-slate-900 dark:text-slate-100 text-base font-bold leading-none mb-1"
+              >
+                Rajesh Kumar
+              </p>
+              <p class="text-primary text-sm font-medium leading-normal">
+                Turning 45 today
+              </p>
+            </div>
+            <button
+              class="flex items-center justify-center gap-1 rounded-lg h-9 px-4 bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
+            >
+              <span class="material-symbols-outlined text-sm">send</span>
+              <span>Wish</span>
+            </button>
+          </div>
+          <div
+            class="flex items-center gap-4 bg-white dark:bg-primary/5 p-4 rounded-xl border border-primary/5 shadow-sm"
+          >
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 shrink-0 border-2 border-primary/20"
+              data-alt="Portrait of a young Indian man"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA4XBH6w6wUn8B3Yiz4Z9SR7RyjPLtPXiwtz0KjZkCWMR8G9FUv4nSqd7tgBe9pvCNjbtVHvB4gHPgKL3atDUgPVV21_yOL6gHwCAptJ0JH-hll2y4KKc0OH-RgCmplvHCmI8qJaABofHfR3BsMpDXRoOysQIBxlb-rGxv8hZpTRRcXqyJIQydK9H0LDkzXhRSWmJhlgrCYXfpgmUvn1m6gNgErPr6ko-c9vEALJkC9RPt6dHFzF6PAd_MaXD6A55mGNmZdBq1bVSGs&quot;);
+              "
+            ></div>
+            <div class="flex flex-col flex-1">
+              <p
+                class="text-slate-900 dark:text-slate-100 text-base font-bold leading-none mb-1"
+              >
+                Amit Prajapati
+              </p>
+              <p class="text-primary text-sm font-medium leading-normal">
+                Turning 32 today
+              </p>
+            </div>
+            <button
+              class="flex items-center justify-center gap-1 rounded-lg h-9 px-4 bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
+            >
+              <span class="material-symbols-outlined text-sm">send</span>
+              <span>Wish</span>
+            </button>
+          </div>
+        </div>
+        <!-- Upcoming Section -->
+        <div class="px-4 pb-3 pt-8">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="material-symbols-outlined text-slate-500"
+              >calendar_month</span
+            >
+            <h2
+              class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em]"
+            >
+              Upcoming this week
+            </h2>
+          </div>
+          <div class="space-y-2">
+            <div
+              class="flex items-center gap-4 bg-transparent border-b border-primary/5 px-2 py-3"
+            >
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 opacity-80"
+                data-alt="Portrait of an elderly Indian professional"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA7BA9vuDFViNnkcAYOotOKIc6KwrQo4of6tVT7Z9S5htKEJxVWUDI5ofvpw0h4bkbIQfiyLvNhoupJsjYdv7efZrN7dIWTtCO-Jk0jBtxywTtcs-V3RzbQpbrNF_Fs63rK9dNWz86qglWutTjEndc895hAY_kIPwVipVhw8wqipfhYS5Ggu9qbJQsWsS0gAkBj1Sd-yPxpplR-5L-1bzDqpZF6wdPGV66iYstBFk-28tBQHDz_Dur1LxRYIR2GW2ftoqvrP0tN2ORE&quot;);
+                "
+              ></div>
+              <div class="flex flex-col flex-1">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-sm font-semibold"
+                >
+                  Sunil Varma
+                </p>
+                <p class="text-slate-500 dark:text-slate-400 text-xs">
+                  Tomorrow, Oct 24
+                </p>
+              </div>
+              <button
+                class="flex items-center justify-center rounded-lg h-8 px-3 bg-primary/10 text-primary text-xs font-bold"
+              >
+                Set Alert
+              </button>
+            </div>
+            <div
+              class="flex items-center gap-4 bg-transparent border-b border-primary/5 px-2 py-3"
+            >
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 opacity-80"
+                data-alt="Portrait of a young Indian artisan"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA0ubuhq48Eu5pcUyMAbJ5LngGZovgzBb5T16oAoBwFBqJ7LRPW2u-Ch7qU2_DChkvXJ4m1hbPyCzqmB07kcVUs8Bw2oyUXc5MQokDWKg4ADzzdws3fYrveZpugpd5PebZSj5EmedqttVZBwhMuA9RKVUGDQYv6mL7xxKm6bpSN1sXJ1go1HBK_9LOhry3EulSrbrM8IiwIIzKgjd2XdJoGBr8yJeZfkWAJGfwj8laCsinYxEyIR_TfeRyE4qEL6wCOWuaEM5NBDlYi&quot;);
+                "
+              ></div>
+              <div class="flex flex-col flex-1">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-sm font-semibold"
+                >
+                  Deepak Chauhan
+                </p>
+                <p class="text-slate-500 dark:text-slate-400 text-xs">
+                  Friday, Oct 26
+                </p>
+              </div>
+              <button
+                class="flex items-center justify-center rounded-lg h-8 px-3 bg-primary/10 text-primary text-xs font-bold"
+              >
+                Set Alert
+              </button>
+            </div>
+            <div
+              class="flex items-center gap-4 bg-transparent border-b border-primary/5 px-2 py-3"
+            >
+              <div
+                class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-12 w-12 shrink-0 opacity-80"
+                data-alt="Portrait of an Indian woman"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuB3mlI1a5k6LvCkKjXntvwhg08Ax31KixejwSQM_Whao08WIQpauwPJ3D4OzkPYZgVBNMDJ1N7kgJqSfb_TR1cVpFLSwPBiOPySypGovAkCujQ8ILp_RXj2kW9RapkVYXW81FjjbUZcHwRmxTZ7Ppn2dVkHh5C_shDQVJtjziT6If9-rlcrmMsO6ZbjZhKaNe9Bp7Jbv7bNOZB7AbPpgDhVqmVfSVBzvMgs14SPhYWGIn6HIW5ErrPTNv1DQA4aFw6KKBv69zfZ4H2p&quot;);
+                "
+              ></div>
+              <div class="flex flex-col flex-1">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-sm font-semibold"
+                >
+                  Meena Solanki
+                </p>
+                <p class="text-slate-500 dark:text-slate-400 text-xs">
+                  Saturday, Oct 27
+                </p>
+              </div>
+              <button
+                class="flex items-center justify-center rounded-lg h-8 px-3 bg-primary/10 text-primary text-xs font-bold"
+              >
+                Set Alert
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="h-20 bg-transparent"></div>
+      </main>
+      <!-- Bottom Navigation Bar -->
+      <nav
+        class="fixed bottom-0 w-full max-w-md border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-3 pt-2"
+      >
+        <div class="flex justify-between items-center">
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+            href="#"
+          >
+            <span class="material-symbols-outlined">home</span>
+            <p class="text-[10px] font-medium">Home</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+            href="#"
+          >
+            <span class="material-symbols-outlined">group</span>
+            <p class="text-[10px] font-medium">Members</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-primary"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >cake</span
+            >
+            <p class="text-[10px] font-bold">Birthdays</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+            href="#"
+          >
+            <span class="material-symbols-outlined">person</span>
+            <p class="text-[10px] font-medium">Profile</p>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </body>
+</html>

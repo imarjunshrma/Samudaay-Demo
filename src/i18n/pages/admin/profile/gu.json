@@ -1,0 +1,14 @@
+{
+  "title": "પ્રોફાઇલ",
+  "loading": "લોડ થઈ રહ્યું છે...",
+  "accountDetails": "ખાતાની વિગતો",
+  "notifications": "નોટિફિકેશન્સ",
+  "security": "સુરક્ષા",
+  "accountDetailsSubtitle": "વ્યક્તિગત માહિતી અપડેટ કરો",
+  "notificationsSubtitle": "એલર્ટ પસંદગીઓ મેનેજ કરો",
+  "securitySubtitle": "પાસવર્ડ અને ઍક્સેસ સેટિંગ્સ",
+  "language.label": "ભાષા પસંદગી",
+  "language.helper": "લેબલ્સ અને મેનૂ માટે તમારી એપ ભાષા પસંદ કરો.",
+  "signOut": "સાઈન આઉટ",
+  "fallbackName": "એડમિન એડમિનિસ્ટ્રેટર"
+}

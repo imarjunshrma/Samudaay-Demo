@@ -1,0 +1,16 @@
+{
+  "title": "Member Directory",
+  "title.communityMembers": "Community Member Directory",
+  "search.placeholder": "Search by name, city, state or pincode",
+  "filters.state": "State",
+  "filters.city": "City",
+  "filters.pincode": "Pincode",
+  "sections.members": "Members",
+  "sections.communityMembers": "Members",
+  "actions.loadMore": "Load More Members",
+  "avatar.fallback": "Community Member",
+  "total.suffix": "Total",
+  "empty.title": "No members found",
+  "empty.communityMembersTitle": "No community members found",
+  "empty.description": "Try a different search or filter combination."
+}

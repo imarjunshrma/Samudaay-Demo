@@ -1,0 +1,8 @@
+{
+  "title": "વિઝ્યુઅલ ઓળખ",
+  "fields.logo": "ક્લાયન્ટ બ્રાન્ડ લોગો",
+  "fields.logoUpload": "બ્રાન્ડ એસેટ અપલોડ કરવા ક્લિક કરો",
+  "fields.logoHelp": "SVG, PNG, JPG (મહત્તમ 5MB)",
+  "fields.palette": "સિગ્નેચર કલર પેલેટ",
+  "fields.customHex": "કસ્ટમ હેક્સ"
+}

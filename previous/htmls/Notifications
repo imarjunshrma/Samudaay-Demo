@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Notifications - Indian Cobbler Community</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl overflow-x-hidden"
+    >
+      <!-- Header -->
+      <div
+        class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10"
+      >
+        <div class="flex items-center p-4 justify-between">
+          <div class="flex items-center gap-3">
+            <div
+              class="text-slate-900 dark:text-slate-100 flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors"
+            >
+              <span class="material-symbols-outlined">arrow_back</span>
+            </div>
+            <h2 class="text-xl font-bold leading-tight tracking-tight">
+              Notifications
+            </h2>
+          </div>
+          <button class="text-primary text-sm font-bold hover:underline">
+            Mark all as read
+          </button>
+        </div>
+        <!-- Tabs -->
+        <div class="flex px-4 gap-8">
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-primary text-slate-900 dark:text-slate-100 pb-3 pt-2"
+            href="#"
+          >
+            <p class="text-sm font-bold">All</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2"
+            href="#"
+          >
+            <p class="text-sm font-bold">Unread</p>
+          </a>
+        </div>
+      </div>
+      <!-- Notification List -->
+      <div class="flex flex-col pb-24">
+        <!-- Section Title -->
+        <h3
+          class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest px-4 pb-2 pt-6"
+        >
+          Today
+        </h3>
+        <!-- Notification Item: New Order -->
+        <div
+          class="flex gap-4 bg-white dark:bg-white/5 mx-4 my-1 p-4 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="relative flex-shrink-0">
+            <div
+              class="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full"
+            >
+              <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
+            <div
+              class="absolute -top-1 -right-1 size-3 bg-primary rounded-full border-2 border-white dark:border-background-dark"
+            ></div>
+          </div>
+          <div class="flex flex-1 flex-col gap-1">
+            <div class="flex justify-between items-start">
+              <p class="text-slate-900 dark:text-slate-100 text-sm font-bold">
+                New Order Received
+              </p>
+              <p
+                class="text-slate-400 dark:text-slate-500 text-[10px] font-medium uppercase"
+              >
+                2m ago
+              </p>
+            </div>
+            <p
+              class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed"
+            >
+              Order ID: #IN-9082. You have a new custom order for formal
+              oxfords.
+            </p>
+          </div>
+        </div>
+        <!-- Notification Item: Community Post with Image -->
+        <div
+          class="flex gap-4 bg-white dark:bg-white/5 mx-4 my-1 p-4 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="flex-shrink-0">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-12 border border-primary/10"
+              data-alt="Handcrafted leather shoe being polished close up"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBb3cBUt2VtgjUTFsZsb8VlqeaKtGW_icBXwwT6yZkeEqrhpGIUb9c0cWr-s4TVdnEvyCjMq2SJUt-eqW7O_RY4c_5VnZCt1ZeC9E59RtGOhTurGlPTU78jWDS44mbPaEKXcwtgy94ABYr2xXwRXA30IdcKEkAS2hGPHAguhTm1TrXEVHTYb0PZowJ1Wi8wzckG9j4FhnUYEU-_YH5mdCLZMoPAEUIr39midoGV90E8vdeuN7xHcx4jNDdfE5Bv52rpW7BF9Herlnwz&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex flex-1 flex-col gap-1">
+            <div class="flex justify-between items-start">
+              <p class="text-slate-900 dark:text-slate-100 text-sm font-bold">
+                New Tip in Community
+              </p>
+              <p
+                class="text-slate-400 dark:text-slate-500 text-[10px] font-medium uppercase"
+              >
+                1h ago
+              </p>
+            </div>
+            <p
+              class="text-slate-600 dark:text-slate-400 text-xs leading-relaxed"
+            >
+              Ramesh shared: "How to maintain leather shine in humid weather."
+            </p>
+          </div>
+        </div>
+        <!-- Section Title -->
+        <h3
+          class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest px-4 pb-2 pt-6"
+        >
+          Yesterday
+        </h3>
+        <!-- Notification Item: Workshop Invite -->
+        <div
+          class="flex gap-4 bg-slate-100/50 dark:bg-white/5 mx-4 my-1 p-4 rounded-xl opacity-80"
+        >
+          <div class="flex-shrink-0">
+            <div
+              class="bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300 flex size-12 items-center justify-center rounded-full"
+            >
+              <span class="material-symbols-outlined">event</span>
+            </div>
+          </div>
+          <div class="flex flex-1 flex-col gap-1">
+            <div class="flex justify-between items-start">
+              <p class="text-slate-700 dark:text-slate-300 text-sm font-bold">
+                Workshop Tomorrow
+              </p>
+              <p
+                class="text-slate-400 dark:text-slate-500 text-[10px] font-medium uppercase"
+              >
+                1d ago
+              </p>
+            </div>
+            <p
+              class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed"
+            >
+              Reminder: "Advanced Stitching Techniques" starts at 10 AM.
+            </p>
+          </div>
+        </div>
+        <!-- Notification Item: Payout Successful with Image -->
+        <div
+          class="flex gap-4 bg-slate-100/50 dark:bg-white/5 mx-4 my-1 p-4 rounded-xl opacity-80"
+        >
+          <div class="flex-shrink-0">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-12 border border-primary/10"
+              data-alt="Close up of Indian currency notes neatly stacked"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCnocTBdJj4CGrfChHvpmnFPla-xhBaArrht50gwviLDki7gZdC69tsIe-7-T_NBigq7RL--suAJGCnODhxaITxdiy5rsfMlP1pxHnPXIE6zc7lJMWktsHHUQmjaWBSssHjswUK_61dLnAwO2faMmY2EXvVs7EDkIy9lbsx0849SxOLRtDooLUGxaZj1y0SNCTDKLRshTDUqtwRe6UCx1zZZL7TICeGD2_ZnnpHXBuyuiExfN_fnaobixRdcIBaVWiWqWv0gxSlyIqt&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex flex-1 flex-col gap-1">
+            <div class="flex justify-between items-start">
+              <p class="text-slate-700 dark:text-slate-300 text-sm font-bold">
+                Payout Successful
+              </p>
+              <p
+                class="text-slate-400 dark:text-slate-500 text-[10px] font-medium uppercase"
+              >
+                1d ago
+              </p>
+            </div>
+            <p
+              class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed"
+            >
+              ₹4,500 has been transferred to your linked bank account.
+            </p>
+          </div>
+        </div>
+        <!-- Notification Item: Review -->
+        <div
+          class="flex gap-4 bg-slate-100/50 dark:bg-white/5 mx-4 my-1 p-4 rounded-xl opacity-80"
+        >
+          <div class="flex-shrink-0">
+            <div
+              class="bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300 flex size-12 items-center justify-center rounded-full"
+            >
+              <span class="material-symbols-outlined">star</span>
+            </div>
+          </div>
+          <div class="flex flex-1 flex-col gap-1">
+            <div class="flex justify-between items-start">
+              <p class="text-slate-700 dark:text-slate-300 text-sm font-bold">
+                New 5-Star Review
+              </p>
+              <p
+                class="text-slate-400 dark:text-slate-500 text-[10px] font-medium uppercase"
+              >
+                2d ago
+              </p>
+            </div>
+            <p
+              class="text-slate-500 dark:text-slate-400 text-xs leading-relaxed"
+            >
+              "Excellent craftsmanship! The repairs were perfect and timely." -
+              Amit S.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Navigation Bar -->
+      <div
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background-light dark:bg-background-dark border-t border-primary/10 px-4 pb-6 pt-2 z-20"
+      >
+        <div class="flex gap-2">
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+            href="#"
+          >
+            <div class="flex h-8 items-center justify-center">
+              <span class="material-symbols-outlined">home</span>
+            </div>
+            <p class="text-[10px] font-medium leading-normal">Home</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+            href="#"
+          >
+            <div class="flex h-8 items-center justify-center">
+              <span class="material-symbols-outlined">shopping_bag</span>
+            </div>
+            <p class="text-[10px] font-medium leading-normal">Orders</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-primary"
+            href="#"
+          >
+            <div class="flex h-8 items-center justify-center">
+              <span
+                class="material-symbols-outlined"
+                style="font-variation-settings: &quot;FILL&quot; 1"
+                >notifications</span
+              >
+            </div>
+            <p class="text-[10px] font-bold leading-normal">Notifications</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+            href="#"
+          >
+            <div class="flex h-8 items-center justify-center">
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <p class="text-[10px] font-medium leading-normal">Profile</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

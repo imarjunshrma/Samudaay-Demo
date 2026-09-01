@@ -1,0 +1,17 @@
+{
+  "title": "વાર્ષિક મીટઅપ 2023",
+  "subtitle": "12-14 ઓક્ટોબર, 2023",
+  "tabs.all": "બધું",
+  "tabs.community": "સમુદાય",
+  "tabs.workshops": "વર્કશોપ્સ",
+  "tabs.crafts": "ક્રાફ્ટ્સ",
+  "badges.workshop": "વર્કશોપ",
+  "empty": "આ ઇવેન્ટ માટે હજુ સુધી ગેલેરી ફોટા અપલોડ થયા નથી.",
+  "errors.cameraDenied": "ઇવેન્ટ ફોટા અપલોડ કરવા માટે કેમેરા ઍક્સેસની મંજૂરી આપો.",
+  "errors.cameraBlocked": "આ એપ માટે કેમેરા ઍક્સેસ બંધ છે. ઇવેન્ટ ફોટા અપલોડ કરવા માટે તેને એપ સેટિંગ્સમાં ચાલુ કરો.",
+  "errors.eventUnavailable": "ઇવેન્ટ ઉપલબ્ધ નથી.",
+  "errors.uploadTitle": "અપલોડ નિષ્ફળ ગયું",
+  "errors.uploadDescription": "આ ફોટો અપલોડ કરી શકાયો નથી.",
+  "errors.shareTitle": "શેર નિષ્ફળ ગયું",
+  "errors.shareDescription": "આ ઇવેન્ટ ગેલેરી શેર કરી શકાયી નથી."
+}

@@ -1,0 +1,16 @@
+{
+  "title.add": "ભૂમિકા ઉમેરો",
+  "title.edit": "ભૂમિકા સંપાદિત કરો",
+  "loading": "ભૂમિકા માહિતી લોડ થઈ રહી છે...",
+  "notFound": "ભૂમિકા મળી નથી.",
+  "errors.load": "ભૂમિકા માહિતી લોડ કરી શક્યાં નથી.",
+  "errors.save": "ભૂમિકા સાચવી શક્યાં નથી.",
+  "labels.name": "ભૂમિકાનું નામ",
+  "labels.description": "વર્ણન",
+  "labels.permissions": "મોડ્યુલ પરવાનગીઓ *",
+  "placeholders.name": "ભૂમિકાનું નામ દાખલ કરો",
+  "placeholders.description": "ભૂમિકાનું વર્ણન",
+  "actions.cancel": "રદ કરો",
+  "actions.saveAdd": "ભૂમિકા બનાવો",
+  "actions.saveEdit": "ભૂમિકા સાચવો"
+}

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Yearly P&amp;L Statement - Indian Cobbler Community</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <!-- Header Section -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10"
+      >
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1"
+        >
+          Yearly P&amp;L Statement
+        </h2>
+        <div class="flex gap-2 items-center justify-end">
+          <button
+            class="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary"
+          >
+            <span class="material-symbols-outlined">ios_share</span>
+          </button>
+          <button
+            class="flex size-10 items-center justify-center rounded-lg bg-primary text-white"
+          >
+            <span class="material-symbols-outlined">download</span>
+          </button>
+        </div>
+      </div>
+      <!-- Year Filters -->
+      <div class="flex gap-3 p-4 overflow-x-auto no-scrollbar">
+        <button
+          class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary px-4 text-white"
+        >
+          <p class="text-sm font-semibold">FY 2023-24</p>
+          <span class="material-symbols-outlined text-sm"
+            >keyboard_arrow_down</span
+          >
+        </button>
+        <button
+          class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary/10 px-4 text-primary"
+        >
+          <p class="text-sm font-medium">FY 2022-23</p>
+        </button>
+        <button
+          class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary/10 px-4 text-primary"
+        >
+          <p class="text-sm font-medium">FY 2021-22</p>
+        </button>
+        <button
+          class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-primary/10 px-4 text-primary"
+        >
+          <p class="text-sm font-medium">All Time</p>
+        </button>
+      </div>
+      <!-- Main Summary Card -->
+      <div class="p-4">
+        <div
+          class="flex flex-col items-stretch justify-start rounded-xl shadow-lg bg-white dark:bg-slate-800 overflow-hidden border border-primary/5"
+        >
+          <div
+            class="p-6 bg-gradient-to-br from-primary to-orange-600 text-white"
+          >
+            <p
+              class="text-orange-100 text-xs font-bold uppercase tracking-wider mb-1"
+            >
+              Total Net Profit (FY 23-24)
+            </p>
+            <div class="flex items-center justify-between">
+              <h1 class="text-3xl font-extrabold">₹12,45,000</h1>
+              <span class="bg-white/20 px-2 py-1 rounded text-sm font-medium"
+                >+12.4% vs LY</span
+              >
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-around p-4 border-t border-primary/10 bg-orange-50 dark:bg-slate-900/50"
+          >
+            <div class="text-center">
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Total Income
+              </p>
+              <p class="text-base font-bold text-green-600">₹45.2L</p>
+            </div>
+            <div class="h-8 w-px bg-primary/10"></div>
+            <div class="text-center">
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Total Expenses
+              </p>
+              <p class="text-base font-bold text-red-500">₹32.75L</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Income Breakdown -->
+      <div class="px-4 py-2">
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight mb-4 flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-primary"
+            >trending_up</span
+          >
+          Income Breakdown
+        </h2>
+        <div class="grid grid-cols-2 gap-3">
+          <div
+            class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <span class="material-symbols-outlined text-primary mb-2"
+              >volunteer_activism</span
+            >
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Donations</p>
+            <p class="text-lg font-bold">₹18.4L</p>
+          </div>
+          <div
+            class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <span class="material-symbols-outlined text-primary mb-2"
+              >event_available</span
+            >
+            <p class="text-slate-500 dark:text-slate-400 text-xs">
+              Registrations
+            </p>
+            <p class="text-lg font-bold">₹12.2L</p>
+          </div>
+          <div
+            class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <span class="material-symbols-outlined text-primary mb-2"
+              >favorite</span
+            >
+            <p class="text-slate-500 dark:text-slate-400 text-xs">Matrimony</p>
+            <p class="text-lg font-bold">₹8.5L</p>
+          </div>
+          <div
+            class="p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <span class="material-symbols-outlined text-primary mb-2"
+              >ad_units</span
+            >
+            <p class="text-slate-500 dark:text-slate-400 text-xs">
+              Advertising
+            </p>
+            <p class="text-lg font-bold">₹6.1L</p>
+          </div>
+        </div>
+      </div>
+      <!-- Profit Trend Chart (Visual Representation) -->
+      <div class="px-4 py-6">
+        <div
+          class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-primary/5 shadow-sm"
+        >
+          <div class="flex items-center justify-between mb-6">
+            <h3 class="font-bold">Monthly Profit Trend</h3>
+            <span class="text-xs text-slate-400">Apr - Mar</span>
+          </div>
+          <div class="flex items-end justify-between h-32 gap-1">
+            <div
+              class="w-full bg-primary/20 rounded-t h-[40%]"
+              title="Apr"
+            ></div>
+            <div
+              class="w-full bg-primary/20 rounded-t h-[55%]"
+              title="May"
+            ></div>
+            <div
+              class="w-full bg-primary/40 rounded-t h-[30%]"
+              title="Jun"
+            ></div>
+            <div
+              class="w-full bg-primary/20 rounded-t h-[45%]"
+              title="Jul"
+            ></div>
+            <div
+              class="w-full bg-primary/60 rounded-t h-[70%]"
+              title="Aug"
+            ></div>
+            <div class="w-full bg-primary rounded-t h-[90%]" title="Sep"></div>
+            <div
+              class="w-full bg-primary/40 rounded-t h-[50%]"
+              title="Oct"
+            ></div>
+            <div
+              class="w-full bg-primary/20 rounded-t h-[35%]"
+              title="Nov"
+            ></div>
+            <div
+              class="w-full bg-primary/80 rounded-t h-[80%]"
+              title="Dec"
+            ></div>
+            <div
+              class="w-full bg-primary/40 rounded-t h-[60%]"
+              title="Jan"
+            ></div>
+            <div
+              class="w-full bg-primary/30 rounded-t h-[45%]"
+              title="Feb"
+            ></div>
+            <div
+              class="w-full bg-primary/50 rounded-t h-[65%]"
+              title="Mar"
+            ></div>
+          </div>
+          <div class="flex justify-between mt-2 text-[10px] text-slate-400">
+            <span>Apr</span>
+            <span>Sep</span>
+            <span>Mar</span>
+          </div>
+        </div>
+      </div>
+      <!-- Expense Breakdown -->
+      <div class="px-4 py-2 mb-20">
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight mb-4 flex items-center gap-2"
+        >
+          <span class="material-symbols-outlined text-red-500"
+            >trending_down</span
+          >
+          Expense Breakdown
+        </h2>
+        <div class="space-y-3">
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+              >
+                <span class="material-symbols-outlined">apartment</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Venue Rentals</p>
+                <p class="text-xs text-slate-500">
+                  Hall &amp; Community Center bookings
+                </p>
+              </div>
+            </div>
+            <p class="font-bold text-red-500">₹9.2L</p>
+          </div>
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+              >
+                <span class="material-symbols-outlined">restaurant</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Catering</p>
+                <p class="text-xs text-slate-500">
+                  Event meals &amp; refreshments
+                </p>
+              </div>
+            </div>
+            <p class="font-bold text-red-500">₹7.8L</p>
+          </div>
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+              >
+                <span class="material-symbols-outlined">campaign</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Marketing &amp; Newsletters</p>
+                <p class="text-xs text-slate-500">Digital &amp; Print reach</p>
+              </div>
+            </div>
+            <p class="font-bold text-red-500">₹4.2L</p>
+          </div>
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+              >
+                <span class="material-symbols-outlined">handshake</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Charity &amp; Scholarships</p>
+                <p class="text-xs text-slate-500">Community support fund</p>
+              </div>
+            </div>
+            <p class="font-bold text-red-500">₹8.5L</p>
+          </div>
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-xl border border-primary/5"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+              >
+                <span class="material-symbols-outlined">settings</span>
+              </div>
+              <div>
+                <p class="font-semibold text-sm">Administrative Costs</p>
+                <p class="text-xs text-slate-500">
+                  Office &amp; Software utilities
+                </p>
+              </div>
+            </div>
+            <p class="font-bold text-red-500">₹3.05L</p>
+          </div>
+        </div>
+      </div>
+      <!-- Action Buttons Footer -->
+      <div
+        class="fixed bottom-16 left-0 right-0 p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-primary/10"
+      >
+        <div class="flex gap-4">
+          <button
+            class="flex-1 flex items-center justify-center gap-2 bg-slate-200 dark:bg-slate-700 text-slate-900 dark:text-slate-100 py-3 rounded-xl font-bold"
+          >
+            <span class="material-symbols-outlined">description</span> Excel
+          </button>
+          <button
+            class="flex-1 flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-xl font-bold"
+          >
+            <span class="material-symbols-outlined">picture_as_pdf</span> PDF
+            Report
+          </button>
+        </div>
+      </div>
+      <!-- Bottom Navigation Bar -->
+      <div
+        class="fixed bottom-0 left-0 right-0 flex border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-3 pt-2 z-20"
+      >
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400"
+          href="#"
+        >
+          <span class="material-symbols-outlined">home</span>
+          <p class="text-[10px] font-medium">Home</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-primary"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >pie_chart</span
+          >
+          <p class="text-[10px] font-medium">Finance</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400"
+          href="#"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <p class="text-[10px] font-medium">Community</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400"
+          href="#"
+        >
+          <span class="material-symbols-outlined">account_circle</span>
+          <p class="text-[10px] font-medium">Profile</p>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

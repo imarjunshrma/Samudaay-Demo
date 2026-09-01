@@ -1,0 +1,20 @@
+{
+  "title": "સુપર એડમિન",
+  "subtitle": "ક્લાયંટ પ્રદાન કરો અને ઉચ્ચ ઍક્સેસ મેનેજ કરો",
+  "hero.title": "પ્રદાન માર્ગ પસંદ કરો",
+  "hero.description": "ક્લાયંટ ઓનબોર્ડિંગથી શરૂ કરો, પછી ટેનન્ટ મેનેજ કરો, બ્રાન્ડિંગ ગોઠવો અથવા ઉચ્ચ ઍક્સેસ આપો.",
+  "hero.entryPoint": "પ્રવેશ બિંદુ",
+  "hero.routes": "માર્ગો",
+  "hero.actionsCount": "5 ક્રિયાઓ",
+  "section.flow": "સુપર એડમિન પ્રવાહ",
+  "action.createClient": "નવો ક્લાયંટ સંગઠન બનાવો",
+  "action.createClient.description": "નવો ટ્રસ્ટ ઓનબોર્ડ કરો, પ્રાથમિક એડમિન સેટ કરો, અને નવો ટેનન્ટ શરૂ કરો.",
+  "action.clientManagement": "ક્લાયંટ મેનેજમેન્ટ",
+  "action.clientManagement.description": "સક્રિય સમુદાયો, ટ્રાયલ ખાતાં અને ક્લાયંટ હેલ્થની સમીક્ષા કરો.",
+  "action.clientConfiguration": "ક્લાયંટ ગોઠવણી",
+  "action.clientConfiguration.description": "ક્લાયંટ માટે બ્રાન્ડિંગ, મૉડ્યુલ્સ, બિલિંગ અને ઍક્સેસ સેટિંગ્સ બદલો.",
+  "action.createAdmin": "એડમિન બનાવો",
+  "action.createAdmin.description": "નવા એડમિનને આમંત્રિત કરો અને યોગ્ય વર્કસ્પેસમાં રૂટ કરો.",
+  "action.assignRole": "વપરાશકર્તા ભૂમિકા આપો",
+  "action.assignRole.description": "સભ્ય, સમુદાય સપોર્ટ અથવા ટ્રસ્ટીને સ્કોપ્ડ ઍક્સેસ આપો."
+}

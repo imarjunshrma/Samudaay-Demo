@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Event Pass - Family Members</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col"
+  >
+    <!-- Header -->
+    <header
+      class="flex items-center px-4 py-4 justify-between border-b border-primary/10 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-20"
+    >
+      <div
+        class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 cursor-pointer"
+      >
+        <span
+          class="material-symbols-outlined text-slate-700 dark:text-slate-300"
+          >arrow_back</span
+        >
+      </div>
+      <h2 class="text-lg font-bold tracking-tight">Family Event Passes</h2>
+      <div class="size-10"></div>
+      <!-- Spacer for centering -->
+    </header>
+    <main class="flex-1 overflow-x-hidden py-8 flex flex-col items-center">
+      <!-- Carousel Container -->
+      <div class="w-full flex flex-col items-center">
+        <div
+          class="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 px-6 pb-4 hide-scrollbar"
+        >
+          <!-- Card 1: Rajesh Kumar -->
+          <div class="min-w-full snap-center flex justify-center">
+            <div
+              class="w-full max-w-sm bg-white dark:bg-slate-800 rounded-xl shadow-xl overflow-hidden border border-primary/10"
+            >
+              <div
+                class="p-8 flex flex-col items-center bg-gradient-to-b from-primary/5 to-transparent"
+              >
+                <div
+                  class="w-full aspect-square max-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-100"
+                >
+                  <img
+                    alt="QR Code for Rajesh Kumar"
+                    class="w-full h-full"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdDhECAUB7AhCKz1tCrwNmPLX7NleJ3NGLV4mRCji6JEkot8L0Qw5yWIM0Q27XwUwloot8kMEvBzE7rwzNTMW0rNGRrGW5FhrdL9JNuK4LNC2Gir5DCGQIqIXU5Co5XRs8aU5ntswx6WOO7lddlxwVjEFZLfrJw2x0oima_LaEQh5f1QFnhVSPVoVUI2iEbVAEP_-sH8bzp7078PgaK91EuBkWLUu2Ekjz7K-bceWDQd_4rFv6mTqry2mSIcLR8CMcdUBZSogeSse5"
+                  />
+                </div>
+                <p
+                  class="mt-4 text-sm font-medium text-primary uppercase tracking-widest text-center"
+                >
+                  Scan at Entrance
+                </p>
+              </div>
+              <div class="px-6 pb-6 text-center">
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
+                  Rajesh Kumar
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                  Global Tech Summit 2024
+                </p>
+                <div
+                  class="my-6 border-t border-dashed border-slate-200 dark:border-slate-700 relative"
+                >
+                  <div
+                    class="absolute -left-9 -top-3 size-6 rounded-full bg-background-light dark:bg-background-dark border-r border-primary/10"
+                  ></div>
+                  <div
+                    class="absolute -right-9 -top-3 size-6 rounded-full bg-background-light dark:bg-background-dark border-l border-primary/10"
+                  ></div>
+                </div>
+                <div class="space-y-3 text-left">
+                  <p
+                    class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2"
+                  >
+                    Registered Add-ons
+                  </p>
+                  <div
+                    class="flex items-center gap-3 p-3 rounded-lg bg-primary/5 dark:bg-primary/10 border border-primary/10"
+                  >
+                    <span class="material-symbols-outlined text-primary text-xl"
+                      >restaurant</span
+                    >
+                    <div class="flex-1">
+                      <p
+                        class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >
+                        Lunch Buffet
+                      </p>
+                      <p class="text-xs text-primary font-medium">Included</p>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-green-500 text-lg"
+                      >check_circle</span
+                    >
+                  </div>
+                  <div
+                    class="flex items-center gap-3 p-3 rounded-lg bg-primary/5 dark:bg-primary/10 border border-primary/10"
+                  >
+                    <span class="material-symbols-outlined text-primary text-xl"
+                      >groups</span
+                    >
+                    <div class="flex-1">
+                      <p
+                        class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >
+                        Networking Dinner
+                      </p>
+                      <p class="text-xs text-primary font-medium">Included</p>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-green-500 text-lg"
+                      >check_circle</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2: Sunita Devi -->
+          <div class="min-w-full snap-center flex justify-center">
+            <div
+              class="w-full max-w-sm bg-white dark:bg-slate-800 rounded-xl shadow-xl overflow-hidden border border-primary/10"
+            >
+              <div
+                class="p-8 flex flex-col items-center bg-gradient-to-b from-primary/5 to-transparent"
+              >
+                <div
+                  class="w-full aspect-square max-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-100"
+                >
+                  <img
+                    alt="QR Code for Sunita Devi"
+                    class="w-full h-full"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdDhECAUB7AhCKz1tCrwNmPLX7NleJ3NGLV4mRCji6JEkot8L0Qw5yWIM0Q27XwUwloot8kMEvBzE7rwzNTMW0rNGRrGW5FhrdL9JNuK4LNC2Gir5DCGQIqIXU5Co5XRs8aU5ntswx6WOO7lddlxwVjEFZLfrJw2x0oima_LaEQh5f1QFnhVSPVoVUI2iEbVAEP_-sH8bzp7078PgaK91EuBkWLUu2Ekjz7K-bceWDQd_4rFv6mTqry2mSIcLR8CMcdUBZSogeSse5"
+                  />
+                </div>
+                <p
+                  class="mt-4 text-sm font-medium text-primary uppercase tracking-widest text-center"
+                >
+                  Scan at Entrance
+                </p>
+              </div>
+              <div class="px-6 pb-6 text-center">
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
+                  Sunita Devi
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                  Global Tech Summit 2024
+                </p>
+                <div
+                  class="my-6 border-t border-dashed border-slate-200 dark:border-slate-700 relative"
+                >
+                  <div
+                    class="absolute -left-9 -top-3 size-6 rounded-full bg-background-light dark:bg-background-dark border-r border-primary/10"
+                  ></div>
+                  <div
+                    class="absolute -right-9 -top-3 size-6 rounded-full bg-background-light dark:bg-background-dark border-l border-primary/10"
+                  ></div>
+                </div>
+                <div class="space-y-3 text-left">
+                  <p
+                    class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2"
+                  >
+                    Registered Add-ons
+                  </p>
+                  <div
+                    class="flex items-center gap-3 p-3 rounded-lg bg-primary/5 dark:bg-primary/10 border border-primary/10"
+                  >
+                    <span class="material-symbols-outlined text-primary text-xl"
+                      >restaurant</span
+                    >
+                    <div class="flex-1">
+                      <p
+                        class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >
+                        Lunch Buffet
+                      </p>
+                      <p class="text-xs text-primary font-medium">Included</p>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-green-500 text-lg"
+                      >check_circle</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3: Anjali Kumar -->
+          <div class="min-w-full snap-center flex justify-center">
+            <div
+              class="w-full max-w-sm bg-white dark:bg-slate-800 rounded-xl shadow-xl overflow-hidden border border-primary/10"
+            >
+              <div
+                class="p-8 flex flex-col items-center bg-gradient-to-b from-primary/5 to-transparent"
+              >
+                <div
+                  class="w-full aspect-square max-w-[240px] bg-white p-4 rounded-lg shadow-sm border border-slate-100"
+                >
+                  <img
+                    alt="QR Code for Anjali Kumar"
+                    class="w-full h-full"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdDhECAUB7AhCKz1tCrwNmPLX7NleJ3NGLV4mRCji6JEkot8L0Qw5yWIM0Q27XwUwloot8kMEvBzE7rwzNTMW0rNGRrGW5FhrdL9JNuK4LNC2Gir5DCGQIqIXU5Co5XRs8aU5ntswx6WOO7lddlxwVjEFZLfrJw2x0oima_LaEQh5f1QFnhVSPVoVUI2iEbVAEP_-sH8bzp7078PgaK91EuBkWLUu2Ekjz7K-bceWDQd_4rFv6mTqry2mSIcLR8CMcdUBZSogeSse5"
+                  />
+                </div>
+                <p
+                  class="mt-4 text-sm font-medium text-primary uppercase tracking-widest text-center"
+                >
+                  Scan at Entrance
+                </p>
+              </div>
+              <div class="px-6 pb-6 text-center">
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">
+                  Anjali Kumar
+                </h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">
+                  Global Tech Summit 2024
+                </p>
+                <div
+                  class="my-6 border-t border-dashed border-slate-200 dark:border-slate-700 relative"
+                >
+                  <div
+                    class="absolute -left-9 -top-3 size-6 rounded-full bg-background-light dark:bg-background-dark border-r border-primary/10"
+                  ></div>
+                  <div
+                    class="absolute -right-9 -top-3 size-6 rounded-full bg-background-light dark:bg-background-dark border-l border-primary/10"
+                  ></div>
+                </div>
+                <div class="space-y-3 text-left">
+                  <p
+                    class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider mb-2"
+                  >
+                    Registered Add-ons
+                  </p>
+                  <div
+                    class="flex items-center gap-3 p-3 rounded-lg bg-primary/5 dark:bg-primary/10 border border-primary/10"
+                  >
+                    <span class="material-symbols-outlined text-primary text-xl"
+                      >workspace_premium</span
+                    >
+                    <div class="flex-1">
+                      <p
+                        class="text-sm font-semibold text-slate-800 dark:text-slate-200"
+                      >
+                        Workshop Access
+                      </p>
+                      <p class="text-xs text-primary font-medium">Included</p>
+                    </div>
+                    <span
+                      class="material-symbols-outlined text-green-500 text-lg"
+                      >check_circle</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Pagination Dots -->
+        <div class="flex gap-2 mt-4">
+          <div class="size-2 rounded-full bg-primary"></div>
+          <div class="size-2 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+          <div class="size-2 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+        </div>
+        <p
+          class="mt-2 text-[10px] text-slate-400 uppercase tracking-widest font-bold"
+        >
+          Swipe for more passes
+        </p>
+      </div>
+      <!-- Action Button -->
+      <div class="w-full max-w-sm px-6 mt-8">
+        <button
+          class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+        >
+          <span class="material-symbols-outlined">download</span>
+          Download Pass
+        </button>
+        <p
+          class="mt-4 text-xs text-slate-500 dark:text-slate-400 text-center px-4"
+        >
+          Please have the current pass ready on your device or printed for quick
+          entry to the venue.
+        </p>
+      </div>
+    </main>
+    <!-- Navigation Bar -->
+    <nav
+      class="sticky bottom-0 w-full border-t border-primary/10 bg-white dark:bg-slate-900 px-4 pb-6 pt-2 z-20"
+    >
+      <div class="flex gap-2 max-w-lg mx-auto">
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">home</span>
+          <p class="text-[10px] font-medium leading-normal">Home</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">calendar_today</span>
+          <p class="text-[10px] font-medium leading-normal">Schedule</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-primary"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >confirmation_number</span
+          >
+          <p class="text-[10px] font-medium leading-normal">Pass</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">person</span>
+          <p class="text-[10px] font-medium leading-normal">Profile</p>
+        </a>
+      </div>
+    </nav>
+  </body>
+</html>

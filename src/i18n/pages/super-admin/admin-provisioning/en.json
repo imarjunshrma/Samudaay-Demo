@@ -1,0 +1,20 @@
+{
+  "title": "Assign Role",
+  "sections.role.title": "Select New Role",
+  "sections.permissions.title": "Specific Permissions",
+  "roles.trustee.title": "Trustee",
+  "roles.trustee.description": "Full administrative access. Can manage community funds, approve new members, and organize regional events.",
+  "roles.member.title": "Member",
+  "roles.member.description": "Standard access to community forums, basic training resources, job listings, and member benefit programs.",
+  "roles.support.title": "Community Support",
+  "roles.support.description": "Can assist members with technical issues and moderate community discussions without financial access.",
+  "permissions.memberManagement.title": "Allow Member Management",
+  "permissions.memberManagement.description": "Can approve or ban community members",
+  "permissions.contentModeration.title": "Content Moderation",
+  "permissions.contentModeration.description": "Can delete posts and comments",
+  "permissions.financialReporting.title": "Financial Reporting",
+  "permissions.financialReporting.description": "Can view and export donation reports",
+  "actions.cancel": "Cancel",
+  "actions.create": "Create Admin",
+  "note": "The user will be notified of their new role via SMS and App Notification."
+}

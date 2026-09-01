@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Family Management - Indian Cobbler Community</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl overflow-x-hidden"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10"
+      >
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center"
+        >
+          Family Management
+        </h2>
+        <div class="flex w-10 items-center justify-end">
+          <button
+            class="flex items-center justify-center rounded-full size-10 bg-primary/10 text-primary"
+          >
+            <span class="material-symbols-outlined">group</span>
+          </button>
+        </div>
+      </div>
+      <!-- Content Area -->
+      <div class="flex-1 overflow-y-auto pb-24">
+        <!-- Summary Section -->
+        <div class="p-4">
+          <div class="bg-primary/5 rounded-xl p-4 border border-primary/20">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-primary font-medium">Total Members</p>
+                <h3 class="text-2xl font-bold">04</h3>
+              </div>
+              <button
+                class="bg-primary text-white px-4 py-2 rounded-lg font-bold text-sm flex items-center gap-2 shadow-lg shadow-primary/20"
+              >
+                <span class="material-symbols-outlined text-sm">add</span> Add
+                Member
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Family List -->
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-xl font-bold px-4 pt-4 pb-2"
+        >
+          Your Family
+        </h2>
+        <div class="space-y-4 p-4">
+          <!-- Member Card 1 (Self) -->
+          <div
+            class="flex flex-col gap-3 rounded-xl bg-white dark:bg-slate-800 p-4 shadow-sm border border-slate-200 dark:border-slate-700"
+          >
+            <div class="flex justify-between items-start">
+              <div class="flex gap-3">
+                <div
+                  class="size-14 rounded-lg bg-cover bg-center"
+                  data-alt="Portrait of a middle aged Indian man"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAGLYWtIwR5zAKOcFFilfaFv7Okkkp9xKSwGsblgoMxzYjvPmaz5kV6OSJe2fLY8lHwYdFa-ROzRy8RQ5j-VEw7oboofbURC6qGrigxyRdFFt0iLzFRpa5Sf4_teXQ33ogFAUzkde4uZc5XRUVQUMwFrbE_ufn8Wq4-2Qh18L0qfWInQIiERCgu4CXzjcOR5qoshVwY2bb94CZHXwjq01qxTaJb43kMDkwEvJPmXksunvPTvW_GZhA0c_rFVM6VfwjJdk1Njf8EmWlI&quot;);
+                  "
+                ></div>
+                <div>
+                  <h4 class="font-bold text-base">Rajesh Kumar</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Self • 42 Years
+                  </p>
+                  <p class="text-xs font-medium text-primary mt-1">
+                    Occupation: Master Cobbler
+                  </p>
+                </div>
+              </div>
+              <span
+                class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase"
+                >Primary</span
+              >
+            </div>
+            <div
+              class="flex border-t border-slate-100 dark:border-slate-700 pt-3 gap-2"
+            >
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 text-sm font-semibold hover:bg-primary/5 transition-colors"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span> Edit
+              </button>
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span>
+                Delete
+              </button>
+            </div>
+          </div>
+          <!-- Member Card 2 (Spouse) -->
+          <div
+            class="flex flex-col gap-3 rounded-xl bg-white dark:bg-slate-800 p-4 shadow-sm border border-slate-200 dark:border-slate-700"
+          >
+            <div class="flex justify-between items-start">
+              <div class="flex gap-3">
+                <div
+                  class="size-14 rounded-lg bg-cover bg-center"
+                  data-alt="Portrait of a woman in traditional Indian attire"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDHrtPEuMZlpn5_Y12Gvx3BRmFuUdjcKSKjKsViZMh-LNLBNnzPwssmK5yhdf9QprdvWnuG2l1asGEZ96qSfDVirGcRY9Uppa_Za07RcRTnJdal0fmI_aVwUupyIDxXj2kDR7d3ZQh_DIzJh4zOljp4sy6IU5L2aJoZ1-L3K8ptezmcsH5FQHsn9UJJ0BMX1M1EbB2ZWIHa_6_AUOI20A0S2gua9zd6vw6luqJoup3xBxI2EvWpwq_AFHVuxP80JwD2iv3ZqKhwU_ey&quot;);
+                  "
+                ></div>
+                <div>
+                  <h4 class="font-bold text-base">Sunita Devi</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Spouse • 38 Years
+                  </p>
+                  <p class="text-xs font-medium text-primary mt-1">
+                    Education: 10th Pass
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex border-t border-slate-100 dark:border-slate-700 pt-3 gap-2"
+            >
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 text-sm font-semibold"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span> Edit
+              </button>
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 text-sm font-semibold text-red-500"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span>
+                Delete
+              </button>
+            </div>
+          </div>
+          <!-- Member Card 3 (Child) -->
+          <div
+            class="flex flex-col gap-3 rounded-xl bg-white dark:bg-slate-800 p-4 shadow-sm border border-slate-200 dark:border-slate-700"
+          >
+            <div class="flex justify-between items-start">
+              <div class="flex gap-3">
+                <div
+                  class="size-14 rounded-lg bg-cover bg-center"
+                  data-alt="Portrait of a young Indian girl student"
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCw5VD6MdutS3CaNAl1HgeEKK3soJlkRoxBMGBKzKvnKcLmfNzd3YY6gBH_UPa6X4-s3fUo-KwdBFVSkFv7bg0iWDvSjeIWfgP1gWLpFo7-myLsAxT1Ekp3KydDyJxVuOps9FEaVgv2zO_Nz9zZP9VhANIZq5X9E5n-nTx46EBT8RXr_CxksgNYnDt3mXh1gyCl5crPcU6qGkIZNW538jaBe4DzQXwuVUdADzRv5A3RmUqT8y6BfMM64cTRGQCHTsbmQnC-iPm184WO&quot;);
+                  "
+                ></div>
+                <div>
+                  <h4 class="font-bold text-base">Anjali Kumar</h4>
+                  <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Daughter • 14 Years
+                  </p>
+                  <div class="mt-1 space-y-0.5">
+                    <p
+                      class="text-[10px] text-slate-400 uppercase tracking-wider font-bold"
+                    >
+                      Schooling
+                    </p>
+                    <p class="text-xs font-medium text-primary">
+                      Class 9 • Govt. Girls School
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex border-t border-slate-100 dark:border-slate-700 pt-3 gap-2"
+            >
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 text-sm font-semibold"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span> Edit
+              </button>
+              <button
+                class="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg bg-slate-50 dark:bg-slate-900 text-sm font-semibold text-red-500"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Add/Edit Section Preview (Form) -->
+        <div
+          class="mx-4 my-6 p-6 rounded-2xl bg-slate-100 dark:bg-slate-900 border-2 border-dashed border-primary/30"
+        >
+          <div class="flex items-center gap-3 mb-6">
+            <div class="bg-primary text-white p-2 rounded-lg">
+              <span class="material-symbols-outlined">person_add</span>
+            </div>
+            <h3 class="text-lg font-bold">Add Family Member</h3>
+          </div>
+          <form class="space-y-4">
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <label
+                  class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                  >Full Name</label
+                >
+                <input
+                  class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-primary focus:border-primary text-sm"
+                  placeholder="e.g. Rahul Kumar"
+                  type="text"
+                />
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label
+                    class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                    >Relation</label
+                  >
+                  <select
+                    class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary"
+                  >
+                    <option>Son</option>
+                    <option>Daughter</option>
+                    <option>Parent</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                    >Gender</label
+                  >
+                  <div
+                    class="flex bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-1"
+                  >
+                    <button
+                      class="flex-1 py-1.5 text-xs font-bold rounded-md bg-primary text-white"
+                      type="button"
+                    >
+                      Male
+                    </button>
+                    <button
+                      class="flex-1 py-1.5 text-xs font-bold rounded-md text-slate-500"
+                      type="button"
+                    >
+                      Female
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label
+                    class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                    >Date of Birth</label
+                  >
+                  <input
+                    class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary"
+                    type="date"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                    >Education</label
+                  >
+                  <input
+                    class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary"
+                    placeholder="e.g. 8th Standard"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <!-- Conditional Fields for Kids -->
+              <div
+                class="p-4 bg-primary/5 rounded-xl border border-primary/10 space-y-4"
+              >
+                <p class="text-[10px] font-bold text-primary uppercase">
+                  Education Details (For Children)
+                </p>
+                <div>
+                  <label
+                    class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                    >School Name</label
+                  >
+                  <input
+                    class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary"
+                    placeholder="e.g. Modern High School"
+                    type="text"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                    >Current Class</label
+                  >
+                  <input
+                    class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary"
+                    placeholder="e.g. 5th Grade"
+                    type="text"
+                  />
+                </div>
+              </div>
+              <div>
+                <label
+                  class="text-xs font-bold text-slate-500 uppercase mb-1 block"
+                  >Occupation</label
+                >
+                <input
+                  class="w-full rounded-lg border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:ring-primary"
+                  placeholder="e.g. Student / Unemployed"
+                  type="text"
+                />
+              </div>
+            </div>
+            <div class="flex gap-3 pt-2">
+              <button
+                class="flex-1 py-3 rounded-xl border border-slate-300 dark:border-slate-600 font-bold text-sm"
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                class="flex-[2_2_0%] py-3 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/30"
+                type="submit"
+              >
+                Save Member
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Navigation Bar -->
+      <div
+        class="fixed bottom-0 left-0 right-0 max-w-md mx-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3"
+      >
+        <div class="flex justify-between items-center">
+          <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+            <span class="material-symbols-outlined">home</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest"
+              >Home</span
+            >
+          </a>
+          <a class="flex flex-col items-center gap-1 text-primary" href="#">
+            <span
+              class="material-symbols-outlined"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >group</span
+            >
+            <span class="text-[10px] font-bold uppercase tracking-widest"
+              >Family</span
+            >
+          </a>
+          <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+            <span class="material-symbols-outlined">work</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest"
+              >Jobs</span
+            >
+          </a>
+          <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+            <span class="material-symbols-outlined">person</span>
+            <span class="text-[10px] font-bold uppercase tracking-widest"
+              >Profile</span
+            >
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "title": "Annual Artisans Meet",
+  "subtitle": "Mumbai Chapter • Oct 2023",
+  "sections.financialOverview": "Financial Overview",
+  "sections.attendanceRate": "Attendance Rate",
+  "sections.attendanceSubtitle": "Actual vs. Registered",
+  "sections.addOnUsage": "Add-on Usage",
+  "actions.viewReport": "View Full Financial Report",
+  "metrics.revenue": "Total Revenue",
+  "metrics.netProfit": "Net Profit",
+  "attendance.registered": "Registered",
+  "attendance.attended": "Attended",
+  "addons.lunches": "Lunches Served",
+  "addons.lunchesFooter": "75% OF REGISTERED USERS",
+  "addons.kits": "Tool Kits Distributed",
+  "addons.kitsFooter": "97% OF ATTENDEES",
+  "addons.certificates": "Certificates Issued",
+  "addons.certificatesFooter": "CLAIMED BY ATTENDEES",
+  "nav.dashboard": "Dashboard",
+  "nav.events": "Events",
+  "nav.community": "Community",
+  "nav.profile": "Profile"
+}

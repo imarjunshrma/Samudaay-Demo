@@ -1,0 +1,16 @@
+{
+  "title.add": "Add Role",
+  "title.edit": "Edit Role",
+  "loading": "Loading role data...",
+  "notFound": "Role not found.",
+  "errors.load": "Unable to load role data.",
+  "errors.save": "Unable to save role.",
+  "labels.name": "Role Name",
+  "labels.description": "Description",
+  "labels.permissions": "Module Permissions *",
+  "placeholders.name": "Enter role name",
+  "placeholders.description": "Role description",
+  "actions.cancel": "Cancel",
+  "actions.saveAdd": "Create Role",
+  "actions.saveEdit": "Save Role"
+}

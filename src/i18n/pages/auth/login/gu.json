@@ -1,0 +1,10 @@
+{
+  "title": "લૉગિન",
+  "subtitle": "ચાલુ રાખવા માટે સાઇન ઇન કરો",
+  "phone.label": "મોબાઇલ નંબર",
+  "phone.placeholder": "મોબાઇલ નંબર દાખલ કરો",
+  "otp.label": "OTP",
+  "otp.placeholder": "OTP દાખલ કરો",
+  "actions.continue": "ચાલુ રાખો",
+  "actions.submit": "સબમિટ"
+}

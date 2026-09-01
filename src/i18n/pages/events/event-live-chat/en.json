@@ -1,0 +1,7 @@
+{
+  "title": "Live Chat",
+  "placeholder.message": "Type your message...",
+  "unavailable.title": "Chat unavailable",
+  "unavailable.default": "You do not have access to this chat.",
+  "unavailable.eventParticipantsOnly": "Only confirmed event participants and authorized admins or trustees can access this event chat."
+}

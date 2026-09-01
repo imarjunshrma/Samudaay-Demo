@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Indian Cobbler Community - Digital ID</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen overflow-hidden"
+  >
+    <!-- Ad Modal Overlay -->
+    <div
+      class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+    >
+      <div
+        class="relative w-full max-w-sm bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300"
+      >
+        <!-- Close Button -->
+        <button
+          class="absolute top-3 right-3 z-10 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors backdrop-blur-md"
+        >
+          <span class="material-symbols-outlined block">close</span>
+        </button>
+        <!-- Ad Content -->
+        <div class="relative aspect-[4/3] w-full overflow-hidden">
+          <img
+            alt="Premium Leather Supplies Ad"
+            class="h-full w-full object-cover"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNS0sVC7BSnU542xnAFxv0_ihDrDSxmpes7lsfvwxvsS_nplXlHG4Vf5m22mPnycg-r1DjhK3XgeOcpcq5pSFZzBl-0L8wmoN_zDrRMc7pqHuEzDow9Ei2D4dnMi6eiA2y1iC6GCh7tDpwZ5s3iWjAiCEubMkm92Px2wXdub7VW6JnEAS7ccaA3ny4bUZcCyzZQXm5OOs99X5Pw6tVOiFQozfiGRwLPW9fpqCltKQ8peR8voPtpEgeS5kto7BIpNB_n-Oaky7nkFEB"
+          />
+          <div class="absolute top-4 left-4">
+            <span
+              class="px-2 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-md flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[10px]"
+                >campaign</span
+              >
+              Sponsored
+            </span>
+          </div>
+        </div>
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            Exclusive Member Discount
+          </h3>
+          <p
+            class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6"
+          >
+            Get up to 30% off on all premium leather tools and raw hides this
+            festive season. Only for registered ICC members. Limited time offer!
+          </p>
+          <button
+            class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-4 rounded-xl transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+          >
+            Shop Now
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Header -->
+    <header
+      class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10"
+    >
+      <div class="flex items-center p-4 justify-between max-w-2xl mx-auto">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-3xl"
+            >shield_person</span
+          >
+          <h1 class="text-lg font-bold leading-tight tracking-tight">
+            ICC Digital ID
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            class="p-2 rounded-full hover:bg-primary/10 transition-colors"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <button
+            class="p-2 rounded-full hover:bg-primary/10 transition-colors"
+          >
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+        </div>
+      </div>
+    </header>
+    <main class="max-w-2xl mx-auto pb-24">
+      <!-- Sponsored Section -->
+      <section class="px-4 pt-4">
+        <div
+          class="relative overflow-hidden rounded-xl border border-primary/20 bg-white dark:bg-slate-800/50 p-4 shadow-sm"
+        >
+          <div class="flex items-center justify-between mb-2">
+            <span
+              class="text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-500 flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-xs">info</span>
+              Sponsored
+            </span>
+            <button class="text-[10px] text-primary font-bold">
+              Learn More
+            </button>
+          </div>
+          <div class="flex gap-4 items-center">
+            <div
+              class="h-16 w-16 rounded-lg bg-slate-100 dark:bg-slate-700 overflow-hidden shrink-0"
+            >
+              <img
+                alt="Sponsored Ad"
+                class="h-full w-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOFlvgbn6TNNOqEgec2A_oXMmeA_ZoHLGwKG5JzqbnXCgh9BDlmtdLJDjw-3ekRb_GB4cvHK-W8rRINMxuOe_uhJaMQhlVP2WP1x7UmtLY3QuI-eWzx71lK_bsUW564aXaTBMPnHZS5R49GCIDbzghV231tNwOQEWCoR8mLkbfa2_utfb_hp7mJdSdGlCEQap8AwPBk8ieIilesnX0QuSL0fvvxkBB2fP7RcMCpH5qSZZR6lknw4eKjSLkXYw3QAjCHqo47xR1sula"
+              />
+            </div>
+            <div class="flex-1">
+              <p class="text-sm font-bold leading-tight">
+                Premium Leather Supplies
+              </p>
+              <p
+                class="text-xs text-slate-600 dark:text-slate-400 mt-1 line-clamp-2"
+              >
+                Get 20% off on bulk orders of authentic full-grain leather.
+                Certified quality for ICC members.
+              </p>
+            </div>
+            <a
+              class="bg-primary text-white p-2 rounded-lg hover:bg-primary/90 transition-colors"
+              href="#"
+            >
+              <span class="material-symbols-outlined">open_in_new</span>
+            </a>
+          </div>
+        </div>
+      </section>
+      <!-- Digital Membership Card Section -->
+      <section class="px-4 pt-6">
+        <h2 class="text-xl font-bold mb-4">Digital Membership Card</h2>
+        <div
+          class="relative overflow-hidden rounded-xl bg-gradient-to-br from-primary to-[#d6660a] p-6 shadow-xl text-white"
+        >
+          <div class="flex justify-between items-start mb-6">
+            <div class="flex flex-col">
+              <span class="text-xs uppercase tracking-widest opacity-80"
+                >Indian Cobbler Community</span
+              >
+              <span class="text-sm font-semibold">Official Member</span>
+            </div>
+            <span class="material-symbols-outlined text-4xl opacity-50"
+              >contactless</span
+            >
+          </div>
+          <div class="flex gap-4 items-center">
+            <div
+              class="h-24 w-24 rounded-lg bg-white p-1 shrink-0 overflow-hidden"
+            >
+              <img
+                alt="Member profile photo"
+                class="h-full w-full object-cover rounded-md"
+                data-alt="Professional portrait of a male community member"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDcTdiOPDFjB0DIG6ekJmydxKptp_AKtUY16EjP9JCuLZYwa-fdfH48OI1asmtP4RTU3E45Muq36kU4TuPc1ppDyympPbZY5FhgXEqmPhKsIC_ZdY21lYRrRK06RsbgH1MBaXXXP5tXi0uU2U2n_90x-G_mqpzQ5VxeXLxWlkRDrz-4C6mFxPatuU1QBa-FsEv9PlFfeZcjweOkW6Rhgadcs6krvBlRwAKU-ZN_cShw6PwgAW5oE4kEZYvAklE75L9J3aPyI_OR9inX"
+              />
+            </div>
+            <div class="flex-1">
+              <p class="text-2xl font-bold leading-none">Rajesh Kumar</p>
+              <p class="text-sm opacity-90 mt-1">ID: IC-2024-8839</p>
+              <div class="mt-3 flex flex-col gap-1 text-xs">
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs"
+                    >location_on</span
+                  >
+                  <span>Mumbai, Maharashtra</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-xs"
+                    >event_available</span
+                  >
+                  <span>Valid thru: Dec 2030</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-6 flex justify-between items-end border-t border-white/20 pt-4"
+          >
+            <div class="bg-white p-2 rounded-lg">
+              <img
+                alt="Member QR Code"
+                class="h-12 w-12"
+                data-alt="Square digital QR code for membership verification"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_NQ8t26AbRvCgZ3RZC1OfRIuu86GwJnKa5qlryBtDBAeI52PY0ugDkPAVgekUW2Pgv3mk42jBL1S7VrWt9ZLGVLfas1hOk1JW1NwKUMl9gzz_Y9xoPNrGg6moTcX1UVMjkaI6dqozojsU7YYzCqIocqkeB7yCQZXm0QeLE3X0og5kbGivGmR8lCtVKmhg3y1WqAyPj4wcCdv7E7rtEvbbuk4eKncK4bmwhD8ST1ewFAV1NsZXsM9mC8jAgqZ4h9c_n0Hi6ss-qd2V"
+              />
+            </div>
+            <button
+              class="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all"
+            >
+              <span class="material-symbols-outlined text-sm"
+                >qr_code_scanner</span
+              >
+              Verify Card
+            </button>
+          </div>
+          <!-- Decorative background pattern -->
+          <div class="absolute -right-10 -bottom-10 opacity-10">
+            <span class="material-symbols-outlined text-[160px]"
+              >identity_platform</span
+            >
+          </div>
+        </div>
+      </section>
+      <!-- Dashboard Section -->
+      <section class="px-4 mt-8">
+        <h3 class="text-lg font-bold mb-4">Community Dashboard</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Profile -->
+          <a
+            class="group p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm hover:shadow-md transition-all flex flex-col gap-3"
+            href="#"
+          >
+            <div
+              class="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">person</span>
+            </div>
+            <div>
+              <p class="font-bold">My Profile</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Manage details
+              </p>
+            </div>
+          </a>
+          <!-- Family -->
+          <a
+            class="group p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm hover:shadow-md transition-all flex flex-col gap-3"
+            href="#"
+          >
+            <div
+              class="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">family_restroom</span>
+            </div>
+            <div>
+              <p class="font-bold">Family</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                4 Registered
+              </p>
+            </div>
+          </a>
+          <!-- Events -->
+          <a
+            class="group p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm hover:shadow-md transition-all flex flex-col gap-3"
+            href="#"
+          >
+            <div
+              class="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">calendar_month</span>
+            </div>
+            <div>
+              <p class="font-bold">Events</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Next: Annual Meet
+              </p>
+            </div>
+          </a>
+          <!-- Donations -->
+          <a
+            class="group p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm hover:shadow-md transition-all flex flex-col gap-3"
+            href="#"
+          >
+            <div
+              class="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">volunteer_activism</span>
+            </div>
+            <div>
+              <p class="font-bold">Donations</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                History &amp; Support
+              </p>
+            </div>
+          </a>
+          <!-- News -->
+          <a
+            class="group p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm hover:shadow-md transition-all flex flex-col gap-3"
+            href="#"
+          >
+            <div
+              class="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">newspaper</span>
+            </div>
+            <div>
+              <p class="font-bold">News</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Community updates
+              </p>
+            </div>
+          </a>
+          <!-- Matrimony -->
+          <a
+            class="group p-4 rounded-xl bg-white dark:bg-slate-800/50 border border-primary/10 shadow-sm hover:shadow-md transition-all flex flex-col gap-3"
+            href="#"
+          >
+            <div
+              class="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <div>
+              <p class="font-bold">Matrimony</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Find matches
+              </p>
+            </div>
+          </a>
+        </div>
+      </section>
+      <!-- Recent Activity Feed -->
+      <section class="px-4 mt-8">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-lg font-bold">Recent Updates</h3>
+          <button class="text-primary text-sm font-semibold">View All</button>
+        </div>
+        <div class="space-y-4">
+          <div
+            class="flex gap-4 p-3 bg-white dark:bg-slate-800/30 rounded-lg border border-primary/5"
+          >
+            <div class="h-12 w-12 rounded-lg overflow-hidden shrink-0">
+              <img
+                alt="Workshop update"
+                class="h-full w-full object-cover"
+                data-alt="Artisanal shoemaking workshop close up"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNS0sVC7BSnU542xnAFxv0_ihDrDSxmpes7lsfvwxvsS_nplXlHG4Vf5m22mPnycg-r1DjhK3XgeOcpcq5pSFZzBl-0L8wmoN_zDrRMc7pqHuEzDow9Ei2D4dnMi6eiA2y1iC6GCh7tDpwZ5s3iWjAiCEubMkm92Px2wXdub7VW6JnEAS7ccaA3ny4bUZcCyzZQXm5OOs99X5Pw6tVOiFQozfiGRwLPW9fpqCltKQ8peR8voPtpEgeS5kto7BIpNB_n-Oaky7nkFEB"
+              />
+            </div>
+            <div>
+              <p class="text-sm font-semibold">Skill Workshop in Mumbai</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                2 days ago • Community Center
+              </p>
+            </div>
+          </div>
+          <div
+            class="flex gap-4 p-3 bg-white dark:bg-slate-800/30 rounded-lg border border-primary/5"
+          >
+            <div
+              class="h-12 w-12 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0"
+            >
+              <span class="material-symbols-outlined">campaign</span>
+            </div>
+            <div>
+              <p class="text-sm font-semibold">
+                Health Insurance Drive Started
+              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                5 days ago • Welfare Board
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Bottom Navigation Bar -->
+    <nav
+      class="fixed bottom-0 left-0 right-0 bg-background-light dark:bg-background-dark border-t border-primary/10 px-4 pb-4 pt-2 z-50"
+    >
+      <div class="max-w-2xl mx-auto flex justify-between">
+        <a class="flex flex-col items-center gap-1 text-primary" href="#">
+          <span class="material-symbols-outlined">home</span>
+          <span class="text-[10px] font-medium">Home</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">groups</span>
+          <span class="text-[10px] font-medium">Directory</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">handyman</span>
+          <span class="text-[10px] font-medium">Services</span>
+        </a>
+        <a
+          class="flex flex-col items-center gap-1 text-slate-400 dark:text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">account_circle</span>
+          <span class="text-[10px] font-medium">Account</span>
+        </a>
+      </div>
+    </nav>
+  </body>
+</html>

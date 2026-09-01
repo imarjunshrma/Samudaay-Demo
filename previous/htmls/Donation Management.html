@@ -1,0 +1,393 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Donation Management - Indian Cobbler Community</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col"
+  >
+    <!-- Header -->
+    <header
+      class="flex items-center bg-background-light dark:bg-background-dark p-4 sticky top-0 z-10 border-b border-primary/10"
+    >
+      <button
+        class="text-slate-900 dark:text-slate-100 p-2 hover:bg-primary/10 rounded-full transition-colors"
+      >
+        <span class="material-symbols-outlined">arrow_back</span>
+      </button>
+      <h1 class="text-xl font-bold ml-2">Donations</h1>
+    </header>
+    <main class="flex-grow overflow-y-auto">
+      <!-- Impact Summary Card -->
+      <div class="p-4 @container">
+        <div
+          class="flex flex-col items-stretch justify-start rounded-xl @xl:flex-row @xl:items-start shadow-sm border border-primary/10 bg-white dark:bg-slate-800/50 overflow-hidden"
+        >
+          <div
+            class="w-full bg-center bg-no-repeat aspect-[21/9] bg-cover"
+            data-alt="Traditional Indian cobbler working with leather tools"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA5lbvs7EK9L2PG_TNfMXqCJT9toXn0_h42qmXwtIhYkpyaYFgpkaVAHPNwNJ8lejIjsgLeK2YE74e6uLkywNnEy05qHOP6dEtg6ZcGWX1ApnEb2IlN0cof9y3ouJmtdCuinWUBEsuUjU8_Bcy9lfDhrXhhPMCUY_4WUPueGxVkrPkdjgQr_Wp1MQX2kkzL6761d8rjVl70lrvytLo9cLmcm5mp5JVAQGVC_W6okrofWD6QqRBW6EAF_HNrH4RIRtB3CoXlbwMxs0FL&quot;);
+            "
+          ></div>
+          <div
+            class="flex w-full min-w-72 grow flex-col items-stretch justify-center gap-1 p-5"
+          >
+            <p
+              class="text-primary text-sm font-semibold uppercase tracking-wider"
+            >
+              Your Impact
+            </p>
+            <p class="text-3xl font-bold leading-tight tracking-tight">
+              ₹45,000
+            </p>
+            <div class="flex items-end gap-3 justify-between">
+              <p
+                class="text-slate-500 dark:text-slate-400 text-base font-normal"
+              >
+                Total Community Contributions
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Make a Donation Form -->
+      <!-- Admin Actions Section -->
+      <section class="px-4 py-2">
+        <div
+          class="bg-slate-100 dark:bg-slate-800/80 rounded-xl p-4 border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="size-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+            >
+              <span class="material-symbols-outlined">post_add</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">
+                Record Offline Donation
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Log manual cash or check contributions
+              </p>
+            </div>
+          </div>
+          <button
+            class="bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 font-semibold py-2 px-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-600 transition-all text-sm"
+          >
+            Add Record
+          </button>
+        </div>
+      </section>
+      <section class="px-4 py-6">
+        <h2 class="text-[22px] font-bold leading-tight tracking-tight mb-4">
+          Make a New Donation
+        </h2>
+        <div
+          class="bg-white dark:bg-slate-800/50 p-5 rounded-xl border border-primary/10 shadow-sm space-y-6"
+        >
+          <!-- Toggle -->
+          <div class="flex bg-slate-100 dark:bg-slate-900 p-1 rounded-lg">
+            <label
+              class="flex flex-1 cursor-pointer items-center justify-center rounded-md py-2 text-sm font-medium transition-all has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:text-primary has-[:checked]:shadow-sm text-slate-500"
+            >
+              <span>Self</span>
+              <input checked="" class="hidden" name="donor_type" type="radio" />
+            </label>
+            <label
+              class="flex flex-1 cursor-pointer items-center justify-center rounded-md py-2 text-sm font-medium transition-all has-[:checked]:bg-white dark:has-[:checked]:bg-slate-700 has-[:checked]:text-primary has-[:checked]:shadow-sm text-slate-500"
+            >
+              <span>On behalf of others</span>
+              <input class="hidden" name="donor_type" type="radio" />
+            </label>
+          </div>
+          <!-- On Behalf Fields (Hidden/Visible logic handled by JS normally, displayed here as context) -->
+          <div class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-1">
+                <label
+                  class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                  >Donor Name</label
+                >
+                <input
+                  class="w-full rounded-lg border-primary/20 bg-background-light dark:bg-slate-900 focus:border-primary focus:ring-primary"
+                  placeholder="Enter name"
+                  type="text"
+                />
+              </div>
+              <div class="space-y-1">
+                <label
+                  class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                  >Relation</label
+                >
+                <input
+                  class="w-full rounded-lg border-primary/20 bg-background-light dark:bg-slate-900 focus:border-primary focus:ring-primary"
+                  placeholder="e.g. Spouse, Parent"
+                  type="text"
+                />
+              </div>
+            </div>
+            <!-- Amount Selection -->
+            <div class="space-y-2">
+              <label
+                class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                >Select Amount</label
+              >
+              <div class="grid grid-cols-3 gap-3">
+                <button
+                  class="py-2 px-4 rounded-lg border border-primary/30 bg-primary/5 text-primary font-bold hover:bg-primary/20 transition-colors"
+                >
+                  ₹500
+                </button>
+                <button
+                  class="py-2 px-4 rounded-lg border border-primary/30 bg-primary/5 text-primary font-bold hover:bg-primary/20 transition-colors"
+                >
+                  ₹1000
+                </button>
+                <button
+                  class="py-2 px-4 rounded-lg border border-primary/30 bg-primary/5 text-primary font-bold hover:bg-primary/20 transition-colors"
+                >
+                  ₹2000
+                </button>
+              </div>
+              <div class="relative mt-2">
+                <span
+                  class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  >₹</span
+                >
+                <input
+                  class="w-full pl-8 rounded-lg border-primary/20 bg-background-light dark:bg-slate-900 focus:border-primary focus:ring-primary"
+                  placeholder="Enter custom amount"
+                  type="number"
+                />
+              </div>
+            </div>
+            <!-- Message -->
+            <div class="space-y-1">
+              <label
+                class="text-sm font-medium text-slate-600 dark:text-slate-400"
+                >Message (Optional)</label
+              >
+              <textarea
+                class="w-full rounded-lg border-primary/20 bg-background-light dark:bg-slate-900 focus:border-primary focus:ring-primary"
+                placeholder="Leave a message for the community..."
+                rows="3"
+              ></textarea>
+            </div>
+            <!-- Submit -->
+            <button
+              class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg shadow-md transition-all flex items-center justify-center gap-2 mt-4"
+            >
+              <span class="material-symbols-outlined">volunteer_activism</span>
+              Donate Now
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- History Section -->
+      <!-- Admin Actions Section -->
+      <section class="px-4 py-2">
+        <div
+          class="bg-slate-100 dark:bg-slate-800/80 rounded-xl p-4 border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="size-12 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300"
+            >
+              <span class="material-symbols-outlined">post_add</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 dark:text-slate-100">
+                Record Offline Donation
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Log manual cash or check contributions
+              </p>
+            </div>
+          </div>
+          <button
+            class="bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-100 font-semibold py-2 px-4 rounded-lg shadow-sm border border-slate-200 dark:border-slate-600 transition-all text-sm"
+          >
+            Add Record
+          </button>
+        </div>
+      </section>
+      <section class="px-4 py-6 mb-20">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-bold">Recent Donations</h2>
+          <button class="text-primary text-sm font-semibold">View All</button>
+        </div>
+        <div class="space-y-3">
+          <!-- Donation Item 1 -->
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+              >
+                <span class="material-symbols-outlined">history_edu</span>
+              </div>
+              <div>
+                <p class="font-bold">₹5,000</p>
+                <p class="text-xs text-slate-500">Oct 12, 2023 • Self</p>
+              </div>
+            </div>
+            <button
+              class="p-2 text-primary hover:bg-primary/5 rounded-full transition-colors"
+              title="Download Receipt"
+            >
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+            </button>
+          </div>
+          <!-- Donation Item 2 -->
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+              >
+                <span class="material-symbols-outlined">history_edu</span>
+              </div>
+              <div>
+                <p class="font-bold">₹10,000</p>
+                <p class="text-xs text-slate-500">
+                  Sep 28, 2023 • Ramesh Kumar (Father)
+                </p>
+              </div>
+            </div>
+            <button
+              class="p-2 text-primary hover:bg-primary/5 rounded-full transition-colors"
+              title="Download Receipt"
+            >
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+            </button>
+          </div>
+          <!-- Donation Item 3 -->
+          <div
+            class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary"
+              >
+                <span class="material-symbols-outlined">history_edu</span>
+              </div>
+              <div>
+                <p class="font-bold">₹2,500</p>
+                <p class="text-xs text-slate-500">Aug 15, 2023 • Self</p>
+              </div>
+            </div>
+            <button
+              class="p-2 text-primary hover:bg-primary/5 rounded-full transition-colors"
+              title="Download Receipt"
+            >
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- Bottom Navigation Bar -->
+    <nav
+      class="fixed bottom-0 left-0 right-0 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-3 pt-2"
+    >
+      <div class="flex gap-2 max-w-2xl mx-auto">
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">home</span>
+          </div>
+          <p class="text-[10px] font-medium leading-normal">Home</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">groups</span>
+          </div>
+          <p class="text-[10px] font-medium leading-normal">Family</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span
+              class="material-symbols-outlined text-primary"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >volunteer_activism</span
+            >
+          </div>
+          <p class="text-[10px] font-medium leading-normal">Donations</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">work</span>
+          </div>
+          <p class="text-[10px] font-medium leading-normal">Jobs</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <p class="text-[10px] font-medium leading-normal">Profile</p>
+        </a>
+      </div>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Student Directory | Artisan Academy</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              outline: "#827470",
+              "on-surface": "#1c1b1a",
+              "surface-container-low": "#f7f3f0",
+              background: "#fdf9f6",
+              "on-error-container": "#93000a",
+              "on-tertiary-fixed": "#00201d",
+              "secondary-fixed": "#ffdcc6",
+              secondary: "#964900",
+              surface: "#fdf9f6",
+              "on-primary-fixed": "#2e150b",
+              "inverse-on-surface": "#f4f0ed",
+              "tertiary-fixed": "#87f5ea",
+              "on-secondary": "#ffffff",
+              "on-surface-variant": "#504441",
+              "on-secondary-fixed-variant": "#723600",
+              "surface-container-high": "#ebe7e4",
+              "surface-container-highest": "#e5e2df",
+              "outline-variant": "#d4c3be",
+              "surface-tint": "#7a5649",
+              primary: "#46291e",
+              "secondary-container": "#ff8928",
+              "on-tertiary-container": "#56c6bc",
+              "on-primary": "#ffffff",
+              "surface-container": "#f1edea",
+              "on-primary-fixed-variant": "#603f33",
+              "surface-variant": "#e5e2df",
+              "on-background": "#1c1b1a",
+              "primary-fixed": "#ffdbcf",
+              "primary-container": "#603f33",
+              error: "#ba1a1a",
+              "tertiary-container": "#00504b",
+              "primary-fixed-dim": "#ebbcac",
+              "inverse-surface": "#31302f",
+              tertiary: "#003733",
+              "on-tertiary": "#ffffff",
+              "inverse-primary": "#ebbcac",
+              "on-tertiary-fixed-variant": "#00504b",
+              "on-secondary-fixed": "#311300",
+              "error-container": "#ffdad6",
+              "secondary-fixed-dim": "#ffb786",
+              "on-primary-container": "#d9ab9b",
+              "on-error": "#ffffff",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-container": "#642f00",
+              "surface-dim": "#ddd9d6",
+              "surface-bright": "#fdf9f6",
+            },
+            fontFamily: {
+              headline: ["Newsreader", "serif"],
+              body: ["Manrope", "sans-serif"],
+              label: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      h1,
+      h2,
+      h3,
+      .font-serif {
+        font-family: "Newsreader", serif;
+      }
+      .glass-nav {
+        backdrop-filter: blur(12px);
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-surface selection:bg-secondary/30">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-[#f1edea]/80 dark:bg-[#1a1614]/80 backdrop-blur-md"
+    >
+      <div
+        class="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto"
+      >
+        <div class="flex items-center gap-3">
+          <span
+            class="material-symbols-outlined text-[#46291e] dark:text-[#d7ccc8]"
+            data-icon="school"
+            >school</span
+          >
+          <h1
+            class="text-2xl font-serif italic text-[#46291e] dark:text-[#f1edea]"
+          >
+            Student Directory
+          </h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="p-2 rounded-full hover:bg-[#46291e]/5 transition-colors active:scale-95 duration-200"
+          >
+            <span
+              class="material-symbols-outlined text-[#46291e] dark:text-[#d7ccc8]"
+              data-icon="search"
+              >search</span
+            >
+          </button>
+        </div>
+      </div>
+      <div
+        class="h-[1px] w-full bg-gradient-to-r from-transparent via-[#46291e]/10 to-transparent"
+      ></div>
+    </header>
+    <main class="pt-24 pb-32 px-6 max-w-7xl mx-auto">
+      <!-- Search & Editorial Filter Section -->
+      <section class="mb-12">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-8"
+        >
+          <div class="max-w-xl w-full">
+            <h2 class="text-4xl font-serif mb-6 text-primary leading-tight">
+              Registry of the <br /><span class="italic"
+                >Rising Generation</span
+              >
+            </h2>
+            <div class="relative group">
+              <input
+                class="w-full bg-surface-container-low border-b border-outline-variant/40 py-4 px-2 focus:outline-none focus:border-secondary transition-all font-body text-lg"
+                placeholder="Search by name (English or Gujarati)..."
+                type="text"
+              />
+              <div class="absolute right-2 bottom-4">
+                <span
+                  class="material-symbols-outlined text-outline"
+                  data-icon="person_search"
+                  >person_search</span
+                >
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <button
+              class="px-5 py-2 rounded-full bg-surface-container-highest text-primary font-label text-sm hover:bg-secondary-fixed transition-colors"
+            >
+              Class 1
+            </button>
+            <button
+              class="px-5 py-2 rounded-full bg-primary text-on-primary font-label text-sm shadow-lg shadow-primary/10"
+            >
+              Class 2
+            </button>
+            <button
+              class="px-5 py-2 rounded-full bg-surface-container-highest text-primary font-label text-sm hover:bg-secondary-fixed transition-colors"
+            >
+              Class 3
+            </button>
+            <div
+              class="w-[1px] h-8 bg-outline-variant/30 mx-2 hidden md:block"
+            ></div>
+            <button
+              class="flex items-center gap-2 px-5 py-2 rounded-full border border-outline-variant text-on-surface-variant font-label text-sm hover:bg-surface-container transition-colors"
+            >
+              <span class="material-symbols-outlined text-sm" data-icon="tune"
+                >tune</span
+              >
+              Filters
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Student Grid: Asymmetric Editorial Layout -->
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12"
+      >
+        <!-- Student Card 1 -->
+        <div
+          class="group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5"
+        >
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img
+              alt="Child portrait"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="Candid studio portrait of a young Indian boy smiling warmly, soft natural workshop lighting, earthy brown tones"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFLP7g0ufaOAOMHs6_NsVMLe-1WH91s1PhbwEkJab9GrDOI0Le-F3EMNSTy9drWNg3cJ2kzLwYJhxM4AYAnbRGnLh3LL0BHSuhe0Bvfx-VrLLH9ip7jDfl-b2CM3NyF8Rbw6-BwWyrC-yNrKg9XFAjrQoawRjX4PBeMCPP-yDN7hOqhwLxnyluvkyoZQjVTzWq7RQmrXExXfx_A3XOrSEWRjb_KgPv4Gw0Y01nK1grY48eSsYuQbaf1gTQBAvr6Y-gsrvf1YgsmjrM"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-widest rounded-full"
+                >Class 2</span
+              >
+            </div>
+          </div>
+          <div class="p-8 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-serif text-primary">Arjun Mehta</h3>
+                <p class="text-secondary font-serif italic text-lg opacity-80">
+                  અર્જુન મહેતા
+                </p>
+              </div>
+              <button
+                class="p-3 bg-white rounded-full text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-300 active:scale-90"
+                title="Download Marksheet"
+              >
+                <span class="material-symbols-outlined" data-icon="download"
+                  >download</span
+                >
+              </button>
+            </div>
+            <div class="space-y-3 pt-4 border-t border-outline-variant/20">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >Parent</span
+                >
+                <span class="text-primary font-body font-semibold"
+                  >Rajesh Mehta</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >School</span
+                >
+                <span class="text-primary font-body text-sm"
+                  >St. Xavier's Academy</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Student Card 2 -->
+        <div
+          class="group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 lg:mt-12"
+        >
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img
+              alt="Child portrait"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="Close-up of a young girl with braided hair looking thoughtful, warm window light in a traditional library setting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXKczLHSdKLIsaA1eQBahYm0pnuvJa17EHx5uuOG6SupfM-TKg6kTeUlaGZqvWF3UzMHJFHZfuk3MS0J7LhrOa4Yc_5ezVVeWNP_8Ec-pCc7Cpb9-qmzRMbTWvtPQYYlRoVPltlcpZlUwgEsc8dnn3CRCc9E3IPkIT9ypxtKyH5b2WkybgH19fZ5X9MzXXwuJA-XTuYQPjIuyvGyyDmu4x8ruGoHtLhVo5BlbRUeIdbpcdFkwzUDDJp4UMVVGam0Y6D6Sm2CqpU5SX"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-widest rounded-full"
+                >Class 2</span
+              >
+            </div>
+          </div>
+          <div class="p-8 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-serif text-primary">Diya Patel</h3>
+                <p class="text-secondary font-serif italic text-lg opacity-80">
+                  દિયા પટેલ
+                </p>
+              </div>
+              <button
+                class="p-3 bg-white rounded-full text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-300 active:scale-90"
+                title="Download Marksheet"
+              >
+                <span class="material-symbols-outlined" data-icon="download"
+                  >download</span
+                >
+              </button>
+            </div>
+            <div class="space-y-3 pt-4 border-t border-outline-variant/20">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >Parent</span
+                >
+                <span class="text-primary font-body font-semibold"
+                  >Sanjay Patel</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >School</span
+                >
+                <span class="text-primary font-body text-sm"
+                  >Greenwood International</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Student Card 3 -->
+        <div
+          class="group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5"
+        >
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img
+              alt="Child portrait"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="Young boy in school uniform studying diligently, soft bokeh background of a clean classroom, morning light"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtajG4GRIl5vZH9vmjnAICk-q169uFeR-ipQNESBdRJeY9FgUABtEymyyzYMcan6p54E5TUJvvFMVCQ8bYgYUoR3D7pCIVNGhsPr-YiWkoiFCrzmjou7t40eIyoBbvep48g5dSrMgKU3J0eWlb4LQEbLHmBu18T5o5Djz0m7QyVbUY5Ft8WVRUY6rfg3nTtqPi-j8-cyBwquAG56NE6R3LYPGkAZu6Rg9lb__9FID51tDI0eqoScIAZqarN9wirVgB_G-mtVq6hlfL"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-widest rounded-full"
+                >Class 1</span
+              >
+            </div>
+          </div>
+          <div class="p-8 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-serif text-primary">Ishaan Shah</h3>
+                <p class="text-secondary font-serif italic text-lg opacity-80">
+                  ઈશાન શાહ
+                </p>
+              </div>
+              <button
+                class="p-3 bg-white rounded-full text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-300 active:scale-90"
+                title="Download Marksheet"
+              >
+                <span class="material-symbols-outlined" data-icon="download"
+                  >download</span
+                >
+              </button>
+            </div>
+            <div class="space-y-3 pt-4 border-t border-outline-variant/20">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >Parent</span
+                >
+                <span class="text-primary font-body font-semibold"
+                  >Amit Shah</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >School</span
+                >
+                <span class="text-primary font-body text-sm"
+                  >Bright Future School</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Student Card 4 -->
+        <div
+          class="group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 lg:-mt-12"
+        >
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img
+              alt="Child portrait"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="Young girl with bright eyes wearing a hand-knit sweater, warm artisanal studio atmosphere"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzYPz9UfPKtb4i1c_GqtnEIvdrNoak_5r1W35lEqFBoUb0EVRurEOXAcswSnMvZpP3S3T28Y97dX56AUSkBptLWPfoZt3tUbnaQhY27Z-UhBPWOfVCivqvtR8tLknu5ooQ-zrwznB31rjZKkHws6vxK17TrSQ2HMBv3uPOyYmZGTz9vUN_i9qjiABHhdhkK9vO6WImplBzuW4yYsPXAZmBDlIZgUY1JdjMMwPD2n6_2ldOZl38Ii1uxocaKAJzXgFbjTLSKIX3A8TW"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-widest rounded-full"
+                >Class 3</span
+              >
+            </div>
+          </div>
+          <div class="p-8 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-serif text-primary">Ananya Joshi</h3>
+                <p class="text-secondary font-serif italic text-lg opacity-80">
+                  અનન્યા જોશી
+                </p>
+              </div>
+              <button
+                class="p-3 bg-white rounded-full text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-300 active:scale-90"
+                title="Download Marksheet"
+              >
+                <span class="material-symbols-outlined" data-icon="download"
+                  >download</span
+                >
+              </button>
+            </div>
+            <div class="space-y-3 pt-4 border-t border-outline-variant/20">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >Parent</span
+                >
+                <span class="text-primary font-body font-semibold"
+                  >Vikram Joshi</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >School</span
+                >
+                <span class="text-primary font-body text-sm"
+                  >Hillcrest Primary</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Student Card 5 -->
+        <div
+          class="group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5"
+        >
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img
+              alt="Child portrait"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="Cheerful young boy wearing glasses, sitting in a craft workshop surrounded by wooden tools, soft diffused light"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzDwHZFJNDs7ysw5Ji7HXJOcicxqCJLV3yug32ENZYa3sCU24PNru-7Ml3T8o3pCz89-8p4lT1XFWPhyTA34Lmc4fH6_pt9sUuFpRKYrysq2BH1Bk3u0n6XVQ9i9ILcBnDRFXf5h1YMkQoxSkAsBUOFU-xct5Xdv51HiV8pdnSufc3RWXdF-uttNboikplc5Ofk_iOQJzQ6eJI51TRp_v24JJEbhn14qUjHVRrBwX8K46AyFFSER7ukL-1ee6gAdvFqugoelk23LcW"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-widest rounded-full"
+                >Class 2</span
+              >
+            </div>
+          </div>
+          <div class="p-8 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-serif text-primary">Kavya Desai</h3>
+                <p class="text-secondary font-serif italic text-lg opacity-80">
+                  કાવ્યા દેસાઈ
+                </p>
+              </div>
+              <button
+                class="p-3 bg-white rounded-full text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-300 active:scale-90"
+                title="Download Marksheet"
+              >
+                <span class="material-symbols-outlined" data-icon="download"
+                  >download</span
+                >
+              </button>
+            </div>
+            <div class="space-y-3 pt-4 border-t border-outline-variant/20">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >Parent</span
+                >
+                <span class="text-primary font-body font-semibold"
+                  >Pranav Desai</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >School</span
+                >
+                <span class="text-primary font-body text-sm"
+                  >Lotus Valley School</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Student Card 6 -->
+        <div
+          class="group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 lg:mt-6"
+        >
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img
+              alt="Child portrait"
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="Young girl playing with colorful educational blocks, natural light on her face, warm workshop textures"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyoe_nszvxUUE0VC7syc3wEhntZwzQuPaonpQ07QstkDU512Z_ypWkeJGlW3lQPTXHmh-igTrhAdOFPU0XSX6_wLhi_W-uR10xdIk06uHFrZarYX85Ju8-Hy7NeSffexw6TUXWaxglB4R_PPZGhX5nCqNBp3BwRe73jtZKckO6KVNUBEU89eCroRVseNj2AtbjO_ELHmOes9Gvdu3Cw7UKMGa74jdfy-aPbmhGYUGGa9enbqe6N9U_NPUVlnjqF0Z7tOGZrkmzQX2h"
+            />
+            <div class="absolute top-4 left-4">
+              <span
+                class="px-3 py-1 bg-secondary-container text-on-secondary-container font-label text-[10px] uppercase tracking-widest rounded-full"
+                >Class 1</span
+              >
+            </div>
+          </div>
+          <div class="p-8 flex flex-col flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h3 class="text-2xl font-serif text-primary">Rohan Vyas</h3>
+                <p class="text-secondary font-serif italic text-lg opacity-80">
+                  રોહન વ્યાસ
+                </p>
+              </div>
+              <button
+                class="p-3 bg-white rounded-full text-primary shadow-sm hover:bg-primary hover:text-white transition-all duration-300 active:scale-90"
+                title="Download Marksheet"
+              >
+                <span class="material-symbols-outlined" data-icon="download"
+                  >download</span
+                >
+              </button>
+            </div>
+            <div class="space-y-3 pt-4 border-t border-outline-variant/20">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >Parent</span
+                >
+                <span class="text-primary font-body font-semibold"
+                  >Meera Vyas</span
+                >
+              </div>
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-on-surface-variant text-xs font-label uppercase tracking-tighter"
+                  >School</span
+                >
+                <span class="text-primary font-body text-sm"
+                  >Riverdale Public School</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 bg-[#f1edea]/90 dark:bg-[#1a1614]/90 backdrop-blur-lg rounded-t-[2rem] border-t border-[#46291e]/10 shadow-[0_-4px_20px_rgba(70,41,30,0.08)]"
+    >
+      <div
+        class="max-w-7xl mx-auto flex justify-around items-center px-4 pt-3 pb-6"
+      >
+        <a
+          class="flex flex-col items-center justify-center text-[#964900] dark:text-[#ffb74d] relative after:content-[''] after:absolute after:-bottom-1 after:w-1 after:h-1 after:bg-[#964900] after:rounded-full group transition-transform active:scale-90"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined mb-1"
+            data-icon="badge"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >badge</span
+          >
+          <span
+            class="font-sans text-[11px] uppercase tracking-widest font-semibold"
+            >Students</span
+          >
+        </a>
+        <a
+          class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#f1edea]/50 hover:text-[#46291e] dark:hover:text-[#f1edea] transition-transform active:scale-90"
+          href="#"
+        >
+          <span class="material-symbols-outlined mb-1" data-icon="analytics"
+            >analytics</span
+          >
+          <span
+            class="font-sans text-[11px] uppercase tracking-widest font-semibold"
+            >Reports</span
+          >
+        </a>
+        <a
+          class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#f1edea]/50 hover:text-[#46291e] dark:hover:text-[#f1edea] transition-transform active:scale-90"
+          href="#"
+        >
+          <span class="material-symbols-outlined mb-1" data-icon="tune"
+            >tune</span
+          >
+          <span
+            class="font-sans text-[11px] uppercase tracking-widest font-semibold"
+            >Filters</span
+          >
+        </a>
+        <a
+          class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#f1edea]/50 hover:text-[#46291e] dark:hover:text-[#f1edea] transition-transform active:scale-90"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined mb-1"
+            data-icon="account_circle"
+            >account_circle</span
+          >
+          <span
+            class="font-sans text-[11px] uppercase tracking-widest font-semibold"
+            >Profile</span
+          >
+        </a>
+      </div>
+    </nav>
+  </body>
+</html>

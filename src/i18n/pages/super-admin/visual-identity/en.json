@@ -1,0 +1,8 @@
+{
+  "title": "The Visual Identity",
+  "fields.logo": "Client Brand Logo",
+  "fields.logoUpload": "Click to upload brand asset",
+  "fields.logoHelp": "SVG, PNG, JPG (Max 5MB)",
+  "fields.palette": "Signature Color Palette",
+  "fields.customHex": "Custom Hex"
+}

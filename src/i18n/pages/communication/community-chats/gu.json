@@ -1,0 +1,23 @@
+{
+  "title": "સમુદાય ચેટ્સ",
+  "search.placeholder": "જૂથો શોધો...",
+  "tabs.all": "બધું",
+  "tabs.groups": "જૂથો",
+  "tabs.events": "ઇવેન્ટ્સ",
+  "tabs.unread": "અવાંચિત",
+  "tabs.archived": "આર્કાઇવ્ડ",
+  "modal.title.edit": "જૂથ ચેટ મેનેજ કરો",
+  "modal.title.create": "નવું જૂથ ચેટ",
+  "modal.fields.title": "શીર્ષક",
+  "modal.fields.titlePlaceholder": "જૂથ શીર્ષક",
+  "modal.fields.city.label": "શહેર ફિલ્ટર",
+  "modal.fields.city.placeholder": "બધા શહેરો",
+  "modal.fields.city.all": "બધા શહેરો",
+  "modal.fields.role.label": "ભૂમિકા ફિલ્ટર",
+  "modal.fields.role.placeholder": "બધી ભૂમિકાઓ",
+  "modal.fields.role.all": "બધી ભૂમિકાઓ",
+  "modal.status.open": "ઓપન ચેટ",
+  "modal.status.adminOnly": "ફક્ત એડમિન",
+  "modal.manualMembers": "મેન્યુઅલ સભ્યો",
+  "modal.searchMembers": "સભ્યો શોધો"
+}

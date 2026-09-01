@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Add New Admin - Indian Cobbler Community</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden"
+    >
+      <!-- Top Navigation -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10"
+      >
+        <div
+          class="text-primary flex size-12 shrink-0 items-center justify-center cursor-pointer"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 px-2"
+        >
+          Add New Admin
+        </h2>
+        <div class="size-12 flex items-center justify-center">
+          <span class="material-symbols-outlined text-primary/40">info</span>
+        </div>
+      </div>
+      <main class="flex-1 max-w-2xl mx-auto w-full pb-20">
+        <!-- Step 1: Select Member -->
+        <section class="mt-4">
+          <h3
+            class="text-slate-900 dark:text-slate-100 text-lg font-bold px-4 pb-2"
+          >
+            Step 1: Select Member
+          </h3>
+          <div class="px-4 py-3">
+            <label class="flex flex-col w-full">
+              <div
+                class="flex w-full items-stretch rounded-lg h-12 bg-primary/5 dark:bg-primary/10 border border-primary/20"
+              >
+                <div class="text-primary flex items-center justify-center pl-4">
+                  <span class="material-symbols-outlined">search</span>
+                </div>
+                <input
+                  class="form-input flex w-full border-none bg-transparent focus:ring-0 text-base font-normal placeholder:text-primary/50"
+                  placeholder="Search member by name or ID"
+                  value="Rajesh Kumar"
+                />
+              </div>
+            </label>
+          </div>
+          <!-- Selected Member Preview -->
+          <div
+            class="mx-4 flex items-center gap-4 bg-white dark:bg-slate-800/50 p-4 rounded-xl border border-primary/10 shadow-sm"
+          >
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-14 w-14 border-2 border-primary/20"
+              data-alt="Portrait of a middle-aged Indian man smiling"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCmOnw7tcLtYiSwJKosT_TC9Lgm6Q70iBrUkGF9ekiwMfcdBGr7v2JddR661EU10hjvjSw2Al3Xr-rU7oY7opREZsjsjuKfMQlrzeMcVG2PScfZ2xY0V477SBypMSbfJTB4yEMCcRPaKURoAen80FQbYiuWFrejv4WLuSsAeltPMUV2Zgz51wELwMtnriveJDC6UzPhZlNZearIeByGj5Wj-gALGsOQ6duZi6pb20XohDc_lrICyDU7JVxskJX4WzqU5uOmmrPxT5dA&quot;);
+              "
+            ></div>
+            <div class="flex flex-col justify-center flex-1">
+              <p class="text-slate-900 dark:text-slate-100 text-base font-bold">
+                Rajesh Kumar
+              </p>
+              <p class="text-primary text-sm font-medium">
+                Member ID: ICC-54321
+              </p>
+            </div>
+            <div class="shrink-0">
+              <span class="material-symbols-outlined text-green-600"
+                >check_circle</span
+              >
+            </div>
+          </div>
+        </section>
+        <!-- Step 2: Assign Admin Role -->
+        <section class="mt-8">
+          <h3
+            class="text-slate-900 dark:text-slate-100 text-lg font-bold px-4 pb-2"
+          >
+            Step 2: Assign Role
+          </h3>
+          <div class="px-4 grid grid-cols-1 gap-3">
+            <!-- Role Options -->
+            <label
+              class="relative flex items-center p-4 rounded-xl border-2 border-primary bg-primary/5 cursor-pointer"
+            >
+              <input
+                checked=""
+                class="hidden peer"
+                name="admin_role"
+                type="radio"
+              />
+              <div class="flex-1">
+                <p class="font-bold text-slate-900 dark:text-slate-100">
+                  Super Admin
+                </p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                  Full access to all modules and system settings
+                </p>
+              </div>
+              <div class="text-primary">
+                <span class="material-symbols-outlined"
+                  >radio_button_checked</span
+                >
+              </div>
+            </label>
+            <label
+              class="relative flex items-center p-4 rounded-xl border border-primary/20 bg-white dark:bg-slate-800/50 cursor-pointer"
+            >
+              <input class="hidden peer" name="admin_role" type="radio" />
+              <div class="flex-1">
+                <p class="font-bold text-slate-900 dark:text-slate-100">
+                  Event Admin
+                </p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                  Manage community meetups, workshops, and exhibitions
+                </p>
+              </div>
+              <div class="text-slate-300">
+                <span class="material-symbols-outlined"
+                  >radio_button_unchecked</span
+                >
+              </div>
+            </label>
+            <label
+              class="relative flex items-center p-4 rounded-xl border border-primary/20 bg-white dark:bg-slate-800/50 cursor-pointer"
+            >
+              <input class="hidden peer" name="admin_role" type="radio" />
+              <div class="flex-1">
+                <p class="font-bold text-slate-900 dark:text-slate-100">
+                  Donation Admin
+                </p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                  Manage crowdfunding and charity distribution records
+                </p>
+              </div>
+              <div class="text-slate-300">
+                <span class="material-symbols-outlined"
+                  >radio_button_unchecked</span
+                >
+              </div>
+            </label>
+            <label
+              class="relative flex items-center p-4 rounded-xl border border-primary/20 bg-white dark:bg-slate-800/50 cursor-pointer"
+            >
+              <input class="hidden peer" name="admin_role" type="radio" />
+              <div class="flex-1">
+                <p class="font-bold text-slate-900 dark:text-slate-100">
+                  Matrimony Admin
+                </p>
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                  Review profiles and facilitate community matches
+                </p>
+              </div>
+              <div class="text-slate-300">
+                <span class="material-symbols-outlined"
+                  >radio_button_unchecked</span
+                >
+              </div>
+            </label>
+          </div>
+        </section>
+        <!-- Step 3: Define Permissions -->
+        <section class="mt-8">
+          <h3
+            class="text-slate-900 dark:text-slate-100 text-lg font-bold px-4 pb-2"
+          >
+            Step 3: Specific Permissions
+          </h3>
+          <div class="px-4 space-y-4">
+            <div
+              class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10"
+            >
+              <div>
+                <p class="font-medium text-slate-900 dark:text-slate-100">
+                  Allow Member Management
+                </p>
+                <p class="text-xs text-slate-500">
+                  Can approve or ban community members
+                </p>
+              </div>
+              <label
+                class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full bg-primary/20 p-0.5 has-[:checked]:bg-primary transition-colors"
+              >
+                <input
+                  checked=""
+                  class="invisible absolute peer"
+                  type="checkbox"
+                />
+                <div
+                  class="h-full w-[27px] rounded-full bg-white transition-all peer-checked:translate-x-[20px]"
+                  style="box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15)"
+                ></div>
+              </label>
+            </div>
+            <div
+              class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10"
+            >
+              <div>
+                <p class="font-medium text-slate-900 dark:text-slate-100">
+                  Content Moderation
+                </p>
+                <p class="text-xs text-slate-500">
+                  Can delete posts and comments
+                </p>
+              </div>
+              <label
+                class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full bg-primary/20 p-0.5 has-[:checked]:bg-primary transition-colors"
+              >
+                <input
+                  checked=""
+                  class="invisible absolute peer"
+                  type="checkbox"
+                />
+                <div
+                  class="h-full w-[27px] rounded-full bg-white transition-all peer-checked:translate-x-[20px]"
+                  style="box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15)"
+                ></div>
+              </label>
+            </div>
+            <div
+              class="flex items-center justify-between p-4 bg-white dark:bg-slate-800/50 rounded-xl border border-primary/10"
+            >
+              <div>
+                <p class="font-medium text-slate-900 dark:text-slate-100">
+                  Financial Reporting
+                </p>
+                <p class="text-xs text-slate-500">
+                  Can view and export donation reports
+                </p>
+              </div>
+              <label
+                class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full bg-primary/20 p-0.5 has-[:checked]:bg-primary transition-colors"
+              >
+                <input class="invisible absolute peer" type="checkbox" />
+                <div
+                  class="h-full w-[27px] rounded-full bg-white transition-all peer-checked:translate-x-[0px]"
+                  style="box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15)"
+                ></div>
+              </label>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- Fixed Bottom Action Bar -->
+      <div
+        class="fixed bottom-0 left-0 right-0 p-4 bg-background-light dark:bg-background-dark border-t border-primary/10 flex gap-4 max-w-2xl mx-auto w-full"
+      >
+        <button
+          class="flex-1 h-12 rounded-lg border border-primary/20 text-slate-600 dark:text-slate-300 font-bold text-base hover:bg-primary/5 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          class="flex-[2] h-12 rounded-lg bg-primary text-white font-bold text-base shadow-lg shadow-primary/20 hover:opacity-90 active:scale-[0.98] transition-all"
+        >
+          Create Admin
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

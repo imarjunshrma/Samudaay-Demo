@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Digital Atelier | Ledger Analytics</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&amp;family=Manrope:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-variant": "#e5e2df",
+              primary: "#46291e",
+              "primary-container": "#603f33",
+              "on-tertiary-fixed": "#00201d",
+              "tertiary-fixed": "#87f5ea",
+              "surface-container-highest": "#e5e2df",
+              "on-tertiary-fixed-variant": "#00504b",
+              "on-primary-container": "#d9ab9b",
+              "outline-variant": "#d4c3be",
+              "on-tertiary-container": "#56c6bc",
+              outline: "#827470",
+              "on-primary-fixed-variant": "#603f33",
+              "surface-container": "#f1edea",
+              "on-secondary": "#ffffff",
+              tertiary: "#003733",
+              "secondary-fixed": "#ffdcc6",
+              "on-surface-variant": "#504441",
+              "on-background": "#1c1b1a",
+              "surface-container-low": "#f7f3f0",
+              "on-tertiary": "#ffffff",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-tint": "#7a5649",
+              "secondary-fixed-dim": "#ffb786",
+              "on-primary": "#ffffff",
+              "inverse-primary": "#ebbcac",
+              "on-error": "#ffffff",
+              error: "#ba1a1a",
+              "surface-dim": "#ddd9d6",
+              "surface-container-lowest": "#ffffff",
+              secondary: "#964900",
+              "inverse-on-surface": "#f4f0ed",
+              "on-error-container": "#93000a",
+              "inverse-surface": "#31302f",
+              "secondary-container": "#ff8928",
+              background: "#fdf9f6",
+              "surface-bright": "#fdf9f6",
+              "on-surface": "#1c1b1a",
+              "on-primary-fixed": "#2e150b",
+              "error-container": "#ffdad6",
+              surface: "#fdf9f6",
+              "tertiary-container": "#00504b",
+              "on-secondary-fixed": "#311300",
+              "surface-container-high": "#ebe7e4",
+              "primary-fixed-dim": "#ebbcac",
+              "primary-fixed": "#ffdbcf",
+              "on-secondary-fixed-variant": "#723600",
+              "on-secondary-container": "#642f00",
+            },
+            fontFamily: {
+              headline: ["Newsreader"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 300,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      .serif {
+        font-family: "Newsreader", serif;
+      }
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-background selection:bg-secondary/30">
+    <!-- TopAppBar -->
+    <header
+      class="fixed top-0 w-full z-50 bg-[#f1edea]/80 backdrop-blur-md flex justify-between items-center px-6 py-4 w-full max-w-screen-2xl mx-auto"
+    >
+      <div class="flex items-center gap-4">
+        <span
+          class="material-symbols-outlined text-[#46291e] cursor-pointer hover:bg-[#46291e]/5 transition-colors p-2 rounded-lg"
+          >menu</span
+        >
+        <h1 class="text-2xl font-serif italic text-[#46291e]">
+          The Digital Atelier
+        </h1>
+      </div>
+      <div class="flex items-center gap-6">
+        <nav class="hidden md:flex gap-8 items-center">
+          <a
+            class="text-[#46291e]/60 hover:bg-[#46291e]/5 transition-colors px-2 py-1 rounded"
+            href="#"
+            >Studio</a
+          >
+          <a
+            class="text-[#46291e]/60 hover:bg-[#46291e]/5 transition-colors px-2 py-1 rounded"
+            href="#"
+            >People</a
+          >
+          <a
+            class="text-[#46291e]/60 hover:bg-[#46291e]/5 transition-colors px-2 py-1 rounded"
+            href="#"
+            >Events</a
+          >
+          <a class="text-[#964900] font-bold px-2 py-1 rounded" href="#"
+            >Ledger</a
+          >
+        </nav>
+        <div
+          class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/30"
+        >
+          <img
+            alt="Craftsman Profile"
+            class="w-full h-full object-cover"
+            data-alt="Portrait of a master craftsman in a workshop"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBop-WpfdZtdKzZmsTSPWOJ_AENwajaFM6vfB1aDfl9I6QDaltiUzdvwRKZusm2lJ-fNOdun9Jew25JTTt07nJ6LvkrmV3KBqG-72MMqWVWP1HCgOSkTlgg8Wqzwos8rkYNAdOEbIIM1_AVkvfbpyziQ9I_SXxF07WJy14BNQqFrJbKzmSYJu5EsWjMtvqguF7k3_tL71JfK4c5wD_8w7tuCyWsr0q2zW9_AAuiImDRlfZpU2RAvjo3bTKuFkINezGdyR-DWn6FD1Z0"
+          />
+        </div>
+      </div>
+    </header>
+    <main class="pt-32 pb-32 px-6 max-w-screen-xl mx-auto">
+      <!-- Editorial Header Section -->
+      <section
+        class="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8"
+      >
+        <div class="max-w-2xl">
+          <span
+            class="text-secondary font-semibold tracking-widest text-xs uppercase mb-4 block"
+            >Workshop Performance</span
+          >
+          <h2
+            class="text-5xl md:text-7xl text-primary font-serif leading-tight"
+          >
+            Ledger <span class="italic font-normal">&amp;</span> Insights
+          </h2>
+          <p
+            class="text-on-surface-variant mt-6 text-lg leading-relaxed max-w-lg"
+          >
+            A curated overview of your atelier's vital statistics. From
+            membership growth to the final stitch of the P&amp;L statement,
+            track the pulse of craftsmanship.
+          </p>
+        </div>
+        <div class="flex flex-col items-start gap-2">
+          <div
+            class="text-sm font-label text-outline uppercase tracking-tighter"
+          >
+            Current Quarter
+          </div>
+          <div
+            class="flex items-center gap-4 bg-surface-container p-4 rounded-xl"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary"
+            >
+              <span class="material-symbols-outlined">trending_up</span>
+            </div>
+            <div>
+              <div class="text-2xl font-serif text-primary">12.4%</div>
+              <div class="text-xs text-on-surface-variant font-medium">
+                Net Growth vs Q3
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Bento Grid Layout for Quick Actions - Clear 2 Columns -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- People Analytics -->
+        <div
+          class="bg-surface-container-low group hover:bg-surface-container transition-all duration-300 rounded-xl p-8 flex flex-col justify-between min-h-[320px] relative overflow-hidden border border-outline-variant/20"
+        >
+          <div class="relative z-10">
+            <div class="flex justify-between items-start">
+              <div
+                class="w-14 h-14 bg-primary rounded-lg flex items-center justify-center text-white mb-6"
+              >
+                <span class="material-symbols-outlined text-3xl">group</span>
+              </div>
+              <span
+                class="text-tertiary font-bold text-xs bg-tertiary-fixed px-3 py-1 rounded-full"
+                >+48 New Craftsmen</span
+              >
+            </div>
+            <h3 class="text-3xl text-primary font-serif mb-2">
+              People Analytics
+            </h3>
+            <p class="text-on-surface-variant max-w-md">
+              Detailed demographics and retention metrics for the master guild
+              and apprentice programs.
+            </p>
+          </div>
+          <div
+            class="absolute right-0 bottom-0 opacity-10 group-hover:opacity-20 transition-opacity"
+          >
+            <span
+              class="material-symbols-outlined text-[12rem] translate-x-8 translate-y-8 text-primary"
+              >diversity_3</span
+            >
+          </div>
+          <div class="relative z-10 flex items-center gap-4 mt-8">
+            <button
+              class="bg-primary text-on-primary px-6 py-2 rounded-md font-medium text-sm hover:opacity-90 transition-opacity"
+            >
+              Review Roster
+            </button>
+            <button
+              class="text-primary font-semibold text-sm px-4 py-2 hover:bg-primary/5 rounded-md transition-colors"
+            >
+              Growth Report
+            </button>
+          </div>
+        </div>
+        <!-- Event Analytics -->
+        <div
+          class="bg-surface-container-highest group hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 rounded-xl p-8 flex flex-col justify-between min-h-[320px] border border-outline-variant/20"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-secondary rounded-lg flex items-center justify-center text-white mb-6"
+            >
+              <span class="material-symbols-outlined">event</span>
+            </div>
+            <h3 class="text-3xl text-primary font-serif mb-2">
+              Event Analytics
+            </h3>
+            <p class="text-on-surface-variant text-base">
+              Attendance patterns and workshop engagement rates from seasonal
+              expos across the region.
+            </p>
+          </div>
+          <div class="mt-4 border-t border-outline-variant/30 pt-6">
+            <div class="flex justify-between items-center mb-2">
+              <span
+                class="text-xs font-bold text-outline uppercase tracking-widest"
+                >Success Rate</span
+              >
+              <span class="text-2xl font-serif text-secondary">92%</span>
+            </div>
+            <div class="w-full h-1.5 bg-outline-variant/30 rounded-full">
+              <div class="w-[92%] h-full bg-secondary rounded-full"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Transaction Analytics -->
+        <div
+          class="bg-surface-container-high rounded-xl p-8 flex flex-col justify-between border-b-4 border-primary min-h-[320px] border-x border-t border-outline-variant/20"
+        >
+          <div>
+            <div class="flex items-center gap-4 mb-6">
+              <div
+                class="w-12 h-12 bg-primary-container text-on-primary-container rounded-full flex items-center justify-center"
+              >
+                <span class="material-symbols-outlined">payments</span>
+              </div>
+              <h3 class="text-2xl text-primary font-serif">
+                Transaction Analytics
+              </h3>
+            </div>
+            <p class="text-on-surface-variant text-base leading-relaxed">
+              Velocity of sales, average order value, and refund frequency
+              across workshop categories.
+            </p>
+          </div>
+          <div class="mt-8">
+            <div class="text-4xl font-serif text-primary tracking-tight">
+              $42,800.00
+            </div>
+            <div
+              class="text-xs text-secondary font-bold uppercase tracking-wider mt-1"
+            >
+              Total Volume / Mo
+            </div>
+          </div>
+        </div>
+        <!-- Matrimony Analytics -->
+        <div
+          class="bg-tertiary/5 border border-tertiary/10 rounded-xl p-8 flex flex-col justify-between group hover:bg-tertiary/10 transition-colors min-h-[320px]"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-tertiary text-white rounded-lg flex items-center justify-center mb-6"
+            >
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+            <h3 class="text-3xl text-primary font-serif mb-2">
+              Matrimony Analytics
+            </h3>
+            <p class="text-on-surface-variant text-base">
+              Insights into the bespoke wedding collection performance and
+              seasonal marriage trends.
+            </p>
+          </div>
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex -space-x-3">
+              <img
+                class="w-10 h-10 rounded-full border-2 border-background"
+                data-alt="Female user profile"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZBlzu1PLndxBAtn-NBAdB2n1jn_6M_QYW3i-PxPNFN3LUmkAY70we488v7G1B0VlHV3uDYHZfFEjPkGn58xkwGxI30B2TkByDazajZu8nMn4HvEBm0Jc-DXmEZSRosyyRnJg6yRpVHEV29OahnjYz7kExsqipSpaQo0LF3ReBslVZDfSFonuh_Ddp9qswMR1cMrbTgAcwKE0u3ECd5GA7WNDx2ZG8ROVE0A3KqMR9DTm1wsKz8buwONheviiTykPQdWLWrt7_J4q_"
+              />
+              <img
+                class="w-10 h-10 rounded-full border-2 border-background"
+                data-alt="Male user profile"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAr9wXSd083WWik9KOcdgyOsncSCb3CGDUWEPu3Td-ciiGjMthq6Q1ttO3E-boj2qHx5ph7MRL4sefPZ6KVwodAFQ7HRT-8dlPDl2AWWxkL7LJN52nSfpT9UGQkHnn32DIHzmujq8al3CjWrvD6-bicBe8WRo-PLZe6gMAzxM8rEgoxe5bPKF7nGfwx0IiosRcyqHd_mfdcVqHd3MPIwK70hf5DvPhK5M89TKCtMg8mrTi7Yy-ryrHgle-CK8CVfJ_Wcqb2pXV4kuWE"
+              />
+              <div
+                class="w-10 h-10 rounded-full border-2 border-background bg-tertiary-fixed text-xs flex items-center justify-center font-bold text-on-tertiary-fixed"
+              >
+                +12
+              </div>
+            </div>
+            <span class="text-tertiary font-bold text-sm">View Collection</span>
+          </div>
+        </div>
+        <!-- All Transactions -->
+        <div
+          class="bg-white rounded-xl p-8 shadow-sm flex flex-col border border-outline-variant/20 min-h-[320px]"
+        >
+          <div class="flex justify-between items-center mb-8">
+            <h3 class="text-2xl text-primary font-serif">All Transactions</h3>
+            <span
+              class="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors"
+              >open_in_new</span
+            >
+          </div>
+          <ul class="space-y-6">
+            <li class="flex justify-between items-center">
+              <div>
+                <div class="text-base font-bold text-primary">
+                  Custom Oxford Boot
+                </div>
+                <div
+                  class="text-[10px] text-outline uppercase tracking-wider font-semibold"
+                >
+                  Order #7721 • Oct 24
+                </div>
+              </div>
+              <div class="text-lg font-serif text-secondary">+$850.00</div>
+            </li>
+            <li class="flex justify-between items-center opacity-60">
+              <div>
+                <div class="text-base font-bold text-primary">
+                  Waxed Laces (Bulk)
+                </div>
+                <div
+                  class="text-[10px] text-outline uppercase tracking-wider font-semibold"
+                >
+                  Order #7720 • Oct 23
+                </div>
+              </div>
+              <div class="text-lg font-serif text-secondary">+$120.00</div>
+            </li>
+            <li class="flex justify-between items-center opacity-60">
+              <div>
+                <div class="text-base font-bold text-primary">
+                  Sole Stitching Service
+                </div>
+                <div
+                  class="text-[10px] text-outline uppercase tracking-wider font-semibold"
+                >
+                  Order #7719 • Oct 23
+                </div>
+              </div>
+              <div class="text-lg font-serif text-secondary">+$245.00</div>
+            </li>
+          </ul>
+          <button
+            class="mt-auto pt-6 text-xs font-bold text-primary uppercase tracking-[0.2em] text-center hover:underline transition-all"
+          >
+            View Entire Ledger
+          </button>
+        </div>
+        <!-- Yearly P&L Statement - Changed from col-span-2 to single card to fit 2-column pattern -->
+        <div
+          class="bg-primary text-on-primary rounded-xl p-8 flex flex-col justify-between min-h-[320px] relative overflow-hidden"
+        >
+          <div class="relative z-10">
+            <span
+              class="text-secondary-fixed text-[10px] font-bold uppercase tracking-[0.2em] mb-4 block"
+              >Annual Summary</span
+            >
+            <h3 class="text-3xl font-serif mb-4 leading-tight">
+              Yearly P&amp;L Statement
+            </h3>
+            <div class="grid grid-cols-2 gap-4 mt-6">
+              <div
+                class="bg-white/5 backdrop-blur-sm p-4 rounded-lg border border-white/10"
+              >
+                <div
+                  class="text-[10px] text-on-primary-container uppercase tracking-widest mb-1"
+                >
+                  Revenue
+                </div>
+                <div class="text-2xl font-serif">$1.2M</div>
+              </div>
+              <div
+                class="bg-white/5 backdrop-blur-sm p-4 rounded-lg border border-white/10"
+              >
+                <div
+                  class="text-[10px] text-on-primary-container uppercase tracking-widest mb-1"
+                >
+                  Costs
+                </div>
+                <div class="text-2xl font-serif">$420k</div>
+              </div>
+            </div>
+          </div>
+          <div class="relative z-10 mt-8">
+            <button
+              class="w-full bg-secondary text-white py-3 rounded-md font-medium flex items-center justify-center gap-2 hover:bg-secondary/90 transition-colors text-sm"
+            >
+              <span class="material-symbols-outlined text-lg">download</span>
+              Export PDF Statement
+            </button>
+          </div>
+          <!-- Abstract Grain Pattern Overlay -->
+          <div
+            class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"
+          ></div>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+      class="fixed bottom-0 left-0 w-full bg-[#f1edea] flex justify-around items-center pb-safe pt-2 px-4 border-t border-[#46291e]/10 shadow-[0_-4px_24px_rgba(70,41,30,0.06)] md:hidden z-50"
+    >
+      <div
+        class="flex flex-col items-center justify-center text-[#46291e]/50 text-[11px] font-sans uppercase tracking-widest"
+      >
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Studio</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#46291e]/50 text-[11px] font-sans uppercase tracking-widest"
+      >
+        <span class="material-symbols-outlined">group</span>
+        <span>People</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#46291e]/50 text-[11px] font-sans uppercase tracking-widest"
+      >
+        <span class="material-symbols-outlined">event</span>
+        <span>Events</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#964900] bg-[#46291e]/5 rounded-xl px-3 py-1 text-[11px] font-sans uppercase tracking-widest font-bold"
+      >
+        <span class="material-symbols-outlined">payments</span>
+        <span>Ledger</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#46291e]/50 text-[11px] font-sans uppercase tracking-widest"
+      >
+        <span class="material-symbols-outlined">favorite</span>
+        <span>Union</span>
+      </div>
+    </nav>
+  </body>
+</html>

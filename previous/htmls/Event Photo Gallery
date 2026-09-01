@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Event Photo Gallery</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col"
+  >
+    <!-- Top Navigation Bar -->
+    <header
+      class="sticky top-0 z-10 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10"
+    >
+      <div
+        class="flex items-center p-4 justify-between max-w-2xl mx-auto w-full"
+      >
+        <div
+          class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors cursor-pointer"
+        >
+          <span
+            class="material-symbols-outlined text-slate-900 dark:text-slate-100"
+            >arrow_back</span
+          >
+        </div>
+        <div class="flex flex-col items-center">
+          <h2
+            class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight"
+          >
+            Annual Meetup 2023
+          </h2>
+          <span class="text-xs text-primary font-medium"
+            >October 12-14, 2023</span
+          >
+        </div>
+        <div
+          class="flex size-10 items-center justify-center rounded-full hover:bg-primary/10 transition-colors cursor-pointer"
+        >
+          <span
+            class="material-symbols-outlined text-slate-900 dark:text-slate-100"
+            >share</span
+          >
+        </div>
+      </div>
+      <!-- Filter Tabs -->
+      <div class="px-4 overflow-x-auto no-scrollbar max-w-2xl mx-auto w-full">
+        <div class="flex gap-6 border-b border-primary/10">
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-primary py-3 px-1"
+            href="#"
+          >
+            <p class="text-primary text-sm font-bold">All</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent py-3 px-1 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors"
+            href="#"
+          >
+            <p class="text-sm font-bold">Community</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent py-3 px-1 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors"
+            href="#"
+          >
+            <p class="text-sm font-bold">Workshops</p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-2 border-transparent py-3 px-1 text-slate-500 dark:text-slate-400 hover:text-primary transition-colors"
+            href="#"
+          >
+            <p class="text-sm font-bold">Crafts</p>
+          </a>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content: Photo Grid -->
+    <main class="flex-1 max-w-2xl mx-auto w-full p-4">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Community Photos -->
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Group of diverse community members smiling together at an outdoor event"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuADj1ve0nk3WnaYZ0aF4Sl3M39BNlDm8PHdCXxIKaFZaZ7GC05s1Pr9MG6HFBR31OAd9K2FQIKSxKEaqzGAP0fKJ3W1SQhLGF6JaLpLRBRoxAE3LaoL2M2ut2JplTCoXdm5aXjlJJVdw4j8TITXEKfkL5lT863pscAseJ0Mq2VgS0Ne2cvTmVVRm0C2ntIncMFamv3GFQIdDIg5KL9sjURKNe7qWqgvVawMAslqvRcW7iwQE7zk_NfNrm1322tpQQkZsaoDXSADaiaQ&quot;);
+            "
+          ></div>
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-background-dark/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3"
+          >
+            <span class="text-white text-xs font-medium">Community Dinner</span>
+          </div>
+        </div>
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="People collaborating around a wooden table in a brightly lit studio"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBz8qqS7xmKyNec6da9Ax83WsqfztkM7wybxecZJ8p-cyvPxUrt5m2_r9LvR7lUm1MKeKm5MRBYsrd-fqZWnPePNK8mZ_ckMMpO6VpQhUgXWIV0GpdtLQdBeadkP1WkaofeBJMdCGYNYQu0hN3yb38b0OAeg5kPFXAyarsISmcTfSehZ06dnAGT3eWrEnPz-g7-29SeAEffJhsPjzhAfQlHcwnm0C-HYcviTVB0Sr_aDYVZ0BGsiGmDBqh17DF9phPlpXan9qebB7WT&quot;);
+            "
+          ></div>
+        </div>
+        <!-- Workshop Photos -->
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Close up of hands working on a detailed leather craft project"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBOM1yglEA6WfV8SEx8HuGCpcX9IENptyBFtILU5o2gZ2vjcmfR6lfzEiZmfycUm0ErDRQIX-MfkhGEQnPPtdM0URuQpgw6n1WaX0m_P1XFUU7NcTsvY3PEOc5JzfhWaZ_j13D91JDsge_78jwaL7jVyORJZ8MUK-P8GoumfqfIF5Py0DUOMKvTn2GBEZDACLmZjx9kP64ru7vPISyKNyqmioaoVd36CHlbCwi4FmPjBNIp2S_QAktc7jjxiNyreDlPfyK-bu6xbLhA&quot;);
+            "
+          ></div>
+          <div class="absolute top-2 right-2">
+            <span
+              class="bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
+              >Workshop</span
+            >
+          </div>
+        </div>
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Instructor demonstrating tool techniques to a group of students"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuD48VWW7snc4OSDPxdIOmjWsKnu2mdV2QEiJUR1I312KKZr407SZ47uDX6fNI-kWGGZhxEMjWoegB7SvBdVSIfHpZM5rMO-m34154sO_IcKwEmUadM0fxttGYppWTcvRuXEoZNsJ_K7qJhqa21XYtMfskNmnxivD3GcKV2ztVfQOwxTmPT-TrNhSWIOxK5nY9Sw8opDK3Qg3I6J__O3eN_NwWdgmpjHB6p_81pJpilGPboJeRhNWoUIHvoAyoid6Wh0M9QM12YCS7TR&quot;);
+            "
+          ></div>
+        </div>
+        <!-- Leather Crafts -->
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Finished high quality leather wallets and accessories on display"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAjJl7n7qSBZBYVusAx3VLrz9CPB39g3UHVYitqfbn67HT0a3XSfsxgNX4lSOqB5zdJBHpExLRvgvO34NkVAZoFKG4A5Qiwye3h3C8cOZhYRR1V9f9XiZSEB3o-RR2TJXcC0mU9duNwGeRBSghsvsFJRBZ6z9_kLR8e-1Z4VLPVBDRdP4HPzYtlWg9nmUx2nGl0jTudoq1HMaPFlscnWfLnjl56sz3TwLd7a3A42zN2NNtKD1I8Zl_6oz6n2ZRECAY4RrmhzIv0FZwb&quot;);
+            "
+          ></div>
+        </div>
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Artisan stitching a custom leather bag with thick wax thread"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBfvulASHUKtz--yKv00D75W-xr7ifdGHGvcdKOQqIOTyV7VO7MOS3tFMNYlOyJGlQuWI79W6bplUaMI7NzXKlobZquGz5KwJsvtDuyAARUPsvT9LHPdt9F4m8ZU7rdrQQtWUPleEPGY8NfERtvDuoGopv-9FgpBT7THX0SG1Plw79gjpZRrHA9g_obleG2RgKN5pg1t-_EdJ__aH2tLg6T2r3ydihiVAPQ9HSPoRI5P1LsO_eY1sdWQMKQT684WTTf0OzUFop28-JP&quot;);
+            "
+          ></div>
+        </div>
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="A row of colorful leather hides hanging in a workshop"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuC7Qt4vNMN8q0N2uTAuG606L_Yn1lsEuu_ymFqVllbWzIAhx_upfAvcZFpebBPUmgPkh4-sClDXFcg0gcwg2WP3C-a44YODPHTX6owFeeGvXLO4Dhmqr1dy-NgNA0r7mlQpYZTikAf9KJTwhbfu2r6v4BzGtSkkrBaWiPeTFJ5AggKUGl7pdzMKVg1wD1qS9erygN37cN5rAGtzGLjzqwAdsncSV6ARKMCnDEPKnQUevfOC2ycqwxmnnFH04HrLdzhaUJlu0rus2fYq&quot;);
+            "
+          ></div>
+        </div>
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Community members laughing and talking during a break"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCRi3KhP2vTzdxJDnXZqs5mk6MF5L2t1cmBHlLpIZLdVELSR9aOHkRufQDflFGEzIrVkHWBpcWvxy723YITBp_aeX9o3VuWD_iJk2984bMTVvWCvux4lWUEXvKbMIav3fR4Pwcl_oyXb3XLb0jVYZuKy9GhwxuxxzDpgWTQRREcadcu-RHBHvDY7SEb7CZB3ZeKkNE6OcTH_cY3RijNm7lqc_A4--z8QYSZMXP4EBQ9Uz12e_nQCcb94RJyABXwOYemfMFpDfUVRZF2&quot;);
+            "
+          ></div>
+        </div>
+        <div
+          class="group relative aspect-square overflow-hidden rounded-xl bg-primary/5"
+        >
+          <div
+            class="w-full h-full bg-center bg-no-repeat bg-cover transition-transform duration-500 group-hover:scale-110"
+            data-alt="Detailed shot of a leather carving tool making an impression"
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDcwxmK8CqNgZOnd2J2X0xL6AEGDtf7Idt2zHUIgWPTzR0ppOsLK-9sksYOw_QCkJ5Z6_OTGyG854jV5xwHapnTPUv8OplaO-4gmQbtDmbxLBfIamyND66t54SHwzFuAq-FSUhFCf3rI6cbeIZjUcQ9EzKIhtvvbEW7ZeIoANlV5vl4Iga9c9y8wC6dpSrT31oTIOpAAUFiNZSq1rCKNPFMJv-tgPfV8cbhePY_ZvJxUnfv2_hMm_4yGp4FtHeUi6PgQ5bfkvFCfhjh&quot;);
+            "
+          ></div>
+        </div>
+      </div>
+      <!-- Floating Action Button -->
+      <div class="fixed bottom-24 right-6 sm:right-1/2 sm:translate-x-64">
+        <button
+          class="flex items-center justify-center rounded-full h-14 w-14 bg-primary text-white shadow-lg hover:scale-105 transition-transform active:scale-95"
+        >
+          <span class="material-symbols-outlined">photo_camera</span>
+        </button>
+      </div>
+    </main>
+    <!-- Bottom Navigation Bar -->
+    <nav
+      class="sticky bottom-0 bg-background-light dark:bg-background-dark border-t border-primary/10 px-4 pb-6 pt-2"
+    >
+      <div class="flex max-w-2xl mx-auto w-full">
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined">calendar_today</span>
+          <p class="text-xs font-medium">Events</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-primary"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >gallery_thumbnail</span
+          >
+          <p class="text-xs font-medium">Gallery</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined">search</span>
+          <p class="text-xs font-medium">Search</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors"
+          href="#"
+        >
+          <span class="material-symbols-outlined">person</span>
+          <p class="text-xs font-medium">Profile</p>
+        </a>
+      </div>
+    </nav>
+    <style>
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </body>
+</html>

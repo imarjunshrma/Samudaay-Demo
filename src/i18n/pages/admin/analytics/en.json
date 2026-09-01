@@ -1,0 +1,13 @@
+{
+  "title": "Analytics",
+  "subtitle": "Community Admin",
+  "error.load": "Unable to load analytics summary.",
+  "people.badge": "+48 New Craftsmen",
+  "people.title": "People Analytics",
+  "people.description": "Detailed demographics and retention metrics for the master guild and apprentice programs.",
+  "people.actions.review": "Review Roster",
+  "people.actions.growth": "Growth Report",
+  "event.title": "Event Analytics",
+  "event.description": "Attendance patterns and workshop engagement rates from seasonal expos across the region.",
+  "event.rate": "Success Rate"
+}

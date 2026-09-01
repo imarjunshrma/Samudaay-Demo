@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Matrimony Admin Dashboard - Indian Cobbler Community</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .active-icon {
+        font-variation-settings: "FILL" 1;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <header
+        class="flex items-center bg-white dark:bg-background-dark/50 border-b border-primary/10 p-4 justify-between sticky top-0 z-10 backdrop-blur-md"
+      >
+        <div class="flex items-center gap-3">
+          <div class="bg-primary/10 p-2 rounded-lg text-primary">
+            <span class="material-symbols-outlined">dashboard</span>
+          </div>
+          <div>
+            <h2
+              class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight"
+            >
+              Community Admin
+            </h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400">
+              Indian Cobbler Matrimony
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button
+            class="p-2 text-slate-500 hover:bg-primary/5 rounded-full transition-colors"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+          <div
+            class="size-10 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/20"
+          >
+            <img
+              alt="Admin Profile"
+              class="w-full h-full object-cover"
+              data-alt="Admin user profile picture"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAi4nmbHAWb7ke7eCVyds9YoDO7XEG2SrLLMf6b7qNTk6pynAObYdRwkhh3PLmOs6DE8IwVcd2JDTUFrCpHr1tnWfyoppAuEGk9-mrIQGDt_87iIs56Zgcahfvxee7RzaStYuY6g6VWllBkRlKD47_aD7mIeqkyu23VbAw0zRrbtxnqfknXKaZdHi1maIzr418JWKRvBZwektH60es0XEh2cu1GvzLhZLICpgmxocWzEPtRqHo-0PPYWikkGSa0y-_2uxwOgHnFubvV"
+            />
+          </div>
+        </div>
+      </header>
+      <main class="flex-1 pb-24">
+        <div class="p-4">
+          <h1 class="text-2xl font-bold mb-1">Analytics Overview</h1>
+          <p class="text-slate-500 text-sm mb-6">
+            Real-time performance of the matrimony platform
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div
+              class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div class="flex justify-between items-start">
+                <p
+                  class="text-slate-600 dark:text-slate-400 text-sm font-medium"
+                >
+                  Active Profiles
+                </p>
+                <span
+                  class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg"
+                  >group</span
+                >
+              </div>
+              <p
+                class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight"
+              >
+                12,450
+              </p>
+              <div class="flex items-center gap-1 mt-1">
+                <span class="material-symbols-outlined text-green-600 text-sm"
+                  >trending_up</span
+                >
+                <p class="text-green-600 text-sm font-semibold">
+                  +12%
+                  <span class="text-slate-400 font-normal ml-1"
+                    >vs last month</span
+                  >
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div class="flex justify-between items-start">
+                <p
+                  class="text-slate-600 dark:text-slate-400 text-sm font-medium"
+                >
+                  New This Month
+                </p>
+                <span
+                  class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg"
+                  >person_add</span
+                >
+              </div>
+              <p
+                class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight"
+              >
+                840
+              </p>
+              <div class="flex items-center gap-1 mt-1">
+                <span class="material-symbols-outlined text-green-600 text-sm"
+                  >trending_up</span
+                >
+                <p class="text-green-600 text-sm font-semibold">
+                  +5%
+                  <span class="text-slate-400 font-normal ml-1"
+                    >vs last week</span
+                  >
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-background-dark border border-primary/10 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div class="flex justify-between items-start">
+                <p
+                  class="text-slate-600 dark:text-slate-400 text-sm font-medium"
+                >
+                  Subscription Revenue
+                </p>
+                <span
+                  class="material-symbols-outlined text-primary bg-primary/10 p-2 rounded-lg"
+                  >payments</span
+                >
+              </div>
+              <p
+                class="text-slate-900 dark:text-slate-100 tracking-tight text-3xl font-bold leading-tight"
+              >
+                ₹4.2L
+              </p>
+              <div class="flex items-center gap-1 mt-1">
+                <span class="material-symbols-outlined text-green-600 text-sm"
+                  >trending_up</span
+                >
+                <p class="text-green-600 text-sm font-semibold">
+                  +18%
+                  <span class="text-slate-400 font-normal ml-1"
+                    >vs last month</span
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="mt-8 bg-white dark:bg-background-dark border border-primary/10 rounded-xl p-6 shadow-sm"
+          >
+            <div class="flex items-center justify-between mb-6">
+              <div>
+                <h2
+                  class="text-slate-900 dark:text-slate-100 text-xl font-bold tracking-tight"
+                >
+                  Revenue Analytics
+                </h2>
+                <p class="text-slate-500 text-sm font-normal">
+                  Monthly growth analysis
+                </p>
+              </div>
+              <div class="flex gap-2">
+                <button
+                  class="px-3 py-1 text-xs font-semibold rounded-full bg-primary text-white"
+                >
+                  Monthly
+                </button>
+                <button
+                  class="px-3 py-1 text-xs font-semibold rounded-full bg-slate-100 dark:bg-background-light/10 text-slate-600"
+                >
+                  Weekly
+                </button>
+              </div>
+            </div>
+            <div class="flex flex-col gap-2">
+              <div
+                class="grid min-h-[220px] grid-flow-col gap-4 md:gap-8 grid-rows-[1fr_auto] items-end justify-items-center pt-4"
+              >
+                <div class="group relative flex flex-col items-center w-full">
+                  <div
+                    class="bg-primary/20 hover:bg-primary/40 rounded-t-lg transition-all w-8 md:w-12"
+                    style="height: 35%"
+                  ></div>
+                  <p
+                    class="text-slate-500 text-[11px] md:text-xs font-bold mt-2"
+                  >
+                    JAN
+                  </p>
+                </div>
+                <div class="group relative flex flex-col items-center w-full">
+                  <div
+                    class="bg-primary/20 hover:bg-primary/40 rounded-t-lg transition-all w-8 md:w-12"
+                    style="height: 60%"
+                  ></div>
+                  <p
+                    class="text-slate-500 text-[11px] md:text-xs font-bold mt-2"
+                  >
+                    FEB
+                  </p>
+                </div>
+                <div class="group relative flex flex-col items-center w-full">
+                  <div
+                    class="bg-primary/20 hover:bg-primary/40 rounded-t-lg transition-all w-8 md:w-12"
+                    style="height: 45%"
+                  ></div>
+                  <p
+                    class="text-slate-500 text-[11px] md:text-xs font-bold mt-2"
+                  >
+                    MAR
+                  </p>
+                </div>
+                <div class="group relative flex flex-col items-center w-full">
+                  <div
+                    class="bg-primary/20 hover:bg-primary/40 rounded-t-lg transition-all w-8 md:w-12"
+                    style="height: 55%"
+                  ></div>
+                  <p
+                    class="text-slate-500 text-[11px] md:text-xs font-bold mt-2"
+                  >
+                    APR
+                  </p>
+                </div>
+                <div class="group relative flex flex-col items-center w-full">
+                  <div
+                    class="bg-primary/20 hover:bg-primary/40 rounded-t-lg transition-all w-8 md:w-12"
+                    style="height: 80%"
+                  ></div>
+                  <p
+                    class="text-slate-500 text-[11px] md:text-xs font-bold mt-2"
+                  >
+                    MAY
+                  </p>
+                </div>
+                <div class="group relative flex flex-col items-center w-full">
+                  <div
+                    class="bg-primary/80 hover:bg-primary rounded-t-lg transition-all w-8 md:w-12"
+                    style="height: 100%"
+                  ></div>
+                  <p class="text-primary text-[11px] md:text-xs font-bold mt-2">
+                    JUN
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-8">
+            <h2 class="text-xl font-bold mb-4">Recent Profile Approvals</h2>
+            <div
+              class="bg-white dark:bg-background-dark border border-primary/10 rounded-xl overflow-hidden shadow-sm"
+            >
+              <div class="divide-y divide-primary/5">
+                <div
+                  class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors"
+                >
+                  <div class="size-12 rounded-lg bg-slate-100 flex-shrink-0">
+                    <img
+                      class="w-full h-full object-cover rounded-lg"
+                      data-alt="Community member profile"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmJHfev4IgLlWlFQHpoNr3lTyaVJieAzz0IbDAUHY08MH2kK0J74C6_aiBQA40ejaCVIbys0jA-QZy3Mf6aokHXKrBExhu_tKGmKMa4OAmWcqWTJFBSnkmgtEdkNcgUHlpDLkTkmfrWodXdP8MrocSQ7E-mSinIedJIbrcNlBs5tn52jZFQObPYQ3uHpmu2PnQ8SSwxLnB1WTcEsMpsL1pBDivm78cjyqbrMMGiqVEg61jkEyIRlRyvIEHJLRLDIeBP495lJTbtOw4"
+                    />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h4
+                      class="font-bold text-slate-900 dark:text-slate-100 truncate"
+                    >
+                      Rajesh Kumar
+                    </h4>
+                    <p class="text-xs text-slate-500">
+                      Agra, Uttar Pradesh • 28 yrs
+                    </p>
+                  </div>
+                  <span
+                    class="px-3 py-1 rounded-full text-[10px] font-bold bg-green-100 text-green-700 uppercase tracking-wider"
+                    >Approved</span
+                  >
+                </div>
+                <div
+                  class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors"
+                >
+                  <div class="size-12 rounded-lg bg-slate-100 flex-shrink-0">
+                    <img
+                      class="w-full h-full object-cover rounded-lg"
+                      data-alt="Community member profile"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsObRfnNG2NKOdtjuWxYp35mRfoYVnCO_wpaDH2zgBZHgvaYDb0VKKKVpGi852mpopS0B2VPaP3X6Z0RoGQXn2j9e31ZLbjU3PFddHk_FHhgdFCOorXEoQxyHu396bOI_HXXQXhZweHLYSdW3JxqxxPIZhG6_kWraAVeV8FPH_m-S-sZL5qBht1U7fTpXc8xRYFVQRev7-rwevrl9lc_SgrPg6CooPtirPyBo4V5ujkkxKqhlgNi5P9E2lPPA4bvaUvU-J60U9JinL"
+                    />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h4
+                      class="font-bold text-slate-900 dark:text-slate-100 truncate"
+                    >
+                      Priya Varma
+                    </h4>
+                    <p class="text-xs text-slate-500">
+                      Kanpur, Uttar Pradesh • 24 yrs
+                    </p>
+                  </div>
+                  <span
+                    class="px-3 py-1 rounded-full text-[10px] font-bold bg-orange-100 text-orange-700 uppercase tracking-wider"
+                    >Pending</span
+                  >
+                </div>
+                <div
+                  class="p-4 flex items-center gap-4 hover:bg-slate-50 dark:hover:bg-primary/5 transition-colors"
+                >
+                  <div class="size-12 rounded-lg bg-slate-100 flex-shrink-0">
+                    <img
+                      class="w-full h-full object-cover rounded-lg"
+                      data-alt="Community member profile"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpgp5827KyKV1Z6_-vW9n5N5CwRaeNN6b25IIlxvmI4KoESOPtavy07e9JrhaGMmuAy9i1edUmBre7XqT79baQLfeNuxL940Mu3ANluE0rmF-yIPi43iiMAO7q9pB6awVsG7T9VCpQfYT8_vrpxc4A3O-ratLKwdTMDzsT7rs9sjq1e4tojgTG09yBPLE5rY-XOIFdMMKZ72Zf90fsL5t18yr7_EnQKMTeCySlU8xTTkEPpa854Eg-TxdrvGfntYjxzrmgX6qvrkgh"
+                    />
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <h4
+                      class="font-bold text-slate-900 dark:text-slate-100 truncate"
+                    >
+                      Amit Jaiswal
+                    </h4>
+                    <p class="text-xs text-slate-500">
+                      Meerut, Uttar Pradesh • 30 yrs
+                    </p>
+                  </div>
+                  <span
+                    class="px-3 py-1 rounded-full text-[10px] font-bold bg-green-100 text-green-700 uppercase tracking-wider"
+                    >Approved</span
+                  >
+                </div>
+              </div>
+              <div class="p-4 bg-slate-50 dark:bg-primary/5 text-center">
+                <button class="text-primary text-sm font-bold hover:underline">
+                  View All Requests
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <nav
+        class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-primary/10 px-4 pb-4 pt-2 z-20"
+      >
+        <div class="flex max-w-lg mx-auto gap-2">
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2 text-primary"
+            href="#"
+          >
+            <span class="material-symbols-outlined active-icon">home</span>
+            <p class="text-[10px] font-bold uppercase tracking-wider">Home</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2 text-slate-400 hover:text-primary transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined">group</span>
+            <p class="text-[10px] font-bold uppercase tracking-wider">
+              Profiles
+            </p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2 text-slate-400 hover:text-primary transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined">analytics</span>
+            <p class="text-[10px] font-bold uppercase tracking-wider">
+              Revenue
+            </p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 rounded-xl py-2 text-slate-400 hover:text-primary transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined">settings</span>
+            <p class="text-[10px] font-bold uppercase tracking-wider">
+              Settings
+            </p>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,487 @@
+<!doctype html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Artisan Registry - KYC Approval</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,700;1,400&amp;family=Manrope:wght@400;500;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-fixed": "#311300",
+              "surface-container-high": "#ebe7e4",
+              "secondary-fixed": "#ffdcc6",
+              "on-secondary-container": "#642f00",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed-variant": "#603f33",
+              background: "#fdf9f6",
+              primary: "#46291e",
+              "tertiary-fixed": "#87f5ea",
+              "surface-tint": "#7a5649",
+              "surface-container": "#f1edea",
+              "on-secondary-fixed-variant": "#723600",
+              "outline-variant": "#d4c3be",
+              "primary-fixed-dim": "#ebbcac",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed-variant": "#00504b",
+              "on-tertiary-container": "#56c6bc",
+              "inverse-surface": "#31302f",
+              surface: "#fdf9f6",
+              "secondary-container": "#ff8928",
+              "inverse-on-surface": "#f4f0ed",
+              error: "#ba1a1a",
+              "on-primary": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "surface-bright": "#fdf9f6",
+              "on-surface": "#1c1b1a",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-container-low": "#f7f3f0",
+              outline: "#827470",
+              "surface-container-highest": "#e5e2df",
+              "primary-container": "#603f33",
+              "on-primary-fixed": "#2e150b",
+              "surface-variant": "#e5e2df",
+              "secondary-fixed-dim": "#ffb786",
+              "tertiary-container": "#00504b",
+              "on-error-container": "#93000a",
+              "surface-dim": "#ddd9d6",
+              "error-container": "#ffdad6",
+              tertiary: "#003733",
+              "on-tertiary-fixed": "#00201d",
+              "primary-fixed": "#ffdbcf",
+              "on-primary-container": "#d9ab9b",
+              secondary: "#964900",
+              "on-surface-variant": "#504441",
+              "surface-container-lowest": "#ffffff",
+              "on-background": "#1c1b1a",
+              "inverse-primary": "#ebbcac",
+            },
+            fontFamily: {
+              headline: ["Newsreader", "serif"],
+              body: ["Manrope", "sans-serif"],
+              label: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+        background-color: #fdf9f6;
+      }
+      .serif-headline {
+        font-family: "Newsreader", serif;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-background min-h-screen flex flex-col md:flex-row"
+  >
+    <!-- NavigationDrawer (Shared Component) -->
+    <aside
+      class="hidden md:flex fixed left-0 top-0 h-full flex flex-col bg-[#f1edea] dark:bg-[#1a1614] h-full w-72 rounded-r-lg border-r border-[#46291e]/10 z-40"
+    >
+      <div class="p-6 flex items-center gap-4 mb-8">
+        <div
+          class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant"
+        >
+          <img
+            alt="Admin Portrait"
+            class="w-full h-full object-cover"
+            data-alt="Close up portrait of the head inspector admin"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYCesiaJe2Tu3mXtPJfI2IyF6XxvQnvOl8EELFv94w-eguUCsZHzWfZ7p2bU3vsPKpxKkJiNMVT4iutDpUmv9Gy1hFFcGgib4DkvYjhwiluKCdxElBsRMcwSYofHFeq6wlxNk2diwz5MLEO2Pg3Kq4cLfLT_ao1IVT6SOKbV_efupEFN9mfRlznCAPokR7ZjGdr3qGtnoT9U38tn-hXs5XTre1QB2p6H830Q0rZLdIglfv14iaMbqfMCOzhECb6z8HvsSq9cvQ2XYS"
+          />
+        </div>
+        <div>
+          <p
+            class="font-serif text-xl Newsreader text-[#46291e] dark:text-[#d7ccc8]"
+          >
+            Head Inspector
+          </p>
+          <p
+            class="font-sans text-xs font-medium Manrope text-[#46291e]/60 dark:text-[#d7ccc8]/60 uppercase tracking-tighter"
+          >
+            Master Atelier
+          </p>
+        </div>
+      </div>
+      <nav class="flex-1 space-y-1">
+        <div
+          class="bg-[#46291e] text-white dark:bg-[#d7ccc8] dark:text-[#1a1614] rounded-md mx-2 px-4 py-3 flex items-center gap-3 cursor-pointer transition-all duration-300 ease-in-out"
+        >
+          <span class="material-symbols-outlined">pending_actions</span>
+          <span class="font-sans text-sm font-medium Manrope">Pending KYC</span>
+        </div>
+        <div
+          class="text-[#46291e] dark:text-[#d7ccc8] mx-2 px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-[#964900]/10 dark:hover:bg-[#ffb74d]/10 transition-all duration-300 ease-in-out"
+        >
+          <span class="material-symbols-outlined">verified_user</span>
+          <span class="font-sans text-sm font-medium Manrope"
+            >Verified Masters</span
+          >
+        </div>
+        <div
+          class="text-[#46291e] dark:text-[#d7ccc8] mx-2 px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-[#964900]/10 dark:hover:bg-[#ffb74d]/10 transition-all duration-300 ease-in-out"
+        >
+          <span class="material-symbols-outlined">history_edu</span>
+          <span class="font-sans text-sm font-medium Manrope">Audit Logs</span>
+        </div>
+        <div
+          class="text-[#46291e] dark:text-[#d7ccc8] mx-2 px-4 py-3 flex items-center gap-3 cursor-pointer hover:bg-[#964900]/10 dark:hover:bg-[#ffb74d]/10 transition-all duration-300 ease-in-out"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <span class="font-sans text-sm font-medium Manrope"
+            >Workshop Settings</span
+          >
+        </div>
+      </nav>
+      <div class="p-6">
+        <div
+          class="text-[#46291e] dark:text-[#d7ccc8] font-serif italic text-2xl"
+        >
+          Artisan Registry
+        </div>
+      </div>
+    </aside>
+    <!-- Main Canvas -->
+    <main class="flex-1 md:ml-72 pb-24 md:pb-0">
+      <!-- TopAppBar (Shared Component) -->
+      <header
+        class="fixed top-0 w-full z-50 bg-[#f1edea]/80 dark:bg-[#1a1614]/80 backdrop-blur-md shadow-sm dark:shadow-none flex items-center justify-between px-6 py-4 md:static md:bg-transparent md:backdrop-blur-none md:shadow-none"
+      >
+        <div class="flex items-center gap-4">
+          <span
+            class="material-symbols-outlined text-[#46291e] cursor-pointer md:hidden"
+            >menu</span
+          >
+          <h1
+            class="font-serif font-bold text-2xl Newsreader text-[#46291e] dark:text-[#d7ccc8]"
+          >
+            KYC Approval
+          </h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <div
+            class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant overflow-hidden"
+          >
+            <img
+              alt="Admin User Profile"
+              class="w-full h-full object-cover"
+              data-alt="Small circular avatar of the logged in administrator"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxamhfIl1LvmjtPTgBBDFsB4K_LlnGm4LIiCxbkWYM_zACwgGmzk35dhb20azpEM3Sxc-A3UGffVNwoM0Ee5KDa2P0KmTs4m8UxdP4V7ASZ2zUIOeyd-MVg-f647lDfqdNJTuIg9xVrG92m1BUYMDe0p1uGyHBRkry95RvBsdKmca0Fc4ldG4jFbDOpGkT36YBlNTwXPVaSQoIqMPwo-PX4Cj1IBIFGfM7serSZc5Nv3EHnvsMU0ISAosADecCMeGHIz27tunu-CAl"
+            />
+          </div>
+        </div>
+      </header>
+      <!-- Content Area -->
+      <div class="mt-20 md:mt-0 px-6 py-10 max-w-5xl mx-auto space-y-12">
+        <!-- Application Hero / Summary -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          <div class="lg:col-span-8 space-y-8">
+            <header>
+              <span
+                class="text-secondary font-bold text-xs uppercase tracking-[0.2em] mb-2 block"
+                >Application #88421</span
+              >
+              <h2
+                class="text-4xl md:text-5xl font-serif text-primary leading-tight"
+              >
+                Arjun Varma
+              </h2>
+              <p class="text-on-surface-variant text-lg mt-2 font-serif italic">
+                Third Generation Cordwainer, Kanpur District
+              </p>
+            </header>
+            <!-- Profile Details Card -->
+            <div
+              class="bg-surface-container-low p-8 rounded-xl border-l-4 border-primary shadow-sm"
+            >
+              <h3
+                class="text-primary font-bold text-sm uppercase tracking-wider mb-6 flex items-center gap-2"
+              >
+                <span class="material-symbols-outlined text-sm">person</span>
+                Profile Information
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+                <div class="space-y-1 border-b border-outline-variant/20 pb-2">
+                  <p
+                    class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest"
+                  >
+                    Full Name
+                  </p>
+                  <p class="text-on-surface text-lg font-medium">
+                    Arjun Kumar Varma
+                  </p>
+                </div>
+                <div class="space-y-1 border-b border-outline-variant/20 pb-2">
+                  <p
+                    class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest"
+                  >
+                    Father's Name
+                  </p>
+                  <p class="text-on-surface text-lg font-medium">
+                    Rajesh Varma
+                  </p>
+                </div>
+                <div class="space-y-1 border-b border-outline-variant/20 pb-2">
+                  <p
+                    class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest"
+                  >
+                    Gender
+                  </p>
+                  <p class="text-on-surface text-lg font-medium">Male</p>
+                </div>
+                <div class="space-y-1 border-b border-outline-variant/20 pb-2">
+                  <p
+                    class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest"
+                  >
+                    Date of Birth
+                  </p>
+                  <p class="text-on-surface text-lg font-medium">
+                    12th August 1988
+                  </p>
+                </div>
+                <div class="md:col-span-2 space-y-1">
+                  <p
+                    class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest"
+                  >
+                    Registered Address
+                  </p>
+                  <p
+                    class="text-on-surface text-lg font-medium leading-relaxed"
+                  >
+                    42, Leather Artisan Block, Industrial Area Phase II, Jajmau,
+                    Kanpur, Uttar Pradesh - 208010
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Status Sidebar -->
+          <div class="lg:col-span-4 space-y-6">
+            <div class="bg-surface-container-highest p-6 rounded-xl space-y-6">
+              <div class="flex items-center justify-between">
+                <span
+                  class="text-xs font-bold uppercase tracking-widest text-on-surface-variant"
+                  >Status</span
+                >
+                <span
+                  class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold uppercase"
+                  >Pending Audit</span
+                >
+              </div>
+              <div class="space-y-2">
+                <p class="text-xs text-on-surface-variant leading-relaxed">
+                  Submitted 48 hours ago by regional node coordinator.
+                </p>
+              </div>
+              <div class="h-px bg-outline-variant/30"></div>
+              <div class="space-y-4">
+                <div class="flex items-center gap-3 text-tertiary">
+                  <span class="material-symbols-outlined text-lg"
+                    >check_circle</span
+                  >
+                  <span class="text-sm font-medium"
+                    >Aadhaar verified via API</span
+                  >
+                </div>
+                <div class="flex items-center gap-3 text-tertiary">
+                  <span class="material-symbols-outlined text-lg"
+                    >check_circle</span
+                  >
+                  <span class="text-sm font-medium">Locality confirmed</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Documents Section -->
+        <section class="space-y-6">
+          <div
+            class="flex items-baseline justify-between border-b border-outline-variant/30 pb-4"
+          >
+            <h3 class="text-2xl font-serif text-primary">
+              Verification Documents
+            </h3>
+            <p class="text-xs text-on-surface-variant">
+              Click to enlarge documents
+            </p>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Document Card 1 -->
+            <div
+              class="group cursor-pointer bg-white border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div
+                class="p-4 bg-surface-container-low flex items-center justify-between"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-primary"
+                    >id_card</span
+                  >
+                  <span class="text-sm font-bold text-primary"
+                    >Aadhaar Card</span
+                  >
+                </div>
+                <span
+                  class="material-symbols-outlined text-on-surface-variant text-sm"
+                  >open_in_full</span
+                >
+              </div>
+              <div class="aspect-[1.6/1] bg-surface-container relative">
+                <img
+                  alt="Aadhaar Card"
+                  class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  data-alt="Sample official identity card with watermark and portrait"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3dDhdtO1PqLzU8ddZX4Tr76oYU8IhJR1jptKHVp7tam93M3oO33GBHOpWM-TLxvqa_IboA4ECErqOxtMV__rkPn-mbF9wnq-PoBujSiY88OCKvj0zXiLME2N_n752NyeVbQtshfbnqyR0ZoXQwDFhhT6h3wdQc0fwCDmeYp9ohTMsIoCH3BXjBoVte0FfYMZs6A13YO9Z2wUAxN0mgIkadiWtkjrVYTLDCukT0gKt-YYb5Bg_QmDNZm-YwiXcLtkO1KPm8v0I8jPs"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+                ></div>
+              </div>
+            </div>
+            <!-- Document Card 2 -->
+            <div
+              class="group cursor-pointer bg-white border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+            >
+              <div
+                class="p-4 bg-surface-container-low flex items-center justify-between"
+              >
+                <div class="flex items-center gap-3">
+                  <span class="material-symbols-outlined text-primary"
+                    >description</span
+                  >
+                  <span class="text-sm font-bold text-primary"
+                    >Caste Certificate</span
+                  >
+                </div>
+                <span
+                  class="material-symbols-outlined text-on-surface-variant text-sm"
+                  >open_in_full</span
+                >
+              </div>
+              <div class="aspect-[1.6/1] bg-surface-container relative">
+                <img
+                  alt="Caste Certificate"
+                  class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                  data-alt="Official document with stamp and signatures on textured paper"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDzYA3A18r0bTUSo-xZWuLoVqUlUhyS2CfzwF4FSL_vTJxwko_NaXNxGTmxD0SQdnQIzFFYmiY2qq8OX9ns9QYB4_QlwX2x_hnEcg3l8C3h8FwjmS5gu_pdA5A8tsxcEGK3TN3pUhs4ai82qJTRX6uCzMoZCQ4JWKnHc_urT7208GYxGTzGkPNDNKWWTZjejRjbbvzWINDYHyl9yYbmvuLrydH5npJP-bGocz8_ucvIm7LFYz6M01L_MKIF2jk0A0uwmNlvUUw9m4hV"
+                />
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Decision Section -->
+        <section
+          class="bg-surface-container p-10 rounded-2xl space-y-8 border border-outline-variant/20"
+        >
+          <div class="max-w-2xl">
+            <h3 class="text-2xl font-serif text-primary mb-2">
+              Final Review Action
+            </h3>
+            <p class="text-on-surface-variant text-sm">
+              Ensure all document details match the digital profile before
+              confirming artisan credentials.
+            </p>
+          </div>
+          <div class="space-y-4">
+            <label
+              class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant"
+              >Reason for Rejection (Optional if approving)</label
+            >
+            <textarea
+              class="w-full bg-surface-container-low border-b-2 border-outline-variant/20 focus:border-primary focus:ring-0 transition-all text-on-surface placeholder:text-on-surface-variant/40 rounded-t-lg p-4 font-body"
+              placeholder="Detail the discrepancy found in documents..."
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="flex flex-col md:flex-row gap-4 pt-4">
+            <button
+              class="flex-1 flex items-center justify-center gap-2 border-2 border-primary text-primary font-bold py-4 rounded-lg hover:bg-primary/5 active:scale-95 duration-200 transition-all uppercase tracking-wider text-sm"
+            >
+              <span class="material-symbols-outlined">close</span>
+              Reject with Reason
+            </button>
+            <button
+              class="flex-[1.5] flex items-center justify-center gap-2 bg-primary text-white font-bold py-4 rounded-lg hover:brightness-110 active:scale-95 duration-200 transition-all shadow-lg shadow-primary/10 uppercase tracking-wider text-sm"
+            >
+              <span class="material-symbols-outlined">verified</span>
+              Approve Member
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!-- BottomNavBar (Shared Component - Mobile Only) -->
+    <nav
+      class="fixed bottom-0 left-0 w-full flex justify-around items-center h-16 px-4 pb-safe bg-[#f1edea]/90 dark:bg-[#1a1614]/90 backdrop-blur-lg border-t border-[#46291e]/5 shadow-[0_-4px_24px_rgba(70,41,30,0.06)] md:hidden z-50"
+    >
+      <div
+        class="flex flex-col items-center justify-center text-[#964900] dark:text-[#ffb74d] font-bold scale-110 active:bg-[#46291e]/5 transition-transform duration-200"
+      >
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >list_alt</span
+        >
+        <span class="font-sans text-[11px] uppercase tracking-wider Manrope"
+          >Applications</span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#d7ccc8]/50 active:bg-[#46291e]/5 transition-transform duration-200"
+      >
+        <span class="material-symbols-outlined">chat_bubble</span>
+        <span class="font-sans text-[11px] uppercase tracking-wider Manrope"
+          >Messages</span
+        >
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#d7ccc8]/50 active:bg-[#46291e]/5 transition-transform duration-200"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span class="font-sans text-[11px] uppercase tracking-wider Manrope"
+          >Profile</span
+        >
+      </div>
+    </nav>
+  </body>
+</html>

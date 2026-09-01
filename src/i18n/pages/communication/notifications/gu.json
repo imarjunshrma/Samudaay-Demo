@@ -1,0 +1,23 @@
+{
+  "title": "નોટિફિકેશન્સ",
+  "search.placeholder": "નોટિફિકેશન્સ શોધો",
+  "actions.create": "નોટિફિકેશન બનાવો",
+  "actions.send": "નોટિફિકેશન મોકલો",
+  "actions.filter": "ફિલ્ટર",
+  "header.title": "નોટિફિકેશન મેનેજમેન્ટ",
+  "header.subtitle": "નોટિફિકેશન ઝુંબેશો અને ડિલિવરી",
+  "stats.campaignAvailable": "ઝુંબેશ ઉપલબ્ધ છે",
+  "stats.campaignsAvailable": "ઝુંબેશો ઉપલબ્ધ છે",
+  "errors.loadFailed": "નોટિફિકેશન્સ લોડ કરી શક્યા નથી",
+  "errors.noMatchTitle": "કોઈ મેળ ખાતા નોટિફિકેશન્સ નથી",
+  "errors.noMatchDescription": "બીજો શોધ શબ્દ અજમાવો.",
+  "errors.emptyTitle": "હજુ સુધી કોઈ નોટિફિકેશન નથી",
+  "errors.emptyDescription": "મોકલેલી અને સમયબદ્ધ નોટિફિકેશન ઝુંબેશો અહીં દેખાશે.",
+  "feed.today": "આજે",
+  "feed.yesterday": "ગઈકાલે",
+  "feed.older": "જૂના",
+  "filters.all": "બધું",
+  "filters.unread": "અવાંચિત",
+  "actions.markAllRead": "બધાને વાંચેલા તરીકે નિશાન કરો",
+  "routes.create": "નોટિફિકેશન બનાવો"
+}

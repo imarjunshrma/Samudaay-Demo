@@ -1,0 +1,14 @@
+{
+  "title": "Student Directory",
+  "hero.prefix": "Registry of the",
+  "hero.highlight": "Rising Generation",
+  "search.placeholder": "Search by name (English or Gujarati)...",
+  "filters.class1": "Class 1",
+  "filters.class2": "Class 2",
+  "filters.class3": "Class 3",
+  "filters.button": "Filters",
+  "bottomNav.students": "Students",
+  "bottomNav.reports": "Reports",
+  "bottomNav.filters": "Filters",
+  "bottomNav.profile": "Profile"
+}

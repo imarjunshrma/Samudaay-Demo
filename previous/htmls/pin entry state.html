@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#fff8f5",
+                        "on-secondary-fixed-variant": "#6d3914",
+                        "outline-variant": "#dec1b0",
+                        "surface-dim": "#ecd6ca",
+                        "tertiary-fixed": "#cee5ff",
+                        "primary": "#984800",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#321300",
+                        "inverse-on-surface": "#ffede5",
+                        "tertiary-container": "#00a1fa",
+                        "primary-container": "#f2780d",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdbc8",
+                        "surface-tint": "#984800",
+                        "primary-fixed-dim": "#ffb689",
+                        "on-secondary-container": "#79421d",
+                        "on-surface-variant": "#574236",
+                        "on-background": "#241912",
+                        "inverse-primary": "#ffb689",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#3b2e26",
+                        "surface-bright": "#fff8f5",
+                        "on-primary-fixed-variant": "#743500",
+                        "on-surface": "#241912",
+                        "on-tertiary-fixed-variant": "#004a77",
+                        "tertiary-fixed-dim": "#97cbff",
+                        "surface-container-low": "#fff1ea",
+                        "secondary-container": "#ffb283",
+                        "tertiary": "#00639c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#ffeadf",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#542500",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#ffb68a",
+                        "on-secondary": "#ffffff",
+                        "background": "#fff8f5",
+                        "secondary": "#8a5029",
+                        "secondary-fixed": "#ffdbc8",
+                        "on-tertiary-container": "#003556",
+                        "surface-variant": "#f4ded3",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#f4ded3",
+                        "on-tertiary-fixed": "#001d33",
+                        "on-primary-fixed": "#311300",
+                        "outline": "#8b7264",
+                        "surface-container-high": "#fae4d8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap-md": "1rem",
+                        "stack-gap-lg": "1.5rem",
+                        "stack-gap-sm": "0.5rem",
+                        "section-margin": "2rem",
+                        "container-padding": "1rem"
+                    },
+                    "fontFamily": {
+                        "body-base": ["Public Sans"],
+                        "label-caps": ["Public Sans"],
+                        "headline-lg": ["Public Sans"],
+                        "display-xl": ["Public Sans"],
+                        "title-md": ["Public Sans"],
+                        "caption": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "body-base": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "400"}],
+                        "label-caps": ["0.875rem", {"lineHeight": "1.25rem", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg": ["1.5rem", {"lineHeight": "2rem", "fontWeight": "700"}],
+                        "display-xl": ["1.875rem", {"lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-md": ["1.125rem", {"lineHeight": "1.75rem", "fontWeight": "600"}],
+                        "caption": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tap-highlight-transparent {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-base min-h-screen flex items-center justify-center">
+<div class="w-full max-w-[448px] h-screen bg-surface relative flex flex-col overflow-hidden">
+<!-- TopAppBar (From JSON Shared Component) -->
+<header class="flex items-center justify-between px-4 h-16 w-full max-w-[448px] mx-auto border-b border-stone-200 dark:border-stone-800 bg-[#f8f7f5] dark:bg-stone-950 docked full-width top-0 z-50">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full text-[#f2780d] dark:text-orange-500 hover:bg-stone-100 dark:hover:bg-stone-900 transition-colors Active: scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Public_Sans'] font-bold text-lg tracking-tight text-on-surface">Security Check</h1>
+</div>
+<div class="w-10"></div> <!-- Spacer for center alignment logic -->
+</header>
+<main class="flex-1 flex flex-col items-center px-container-padding py-stack-gap-lg overflow-y-auto">
+<!-- Community Branding -->
+<div class="mt-8 mb-6 flex flex-col items-center gap-stack-gap-md">
+<div class="w-24 h-24 rounded-full bg-surface-container flex items-center justify-center border-2 border-primary/20 shadow-lg">
+<div class="w-20 h-20 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Macro close-up of high-quality tanned leather with professional cobbler stitching and antique brass tools on a wooden workshop table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaX8A_id1VQA2tdskiICldFhKPjztTWpJ2lRo2WOWS9ivSLqnHh3ofAoDI2ukQDdOyvWqIqOa0a4mWVw8xoTUPVPgqsiKa9WW6GAxfSkcC3uVBy3iHaEX8X21VKq3ojMNPFLOdF-jMDcS0r-YfFv2WJ_g-IhIgBl4sAigFvzTxIN9vfXBFOjDl0SItlPGmdiaIlnOj0R0Re_hNv-hzl7md0UqO4dYS6ZLWYOuy1nIOiovABmsf0x00CQVuIO7gl_IV5VeYnh861hfm"/>
+</div>
+</div>
+<div class="text-center">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Welcome back,</h2>
+<p class="font-display-xl text-display-xl text-primary-container -mt-1">Master Artisan</p>
+</div>
+</div>
+<!-- PIN Indicator Section -->
+<div class="flex flex-col items-center gap-stack-gap-lg w-full mb-stack-gap-lg">
+<p class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Enter Security PIN</p>
+<div class="flex gap-4">
+<!-- 3 Filled -->
+<div class="w-4 h-4 rounded-full bg-primary-container shadow-md"></div>
+<div class="w-4 h-4 rounded-full bg-primary-container shadow-md"></div>
+<div class="w-4 h-4 rounded-full bg-primary-container shadow-md"></div>
+<!-- 3 Empty -->
+<div class="w-4 h-4 rounded-full border-2 border-outline-variant bg-surface-container-lowest"></div>
+<div class="w-4 h-4 rounded-full border-2 border-outline-variant bg-surface-container-lowest"></div>
+<div class="w-4 h-4 rounded-full border-2 border-outline-variant bg-surface-container-lowest"></div>
+</div>
+</div>
+<!-- Numeric Keypad -->
+<div class="grid grid-cols-3 gap-y-4 gap-x-8 mt-auto mb-stack-gap-lg">
+<!-- Row 1 -->
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">1</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">2</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">3</button>
+<!-- Row 2 -->
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">4</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">5</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">6</button>
+<!-- Row 3 -->
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">7</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">8</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">9</button>
+<!-- Row 4 -->
+<button class="w-16 h-16 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">
+<span class="material-symbols-outlined text-2xl" data-icon="fingerprint">fingerprint</span>
+</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full font-title-md text-title-md text-on-surface hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">0</button>
+<button class="w-16 h-16 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-high active:scale-90 transition-all tap-highlight-transparent">
+<span class="material-symbols-outlined text-2xl" data-icon="backspace">backspace</span>
+</button>
+</div>
+<!-- Bottom Actions -->
+<div class="w-full flex flex-col gap-4 mb-stack-gap-md px-4">
+<button class="w-full h-14 bg-primary-container text-on-primary font-bold rounded-xl shadow-lg flex items-center justify-center gap-2 active:scale-95 transition-all tap-highlight-transparent">
+<span class="material-symbols-outlined" data-icon="face">face</span>
+                    Use Biometrics
+                </button>
+<button class="w-full py-2 font-label-caps text-label-caps text-primary hover:text-on-secondary-fixed-variant transition-colors text-center">
+                    Forgot PIN?
+                </button>
+</div>
+</main>
+<!-- BottomNavBar Logic (Suppressed for focused Security task as per rules) -->
+<!-- But including a subtle home indicator for visual completeness if needed in standard app flow -->
+<div class="h-6 w-full flex justify-center items-center">
+<div class="w-32 h-1.5 bg-stone-200 rounded-full"></div>
+</div>
+</div>
+</body></html>

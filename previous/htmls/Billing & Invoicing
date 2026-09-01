@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>The Digital Atelier | Billing &amp; Invoicing</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#fdf9f6",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#ebbcac",
+              outline: "#827470",
+              "inverse-primary": "#ebbcac",
+              surface: "#fdf9f6",
+              "surface-variant": "#e5e2df",
+              error: "#ba1a1a",
+              "outline-variant": "#d4c3be",
+              primary: "#46291e",
+              "error-container": "#ffdad6",
+              "tertiary-container": "#00504b",
+              "surface-container": "#f1edea",
+              "on-primary-fixed-variant": "#603f33",
+              "inverse-on-surface": "#f4f0ed",
+              "on-error-container": "#93000a",
+              tertiary: "#003733",
+              "inverse-surface": "#31302f",
+              "tertiary-fixed": "#87f5ea",
+              "on-secondary-container": "#642f00",
+              "on-surface-variant": "#504441",
+              "on-tertiary-container": "#56c6bc",
+              "on-error": "#ffffff",
+              "surface-dim": "#ddd9d6",
+              "on-background": "#1c1b1a",
+              "on-surface": "#1c1b1a",
+              background: "#fdf9f6",
+              "on-tertiary": "#ffffff",
+              "on-secondary": "#ffffff",
+              "on-primary-container": "#d9ab9b",
+              "surface-tint": "#7a5649",
+              "surface-container-high": "#ebe7e4",
+              "primary-fixed": "#ffdbcf",
+              "secondary-container": "#ff8928",
+              secondary: "#964900",
+              "on-secondary-fixed-variant": "#723600",
+              "secondary-fixed": "#ffdcc6",
+              "primary-container": "#603f33",
+              "on-tertiary-fixed": "#00201d",
+              "on-primary-fixed": "#2e150b",
+              "surface-container-highest": "#e5e2df",
+              "on-primary": "#ffffff",
+              "secondary-fixed-dim": "#ffb786",
+              "on-tertiary-fixed-variant": "#00504b",
+              "surface-container-low": "#f7f3f0",
+              "on-secondary-fixed": "#311300",
+            },
+            fontFamily: {
+              headline: ["Newsreader"],
+              body: ["Manrope"],
+              label: ["Manrope"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      body {
+        font-family: "Manrope", sans-serif;
+      }
+      h1,
+      h2,
+      h3 {
+        font-family: "Newsreader", serif;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-surface text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed"
+  >
+    <!-- TopAppBar -->
+    <header class="fixed top-0 w-full z-50 bg-stone-50/80 backdrop-blur-md">
+      <div
+        class="flex justify-between items-center px-6 py-4 w-full max-w-7xl mx-auto"
+      >
+        <div class="flex items-center gap-4">
+          <span
+            class="material-symbols-outlined text-[#46291e]"
+            data-icon="grid_view"
+            >grid_view</span
+          >
+          <h1 class="text-2xl font-serif italic text-[#46291e]">
+            The Digital Atelier
+          </h1>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+          <a
+            class="text-[#46291e]/60 font-medium hover:text-[#964900] transition-colors"
+            href="#"
+            >Clients</a
+          >
+          <a
+            class="text-[#46291e]/60 font-medium hover:text-[#964900] transition-colors"
+            href="#"
+            >Configs</a
+          >
+          <a class="text-[#964900] font-bold" href="#">Billing</a>
+          <a
+            class="text-[#46291e]/60 font-medium hover:text-[#964900] transition-colors"
+            href="#"
+            >Audit</a
+          >
+        </nav>
+        <div class="flex items-center gap-3">
+          <div class="text-right hidden sm:block">
+            <p
+              class="text-xs font-bold text-primary uppercase tracking-tighter"
+            >
+              Superadmin
+            </p>
+            <p class="text-[10px] text-on-surface-variant">Master Artisan</p>
+          </div>
+          <div
+            class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant/20"
+          >
+            <img
+              alt="Superadmin Profile"
+              class="w-full h-full object-cover"
+              data-alt="professional portrait of a creative director in a minimalist studio setting with soft natural lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8xXm6to0Tmledrbm6AcUJU-PI4iGty1rmzNgIgFuQ9PWpm44rZxa8ILKfJNU4uUklDJpMK8radkoI6j8L1_GkIglc-l0mLyzdWJ1w9Q6Gpk3SJ12bG6BSoglToN7ni9aq2AfQhvD-2ZvHo_doV9_BVnO0Um-IrAir2LHyEyGTTSHYVKdLm50xRixF2rgunfz7c_8sVjE4b4v1IzEjaizi2d7NcYnBHCf6BSeVroS9siLOO_6HhKrfJyGmFGOdkjh80VKIq8Uc-9Q9"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="pt-24 pb-32 px-6 max-w-7xl mx-auto">
+      <!-- Hero Section / Editorial Title -->
+      <section class="mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-end">
+          <div class="md:col-span-8">
+            <span
+              class="text-secondary font-semibold tracking-widest uppercase text-xs mb-4 block"
+              >Financial Ledger</span
+            >
+            <h2 class="text-5xl md:text-7xl font-light leading-tight">
+              Billing &amp; <span class="italic">Revenue</span>
+            </h2>
+          </div>
+          <div class="md:col-span-4 text-right">
+            <p class="text-on-surface-variant body-md max-w-xs ml-auto">
+              Precision tracking of atelier subscriptions and service retainers.
+              Managed with the same care as a hand-welted sole.
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- KPI Bento Grid -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+        <div
+          class="md:col-span-2 p-8 bg-primary-container rounded-xl text-stone-50 flex flex-col justify-between relative overflow-hidden group"
+        >
+          <div class="relative z-10">
+            <h3
+              class="text-stone-50/60 text-sm font-label uppercase tracking-widest mb-2"
+            >
+              Total Monthly Recurring Revenue
+            </h3>
+            <p class="text-5xl font-headline italic">$42,850.00</p>
+          </div>
+          <div class="mt-8 flex items-center gap-2 relative z-10">
+            <span
+              class="material-symbols-outlined text-tertiary-fixed-dim"
+              data-icon="trending_up"
+              >trending_up</span
+            >
+            <span class="text-xs font-label">+12.4% from last month</span>
+          </div>
+          <!-- Subtle texture overlay -->
+          <div
+            class="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"
+          ></div>
+        </div>
+        <div
+          class="p-8 bg-surface-container rounded-xl flex flex-col justify-between border-b-2 border-outline-variant/10"
+        >
+          <div>
+            <h3
+              class="text-on-surface-variant text-sm font-label uppercase tracking-widest mb-2"
+            >
+              Upcoming Renewals
+            </h3>
+            <p class="text-4xl font-headline">14</p>
+          </div>
+          <div
+            class="mt-4 text-xs text-secondary font-bold flex items-center gap-1"
+          >
+            <span
+              class="material-symbols-outlined text-sm"
+              data-icon="event_repeat"
+              >event_repeat</span
+            >
+            Next 7 Days
+          </div>
+        </div>
+        <div
+          class="p-8 bg-surface-container-high rounded-xl flex flex-col justify-between border-b-2 border-outline-variant/10"
+        >
+          <div>
+            <h3
+              class="text-on-surface-variant text-sm font-label uppercase tracking-widest mb-2"
+            >
+              Outstanding
+            </h3>
+            <p class="text-4xl font-headline">$3,210</p>
+          </div>
+          <div
+            class="mt-4 text-xs text-error font-bold flex items-center gap-1"
+          >
+            <span class="material-symbols-outlined text-sm" data-icon="error"
+              >error</span
+            >
+            3 Overdue Invoices
+          </div>
+        </div>
+      </section>
+      <!-- Main Content Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Recent Invoices List (Large Table Area) -->
+        <div class="lg:col-span-2 space-y-8">
+          <div class="flex justify-between items-center">
+            <h3 class="text-2xl font-headline italic">Recent Invoices</h3>
+            <button
+              class="text-xs font-bold uppercase tracking-widest border-b border-primary pb-1 hover:text-secondary hover:border-secondary transition-all"
+            >
+              View All Ledger
+            </button>
+          </div>
+          <div class="space-y-4">
+            <!-- Invoice Row -->
+            <div
+              class="group flex flex-col md:flex-row md:items-center justify-between p-6 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-colors"
+            >
+              <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div
+                  class="w-12 h-12 bg-surface-container-highest rounded-lg flex items-center justify-center text-primary"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    data-icon="description"
+                    >description</span
+                  >
+                </div>
+                <div>
+                  <h4 class="font-bold text-primary">Heritage Leathers Co.</h4>
+                  <p class="text-xs text-on-surface-variant">
+                    INV-2023-0842 • Oct 12, 2023
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between md:justify-end gap-8"
+              >
+                <div class="text-right">
+                  <p class="font-headline text-xl">$1,250.00</p>
+                  <span
+                    class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase rounded tracking-tighter"
+                    >Paid</span
+                  >
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    class="p-2 hover:bg-surface-container rounded-full transition-colors group-hover:text-secondary"
+                    title="Download PDF"
+                  >
+                    <span class="material-symbols-outlined" data-icon="download"
+                      >download</span
+                    >
+                  </button>
+                  <button
+                    class="p-2 hover:bg-surface-container rounded-full transition-colors opacity-30 cursor-not-allowed"
+                  >
+                    <span
+                      class="material-symbols-outlined"
+                      data-icon="notification_add"
+                      >notification_add</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Invoice Row Overdue -->
+            <div
+              class="group flex flex-col md:flex-row md:items-center justify-between p-6 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-colors"
+            >
+              <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div
+                  class="w-12 h-12 bg-error-container/20 rounded-lg flex items-center justify-center text-error"
+                >
+                  <span class="material-symbols-outlined" data-icon="warning"
+                    >warning</span
+                  >
+                </div>
+                <div>
+                  <h4 class="font-bold text-primary">Savile Row Bespoke</h4>
+                  <p class="text-xs text-on-surface-variant">
+                    INV-2023-0839 • Oct 05, 2023
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between md:justify-end gap-8"
+              >
+                <div class="text-right">
+                  <p class="font-headline text-xl">$2,400.00</p>
+                  <span
+                    class="px-2 py-0.5 bg-error-container text-on-error-container text-[10px] font-bold uppercase rounded tracking-tighter"
+                    >Overdue</span
+                  >
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    class="p-2 hover:bg-surface-container rounded-full transition-colors"
+                    title="Download PDF"
+                  >
+                    <span class="material-symbols-outlined" data-icon="download"
+                      >download</span
+                    >
+                  </button>
+                  <button
+                    class="p-2 hover:bg-surface-container rounded-full transition-colors text-secondary"
+                    title="Send Reminder"
+                  >
+                    <span
+                      class="material-symbols-outlined"
+                      data-icon="notification_add"
+                      data-weight="fill"
+                      style="font-variation-settings: &quot;FILL&quot; 1"
+                      >notification_add</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- Invoice Row -->
+            <div
+              class="group flex flex-col md:flex-row md:items-center justify-between p-6 bg-surface-container-low rounded-xl hover:bg-surface-container-high transition-colors"
+            >
+              <div class="flex items-center gap-4 mb-4 md:mb-0">
+                <div
+                  class="w-12 h-12 bg-surface-container-highest rounded-lg flex items-center justify-center text-primary"
+                >
+                  <span
+                    class="material-symbols-outlined"
+                    data-icon="description"
+                    >description</span
+                  >
+                </div>
+                <div>
+                  <h4 class="font-bold text-primary">The Lasting Studio</h4>
+                  <p class="text-xs text-on-surface-variant">
+                    INV-2023-0831 • Sep 28, 2023
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex items-center justify-between md:justify-end gap-8"
+              >
+                <div class="text-right">
+                  <p class="font-headline text-xl">$850.00</p>
+                  <span
+                    class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold uppercase rounded tracking-tighter"
+                    >Paid</span
+                  >
+                </div>
+                <div class="flex gap-2">
+                  <button
+                    class="p-2 hover:bg-surface-container rounded-full transition-colors"
+                    title="Download PDF"
+                  >
+                    <span class="material-symbols-outlined" data-icon="download"
+                      >download</span
+                    >
+                  </button>
+                  <button
+                    class="p-2 hover:bg-surface-container rounded-full transition-colors opacity-30 cursor-not-allowed"
+                  >
+                    <span
+                      class="material-symbols-outlined"
+                      data-icon="notification_add"
+                      >notification_add</span
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Sidebar Context -->
+        <div class="space-y-12">
+          <!-- Client Plans Spotlight -->
+          <div class="bg-surface-container p-8 rounded-xl">
+            <h3 class="text-xl font-headline italic mb-6">Client Tiers</h3>
+            <div class="space-y-6">
+              <div class="flex justify-between items-center">
+                <span
+                  class="text-sm font-label uppercase text-on-surface-variant"
+                  >Master Artisan</span
+                >
+                <span class="font-bold text-primary">12 Clients</span>
+              </div>
+              <div
+                class="w-full h-1.5 bg-outline-variant/20 rounded-full overflow-hidden"
+              >
+                <div class="bg-primary h-full w-[80%] rounded-full"></div>
+              </div>
+              <div class="flex justify-between items-center">
+                <span
+                  class="text-sm font-label uppercase text-on-surface-variant"
+                  >Journeyman</span
+                >
+                <span class="font-bold text-primary">28 Clients</span>
+              </div>
+              <div
+                class="w-full h-1.5 bg-outline-variant/20 rounded-full overflow-hidden"
+              >
+                <div class="bg-secondary h-full w-[45%] rounded-full"></div>
+              </div>
+              <div class="flex justify-between items-center">
+                <span
+                  class="text-sm font-label uppercase text-on-surface-variant"
+                  >Apprentice</span
+                >
+                <span class="font-bold text-primary">64 Clients</span>
+              </div>
+              <div
+                class="w-full h-1.5 bg-outline-variant/20 rounded-full overflow-hidden"
+              >
+                <div class="bg-tertiary h-full w-[60%] rounded-full"></div>
+              </div>
+            </div>
+          </div>
+          <!-- Upcoming Renewals Card -->
+          <div
+            class="relative rounded-xl overflow-hidden aspect-[4/5] group shadow-xl"
+          >
+            <img
+              alt="Renewal Context"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              data-alt="close-up of a vintage brass shoe hammer and polished leather on a workbench with warm ambient lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxn353UjBPdoul75d55CiYu3OggYqGV1x068ipoRmQqilFHjMXYnfOxE4I-9AHS8GDTupg_FrEsvh6klva1Dews3uyFp2YfAxqIw5osiMTDMWlLXyi64mC8m5icw-TrbCHxPabnpAb-DyWnwy1lmo5Je5R3SOJMJ7eogS8eZEWJly8CLHrG5TDqcbeHFDfaRBh3OD_iCNs_S8Ao4I4GziD0otrdphBnJtqQsD-jP4PVsVUtL-VSQV_KQMpjnMkSs6aRGKk7vvn9r2M"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent flex flex-col justify-end p-8 text-stone-50"
+            >
+              <h4 class="text-2xl font-headline italic mb-2">
+                Renewal Spotlight
+              </h4>
+              <p class="text-sm text-stone-300 mb-6 font-body">
+                Global Cobblers Guild subscription renews in 2 days ($4,500.00)
+              </p>
+              <button
+                class="w-full py-3 bg-stone-50 text-primary font-bold uppercase tracking-widest text-[10px] rounded-lg hover:bg-secondary hover:text-white transition-colors"
+              >
+                Review Contract
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- BottomNavBar -->
+    <nav
+      class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-4 pt-2 bg-stone-100 dark:bg-stone-950 z-50 rounded-t-xl shadow-[0_-4px_24px_rgba(70,41,30,0.06)] border-t border-stone-200/30"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 px-4 py-1.5 hover:text-[#964900]"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="corporate_fare"
+          >corporate_fare</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase"
+          >Clients</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 px-4 py-1.5 hover:text-[#964900]"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined"
+          data-icon="settings_input_component"
+          >settings_input_component</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase"
+          >Configs</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center bg-[#603f33] text-stone-50 rounded-lg px-4 py-1.5 translate-y-0.5 transition-transform"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="payments"
+          >payments</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase"
+          >Billing</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 px-4 py-1.5 hover:text-[#964900]"
+        href="#"
+      >
+        <span class="material-symbols-outlined" data-icon="receipt_long"
+          >receipt_long</span
+        >
+        <span class="text-[11px] font-sans tracking-wide uppercase">Audit</span>
+      </a>
+    </nav>
+  </body>
+</html>

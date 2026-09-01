@@ -1,0 +1,23 @@
+{
+  "title": "Community Chats",
+  "search.placeholder": "Search groups...",
+  "tabs.all": "All",
+  "tabs.groups": "Groups",
+  "tabs.events": "Events",
+  "tabs.unread": "Unread",
+  "tabs.archived": "Archived",
+  "modal.title.edit": "Manage group chat",
+  "modal.title.create": "New group chat",
+  "modal.fields.title": "Title",
+  "modal.fields.titlePlaceholder": "Group title",
+  "modal.fields.city.label": "City filter",
+  "modal.fields.city.placeholder": "All cities",
+  "modal.fields.city.all": "All cities",
+  "modal.fields.role.label": "Role filter",
+  "modal.fields.role.placeholder": "All roles",
+  "modal.fields.role.all": "All roles",
+  "modal.status.open": "Open Chat",
+  "modal.status.adminOnly": "Admin Only",
+  "modal.manualMembers": "Manual members",
+  "modal.searchMembers": "Search members"
+}

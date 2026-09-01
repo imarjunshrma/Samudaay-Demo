@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Community Chats - Indian Cobbler Community</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div
+      class="relative flex h-screen max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-hidden border-x border-primary/10"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between"
+      >
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center"
+        >
+          <span class="material-symbols-outlined">menu</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1"
+        >
+          Community Chats
+        </h2>
+        <div class="flex w-12 items-center justify-end">
+          <button
+            class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 bg-transparent text-primary gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0"
+          >
+            <span class="material-symbols-outlined">group_add</span>
+          </button>
+        </div>
+      </div>
+      <!-- Search Bar -->
+      <div class="px-4 py-3">
+        <label class="flex flex-col min-w-40 h-12 w-full">
+          <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+            <div
+              class="text-primary/60 flex border-none bg-primary/10 items-center justify-center pl-4 rounded-l-lg border-r-0"
+            >
+              <span class="material-symbols-outlined">search</span>
+            </div>
+            <input
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-primary/10 focus:border-none h-full placeholder:text-primary/60 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
+              placeholder="Search groups..."
+              value=""
+            />
+          </div>
+        </label>
+      </div>
+      <!-- Tabs -->
+      <div class="pb-3">
+        <div class="flex border-b border-primary/10 px-4 gap-8">
+          <a
+            class="flex flex-col items-center justify-center border-b-[3px] border-primary text-slate-900 dark:text-slate-100 pb-[13px] pt-4"
+            href="#"
+          >
+            <p class="text-sm font-bold leading-normal tracking-[0.015em]">
+              All Groups
+            </p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-primary/60 pb-[13px] pt-4"
+            href="#"
+          >
+            <p class="text-sm font-bold leading-normal tracking-[0.015em]">
+              Unread
+            </p>
+          </a>
+          <a
+            class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-primary/60 pb-[13px] pt-4"
+            href="#"
+          >
+            <p class="text-sm font-bold leading-normal tracking-[0.015em]">
+              Archived
+            </p>
+          </a>
+        </div>
+      </div>
+      <!-- Chat List -->
+      <div class="flex-1 overflow-y-auto">
+        <!-- Group Item 1 (Unread) -->
+        <div
+          class="flex gap-4 bg-background-light dark:bg-background-dark px-4 py-3 justify-between hover:bg-primary/5 cursor-pointer"
+        >
+          <div class="flex items-start gap-4">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-[60px] w-[60px] shrink-0 border border-primary/20"
+              data-alt="Traditional Indian leather craft tools on table"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA8vXVmTp_vlxEpUzmjHz63u3uLjhxULwa2_MfszM2v-OrZIqg7gJmW9MmBH4n7tNusHYIdaT-2v3Y9E3csIFFBqBVksta_1yvFnO-YkeRIN7kEEztrflFyYaB1K1gmMGI2OfCd0jMwFqQJM6TFZuC5oIYMsUs1rZyohgsvQd6o9UEDCziVnzEBR6tKgi2EDMh3MRxQccKZIH-HUdgkw78wwngkCnRaogMctXacnLs95BNHm1Jf1VM4qnhu1KAcvnJYwl40oWZ1BtEV&quot;);
+              "
+            ></div>
+            <div class="flex flex-1 flex-col justify-center">
+              <div class="flex justify-between items-center">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-base font-bold leading-normal"
+                >
+                  National Meetup Delhi
+                </p>
+                <p class="text-primary text-xs font-medium">10:30 AM</p>
+              </div>
+              <p
+                class="text-primary/80 text-sm font-semibold truncate leading-normal"
+              >
+                Rajesh: Looking forward to seeing everyone!
+              </p>
+              <p class="text-slate-500 text-xs mt-1">24 members active</p>
+            </div>
+          </div>
+          <div class="shrink-0 flex items-center">
+            <div
+              class="flex size-6 items-center justify-center rounded-full bg-primary text-white text-[10px] font-bold"
+            >
+              3
+            </div>
+          </div>
+        </div>
+        <!-- Group Item 2 -->
+        <div
+          class="flex gap-4 bg-background-light dark:bg-background-dark px-4 py-3 justify-between hover:bg-primary/5 cursor-pointer"
+        >
+          <div class="flex items-start gap-4">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-[60px] w-[60px] shrink-0 border border-primary/20"
+              data-alt="Close up of a cobbler stitching leather shoes"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuC5zDIFn2xmZuMbv5c_fKrrPYpBW7p0se0SIj3XeZ7EwQpeSHlvAJrctft7Pt7crxtWKN8E4PQ3mK8r87t1LN9EQPe_1bb_fmPk4I092EpQTC5Ow0qAPSjByCl0OdA7Jj9Z5BbDwEd1jtrGouCYqqAwJt5d4Irzu3CLh6F_Ibc7XKF1ly4wicRB2Imn4m7YyzXO0EJTq-TWtXS06FWs2n_LdsHf2HZGfgtaVr7VgqqFUdS5CKw4uvF4iLM-yxu554_vZe_lt947kIMl&quot;);
+              "
+            ></div>
+            <div class="flex flex-1 flex-col justify-center">
+              <div class="flex justify-between items-center">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal"
+                >
+                  Mumbai Local Group
+                </p>
+                <p class="text-slate-500 text-xs font-normal">Yesterday</p>
+              </div>
+              <p class="text-slate-500 text-sm truncate leading-normal">
+                Amit: Does anyone know a good tanner in Dharavi?
+              </p>
+              <p class="text-slate-500 text-xs mt-1">112 members</p>
+            </div>
+          </div>
+        </div>
+        <!-- Group Item 3 -->
+        <div
+          class="flex gap-4 bg-background-light dark:bg-background-dark px-4 py-3 justify-between hover:bg-primary/5 cursor-pointer"
+        >
+          <div class="flex items-start gap-4">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-[60px] w-[60px] shrink-0 border border-primary/20"
+              data-alt="Artisan workshop with various leather pieces"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDsfz1a_s13ad2uVDtv5slAUwFTqLLQ1bXPx5hRLU9otz1T7LtQFcCi0G65UkWncrNrgMshGB0ySRl9vILHTRZ1CeCIfOR6UlR6179K3rwN95B8uaPccKre3d4lzBfuZTOSHcdjOY1eaddOSNHwH7iO-4q7pkm5qYY_PgrlsncgbSeK9K6Ofw9_vKJTf5HS0t5XfGeVMlcO3Kfwf1vcI_55HtvydRFNz3fulun2q-ZccPD6H5HRACOMwyYtCZTF0csUDg4FSK2JaxO8&quot;);
+              "
+            ></div>
+            <div class="flex flex-1 flex-col justify-center">
+              <div class="flex justify-between items-center">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal"
+                >
+                  Leather Crafts Workshop
+                </p>
+                <p class="text-slate-500 text-xs font-normal">Monday</p>
+              </div>
+              <p class="text-slate-500 text-sm truncate leading-normal">
+                Suresh: Shared a video: Pattern Cutting 101
+              </p>
+              <p class="text-slate-500 text-xs mt-1">85 members</p>
+            </div>
+          </div>
+        </div>
+        <!-- Group Item 4 -->
+        <div
+          class="flex gap-4 bg-background-light dark:bg-background-dark px-4 py-3 justify-between hover:bg-primary/5 cursor-pointer"
+        >
+          <div class="flex items-start gap-4">
+            <div
+              class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-[60px] w-[60px] shrink-0 border border-primary/20"
+              data-alt="Shelf of polished handmade leather shoes"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuD4N8ZkoYUL5AS7yCa8iWdmQPKwlwjKOaKS4hQOp4oxPhSeJoWVqAMBD0MralMTZD7oS02TLOx2zRIuMh4MrpCp3TUcZX9v1TOlXXO5lDdPwLjTiU-uBB0iIsZOhdrhMeSIRRJ86g3XXejUYo9xTe2KPhzMoWiarA-Q4w1ClmkfhpWud7Rp3v4bPtPtGFgPgcKv4sVLMGIpGR9A0LxRrlOcHhdAP2SRPr5yLzHSutwQixgkfXpKriy2yCX3bHbUZEkHDcFWoDnFq7pW&quot;);
+              "
+            ></div>
+            <div class="flex flex-1 flex-col justify-center">
+              <div class="flex justify-between items-center">
+                <p
+                  class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal"
+                >
+                  Southern Artisans Guild
+                </p>
+                <p class="text-slate-500 text-xs font-normal">12 Oct</p>
+              </div>
+              <p class="text-slate-500 text-sm truncate leading-normal">
+                Venkatesh: The new batch of soles has arrived.
+              </p>
+              <p class="text-slate-500 text-xs mt-1">42 members</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating Action Button -->
+      <button
+        class="absolute bottom-24 right-6 size-14 rounded-full bg-primary text-white shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+      >
+        <span class="material-symbols-outlined text-2xl">chat</span>
+      </button>
+      <!-- Bottom Navigation -->
+      <div
+        class="flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2 shrink-0"
+      >
+        <a
+          class="just flex flex-1 flex-col items-center justify-end gap-1 text-primary/60"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">home</span>
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Home
+          </p>
+        </a>
+        <a
+          class="just flex flex-1 flex-col items-center justify-end gap-1 text-primary"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span
+              class="material-symbols-outlined"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >chat_bubble</span
+            >
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Chats
+          </p>
+        </a>
+        <a
+          class="just flex flex-1 flex-col items-center justify-end gap-1 text-primary/60"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">storefront</span>
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Market
+          </p>
+        </a>
+        <a
+          class="just flex flex-1 flex-col items-center justify-end gap-1 text-primary/60"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Profile
+          </p>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

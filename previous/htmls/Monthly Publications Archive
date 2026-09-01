@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <title>Community Publications Archive</title>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen"
+  >
+    <div
+      class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark shadow-xl overflow-x-hidden"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-primary/10"
+      >
+        <div
+          class="text-primary flex size-10 shrink-0 items-center justify-center cursor-pointer"
+        >
+          <span class="material-symbols-outlined text-2xl">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center"
+        >
+          Community Publications
+        </h2>
+        <div class="size-10"></div>
+        <!-- Spacer for centering -->
+      </div>
+      <!-- Search Bar -->
+      <div class="px-4 py-4">
+        <label class="flex flex-col min-w-40 h-12 w-full">
+          <div
+            class="flex w-full flex-1 items-stretch rounded-xl h-full shadow-sm"
+          >
+            <div
+              class="text-primary flex border-none bg-primary/10 items-center justify-center pl-4 rounded-l-xl"
+            >
+              <span class="material-symbols-outlined text-xl">search</span>
+            </div>
+            <input
+              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-xl text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-primary/10 focus:border-none h-full placeholder:text-primary/60 px-4 pl-2 text-base font-normal leading-normal"
+              placeholder="Search months or topics"
+              value=""
+            />
+          </div>
+        </label>
+      </div>
+      <!-- Section: 2024 -->
+      <h3
+        class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4"
+      >
+        Archive 2024
+      </h3>
+      <div class="space-y-4 p-4">
+        <!-- Publication Item 1 -->
+        <div
+          class="flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-800/40 p-4 shadow-sm border border-primary/5"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-col gap-1 flex-1">
+              <p
+                class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight"
+              >
+                January 2024 Edition
+              </p>
+              <p
+                class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal"
+              >
+                New Year resolutions and community projects.
+              </p>
+            </div>
+            <div
+              class="w-24 h-32 bg-center bg-no-repeat bg-cover rounded-lg shadow-md shrink-0"
+              data-alt="Magazine cover with modern abstract design in orange"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBfecnP7zJz-GG3ewjTFysVyBxmSnV827HsLlihfCszvKUpjUCha8TrGTJ_thCCSVPghI35yuuxYG_r8EolLSGCQ-zwIEg_6NtcQnsNLJKQSunyzFelC7wnAcv9aU7-iAGLamDvZHdksnQmMLtxjjmYVhLQMwaSgrJKMnz-ar89yyjdk3GSnLdU13vSyeUGEtAsWUY4Qd8pPjZE7t8yUsOMwKz-G3gIIrZbX6oDg8WkHe-8DviquBILIY23ZCcPNqgsQ0wfo61LW402&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="flex-1 flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white gap-2 text-sm font-semibold transition-colors hover:bg-primary/90"
+            >
+              <span class="material-symbols-outlined text-lg">book_2</span>
+              <span>Read Online</span>
+            </button>
+            <button
+              class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary/10 text-primary gap-2 text-sm font-semibold transition-colors hover:bg-primary/20"
+            >
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>PDF</span>
+            </button>
+          </div>
+        </div>
+        <!-- Publication Item 2 -->
+        <div
+          class="flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-800/40 p-4 shadow-sm border border-primary/5"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-col gap-1 flex-1">
+              <p
+                class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight"
+              >
+                February 2024 Edition
+              </p>
+              <p
+                class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal"
+              >
+                Valentines special and local market features.
+              </p>
+            </div>
+            <div
+              class="w-24 h-32 bg-center bg-no-repeat bg-cover rounded-lg shadow-md shrink-0"
+              data-alt="February edition cover featuring community flowers"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuDZS6-Pnu6VcHAOGqfHBzq04w4CbS8QJjAqTYwKbBUr-obduGq2L17B26UAK_6ASVzkhxd66NYqv6K5ydH1RZU1baSM1pCAGsKrpEP5TBrlWwUqX-J-gPDQ1QoXr_0Od3hlAm-fYUmClXMHN8cnf-KZvJlQSxY_AQkzxkwcvfJTC746u1QzafRR12jtRLq__SQ2C-5-Q9M79dvix3ktu6tj-kOfVoU06-Bpyq6sT4lEe-bNei5VmQFOlzIR4jjiZmKXU6nWaEC6aQ40&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="flex-1 flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white gap-2 text-sm font-semibold transition-colors hover:bg-primary/90"
+            >
+              <span class="material-symbols-outlined text-lg">book_2</span>
+              <span>Read Online</span>
+            </button>
+            <button
+              class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary/10 text-primary gap-2 text-sm font-semibold transition-colors hover:bg-primary/20"
+            >
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>PDF</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Section: 2023 -->
+      <h3
+        class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-6"
+      >
+        Archive 2023
+      </h3>
+      <div class="space-y-4 p-4 pb-24">
+        <!-- Publication Item 3 -->
+        <div
+          class="flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-800/40 p-4 shadow-sm border border-primary/5"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-col gap-1 flex-1">
+              <p
+                class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight"
+              >
+                December 2023 Edition
+              </p>
+              <p
+                class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal"
+              >
+                Year in review and holiday celebrations.
+              </p>
+            </div>
+            <div
+              class="w-24 h-32 bg-center bg-no-repeat bg-cover rounded-lg shadow-md shrink-0"
+              data-alt="Holiday themed magazine cover with warm lighting"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCZeU_YERIb3oFmjyVTaFv9F_fdCW_w5kEqDz59cRazBEzKTeJW5Tug6geXqVzdxh5psA0Ajj5bQV5y6vwhP1_vE4sY_v8UsldqEAHZzEciml07PkNumSXXQjvb_Wrh5YCihaUVgLZu3bVl3cUgHt5X7DvDBDFcAAH0OXzpcwgE6mV2hJ_Ofg4XI_KWPrf8c-wHPZUbTwKCHeFUe0ZB-eVACLZ4clypcDIQq6fVF6BcVQn0iJgF0FY6lwCjm6q33qrwOvKeWxQlHXwG&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="flex-1 flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white gap-2 text-sm font-semibold transition-colors hover:bg-primary/90"
+            >
+              <span class="material-symbols-outlined text-lg">book_2</span>
+              <span>Read Online</span>
+            </button>
+            <button
+              class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary/10 text-primary gap-2 text-sm font-semibold transition-colors hover:bg-primary/20"
+            >
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>PDF</span>
+            </button>
+          </div>
+        </div>
+        <!-- Publication Item 4 -->
+        <div
+          class="flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-800/40 p-4 shadow-sm border border-primary/5"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-col gap-1 flex-1">
+              <p
+                class="text-slate-900 dark:text-slate-100 text-base font-bold leading-tight"
+              >
+                November 2023 Edition
+              </p>
+              <p
+                class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal"
+              >
+                Autumn harvest and volunteer spotlight.
+              </p>
+            </div>
+            <div
+              class="w-24 h-32 bg-center bg-no-repeat bg-cover rounded-lg shadow-md shrink-0"
+              data-alt="Autumn themed publication cover with orange leaves"
+              style="
+                background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuApth8trrQs2mrMDcHp0jXUg01Dwv1vJsYMhkdoCq0_5D1EcDdml6rIFLpTu5kAZPB2-a8Fm6jrRQ3gKm8A3rZrSYbomYUqYwX56ugb3Gw8MnJdXRB8W-KWlzWMhg2cEYu4nrUA0y-cxL4c7ZQtKGGvNzsD_P-5LnYo_QdQGjWUvGXlz7PMzYbvx1G2W5a4IcQrYwYjFGJkqInIzBklf7FQcToFNb2hRf_71UIFHnquwPw9bi5thI2jg5rxhDCnEB6M3kw1xkzvUag0&quot;);
+              "
+            ></div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="flex-1 flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white gap-2 text-sm font-semibold transition-colors hover:bg-primary/90"
+            >
+              <span class="material-symbols-outlined text-lg">book_2</span>
+              <span>Read Online</span>
+            </button>
+            <button
+              class="flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary/10 text-primary gap-2 text-sm font-semibold transition-colors hover:bg-primary/20"
+            >
+              <span class="material-symbols-outlined text-lg">download</span>
+              <span>PDF</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Navigation Bar -->
+      <div
+        class="fixed bottom-0 w-full max-w-md bg-background-light dark:bg-background-dark border-t border-primary/10 px-4 pb-3 pt-2"
+      >
+        <div class="flex gap-2">
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 hover:text-primary transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined">home</span>
+            <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+              Home
+            </p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 hover:text-primary transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined">newspaper</span>
+            <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+              News
+            </p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-primary"
+            href="#"
+          >
+            <span
+              class="material-symbols-outlined"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >book_2</span
+            >
+            <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+              Pubs
+            </p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 hover:text-primary transition-colors"
+            href="#"
+          >
+            <span class="material-symbols-outlined">person</span>
+            <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+              Profile
+            </p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

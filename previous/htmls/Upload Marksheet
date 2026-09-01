@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-error-container": "#93000a",
+              "secondary-container": "#ff8928",
+              "surface-container": "#f1edea",
+              "surface-container-low": "#f7f3f0",
+              "secondary-fixed-dim": "#ffb786",
+              "on-secondary-fixed": "#311300",
+              outline: "#827470",
+              "on-primary-fixed-variant": "#603f33",
+              "surface-container-highest": "#e5e2df",
+              "outline-variant": "#d4c3be",
+              "on-tertiary-fixed-variant": "#00504b",
+              "on-secondary": "#ffffff",
+              "inverse-on-surface": "#f4f0ed",
+              "surface-tint": "#7a5649",
+              "on-secondary-container": "#642f00",
+              "on-primary-fixed": "#2e150b",
+              "tertiary-container": "#00504b",
+              "tertiary-fixed-dim": "#69d8ce",
+              "surface-container-high": "#ebe7e4",
+              "surface-bright": "#fdf9f6",
+              "error-container": "#ffdad6",
+              "surface-dim": "#ddd9d6",
+              "on-secondary-fixed-variant": "#723600",
+              tertiary: "#003733",
+              "primary-fixed-dim": "#ebbcac",
+              background: "#fdf9f6",
+              "on-primary": "#ffffff",
+              "on-tertiary-container": "#56c6bc",
+              "on-primary-container": "#d9ab9b",
+              "on-background": "#1c1b1a",
+              "surface-container-lowest": "#ffffff",
+              error: "#ba1a1a",
+              "secondary-fixed": "#ffdcc6",
+              primary: "#46291e",
+              surface: "#fdf9f6",
+              "primary-container": "#603f33",
+              "on-surface": "#1c1b1a",
+              "inverse-surface": "#31302f",
+              "surface-variant": "#e5e2df",
+              secondary: "#964900",
+              "inverse-primary": "#ebbcac",
+              "on-tertiary-fixed": "#00201d",
+              "tertiary-fixed": "#87f5ea",
+              "on-error": "#ffffff",
+              "primary-fixed": "#ffdbcf",
+              "on-tertiary": "#ffffff",
+              "on-surface-variant": "#504441",
+            },
+            fontFamily: {
+              headline: ["Newsreader", "serif"],
+              body: ["Manrope", "sans-serif"],
+              label: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body class="bg-background text-on-surface font-body min-h-screen pb-32">
+    <!-- Top App Bar (Shared Component) -->
+    <header
+      class="fixed top-0 w-full z-50 bg-[#f1edea]/80 dark:bg-[#1a1a1a]/80 backdrop-blur-md shadow-none flex justify-between items-center px-6 py-4 w-full"
+    >
+      <div class="flex items-center gap-4">
+        <button
+          class="transition-all duration-300 ease-in-out active:scale-95 text-[#46291e] dark:text-[#f1edea]"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1
+          class="font-serif text-2xl font-medium Newsreader text-[#46291e] dark:text-[#f1edea]"
+        >
+          Upload Marksheet
+        </h1>
+      </div>
+      <div
+        class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border border-outline-variant/20"
+      >
+        <img
+          class="w-full h-full object-cover"
+          data-alt="Portrait of a middle-aged Indian craftsman with a warm smile, wearing a traditional cotton shirt in a workshop setting"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRKSH5XU8UPNkK6XIrI-R-9C-aeHYhCQkeFYD8VvT-eAEV7OM2G2vqj1YOuN6n9dFjbfrdKY7tbDsXGUM_L94gOFhk5KsrvBnSYx9pkfmZ_em0cy97PCdaLoy4MZAMNW7yAWrMN8b1gu_nhcAvDPhgeAII85GnoIYOl0gLUGcxXH9j1rDOH2XHe0x29fAagdiT0BQ9vj6uTsIPbkXBXCuQByBrMhuX8ALADVQVWGJO3LoXkpAMtnVp2E-3Xbn_wkj-hAw51xijOrSt"
+        />
+      </div>
+    </header>
+    <main class="pt-24 px-6 max-w-md mx-auto">
+      <!-- Step 1: Select Child -->
+      <section class="mb-10">
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="font-headline text-xl text-primary font-semibold">
+            Select Child
+          </h2>
+          <span
+            class="text-xs font-label uppercase tracking-widest text-secondary font-bold"
+            >Step 1 of 3</span
+          >
+        </div>
+        <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+          <!-- Child Card: Arjun -->
+          <button
+            class="flex-shrink-0 group flex flex-col items-center gap-3 transition-all duration-300 active:scale-95"
+          >
+            <div class="relative p-1 rounded-full border-2 border-secondary">
+              <div class="w-16 h-16 rounded-full overflow-hidden">
+                <img
+                  class="w-full h-full object-cover"
+                  data-alt="Close-up portrait of a young Indian boy named Arjun, smiling brightly, outdoors in soft daylight"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAA45AX4ztfYf8we4GJfJZ5qxyTDDbcWWe2UgagNx1Mf5y3Axir7lkyTr6VNQE82IO1CF7aw9rmnmsZe59dlXgbgzsmW853opv-o8OO5hN0zhnhEDxjnmwyN5mD1UnYdMPbrpiO4fzZLgEi44Bx8VQtbnyrYGLRFjMphOol4vm6oP3X05XbfANjWBXCqpvzinT_YwGP5qAmWl4xiTQJKL81Tp6GZX0OlANtAjG_Iw3CO9dQMOmURR_bGOXdDRU7YYedtDHevzGAR-b0"
+                />
+              </div>
+              <div
+                class="absolute -bottom-1 -right-1 bg-secondary text-on-secondary rounded-full p-0.5 flex items-center justify-center"
+              >
+                <span
+                  class="material-symbols-outlined text-xs"
+                  style="font-variation-settings: &quot;FILL&quot; 1"
+                  >check_circle</span
+                >
+              </div>
+            </div>
+            <span class="text-sm font-semibold text-primary">Arjun Mehta</span>
+          </button>
+          <!-- Child Card: Diya -->
+          <button
+            class="flex-shrink-0 group flex flex-col items-center gap-3 transition-all duration-300 opacity-60 hover:opacity-100 active:scale-95"
+          >
+            <div class="p-1 rounded-full border-2 border-transparent">
+              <div class="w-16 h-16 rounded-full overflow-hidden">
+                <img
+                  class="w-full h-full object-cover"
+                  data-alt="Close-up portrait of a young Indian girl named Diya, with braided hair, smiling gently in a library"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE56nHoYn-omneX9FcYLonSWxBgJ5QlUluphzvNeKHRmR42LjU37RLbgQp1RrCeTADR-DP8kPzw0bK4lg_yToSLTecF2sAzpXooN4y3VnANO_C0wnBQBP2kCLTK5e4v_fnM8yNqXS6jWX4-ydC3EdcDQpY5KngurlV0oMP9ncf2l4XfJuvYgWUEM4DU7XzmnPiE6FNI4weFNeBkvGe3L11oq5OTmjSWJjSeNXOsjJlMOb5gkRExxExUah5CGdJpD2iVv17y_OFwyHL"
+                />
+              </div>
+            </div>
+            <span class="text-sm font-medium text-on-surface-variant"
+              >Diya Patel</span
+            >
+          </button>
+          <!-- Add Child Placeholder -->
+          <button
+            class="flex-shrink-0 group flex flex-col items-center gap-3 active:scale-95"
+          >
+            <div
+              class="w-16 h-16 rounded-full border-2 border-dashed border-outline-variant flex items-center justify-center text-outline"
+            >
+              <span class="material-symbols-outlined">add</span>
+            </div>
+            <span class="text-sm font-medium text-on-surface-variant">New</span>
+          </button>
+        </div>
+      </section>
+      <!-- Step 2: Academic Year Selection -->
+      <section class="mb-10">
+        <h2 class="font-headline text-xl text-primary font-semibold mb-4">
+          Academic Year
+        </h2>
+        <div class="relative">
+          <select
+            class="w-full bg-surface-container-low border-b border-outline-variant/40 py-4 px-1 text-on-surface font-body focus:ring-0 focus:border-secondary transition-colors appearance-none"
+          >
+            <option value="2023-24">2023 - 2024 (Current)</option>
+            <option value="2022-23">2022 - 2023</option>
+            <option value="2021-22">2021 - 2022</option>
+          </select>
+          <div
+            class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-primary"
+          >
+            <span class="material-symbols-outlined">unfold_more</span>
+          </div>
+        </div>
+      </section>
+      <!-- Step 3: Document Upload Area -->
+      <section class="mb-10">
+        <h2 class="font-headline text-xl text-primary font-semibold mb-4">
+          Document Upload
+        </h2>
+        <!-- Upload Zone -->
+        <label class="block group cursor-pointer">
+          <input class="hidden" type="file" />
+          <div
+            class="border-2 border-dashed border-outline-variant rounded-xl bg-surface-container p-8 text-center transition-all group-hover:bg-surface-container-high group-hover:border-secondary/40"
+          >
+            <div
+              class="w-16 h-16 bg-secondary-fixed text-on-secondary-fixed rounded-full flex items-center justify-center mx-auto mb-4 transition-transform group-hover:scale-110"
+            >
+              <span class="material-symbols-outlined text-3xl"
+                >cloud_upload</span
+              >
+            </div>
+            <p class="text-primary font-bold mb-1">Upload Marksheet</p>
+            <p class="text-xs text-on-surface-variant font-medium">
+              PDF, JPG, or PNG (Max 5MB)
+            </p>
+          </div>
+        </label>
+        <!-- Review Section (Mocked State: Uploaded) -->
+        <div
+          class="mt-6 p-4 rounded-xl bg-surface-container-highest/50 border border-outline-variant/10 flex items-center justify-between"
+        >
+          <div class="flex items-center gap-4">
+            <div
+              class="w-10 h-10 bg-tertiary-container/20 text-tertiary rounded-lg flex items-center justify-center"
+            >
+              <span class="material-symbols-outlined">description</span>
+            </div>
+            <div>
+              <p class="text-sm font-bold text-primary truncate max-w-[180px]">
+                Arjun_Grade_8_2024.pdf
+              </p>
+              <p
+                class="text-[10px] text-on-surface-variant uppercase tracking-tighter"
+              >
+                Ready for submission • 1.2 MB
+              </p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button
+              class="w-8 h-8 rounded-full hover:bg-error/10 text-error flex items-center justify-center transition-colors"
+            >
+              <span class="material-symbols-outlined text-xl"
+                >delete_outline</span
+              >
+            </button>
+            <button
+              class="w-8 h-8 rounded-full hover:bg-secondary/10 text-secondary flex items-center justify-center transition-colors"
+            >
+              <span class="material-symbols-outlined text-xl">visibility</span>
+            </button>
+          </div>
+        </div>
+      </section>
+      <!-- Submit Action -->
+      <div
+        class="fixed bottom-0 left-0 w-full p-6 bg-surface/90 backdrop-blur-md z-40"
+      >
+        <button
+          class="w-full bg-primary text-on-primary py-4 rounded-xl font-bold text-lg tracking-wide flex items-center justify-center gap-3 shadow-lg active:scale-95 transition-transform"
+        >
+          <span>Submit Marksheet</span>
+          <span class="material-symbols-outlined">send</span>
+        </button>
+        <p
+          class="text-center text-[11px] text-on-surface-variant mt-3 font-medium uppercase tracking-widest"
+        >
+          Academic Records • Master Artisan Community
+        </p>
+      </div>
+    </main>
+    <!-- Bottom Navigation (Shared Component) -->
+    <nav
+      class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-[#f1edea]/90 dark:bg-[#1a1a1a]/90 backdrop-blur-lg border-t border-[#46291e]/10 dark:border-[#f1edea]/10 shadow-[0_-4px_24px_rgba(70,41,30,0.06)] z-50"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#f1edea]/50 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-[#964900] dark:hover:text-[#964900]"
+        href="#"
+      >
+        <span class="material-symbols-outlined">home</span>
+        <span
+          class="font-sans text-[11px] font-semibold tracking-wider uppercase Manrope"
+          >Home</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center bg-[#46291e] text-[#f1edea] rounded-xl px-4 py-2 transition-transform duration-200 active:scale-90"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >school</span
+        >
+        <span
+          class="font-sans text-[11px] font-semibold tracking-wider uppercase Manrope"
+          >Education</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#f1edea]/50 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-[#964900] dark:hover:text-[#964900]"
+        href="#"
+      >
+        <span class="material-symbols-outlined">family_restroom</span>
+        <span
+          class="font-sans text-[11px] font-semibold tracking-wider uppercase Manrope"
+          >Family</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#46291e]/50 dark:text-[#f1edea]/50 px-4 py-2 transition-transform duration-200 active:scale-90 hover:text-[#964900] dark:hover:text-[#964900]"
+        href="#"
+      >
+        <span class="material-symbols-outlined">mail</span>
+        <span
+          class="font-sans text-[11px] font-semibold tracking-wider uppercase Manrope"
+          >Inbox</span
+        >
+      </a>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,266 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>My Events - Indian Cobbler Community</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <!-- Header -->
+      <header
+        class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10"
+      >
+        <div
+          class="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 cursor-pointer"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+        <h1 class="ml-2 text-xl font-bold leading-tight tracking-tight">
+          My Events
+        </h1>
+      </header>
+      <!-- Tabs -->
+      <div
+        class="sticky top-[73px] z-10 bg-background-light dark:bg-background-dark"
+      >
+        <div class="flex border-b border-primary/10 px-4">
+          <a
+            class="flex flex-1 flex-col items-center justify-center border-b-2 border-primary pb-3 pt-4"
+            href="#"
+          >
+            <p class="text-sm font-bold text-primary">Upcoming</p>
+          </a>
+          <a
+            class="flex flex-1 flex-col items-center justify-center border-b-2 border-transparent pb-3 pt-4 opacity-60"
+            href="#"
+          >
+            <p class="text-sm font-bold">Past</p>
+          </a>
+        </div>
+      </div>
+      <!-- Content Area -->
+      <main class="flex-1 p-4 pb-24">
+        <section class="mb-6">
+          <h3 class="text-lg font-bold mb-4">This Month</h3>
+          <!-- Event Card 1 -->
+          <div
+            class="mb-4 flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-800/50 p-4 shadow-sm border border-primary/5"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex flex-col gap-1 flex-1">
+                <p class="text-base font-bold">Annual Cobbler Meetup 2024</p>
+                <div
+                  class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-sm"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >calendar_today</span
+                  >
+                  <span>Oct 25, 2024</span>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-sm"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >location_on</span
+                  >
+                  <span>Pragati Maidan, Delhi</span>
+                </div>
+              </div>
+              <div
+                class="h-20 w-28 shrink-0 bg-center bg-cover rounded-lg"
+                data-alt="Modern conference hall with people gathering"
+                data-location="Delhi"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAJypxJvHDs7d1P2OHqKBhSSkzC0xe2un8uZT9r1bV5lVN2Vmii_GxhQShZRnvJEDyMymUfxmQ-mdfxwc0qdTzBh1YcZj4qBwA_9HSUaYBopsqbi5aPvOHZfdYZvyJWbznaSHW8ltSZnAdER8JEO08ZlYaHjGxJubi53CvBcgTFwg544MmuciQCa1-4tnIoxZs3G4aSfma-RIjvgjX6WLqqieuwGusOYq088CT3qEubeAVilRwAuqdCfVyI25RzS-F2_Q-t7nCqYU-4&quot;);
+                "
+              ></div>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <button
+                class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm"
+              >
+                <span class="material-symbols-outlined text-lg"
+                  >confirmation_number</span
+                >
+                View Pass
+              </button>
+            </div>
+          </div>
+          <!-- Event Card 2 -->
+          <div
+            class="mb-4 flex flex-col gap-4 rounded-xl bg-white dark:bg-slate-800/50 p-4 shadow-sm border border-primary/5"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex flex-col gap-1 flex-1">
+                <p class="text-base font-bold">Leather Craft Workshop</p>
+                <div
+                  class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-sm"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >calendar_today</span
+                  >
+                  <span>Oct 28, 2024</span>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-sm"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >location_on</span
+                  >
+                  <span>Dharavi, Mumbai</span>
+                </div>
+              </div>
+              <div
+                class="h-20 w-28 shrink-0 bg-center bg-cover rounded-lg"
+                data-alt="Hands working on leather crafts"
+                data-location="Mumbai"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuC5VP2eLm_GnS76VVxcYMOSaAVMWDcfEGysHA9Ppx2icocXF5dI2fimifavBsfRpHYukBKCe2dsUnnNexkQstk4xTX23J200LAZdxbixLE6Zmsxp62ckeamTu0HFQLgR43Yf4BZ-MTVsRkQVwRP-3QSG1qd_7nxWX1Vx7K24urX-36bhO4eStJGUX-j548tLEo1ZjTVlx02ZAcW69ZlfENCcw96bALD71912HLWPO9Y770npHHWZPWhBWAGwmXjjWBMw1PKnHaFWI02&quot;);
+                "
+              ></div>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <button
+                class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-sm"
+              >
+                <span class="material-symbols-outlined text-lg"
+                  >confirmation_number</span
+                >
+                View Pass
+              </button>
+            </div>
+          </div>
+        </section>
+        <section>
+          <h3 class="text-lg font-bold mb-4 opacity-60">Next Month</h3>
+          <!-- Event Card 3 -->
+          <div
+            class="mb-4 flex flex-col gap-4 rounded-xl bg-white/60 dark:bg-slate-800/30 p-4 border border-primary/5"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div class="flex flex-col gap-1 flex-1">
+                <p class="text-base font-bold">Sustainable Footwear Expo</p>
+                <div
+                  class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-sm"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >calendar_today</span
+                  >
+                  <span>Nov 12, 2024</span>
+                </div>
+                <div
+                  class="flex items-center gap-1 text-slate-600 dark:text-slate-400 text-sm"
+                >
+                  <span class="material-symbols-outlined text-sm"
+                    >location_on</span
+                  >
+                  <span>Whitefield, Bengaluru</span>
+                </div>
+              </div>
+              <div
+                class="h-20 w-28 shrink-0 bg-center bg-cover rounded-lg"
+                data-alt="Eco-friendly footwear display"
+                data-location="Bengaluru"
+                style="
+                  background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBYeNARgr_CDSlgDXyttxqcuLt1_FpCXe20iC4vstrjb1xUEyux6YKM94_lwaXcRKdHnTng17ppTrPJKLvd5quQgPj6HQ8IVDI1ZFD8jTPN3zSIdFDsxFPIoi6vhOGFfmXgSwUve4XwRvktiE6yeBPuvqIsONmAuoDmnBkCKN6tPnYElzVcLDup_2Os1wyHLgKmJ5ZhM9swPShWm7R2DLOk3nO2Fe1_6XUvCw_JaWAzVkv5h3jwLO8vbDMLciZxrOjtGt4ySvUX4smR&quot;);
+                "
+              ></div>
+            </div>
+            <div class="flex gap-2 mt-2">
+              <button
+                class="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary/20 px-4 py-2 text-sm font-bold text-primary"
+              >
+                <span class="material-symbols-outlined text-lg"
+                  >confirmation_number</span
+                >
+                View Pass
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+      <!-- Bottom Navigation -->
+      <nav
+        class="fixed bottom-0 left-0 right-0 z-20 flex border-t border-primary/10 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 pb-6 pt-2"
+      >
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400"
+          href="#"
+        >
+          <span class="material-symbols-outlined">home</span>
+          <p class="text-xs font-medium">Home</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-primary"
+          href="#"
+        >
+          <span
+            class="material-symbols-outlined"
+            style="font-variation-settings: &quot;FILL&quot; 1"
+            >calendar_month</span
+          >
+          <p class="text-xs font-medium">My Events</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400"
+          href="#"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <p class="text-xs font-medium">Community</p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-400"
+          href="#"
+        >
+          <span class="material-symbols-outlined">account_circle</span>
+          <p class="text-xs font-medium">Profile</p>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

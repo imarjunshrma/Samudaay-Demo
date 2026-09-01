@@ -1,0 +1,17 @@
+{
+  "title": "Annual Meetup 2023",
+  "subtitle": "October 12-14, 2023",
+  "tabs.all": "All",
+  "tabs.community": "Community",
+  "tabs.workshops": "Workshops",
+  "tabs.crafts": "Crafts",
+  "badges.workshop": "Workshop",
+  "empty": "No gallery photos uploaded for this event yet.",
+  "errors.cameraDenied": "Allow camera access to upload event photos.",
+  "errors.cameraBlocked": "Camera access is disabled for this app. Enable it from app settings to upload event photos.",
+  "errors.eventUnavailable": "Event is not available.",
+  "errors.uploadTitle": "Upload failed",
+  "errors.uploadDescription": "Unable to upload this photo.",
+  "errors.shareTitle": "Share failed",
+  "errors.shareDescription": "Unable to share this event gallery."
+}

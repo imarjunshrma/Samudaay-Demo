@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Send Birthday Card</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen"
+  >
+    <div
+      class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-x-hidden border-x border-primary/10"
+    >
+      <!-- Header -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 sticky top-0 z-10 border-b border-primary/10"
+      >
+        <button
+          class="text-slate-900 dark:text-slate-100 flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-primary/10 transition-colors"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-2"
+        >
+          Send Birthday Card
+        </h2>
+      </div>
+      <div class="flex-1 overflow-y-auto">
+        <!-- Template Selection -->
+        <div class="px-4 pt-6 pb-2 flex justify-between items-end">
+          <h3
+            class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight"
+          >
+            Select a Template
+          </h3>
+          <span class="text-primary text-sm font-medium">View All</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 p-4">
+          <!-- Template Item 1 -->
+          <div class="group relative cursor-pointer">
+            <div
+              class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-4 aspect-[3/4] border-2 border-primary ring-offset-2 ring-primary overflow-hidden"
+              data-alt="Intricate colorful traditional Indian mandala pattern"
+              style="
+                background-image:
+                  linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.6) 0%,
+                    rgba(0, 0, 0, 0) 60%
+                  ),
+                  url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBK0CjwTIipM3VFnMVwzzbtpukQ3XHyjf1OtBXYakmXr0xTcfG7yaOfX2xW26K7kCZrYNT_cBWbCHE8APa1Yq4j8jH4M_GbImVEOLmgKcgH5-NqgI4th_7hvhHRBk-dUAZFeq_7klHkfYtH0agYng86kjgVEtnmHewLIicUyZ86XLoy0IWSILPsEAtALFBCz02D8TwdfYnAUjz-qCbLNJD2zo7DM2Edc42B9WbQ2LZO1c-U2GPkWKeSWtmUYKwW4jyxmoJ6f2kCOYTR&quot;);
+              "
+            >
+              <div
+                class="absolute top-2 right-2 bg-primary text-white rounded-full p-1"
+              >
+                <span class="material-symbols-outlined text-sm">check</span>
+              </div>
+              <p
+                class="text-white text-sm font-bold leading-tight line-clamp-2"
+              >
+                Traditional Indian Patterns
+              </p>
+            </div>
+          </div>
+          <!-- Template Item 2 -->
+          <div class="group relative cursor-pointer">
+            <div
+              class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-4 aspect-[3/4] border-2 border-transparent hover:border-primary/50 transition-all overflow-hidden"
+              data-alt="Rustic hand-stitched brown leather texture background"
+              style="
+                background-image:
+                  linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.6) 0%,
+                    rgba(0, 0, 0, 0) 60%
+                  ),
+                  url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCh_sBpB5nKS7i0Bv2tnP_YKPoqQyu87BfOlLR_-gid6GSWzM5cHf_DYEKwVnU8ZLewxVTmkc6UHVRs3WB3f2jinaNEygydZaN-ZrpSearfhPOR_sJQflMtO-RhfNycrkpowwfjLZEMtUF-boxtDATDWeWT8lRcorKtr14Eh1A-I1C3C3AEmOOUkRhpDiypoNhaO8NWnQEWsQYRWyulosZBVRRmbz0AVK4vUDThyIhY6iqz8afg76dPHKuijMkojnyJ5HUTt-WpilnW&quot;);
+              "
+            >
+              <p
+                class="text-white text-sm font-bold leading-tight line-clamp-2"
+              >
+                Leather Craft
+              </p>
+            </div>
+          </div>
+          <!-- Template Item 3 -->
+          <div class="group relative cursor-pointer">
+            <div
+              class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-4 aspect-[3/4] border-2 border-transparent hover:border-primary/50 transition-all overflow-hidden"
+              data-alt="Elegant soft pink and white floral arrangement"
+              style="
+                background-image:
+                  linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.6) 0%,
+                    rgba(0, 0, 0, 0) 60%
+                  ),
+                  url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuA09yp3jUtw9E3Fm7QxltmWGkqBJd3NsSWX3EQKGSYAvJV_YpEhnKXwbXzv0dY9yfqVi3u_0MHQ1y_jNtM51mbiTP2iBYiJiLLrz-iLDJRdyJcvaJRRjmD7HBc5vihrRG2GiJ0rsFM5nDgRJ6A0qqnk1qlzoVodLeDXAFHoyOmHPpC6gHjl_ZKk_GWq03yRpE3rkdAEliiduRsRBjmerP8wBI1vRDOrzcWol99X8jd_LQuInwz_Wa3SF22-uTtbXWij6zTjD12EtJUs&quot;);
+              "
+            >
+              <p
+                class="text-white text-sm font-bold leading-tight line-clamp-2"
+              >
+                Floral Designs
+              </p>
+            </div>
+          </div>
+          <!-- Template Item 4 -->
+          <div class="group relative cursor-pointer">
+            <div
+              class="bg-cover bg-center flex flex-col gap-3 rounded-xl justify-end p-4 aspect-[3/4] border-2 border-transparent hover:border-primary/50 transition-all overflow-hidden"
+              data-alt="Minimalist abstract geometric shapes in orange and beige"
+              style="
+                background-image:
+                  linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.6) 0%,
+                    rgba(0, 0, 0, 0) 60%
+                  ),
+                  url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuD8j6VSP7kcWrvMrPRDrX3ZQYy5AytVx8cWn_nnuXhcfQCS7tt756OI9kd1pZOu0Vqs_UK4lIYTpGQckEP8N21DR8ZwEr7wOL2AkAGaJ-W0dsDZGwq4BcBnta1QeOI3KD813FWTSEMpWkebfenCtRcq2f9fw6gxW6EGkZm67cDcKZ8-BaxaUwb2hcM0lT_emHqjxjDCX6zfuPLwtnZDd9zZ77M138dypmhO-JUR9IGMXM_W_cH0aqMg66kzPt7E9M8WdaDLEhwnKKPq&quot;);
+              "
+            >
+              <p
+                class="text-white text-sm font-bold leading-tight line-clamp-2"
+              >
+                Minimalist Abstract
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Message Input Section -->
+        <div class="px-4 py-6">
+          <label
+            class="block text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight mb-4"
+            for="message"
+            >Your Message</label
+          >
+          <div class="relative">
+            <textarea
+              class="w-full rounded-xl border-primary/20 bg-white dark:bg-background-dark/50 text-slate-900 dark:text-slate-100 focus:border-primary focus:ring-primary p-4 text-base placeholder:text-slate-400"
+              id="message"
+              placeholder="Write a heartfelt birthday message..."
+              rows="5"
+            ></textarea>
+            <div class="absolute bottom-3 right-3 text-slate-400 text-xs">
+              0/250
+            </div>
+          </div>
+        </div>
+        <!-- Recipient Preview -->
+        <div class="px-4 pb-8">
+          <div
+            class="flex items-center gap-3 p-4 rounded-xl bg-primary/5 border border-primary/10"
+          >
+            <div
+              class="size-12 rounded-full overflow-hidden bg-primary/20 flex items-center justify-center border border-primary/30"
+            >
+              <span class="material-symbols-outlined text-primary">person</span>
+            </div>
+            <div>
+              <p
+                class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold"
+              >
+                Sending to
+              </p>
+              <p class="text-slate-900 dark:text-slate-100 font-bold">
+                Arjun Sharma
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Action Button -->
+      <div
+        class="p-4 bg-background-light dark:bg-background-dark border-t border-primary/10"
+      >
+        <button
+          class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]"
+        >
+          <span>Send Birthday Card</span>
+          <span class="material-symbols-outlined">send</span>
+        </button>
+      </div>
+      <!-- Bottom Navigation Bar -->
+      <div
+        class="flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-6 pt-2"
+      >
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">home</span>
+          </div>
+          <p
+            class="text-[10px] font-medium leading-normal tracking-wide uppercase"
+          >
+            Home
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">group</span>
+          </div>
+          <p
+            class="text-[10px] font-medium leading-normal tracking-wide uppercase"
+          >
+            Community
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-primary"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span
+              class="material-symbols-outlined"
+              style="font-variation-settings: &quot;FILL&quot; 1"
+              >featured_seasonal_and_gifts</span
+            >
+          </div>
+          <p
+            class="text-[10px] font-bold leading-normal tracking-wide uppercase"
+          >
+            Cards
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <p
+            class="text-[10px] font-medium leading-normal tracking-wide uppercase"
+          >
+            Profile
+          </p>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

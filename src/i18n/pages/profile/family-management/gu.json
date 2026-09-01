@@ -1,0 +1,12 @@
+{
+  "title": "કુટુંબ વ્યવસ્થાપન",
+  "empty.title": "હજુ સુધી કોઈ કુટુંબ સભ્યો નથી",
+  "empty.description": "આ વિભાગને ગોઠવેલા રાખવા માટે પહેલો કુટુંબ સભ્ય ઉમેરો.",
+  "empty.action": "સભ્ય ઉમેરો",
+  "summary.totalMembers": "કુલ સભ્યો",
+  "sections.yourFamily": "તમારું કુટુંબ",
+  "fields.bloodGroup": "બ્લડ ગ્રુપ",
+  "actions.uploadMarksheet": "માર્કશીટ અપલોડ કરો",
+  "actions.edit": "સંપાદિત કરો",
+  "actions.delete": "ડિલીટ કરો"
+}

@@ -1,0 +1,20 @@
+{
+  "title": "ભૂમિકા આપો",
+  "sections.role.title": "નવી ભૂમિકા પસંદ કરો",
+  "sections.permissions.title": "ખાસ પરવાનગીઓ",
+  "roles.trustee.title": "ટ્રસ્ટી",
+  "roles.trustee.description": "પૂર્ણ વહીવટી ઍક્સેસ. સમુદાય ફંડ સંભાળી શકે, નવા સભ્યોને મંજૂર કરી શકે અને પ્રાદેશિક કાર્યક્રમો આયોજિત કરી શકે.",
+  "roles.member.title": "સભ્ય",
+  "roles.member.description": "સમુદાય ફોરમ, મૂળભૂત તાલીમ સંસાધનો, નોકરી યાદીઓ અને સભ્ય લાભ કાર્યક્રમોનો સામાન્ય ઍક્સેસ.",
+  "roles.support.title": "સમુદાય સપોર્ટ",
+  "roles.support.description": "ટેકનિકલ સમસ્યાઓમાં સભ્યોને મદદ કરી શકે અને નાણાકીય ઍક્સેસ વિના સમુદાય ચર્ચાઓ સંભાળી શકે.",
+  "permissions.memberManagement.title": "સભ્ય વ્યવસ્થાપન મંજૂર કરો",
+  "permissions.memberManagement.description": "સમુદાય સભ્યોને મંજૂર અથવા પ્રતિબંધિત કરી શકે",
+  "permissions.contentModeration.title": "કન્ટેન્ટ મોડરેશન",
+  "permissions.contentModeration.description": "પોસ્ટ અને ટિપ્પણીઓ કાઢી શકે",
+  "permissions.financialReporting.title": "વિત્તીય રિપોર્ટિંગ",
+  "permissions.financialReporting.description": "દાન રિપોર્ટ્સ જોઈ અને નિકાસ કરી શકે",
+  "actions.cancel": "રદ કરો",
+  "actions.create": "એડમિન બનાવો",
+  "note": "વપરાશકર્તાને તેમની નવી ભૂમિકા વિશે SMS અને એપ નોટિફિકેશન દ્વારા જાણ કરવામાં આવશે."
+}

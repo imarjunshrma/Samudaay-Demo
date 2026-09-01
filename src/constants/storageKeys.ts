@@ -1,0 +1,16 @@
+export const storageKeys = {
+  themeMode: 'theme-mode',
+  language: 'language',
+  session: 'user-session',
+  biometricEnabled: 'profile-security-biometric-enabled',
+  pinDisabled: 'profile-security-pin-disabled',
+  biometricSkipped: 'biometric-skipped',
+  biometricSkippedAt: 'biometric-skipped-at',
+  biometricAppOpenCount: 'biometric-app-open-count',
+  notificationDeviceId: 'notification-device-id',
+  pendingNotificationOpen: 'pending-notification-open',
+  notificationPromptShown: 'notification-prompt-shown',
+  cameraPermissionPromptShown: 'camera-permission-prompt-shown',
+  mediaLibraryPermissionPromptShown: 'media-library-permission-prompt-shown',
+  pdfDownloadDirectoryUri: 'pdf-download-directory-uri',
+} as const;

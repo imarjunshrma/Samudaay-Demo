@@ -1,0 +1,23 @@
+{
+  "title": "Notifications",
+  "search.placeholder": "Search notifications",
+  "actions.create": "Create Notification",
+  "actions.send": "Send Notification",
+  "actions.filter": "Filter",
+  "header.title": "Notification Management",
+  "header.subtitle": "Notification campaigns and delivery",
+  "stats.campaignAvailable": "Campaign available",
+  "stats.campaignsAvailable": "Campaigns available",
+  "errors.loadFailed": "Unable to load notifications",
+  "errors.noMatchTitle": "No matching notifications",
+  "errors.noMatchDescription": "Try a different search term.",
+  "errors.emptyTitle": "No notifications yet",
+  "errors.emptyDescription": "Sent and scheduled notification campaigns will appear here.",
+  "feed.today": "Today",
+  "feed.yesterday": "Yesterday",
+  "feed.older": "Older",
+  "filters.all": "All",
+  "filters.unread": "Unread",
+  "actions.markAllRead": "Mark all as read",
+  "routes.create": "Create notification"
+}

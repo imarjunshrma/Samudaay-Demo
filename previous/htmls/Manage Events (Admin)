@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <header
+        class="flex items-center justify-between bg-white dark:bg-slate-900 px-4 py-4 border-b border-primary/10 sticky top-0 z-10"
+      >
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-primary text-3xl"
+            >event_available</span
+          >
+          <h1 class="text-xl font-bold tracking-tight">Manage Events</h1>
+        </div>
+        <button
+          class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-semibold transition-colors shadow-sm"
+        >
+          <span class="material-symbols-outlined">add</span>
+          <span class="hidden sm:inline">Create Event</span>
+        </button>
+      </header>
+      <main class="flex-1 p-4 max-w-5xl mx-auto w-full">
+        <div class="mb-6 space-y-4">
+          <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative flex-1">
+              <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                >search</span
+              >
+              <input
+                class="w-full pl-10 pr-4 py-3 rounded-xl border border-primary/20 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                placeholder="Search events by name or location..."
+                type="text"
+              />
+            </div>
+            <div class="flex gap-2">
+              <button
+                class="flex items-center gap-2 px-4 py-3 rounded-xl bg-white dark:bg-slate-800 border border-primary/20 hover:bg-primary/5 transition-colors"
+              >
+                <span class="material-symbols-outlined text-primary"
+                  >filter_list</span
+                >
+                <span class="font-medium">Filters</span>
+              </button>
+            </div>
+          </div>
+          <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <button
+              class="bg-primary text-white px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap"
+            >
+              All Events
+            </button>
+            <button
+              class="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary/20 transition-colors whitespace-nowrap"
+            >
+              Upcoming
+            </button>
+            <button
+              class="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary/20 transition-colors whitespace-nowrap"
+            >
+              Past Events
+            </button>
+            <button
+              class="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium hover:bg-primary/20 transition-colors whitespace-nowrap"
+            >
+              Drafts
+            </button>
+          </div>
+        </div>
+        <div class="grid gap-4">
+          <div
+            class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-primary/10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 group"
+          >
+            <div class="flex items-start gap-4">
+              <div class="bg-primary/10 p-3 rounded-lg text-primary shrink-0">
+                <span class="material-symbols-outlined text-2xl">eco</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-bold text-lg">Community Garden Planting</h3>
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                    >Upcoming</span
+                  >
+                </div>
+                <div
+                  class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400"
+                >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >calendar_month</span
+                    >Oct 12, 2023</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >schedule</span
+                    >10:00 AM</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >location_on</span
+                    >Green Park, West Side</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-700"
+            >
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-primary hover:bg-primary/10 font-semibold transition-colors flex items-center justify-center gap-2 border border-primary/20 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span>Edit
+              </button>
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold transition-colors flex items-center justify-center gap-2 border border-red-200 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span
+                >Delete
+              </button>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-primary/10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 group"
+          >
+            <div class="flex items-start gap-4">
+              <div class="bg-primary/10 p-3 rounded-lg text-primary shrink-0">
+                <span class="material-symbols-outlined text-2xl"
+                  >local_library</span
+                >
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-bold text-lg">Neighborhood Book Club</h3>
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                    >Upcoming</span
+                  >
+                </div>
+                <div
+                  class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400"
+                >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >calendar_month</span
+                    >Oct 15, 2023</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >schedule</span
+                    >06:30 PM</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >location_on</span
+                    >Central Library</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-700"
+            >
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-primary hover:bg-primary/10 font-semibold transition-colors flex items-center justify-center gap-2 border border-primary/20 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span>Edit
+              </button>
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold transition-colors flex items-center justify-center gap-2 border border-red-200 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span
+                >Delete
+              </button>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-primary/10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 group opacity-75"
+          >
+            <div class="flex items-start gap-4">
+              <div
+                class="bg-slate-100 dark:bg-slate-700 p-3 rounded-lg text-slate-500 shrink-0"
+              >
+                <span class="material-symbols-outlined text-2xl"
+                  >sports_soccer</span
+                >
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-bold text-lg">Youth Soccer Finals</h3>
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-slate-100 text-slate-600 dark:bg-slate-900 dark:text-slate-400"
+                    >Past</span
+                  >
+                </div>
+                <div
+                  class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400"
+                >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >calendar_month</span
+                    >Sep 30, 2023</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >schedule</span
+                    >09:00 AM</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >location_on</span
+                    >Metro Sports Complex</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-700"
+            >
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-primary hover:bg-primary/10 font-semibold transition-colors flex items-center justify-center gap-2 border border-primary/20 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span>Edit
+              </button>
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold transition-colors flex items-center justify-center gap-2 border border-red-200 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span
+                >Delete
+              </button>
+            </div>
+          </div>
+          <div
+            class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-primary/10 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 group"
+          >
+            <div class="flex items-start gap-4">
+              <div class="bg-primary/10 p-3 rounded-lg text-primary shrink-0">
+                <span class="material-symbols-outlined text-2xl"
+                  >theater_comedy</span
+                >
+              </div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <h3 class="font-bold text-lg">Summer Night Improv</h3>
+                  <span
+                    class="px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                    >Upcoming</span
+                  >
+                </div>
+                <div
+                  class="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500 dark:text-slate-400"
+                >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >calendar_month</span
+                    >Oct 20, 2023</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >schedule</span
+                    >08:00 PM</span
+                  >
+                  <span class="flex items-center gap-1"
+                    ><span class="material-symbols-outlined text-sm"
+                      >location_on</span
+                    >The Laugh Barn</span
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex items-center gap-2 border-t md:border-t-0 pt-3 md:pt-0 border-slate-100 dark:border-slate-700"
+            >
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-primary hover:bg-primary/10 font-semibold transition-colors flex items-center justify-center gap-2 border border-primary/20 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">edit</span>Edit
+              </button>
+              <button
+                class="flex-1 md:flex-none px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 font-semibold transition-colors flex items-center justify-center gap-2 border border-red-200 md:border-transparent"
+              >
+                <span class="material-symbols-outlined text-lg">delete</span
+                >Delete
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8 mb-20 flex justify-center">
+          <nav class="flex items-center gap-1">
+            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-500">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button
+              class="w-10 h-10 rounded-lg bg-primary text-white font-bold"
+            >
+              1
+            </button>
+            <button
+              class="w-10 h-10 rounded-lg hover:bg-primary/10 font-medium"
+            >
+              2
+            </button>
+            <button
+              class="w-10 h-10 rounded-lg hover:bg-primary/10 font-medium"
+            >
+              3
+            </button>
+            <button class="p-2 rounded-lg hover:bg-primary/10 text-slate-500">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </nav>
+        </div>
+      </main>
+      <nav
+        class="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-primary/10 px-4 py-2 flex justify-around items-center sm:hidden z-20"
+      >
+        <a class="flex flex-col items-center gap-1 text-primary" href="#">
+          <span class="material-symbols-outlined">dashboard</span>
+          <span class="text-[10px] font-medium">Admin</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+          <span class="material-symbols-outlined">event</span>
+          <span class="text-[10px] font-medium">Events</span>
+        </a>
+        <div class="relative -top-6">
+          <button
+            class="bg-primary text-white w-12 h-12 rounded-full shadow-lg shadow-primary/40 flex items-center justify-center"
+          >
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+        <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+          <span class="material-symbols-outlined">group</span>
+          <span class="text-[10px] font-medium">Users</span>
+        </a>
+        <a class="flex flex-col items-center gap-1 text-slate-400" href="#">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="text-[10px] font-medium">Settings</span>
+        </a>
+      </nav>
+      <button
+        class="hidden sm:flex fixed bottom-8 right-8 bg-primary text-white w-14 h-14 rounded-full shadow-xl shadow-primary/30 items-center justify-center hover:scale-105 transition-transform"
+      >
+        <span class="material-symbols-outlined text-3xl">add</span>
+      </button>
+    </div>
+  </body>
+</html>

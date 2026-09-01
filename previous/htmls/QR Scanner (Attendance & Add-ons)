@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Admin QR Scanner - Indian Cobbler Community</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .scanner-frame {
+        border: 2px solid rgba(242, 120, 13, 0.5);
+        box-shadow: 0 0 0 4000px rgba(0, 0, 0, 0.5);
+      }
+      .scanner-corner {
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        border-color: #f2780d;
+        border-style: solid;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <!-- Header -->
+      <div
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10 justify-between sticky top-0 z-50"
+      >
+        <div
+          class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center"
+        >
+          <span class="material-symbols-outlined">arrow_back</span>
+        </div>
+        <h2
+          class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center"
+        >
+          Admin QR Scanner
+        </h2>
+        <div class="flex w-12 items-center justify-end">
+          <button
+            class="flex items-center justify-center rounded-lg h-12 bg-transparent text-slate-900 dark:text-slate-100"
+          >
+            <span class="material-symbols-outlined">history</span>
+          </button>
+        </div>
+      </div>
+      <!-- Live Scanner View -->
+      <div
+        class="relative flex-1 bg-black overflow-hidden flex items-center justify-center"
+      >
+        <!-- Simulated Camera Feed Background -->
+        <div class="absolute inset-0 opacity-60">
+          <div
+            class="w-full h-full bg-gradient-to-br from-slate-800 to-black"
+          ></div>
+        </div>
+        <!-- Scanning Frame -->
+        <div class="relative w-64 h-64 z-10">
+          <div class="scanner-frame w-full h-full rounded-xl"></div>
+          <!-- Corner Accents -->
+          <div
+            class="scanner-corner border-t-4 border-l-4 top-0 left-0 rounded-tl-lg"
+          ></div>
+          <div
+            class="scanner-corner border-t-4 border-r-4 top-0 right-0 rounded-tr-lg"
+          ></div>
+          <div
+            class="scanner-corner border-b-4 border-l-4 bottom-0 left-0 rounded-bl-lg"
+          ></div>
+          <div
+            class="scanner-corner border-b-4 border-r-4 bottom-0 right-0 rounded-br-lg"
+          ></div>
+          <!-- Scanning Animation Line -->
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-primary shadow-[0_0_15px_#f2780d] animate-pulse"
+          ></div>
+        </div>
+        <!-- Camera Controls -->
+        <div
+          class="absolute bottom-8 left-0 w-full flex items-center justify-center gap-6 z-20"
+        >
+          <button
+            class="flex shrink-0 items-center justify-center rounded-full size-12 bg-black/50 text-white backdrop-blur-md border border-white/20"
+          >
+            <span class="material-symbols-outlined">flashlight_on</span>
+          </button>
+          <button
+            class="flex shrink-0 items-center justify-center rounded-full size-16 bg-primary text-white shadow-lg shadow-primary/40"
+          >
+            <span class="material-symbols-outlined text-4xl"
+              >qr_code_scanner</span
+            >
+          </button>
+          <button
+            class="flex shrink-0 items-center justify-center rounded-full size-12 bg-black/50 text-white backdrop-blur-md border border-white/20"
+          >
+            <span class="material-symbols-outlined">sync</span>
+          </button>
+        </div>
+      </div>
+      <!-- Mode Selector -->
+      <div
+        class="bg-background-light dark:bg-background-dark px-4 py-4 shadow-2xl z-30"
+      >
+        <div
+          class="flex h-12 flex-1 items-center justify-center rounded-xl bg-primary/10 p-1"
+        >
+          <label
+            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 bg-white dark:bg-primary shadow-sm text-primary dark:text-white text-sm font-bold"
+          >
+            <span class="truncate">Event Attendance</span>
+            <input
+              checked=""
+              class="hidden"
+              name="scan-mode"
+              type="radio"
+              value="attendance"
+            />
+          </label>
+          <label
+            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 text-slate-500 dark:text-slate-400 text-sm font-medium"
+          >
+            <span class="truncate">Add-on Verification</span>
+            <input class="hidden" name="scan-mode" type="radio" value="addon" />
+          </label>
+        </div>
+      </div>
+      <!-- Success Result Overlay (Slide-up Panel) -->
+      <div
+        class="fixed inset-0 z-50 flex flex-col justify-end bg-black/60 backdrop-blur-sm"
+      >
+        <div
+          class="bg-white dark:bg-background-dark rounded-t-3xl p-6 shadow-2xl animate-in slide-in-from-bottom duration-300"
+        >
+          <!-- Drag Handle -->
+          <div
+            class="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-6"
+          ></div>
+          <!-- Member Header -->
+          <div class="flex items-center gap-4 mb-6">
+            <div
+              class="size-20 rounded-2xl overflow-hidden border-2 border-primary"
+            >
+              <img
+                class="w-full h-full object-cover"
+                data-alt="Profile photo of a smiling Indian man"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVMkCFB0gq-x-pgREX5Bx2fwCJh-SnyQ0B92eDO9SNh2bCvT7A_R3feQCHrBPI2RC0e3WNshD_oIm-oC8D8Mq8YSSyxlSTSytkucBfrb8RZ2kk6grzicr49tpByQqMnA0bb0BlfAn029mxn7UelWgnUfmUjc5m2DsQAMaefYQoacdcK2sMcA-iJZSbiwqPveOOxfKVuGXzvT4DT46M-x1oolJ-R3AK6uFt6VZlkidysGcYpXMl2LkY1C6FNgRDioz8gj9IHaH2DsUn"
+              />
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-xl font-bold">Rajesh Kumar</h3>
+                <span
+                  class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
+                  >Verified</span
+                >
+              </div>
+              <p class="text-slate-500 text-sm">Member ID: #ICC-2024-8892</p>
+              <div class="mt-1 flex items-center gap-1 text-primary">
+                <span class="material-symbols-outlined text-sm"
+                  >event_available</span
+                >
+                <span class="text-xs font-semibold"
+                  >National Cobbler Meet 2024</span
+                >
+              </div>
+            </div>
+          </div>
+          <!-- Status & Add-ons -->
+          <div class="space-y-4">
+            <div
+              class="p-4 bg-primary/5 dark:bg-primary/10 rounded-xl border border-primary/20"
+            >
+              <p
+                class="text-xs font-bold text-primary uppercase tracking-wider mb-3"
+              >
+                Service Verification
+              </p>
+              <div class="space-y-3">
+                <!-- Add-on Item -->
+                <div
+                  class="flex items-center justify-between py-2 border-b border-primary/10 last:border-0"
+                >
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary"
+                    >
+                      <span class="material-symbols-outlined">restaurant</span>
+                    </div>
+                    <div>
+                      <p class="font-bold text-sm">Lunch Coupon</p>
+                      <p class="text-xs text-slate-500">Traditional Thali</p>
+                    </div>
+                  </div>
+                  <button
+                    class="bg-primary text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm"
+                  >
+                    Mark as Used
+                  </button>
+                </div>
+                <!-- Add-on Item (Already Used State) -->
+                <div
+                  class="flex items-center justify-between py-2 border-b border-primary/10 last:border-0 opacity-60"
+                >
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="size-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-500"
+                    >
+                      <span class="material-symbols-outlined">redeem</span>
+                    </div>
+                    <div>
+                      <p class="font-bold text-sm">Gift Pack</p>
+                      <p class="text-xs text-slate-500">Tool Kit V2</p>
+                    </div>
+                  </div>
+                  <div class="flex items-center gap-1 text-green-600">
+                    <span class="material-symbols-outlined text-sm font-bold"
+                      >check_circle</span
+                    >
+                    <span class="text-xs font-bold uppercase">Redeemed</span>
+                  </div>
+                </div>
+                <!-- Add-on Item -->
+                <div
+                  class="flex items-center justify-between py-2 border-b border-primary/10 last:border-0"
+                >
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="size-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary"
+                    >
+                      <span class="material-symbols-outlined"
+                        >dinner_dining</span
+                      >
+                    </div>
+                    <div>
+                      <p class="font-bold text-sm">Dinner Pass</p>
+                      <p class="text-xs text-slate-500">Networking Gala</p>
+                    </div>
+                  </div>
+                  <button
+                    class="bg-primary text-white text-xs font-bold px-4 py-2 rounded-lg shadow-sm"
+                  >
+                    Mark as Used
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button
+              class="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-xl font-bold tracking-wide mt-2"
+            >
+              Next Scan
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Navigation (Hidden by Result Overlay usually, but present in structure) -->
+      <div
+        class="flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-3 pt-2 mt-auto"
+      >
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
+          href="#"
+        >
+          <span class="material-symbols-outlined">qr_code_scanner</span>
+          <p class="text-xs font-bold leading-normal tracking-[0.015em]">
+            Scan
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">group</span>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Members
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500"
+          href="#"
+        >
+          <span class="material-symbols-outlined">settings</span>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Settings
+          </p>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

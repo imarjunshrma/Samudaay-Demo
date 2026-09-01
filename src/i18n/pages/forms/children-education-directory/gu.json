@@ -1,0 +1,14 @@
+{
+  "title": "વિદ્યાર્થી ડિરેક્ટરી",
+  "hero.prefix": "નોંધણી",
+  "hero.highlight": "ઉભરી રહેલી પેઢી",
+  "search.placeholder": "નામથી શોધો (અંગ્રેજી અથવા ગુજરાતી)...",
+  "filters.class1": "વર્ગ 1",
+  "filters.class2": "વર્ગ 2",
+  "filters.class3": "વર્ગ 3",
+  "filters.button": "ફિલ્ટર્સ",
+  "bottomNav.students": "વિદ્યાર્થીઓ",
+  "bottomNav.reports": "રિપોર્ટ્સ",
+  "bottomNav.filters": "ફિલ્ટર્સ",
+  "bottomNav.profile": "પ્રોફાઇલ"
+}

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Cobbler Community Matrimony - Discover</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              primary: "#f2780d",
+              "background-light": "#f8f7f5",
+              "background-dark": "#221810",
+            },
+            fontFamily: {
+              display: ["Public Sans", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.25rem",
+              lg: "0.5rem",
+              xl: "0.75rem",
+              full: "9999px",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100"
+  >
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+      <!-- Header -->
+      <header
+        class="flex items-center bg-background-light dark:bg-background-dark p-4 border-b border-primary/10 sticky top-0 z-10"
+      >
+        <div
+          class="text-primary flex size-10 shrink-0 items-center justify-center"
+        >
+          <span class="material-symbols-outlined text-3xl">menu</span>
+        </div>
+        <div class="flex-1 px-4">
+          <h1
+            class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight"
+          >
+            Cobbler Matrimony
+          </h1>
+          <p class="text-primary text-xs font-medium">Community Discovery</p>
+        </div>
+        <div class="flex w-10 items-center justify-end">
+          <button
+            class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary/10 text-primary"
+          >
+            <span class="material-symbols-outlined">notifications</span>
+          </button>
+        </div>
+      </header>
+      <!-- Search Bar -->
+      <div class="px-4 py-3 bg-background-light dark:bg-background-dark">
+        <label class="flex flex-col w-full">
+          <div
+            class="flex w-full items-stretch rounded-xl h-12 bg-primary/5 border border-primary/10 overflow-hidden"
+          >
+            <div class="text-primary flex items-center justify-center px-4">
+              <span class="material-symbols-outlined">search</span>
+            </div>
+            <input
+              class="form-input flex-1 border-none bg-transparent focus:ring-0 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 text-base font-normal"
+              placeholder="Search by name or ID"
+            />
+          </div>
+        </label>
+      </div>
+      <!-- Filters Scrollable -->
+      <div class="flex gap-3 px-4 pb-4 overflow-x-auto no-scrollbar">
+        <button
+          class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 px-4 border border-primary/20"
+        >
+          <span class="text-slate-900 dark:text-slate-100 text-sm font-medium"
+            >Age</span
+          >
+          <span class="material-symbols-outlined text-sm">expand_more</span>
+        </button>
+        <button
+          class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 px-4 border border-primary/20"
+        >
+          <span class="text-slate-900 dark:text-slate-100 text-sm font-medium"
+            >Education</span
+          >
+          <span class="material-symbols-outlined text-sm">expand_more</span>
+        </button>
+        <button
+          class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 px-4 border border-primary/20"
+        >
+          <span class="text-slate-900 dark:text-slate-100 text-sm font-medium"
+            >Profession</span
+          >
+          <span class="material-symbols-outlined text-sm">expand_more</span>
+        </button>
+        <button
+          class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/10 px-4 border border-primary/20"
+        >
+          <span class="text-slate-900 dark:text-slate-100 text-sm font-medium"
+            >City</span
+          >
+          <span class="material-symbols-outlined text-sm">expand_more</span>
+        </button>
+      </div>
+      <!-- Premium Banner -->
+      <div class="px-4 py-2 @container">
+        <div
+          class="flex flex-col gap-4 rounded-xl border border-primary/20 bg-primary/5 p-4 @[480px]:flex-row @[480px]:items-center @[480px]:justify-between"
+        >
+          <div class="flex flex-col gap-1">
+            <p class="text-slate-900 dark:text-slate-100 text-base font-bold">
+              Direct Family Connect
+            </p>
+            <p class="text-slate-600 dark:text-slate-400 text-sm">
+              Upgrade to view contact details of verified profiles.
+            </p>
+          </div>
+          <button
+            class="flex min-w-[120px] items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-sm active:scale-95 transition-transform"
+          >
+            Upgrade Now
+          </button>
+        </div>
+      </div>
+      <!-- Profile List -->
+      <main class="flex-1 px-4 py-4 space-y-4">
+        <!-- Profile Card 1 -->
+        <div
+          class="flex flex-col bg-white dark:bg-background-dark/50 rounded-xl overflow-hidden border border-primary/10 shadow-sm"
+        >
+          <div class="relative h-64 w-full">
+            <img
+              class="w-full h-full object-cover"
+              data-alt="Portrait of a young Indian woman smiling"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzqAidFFGRery8GMg2NSI5pSAKbnBdq0_1ufz-5pE6r9u5z-VYSjY-kozk_faG2e10Adb7YrNG6nUro8LZHP3jpdwCNJCP5QHhOL6akfLAoALxBEaGt6NUcGyWO2YVKimX1OmoetEB3H0pLhyYB74FmDQHyVI_KWDn7cW3IR9I3HMXEFmQLERxL5TiZdJ-jAyf-eHcz5M5YXjQu8H928XMQLC1CzlNCMBgyq97FOdggd1LPW7ZWHG5ZzRa5jqMYDfWbmCF_GQzoy00"
+            />
+            <div
+              class="absolute top-3 right-3 bg-white/90 backdrop-blur rounded-full p-2 text-primary"
+            >
+              <span class="material-symbols-outlined fill-1">favorite</span>
+            </div>
+            <div
+              class="absolute bottom-3 left-3 bg-black/40 backdrop-blur text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-xs">verified</span>
+              Verified Profile
+            </div>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3
+                  class="text-xl font-bold text-slate-900 dark:text-slate-100"
+                >
+                  Ananya Verma, 24
+                </h3>
+                <p class="text-primary font-medium text-sm">ID: CM-88291</p>
+              </div>
+              <span
+                class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded uppercase tracking-wider"
+                >Online Now</span
+              >
+            </div>
+            <div class="grid grid-cols-2 gap-y-2 text-sm">
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg">height</span>
+                <span>5' 4" (162 cm)</span>
+              </div>
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg">school</span>
+                <span>M.Sc IT</span>
+              </div>
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg">work</span>
+                <span>Software Engineer</span>
+              </div>
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg"
+                  >location_on</span
+                >
+                <span>Pune, MH</span>
+              </div>
+            </div>
+            <div class="pt-2 flex gap-2">
+              <button
+                class="flex-1 bg-primary text-white font-bold py-2.5 rounded-lg text-sm active:bg-primary/90"
+              >
+                Connect Now
+              </button>
+              <button
+                class="flex items-center justify-center w-12 bg-primary/10 text-primary rounded-lg border border-primary/20"
+              >
+                <span class="material-symbols-outlined">chat</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Profile Card 2 -->
+        <div
+          class="flex flex-col bg-white dark:bg-background-dark/50 rounded-xl overflow-hidden border border-primary/10 shadow-sm"
+        >
+          <div class="relative h-64 w-full">
+            <img
+              class="w-full h-full object-cover"
+              data-alt="Portrait of a young Indian man in business casual"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoNlN_eYNnyMLNtAVlV7a8w9X3NnXccV1f5SV-2srPezXSUJ7w8V0OW29RvABdG0s4f1HkAW8R2J7ghebAwSNF-IN_gDUm6vqjpxetVwdXEqeIfRD7FnJ2RGCxXOJqotZBhk0b916TjBNvaW8Oxb80qjArobgEhikaiMCd8nuYfTZC8yHcThpKo94qRJY1pAW6SEGWoYfqQM66Ds6AV1HHCPnuLXcc45p8oRl0hkl6VoiQa2LckVOCX1dURP1K0gHenK1gwdWa_vl7"
+            />
+            <div
+              class="absolute top-3 right-3 bg-white/90 backdrop-blur rounded-full p-2 text-slate-400"
+            >
+              <span class="material-symbols-outlined">favorite</span>
+            </div>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3
+                  class="text-xl font-bold text-slate-900 dark:text-slate-100"
+                >
+                  Rahul Jadhav, 28
+                </h3>
+                <p class="text-primary font-medium text-sm">ID: CM-77102</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-y-2 text-sm">
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg">height</span>
+                <span>5' 9" (175 cm)</span>
+              </div>
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg">school</span>
+                <span>MBA Finance</span>
+              </div>
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg">work</span>
+                <span>Bank Manager</span>
+              </div>
+              <div
+                class="flex items-center gap-2 text-slate-600 dark:text-slate-400"
+              >
+                <span class="material-symbols-outlined text-lg"
+                  >location_on</span
+                >
+                <span>Mumbai, MH</span>
+              </div>
+            </div>
+            <div class="pt-2 flex gap-2">
+              <button
+                class="flex-1 bg-primary text-white font-bold py-2.5 rounded-lg text-sm active:bg-primary/90"
+              >
+                Connect Now
+              </button>
+              <button
+                class="flex items-center justify-center w-12 bg-primary/10 text-primary rounded-lg border border-primary/20"
+              >
+                <span class="material-symbols-outlined">chat</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Profile Card 3 -->
+        <div
+          class="flex flex-col bg-white dark:bg-background-dark/50 rounded-xl overflow-hidden border border-primary/10 shadow-sm opacity-90"
+        >
+          <div class="relative h-64 w-full">
+            <img
+              class="w-full h-full object-cover grayscale-[20%]"
+              data-alt="Portrait of a traditional Indian woman in saree"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-YWtqr-MsvTGl7VbjhK0wU9nKJWN9FZ9XV87F4D05n1gBxS7NcZtvRMxtvldGdmy_21A4RUZ8ILVk2e8JwcPO7Dd5amml8c98AoTK4ZlKz02uevAOAIkPry6tpAV_YIK0xXWZz4KOcdHOjTffvvEAwkKdQtZgpEjhbEym9jr93F0DZH9wCSgfSByDlsqkYYsIll0xTHXM-dlVg8BNXkQn3kx_P0gOqVbwIRiNBTRbLdTZbpoPLih1imznLSesB32jCXngjelfabwj"
+            />
+            <div
+              class="absolute inset-0 bg-background-dark/20 backdrop-blur-[2px] flex items-center justify-center"
+            >
+              <div
+                class="bg-white/90 dark:bg-background-dark/90 px-4 py-2 rounded-lg text-primary text-sm font-bold shadow-lg"
+              >
+                Premium Member Only
+              </div>
+            </div>
+          </div>
+          <div class="p-4 space-y-3">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3
+                  class="text-xl font-bold text-slate-900 dark:text-slate-100"
+                >
+                  Priya K., 26
+                </h3>
+                <p class="text-primary font-medium text-sm">ID: CM-90211</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-y-2 text-sm blur-[1.5px]">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">height</span>
+                <span>5' 2" (157 cm)</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">school</span>
+                <span>Bachelor of Arts</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">work</span>
+                <span>Teacher</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg"
+                  >location_on</span
+                >
+                <span>Ahmedabad, GJ</span>
+              </div>
+            </div>
+            <p class="text-xs text-center text-slate-500 italic">
+              Details hidden for your privacy level
+            </p>
+          </div>
+        </div>
+      </main>
+      <div class="h-20 bg-background-light dark:bg-background-dark"></div>
+      <!-- Bottom Navigation Bar -->
+      <nav
+        class="fixed bottom-0 w-full flex gap-2 border-t border-primary/10 bg-white dark:bg-background-dark px-4 pb-4 pt-2 z-20"
+      >
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-primary"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined fill-1">explore</span>
+          </div>
+          <p class="text-xs font-bold leading-normal tracking-[0.015em]">
+            Discover
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">favorite</span>
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Matches
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">forum</span>
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Messages
+          </p>
+        </a>
+        <a
+          class="flex flex-1 flex-col items-center justify-end gap-1 text-slate-500 dark:text-slate-400"
+          href="#"
+        >
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <p class="text-xs font-medium leading-normal tracking-[0.015em]">
+            Profile
+          </p>
+        </a>
+      </nav>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "title": "એડમિન QR સ્કેનર",
+  "tabs.attendance": "ઇવેન્ટ હાજરી",
+  "tabs.addons": "એડ-ઓન ચકાસણી",
+  "services.redeemed": "ઉપયોગ થયેલ",
+  "actions.markUsed": "ઉપયોગ થયેલ તરીકે ચિહ્નિત કરો",
+  "sections.serviceVerification": "સેવા ચકાસણી",
+  "actions.nextScan": "આગલું સ્કેન",
+  "status.alignQr": "સ્કેનર લોક થાય ત્યાં સુધી QR ને મધ્યની નજીક રાખો",
+  "status.validating": "પાસ ચકાસી રહ્યા છીએ...",
+  "result.entry.title": "ઇવેન્ટ એન્ટ્રી",
+  "result.entry.marked": "આ સ્કેનથી હાજરી નોંધાઈ",
+  "result.entry.alreadyMarked": "આ પાસ માટે હાજરી પહેલેથી નોંધાઈ છે",
+  "result.entry.ready": "પાસ ચકાસાયો",
+  "result.addon.consumed": "આ સ્કેનથી એડ-ઓન ઉપયોગ થયો",
+  "result.addon.alreadyConsumed": "આ પાસ માટે એડ-ઓન પહેલેથી ઉપયોગ થયું છે",
+  "result.addon.ready": "એડ-ઓન ચકાસાયો",
+  "result.addon.none": "આ ઇવેન્ટ પાસ સાથે કોઈ એડ-ઓન જોડાયેલું નથી.",
+  "result.empty": "આ પાસ માટે કોઈ ચકાસણી વિગતો ઉપલબ્ધ નથી.",
+  "errors.scanFailed": "સ્કેન નિષ્ફળ ગયું",
+  "errors.unableToValidate": "આ ઇવેન્ટ પાસ ચકાસી શક્યા નથી."
+}

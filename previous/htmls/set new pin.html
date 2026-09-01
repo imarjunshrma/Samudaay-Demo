@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Set New PIN - Security</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed": "#cee5ff",
+                        "secondary-fixed": "#ffdbc8",
+                        "on-background": "#241912",
+                        "on-tertiary-fixed-variant": "#004a77",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#743500",
+                        "secondary-container": "#ffb283",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#fff8f5",
+                        "surface-container-highest": "#f4ded3",
+                        "primary": "#984800",
+                        "tertiary-container": "#00a1fa",
+                        "outline": "#8b7264",
+                        "on-secondary-container": "#79421d",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fff8f5",
+                        "on-primary-fixed": "#311300",
+                        "primary-container": "#f2780d",
+                        "on-tertiary-fixed": "#001d33",
+                        "surface-container": "#ffeadf",
+                        "inverse-primary": "#ffb689",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#ffdbc8",
+                        "on-secondary-fixed-variant": "#6d3914",
+                        "surface-dim": "#ecd6ca",
+                        "tertiary": "#00639c",
+                        "on-surface-variant": "#574236",
+                        "on-error-container": "#93000a",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#97cbff",
+                        "surface-variant": "#f4ded3",
+                        "on-surface": "#241912",
+                        "inverse-on-surface": "#ffede5",
+                        "surface-container-low": "#fff1ea",
+                        "on-secondary-fixed": "#321300",
+                        "secondary-fixed-dim": "#ffb68a",
+                        "surface-tint": "#984800",
+                        "outline-variant": "#dec1b0",
+                        "on-primary-container": "#542500",
+                        "inverse-surface": "#3b2e26",
+                        "secondary": "#8a5029",
+                        "primary-fixed-dim": "#ffb689",
+                        "on-tertiary-container": "#003556",
+                        "surface-container-high": "#fae4d8",
+                        "on-secondary": "#ffffff",
+                        "surface": "#fff8f5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-gap-sm": "0.5rem",
+                        "stack-gap-lg": "1.5rem",
+                        "container-padding": "1rem",
+                        "section-margin": "2rem",
+                        "stack-gap-md": "1rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Public Sans"],
+                        "display-xl": ["Public Sans"],
+                        "body-base": ["Public Sans"],
+                        "title-md": ["Public Sans"],
+                        "caption": ["Public Sans"],
+                        "label-caps": ["Public Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["1.5rem", {"lineHeight": "2rem", "fontWeight": "700"}],
+                        "display-xl": ["1.875rem", {"lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-base": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "400"}],
+                        "title-md": ["1.125rem", {"lineHeight": "1.75rem", "fontWeight": "600"}],
+                        "caption": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "400"}],
+                        "label-caps": ["0.875rem", {"lineHeight": "1.25rem", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pin-dot {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#f8f7f5] text-on-surface font-body-base min-h-screen">
+<div class="max-w-[448px] mx-auto min-h-screen flex flex-col bg-background shadow-xl">
+<!-- TopAppBar (From Shared JSON) -->
+<header class="bg-[#f8f7f5] border-b border-stone-200 flex items-center justify-between px-4 h-16 w-full sticky top-0 z-50">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-stone-100 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[#f2780d]">arrow_back</span>
+</button>
+<h1 class="font-['Public_Sans'] font-semibold text-stone-900 text-title-md">Security Verification</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-container-padding py-stack-gap-lg overflow-y-auto">
+<!-- Artisan Branding Sub-header -->
+<div class="flex flex-col items-center mb-stack-gap-lg">
+<div class="w-16 h-16 bg-surface-container rounded-full flex items-center justify-center mb-4 border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary text-[32px]" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-background text-center">Set New PIN</h2>
+<p class="font-body-base text-body-base text-on-surface-variant text-center mt-2">Enter a new 6-digit security PIN.</p>
+</div>
+<!-- PIN Display Section -->
+<div class="flex justify-center gap-stack-gap-sm my-stack-gap-lg">
+<!-- PIN Circles (Placeholders for 6 digits) -->
+<div class="w-12 h-14 bg-white border-2 border-outline-variant/20 rounded-xl flex items-center justify-center shadow-sm pin-dot">
+<div class="w-3 h-3 bg-primary-container rounded-full"></div>
+</div>
+<div class="w-12 h-14 bg-white border-2 border-outline-variant/20 rounded-xl flex items-center justify-center shadow-sm pin-dot">
+<div class="w-3 h-3 bg-primary-container rounded-full"></div>
+</div>
+<div class="w-12 h-14 bg-white border-2 border-outline-variant/20 rounded-xl flex items-center justify-center shadow-sm pin-dot">
+<div class="w-3 h-3 bg-primary-container rounded-full"></div>
+</div>
+<div class="w-12 h-14 bg-white border-2 border-outline-variant/20 rounded-xl flex items-center justify-center shadow-sm pin-dot">
+<!-- Empty dot -->
+<div class="w-3 h-3 bg-stone-200 rounded-full"></div>
+</div>
+<div class="w-12 h-14 bg-white border-2 border-outline-variant/20 rounded-xl flex items-center justify-center shadow-sm pin-dot">
+<div class="w-3 h-3 bg-stone-200 rounded-full"></div>
+</div>
+<div class="w-12 h-14 bg-white border-2 border-outline-variant/20 rounded-xl flex items-center justify-center shadow-sm pin-dot">
+<div class="w-3 h-3 bg-stone-200 rounded-full"></div>
+</div>
+</div>
+<!-- Instruction Text Secondary -->
+<div class="mt-auto mb-stack-gap-lg">
+<div class="bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">info</span>
+<p class="font-caption text-caption text-on-surface-variant">Your PIN is used to verify high-value artisanal transactions and account changes.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Numeric Keypad Area -->
+<section class="bg-surface-container-lowest border-t border-stone-100 px-6 py-6 rounded-t-[2rem] shadow-[0_-8px_30px_rgb(0,0,0,0.04)]">
+<div class="grid grid-cols-3 gap-y-4 gap-x-8 max-w-[320px] mx-auto">
+<!-- Rows 1-3 -->
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">1</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">2</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">3</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">4</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">5</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">6</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">7</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">8</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">9</span>
+</button>
+<!-- Bottom Row -->
+<button class="w-full aspect-square flex items-center justify-center rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant">fingerprint</span>
+</button>
+<button class="w-full aspect-square flex flex-col items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="text-display-xl font-display-xl text-on-background">0</span>
+</button>
+<button class="w-full aspect-square flex items-center justify-center rounded-full hover:bg-stone-50 active:scale-90 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant">backspace</span>
+</button>
+</div>
+<!-- Action Button -->
+<div class="mt-8">
+<button class="w-full h-14 bg-stone-200 text-stone-500 font-bold text-title-md rounded-xl cursor-not-allowed transition-all active:scale-[0.98] disabled:opacity-70 disabled:grayscale" disabled="">
+                    Confirm New PIN
+                </button>
+<!-- Initial instruction helper -->
+<p class="text-center font-caption text-caption text-on-surface-variant/60 mt-3">Please fill all 6 digits to proceed</p>
+</div>
+</section>
+</div>
+<!-- Background Decoration (Mobile Frame Visual Only) -->
+<div class="hidden lg:block fixed inset-0 -z-10 bg-stone-100">
+<div class="absolute inset-0 opacity-20" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuATnrVMSOn5yCrSCl4pXL7UxRsxubpWIHWjlBlKIY9b6qTd0E18RUR6BlE35URYSgy5HHq4jTx_2FcKaYiYOxDrvGvQoLz2pAhcdF6rJOp-c2PCBIZZMV-omnyr_h5s089Y8HGngLE3-aDjX1qw-JLTqdlGF5E37hZ5XhcUzKJkAFx0KOYk7k2wMwFjyoPbm83zzh_6w3vawW_pVQUyZA3eVMOUby42UncaK8uY-17ZuJYFmlyFiyBQ9J2Z2q_IFwddb7PDhbnSVpM9');"></div>
+</div>
+</body></html>

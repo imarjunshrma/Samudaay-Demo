@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#f2780d",
+                    "background": "#f8f7f5",
+                    "surface": "#fff8f5",
+                    "surface-container-low": "#fff1ea",
+                    "on-surface": "#241912",
+                    "on-surface-variant": "#574236",
+                    "outline-variant": "#dec1b0",
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap-lg": "1.5rem",
+                    "container-padding": "1rem",
+                    "stack-gap-sm": "0.5rem",
+                    "stack-gap-md": "1rem",
+                    "section-margin": "2rem"
+            },
+            "fontFamily": {
+                    "body": ["Public Sans"],
+            },
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+        }
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body antialiased flex justify-center items-center min-h-screen">
+<!-- Mobile Container (448px) -->
+<div class="relative w-full max-w-[448px] h-screen bg-background overflow-hidden shadow-2xl flex flex-col">
+<!-- Header -->
+<header class="flex items-center px-4 h-16 w-full shrink-0">
+<button class="w-10 h-10 flex items-center justify-start text-on-surface">
+<span class="material-symbols-outlined text-3xl" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center font-bold text-lg pr-10">Security Check</h1>
+</header>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center px-6 pt-12">
+<!-- Icon/Brand Section -->
+<div class="flex flex-col items-center gap-6 mb-12">
+<div class="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-6xl" style="font-variation-settings: 'FILL' 1;">fingerprint</span>
+</div>
+<div class="text-center">
+<h2 class="text-3xl font-bold tracking-tight text-on-surface mb-3">Verify Identity</h2>
+<p class="text-on-surface-variant leading-relaxed">Please place your finger on the sensor to continue to your workshop dashboard.</p>
+</div>
+</div>
+<!-- Illustration or Subtle Visual (matching the clean style of SCREEN_92) -->
+<div class="w-full flex justify-center mb-12">
+<div class="relative">
+<div class="absolute -inset-4 bg-primary/5 rounded-full blur-xl"></div>
+<img alt="Artisan hands" class="relative w-20 h-20 rounded-full border-2 border-primary/20 object-cover grayscale opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPhp8tDNw0Ai55HjV_77iOdBMVg9-1DPjRiVkuSdGqAucIFsjh23OPK8e36ZafsbISPasgWrAs2mGzSyRBU5cjkEAmRNRr1hScmgaofbg_WTnZDhP17nqbJMswjkwQFanQc9YZXBxAYDhG4crTV9_VML4CgniWwXOO88zGgZRlLyewNHpL8uKgKIxeX3T4ECpI9ErhxHjjyEuxdeH8e0d6jlgVhzujcq6JIcBTgVbgW7M0mEtjBiXw63FMpVuqX0SNCHm1dqECPUW0"/>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="mt-auto w-full space-y-4 pb-10">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="sensors">sensors</span>
+                    Scan Now
+                </button>
+<button class="w-full bg-white border border-primary/20 text-on-surface font-semibold py-4 rounded-xl hover:bg-primary/5 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="pin">pin</span>
+                    Use PIN instead
+                </button>
+<div class="flex items-center justify-center gap-2 pt-4">
+<span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-on-surface-variant text-xs font-semibold uppercase tracking-widest">Secure Craftsmanship</span>
+</div>
+</div>
+</main>
+<!-- Bottom Safe Area Indicator -->
+<div class="h-6 bg-background w-full"></div>
+</div>
+</body></html>

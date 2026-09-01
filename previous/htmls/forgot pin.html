@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Security Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed": "#cee5ff",
+                    "secondary-fixed": "#ffdbc8",
+                    "on-background": "#241912",
+                    "on-tertiary-fixed-variant": "#004a77",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#743500",
+                    "secondary-container": "#ffb283",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fff8f5",
+                    "surface-container-highest": "#f4ded3",
+                    "primary": "#984800",
+                    "tertiary-container": "#00a1fa",
+                    "outline": "#8b7264",
+                    "on-secondary-container": "#79421d",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#fff8f5",
+                    "on-primary-fixed": "#311300",
+                    "primary-container": "#f2780d",
+                    "on-tertiary-fixed": "#001d33",
+                    "surface-container": "#ffeadf",
+                    "inverse-primary": "#ffb689",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "primary-fixed": "#ffdbc8",
+                    "on-secondary-fixed-variant": "#6d3914",
+                    "surface-dim": "#ecd6ca",
+                    "tertiary": "#00639c",
+                    "on-surface-variant": "#574236",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#97cbff",
+                    "surface-variant": "#f4ded3",
+                    "on-surface": "#241912",
+                    "inverse-on-surface": "#ffede5",
+                    "surface-container-low": "#fff1ea",
+                    "on-secondary-fixed": "#321300",
+                    "secondary-fixed-dim": "#ffb68a",
+                    "surface-tint": "#984800",
+                    "outline-variant": "#dec1b0",
+                    "on-primary-container": "#542500",
+                    "inverse-surface": "#3b2e26",
+                    "secondary": "#8a5029",
+                    "primary-fixed-dim": "#ffb689",
+                    "on-tertiary-container": "#003556",
+                    "surface-container-high": "#fae4d8",
+                    "on-secondary": "#ffffff",
+                    "surface": "#fff8f5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap-sm": "0.5rem",
+                    "stack-gap-lg": "1.5rem",
+                    "container-padding": "1rem",
+                    "section-margin": "2rem",
+                    "stack-gap-md": "1rem"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Public Sans"],
+                    "display-xl": ["Public Sans"],
+                    "body-base": ["Public Sans"],
+                    "title-md": ["Public Sans"],
+                    "caption": ["Public Sans"],
+                    "label-caps": ["Public Sans"]
+            },
+            "fontSize": {
+                    "headline-lg": ["1.5rem", {"lineHeight": "2rem", "fontWeight": "700"}],
+                    "display-xl": ["1.875rem", {"lineHeight": "2.25rem", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-base": ["1rem", {"lineHeight": "1.5rem", "fontWeight": "400"}],
+                    "title-md": ["1.125rem", {"lineHeight": "1.75rem", "fontWeight": "600"}],
+                    "caption": ["0.75rem", {"lineHeight": "1rem", "fontWeight": "400"}],
+                    "label-caps": ["0.875rem", {"lineHeight": "1.25rem", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .artisan-texture {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23984800' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background font-body-base text-on-surface antialiased">
+<!-- Fixed-Width Mobile Container -->
+<div class="relative min-h-screen max-w-[448px] mx-auto flex flex-col artisan-texture overflow-hidden bg-background">
+<!-- TopAppBar (From Shared JSON) -->
+<header class="bg-[#f8f7f5] dark:bg-stone-900 flex items-center justify-between px-4 h-16 w-full max-w-[448px] mx-auto docked full-width top-0 border-b border-stone-200 dark:border-stone-800 flat no shadows z-50">
+<button class="text-[#f2780d] dark:text-orange-500 active:scale-95 transition-transform flex items-center justify-center p-2">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Public_Sans'] font-semibold text-stone-900 dark:text-stone-50">Security Verification</h1>
+<div class="w-10"></div> <!-- Spacer for alignment -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col items-center justify-center px-container-padding pb-stack-gap-lg pt-8">
+<!-- Lock Icon Section -->
+<div class="relative mb-stack-gap-lg">
+<div class="w-24 h-24 rounded-full bg-surface-container flex items-center justify-center shadow-lg border border-primary/10 relative z-10">
+<span class="material-symbols-outlined text-[48px] text-primary" data-icon="lock" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<!-- Decorative Artisan Accent -->
+<div class="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-primary-container flex items-center justify-center shadow-md z-20">
+<span class="material-symbols-outlined text-white text-[16px]" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="absolute inset-0 bg-primary/5 blur-3xl rounded-full scale-150 -z-0"></div>
+</div>
+<!-- Typography Header Area -->
+<div class="text-center space-y-stack-gap-sm max-w-[320px] mb-12">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Forgot PIN?</h2>
+<p class="font-body-base text-body-base text-on-surface-variant">Verify your identity to reset your security PIN.</p>
+</div>
+<!-- Action Area / Buttons -->
+<div class="w-full flex flex-col gap-stack-gap-md">
+<!-- Face ID Option -->
+<button class="group w-full h-14 bg-primary-container hover:bg-primary transition-all duration-200 rounded-xl flex items-center justify-between px-6 shadow-lg active:scale-[0.98]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-white" data-icon="faceid">face</span>
+<span class="font-title-md text-white">Verify with Face ID</span>
+</div>
+<span class="material-symbols-outlined text-white/50 group-hover:text-white transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+<!-- OTP Option -->
+<button class="group w-full h-14 bg-white border border-primary/20 hover:border-primary/40 transition-all duration-200 rounded-xl flex items-center justify-between px-6 shadow-sm active:scale-[0.98]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="smartphone">smartphone</span>
+<span class="font-title-md text-primary">Send OTP to Mobile</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+<!-- Visual Separation with Artisan Craftsmanship Theme -->
+<div class="mt-stack-gap-lg flex items-center gap-4 w-full px-8 opacity-40">
+<div class="h-[1px] flex-1 bg-primary/30"></div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="workspace_premium">workspace_premium</span>
+<div class="h-[1px] flex-1 bg-primary/30"></div>
+</div>
+<!-- Secondary Action Card -->
+<div class="mt-8 p-4 bg-surface-container-low rounded-xl border border-dashed border-outline/30 w-full text-center">
+<p class="font-caption text-caption text-on-surface-variant mb-3">Having trouble verifying?</p>
+<button class="font-label-caps text-label-caps text-primary hover:underline decoration-2 underline-offset-4">Contact Artisan Support</button>
+</div>
+</main>
+<!-- Footer Action Area (Pinned) -->
+<footer class="p-container-padding bg-background/80 backdrop-blur-sm">
+<button class="w-full h-14 bg-transparent border border-outline/20 text-on-surface-variant font-title-md rounded-xl active:scale-95 transition-transform">
+                Cancel
+            </button>
+</footer>
+<!-- Decorative Corners (Artisan Details) -->
+<div class="absolute top-20 left-0 w-32 h-32 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"></div>
+<div class="absolute bottom-24 right-0 w-48 h-48 bg-secondary-container/10 rounded-full translate-x-1/2 translate-y-1/2 blur-3xl"></div>
+</div>
+<!-- Navigation suppressed per task logic (Transactional/Focused Task) -->
+<!-- But keeping the logic template for BottomNavBar reference if needed for future states -->
+</body></html>

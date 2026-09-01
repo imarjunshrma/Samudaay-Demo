@@ -1,0 +1,11 @@
+{
+  "title": "ભૂમિકા વ્યવસ્થાપન",
+  "sections.existing": "હાલની ભૂમિકાઓ",
+  "stats.active": "{count} ભૂમિકાઓ સક્રિય",
+  "loading": "ભૂમિકાઓ લોડ થઈ રહી છે...",
+  "empty.title": "હજુ સુધી કોઈ ભૂમિકાઓ નથી",
+  "empty.description": "પહેલી ભૂમિકા બનાવો અને મોડ્યુલ પરવાનગીઓ આપો.",
+  "actions.add": "ભૂમિકા ઉમેરો",
+  "kind.system": "સિસ્ટમ",
+  "kind.custom": "કસ્ટમ"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Role Management",
+  "sections.existing": "Existing Roles",
+  "stats.active": "{count} Roles Active",
+  "loading": "Loading roles...",
+  "empty.title": "No roles yet",
+  "empty.description": "Create the first role and assign module permissions.",
+  "actions.add": "Add Role",
+  "kind.system": "System",
+  "kind.custom": "Custom"
+}

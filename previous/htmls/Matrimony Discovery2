@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;1,400;1,600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#504441",
+              "primary-fixed": "#ffdbcf",
+              "on-surface": "#1c1b1a",
+              "surface-variant": "#e5e2df",
+              "surface-container-high": "#ebe7e4",
+              "primary-container": "#603f33",
+              "on-primary-fixed": "#2e150b",
+              "tertiary-fixed": "#87f5ea",
+              "inverse-surface": "#31302f",
+              "inverse-on-surface": "#f4f0ed",
+              "on-secondary-container": "#642f00",
+              "surface-dim": "#ddd9d6",
+              "on-primary-fixed-variant": "#603f33",
+              "on-secondary": "#ffffff",
+              "surface-container": "#f1edea",
+              "inverse-primary": "#ebbcac",
+              "secondary-fixed-dim": "#ffb786",
+              "secondary-fixed": "#ffdcc6",
+              "surface-bright": "#fdf9f6",
+              "on-error": "#ffffff",
+              "on-tertiary-fixed": "#00201d",
+              "on-background": "#1c1b1a",
+              background: "#fdf9f6",
+              "outline-variant": "#d4c3be",
+              "secondary-container": "#ff8928",
+              "tertiary-fixed-dim": "#69d8ce",
+              "on-secondary-fixed": "#311300",
+              "on-error-container": "#93000a",
+              secondary: "#964900",
+              "tertiary-container": "#00504b",
+              surface: "#fdf9f6",
+              tertiary: "#003733",
+              "surface-container-low": "#f7f3f0",
+              primary: "#46291e",
+              "surface-tint": "#7a5649",
+              "on-tertiary-container": "#56c6bc",
+              "surface-container-lowest": "#ffffff",
+              "on-secondary-fixed-variant": "#723600",
+              "on-primary-container": "#d9ab9b",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed-variant": "#00504b",
+              "error-container": "#ffdad6",
+              "primary-fixed-dim": "#ebbcac",
+              outline: "#827470",
+              error: "#ba1a1a",
+              "on-tertiary": "#ffffff",
+              "surface-container-highest": "#e5e2df",
+            },
+            fontFamily: {
+              headline: ["Newsreader", "serif"],
+              body: ["Manrope", "sans-serif"],
+              label: ["Manrope", "sans-serif"],
+            },
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+    <style>
+      body {
+        min-height: max(884px, 100dvh);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-background text-on-surface font-body selection:bg-secondary-fixed selection:text-on-secondary-fixed"
+  >
+    <!-- TopAppBar Implementation -->
+    <header
+      class="fixed top-0 w-full z-50 bg-[#f1edea]/80 dark:bg-stone-900/80 backdrop-blur-md"
+    >
+      <div
+        class="flex justify-between items-center px-6 py-4 w-full max-w-none"
+      >
+        <div class="flex items-center gap-4">
+          <button
+            class="text-[#46291e] dark:text-[#d7ccc8] hover:bg-[#46291e]/5 transition-colors p-2 rounded-full"
+          >
+            <span class="material-symbols-outlined">menu</span>
+          </button>
+          <h1
+            class="text-[#46291e] dark:text-[#d7ccc8] font-serif font-bold text-xl Newsreader italic text-2xl"
+          >
+            Cobbler Matrimony
+          </h1>
+        </div>
+        <div class="flex items-center gap-4">
+          <button
+            class="text-[#603f33] dark:text-stone-400 hover:bg-[#46291e]/5 transition-colors p-2 rounded-full hidden md:flex"
+          >
+            <span class="material-symbols-outlined">filter_list</span>
+          </button>
+          <div
+            class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container"
+          >
+            <img
+              class="w-full h-full object-cover"
+              data-alt="professional headshot of an artisan community member with warm studio lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvwS71q-rDILNLST1cFRWUcj4XuSGyN2iqEGW7_BQvycPQYaJiiV07RR_UewMK9KmwjheyLJvF4Kxcjiy4q1bb45K0zMa_yDHsiTka5PtMxh3Hp1N2-bzd8efxRdr7RuyXMyiF--CngVjIM-q86QtlmwIndLvOidkC7--xSyqen0c0gNHAR2Uibe8IsvwuXI-mNn8Dfq5pMrQGnx5wII5Ee6I62WGGJOfkDkYx6QVH4Jj0qDU5eYBdoefCS4A4qmHM33DVcgzqZ0-p"
+            />
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="pt-24 pb-32 px-4 md:px-8 max-w-7xl mx-auto">
+      <!-- Editorial Introduction -->
+      <section class="mb-12 md:mb-20">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6"
+        >
+          <div class="max-w-2xl">
+            <h2
+              class="font-headline text-5xl md:text-6xl text-primary leading-tight"
+            >
+              Hand-picked Matches for Your Family
+            </h2>
+            <p
+              class="mt-6 text-on-surface-variant text-lg leading-relaxed max-w-lg"
+            >
+              Celebrating heritage and craftsmanship through intentional
+              connections. Find a partner who shares your values and your story.
+            </p>
+          </div>
+          <div class="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+            <span
+              class="px-4 py-2 rounded-full bg-secondary-container text-on-secondary-container font-label text-sm whitespace-nowrap"
+              >Newly Joined</span
+            >
+            <span
+              class="px-4 py-2 rounded-full bg-surface-container-high text-primary font-label text-sm whitespace-nowrap"
+              >Highly Compatible</span
+            >
+            <span
+              class="px-4 py-2 rounded-full bg-surface-container-high text-primary font-label text-sm whitespace-nowrap"
+              >Nearby Masters</span
+            >
+          </div>
+        </div>
+      </section>
+      <!-- Profile Grid: Bento Style -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Profile Card 1 -->
+        <article
+          class="group relative bg-surface-container-low overflow-hidden rounded-xl transition-all duration-300 hover:shadow-[0_24px_48px_-12px_rgba(70,41,30,0.12)]"
+        >
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <img
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="portrait of a young woman in an artisan workshop setting with soft natural window lighting and warm tones"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZZtAPeAU_ry2pNH5eE1Rbp0R7mpcuVpOivr1ODmUVJcEfflOBTL-n4lPmV3u-nCfJi1HQp5dCXyWjFPSLNoHOxHU3zwUy_qDNes_g2S_YehkcxFrrXwkMhpmkcUKF5cKrmeuVMVrSeQMwFCjwvrsQ1jSazhvNxsJmv99DlipZu26pBv3Kl0wJvcpXmzP_wShom9xXcMuNhYfUqg8UK8AGXIiz57dm20Ml8fSGJfaNJeMVgEuKaCVpoH_yaqchfSgV7jFXEU0T8Fci"
+            />
+            <div class="absolute top-4 right-4 flex flex-col gap-2">
+              <button
+                class="w-10 h-10 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-primary shadow-sm hover:bg-surface-bright transition-colors"
+              >
+                <span
+                  class="material-symbols-outlined"
+                  style="font-variation-settings: &quot;FILL&quot; 0"
+                  >favorite</span
+                >
+              </button>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-primary/80 to-transparent"
+            >
+              <h3 class="font-headline text-3xl text-white">Ananya Sharma</h3>
+              <p
+                class="text-on-primary-container text-sm font-label uppercase tracking-widest mt-1"
+              >
+                Footwear Designer • London
+              </p>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="grid grid-cols-2 gap-y-4 mb-8">
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Age &amp; Height
+                </p>
+                <p class="text-primary font-medium text-sm">27 yrs, 5'6"</p>
+              </div>
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Education
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  MA Fashion Design
+                </p>
+              </div>
+              <div class="col-span-2">
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Profession
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  Creative Lead at Artisan Collective
+                </p>
+              </div>
+            </div>
+            <button
+              class="w-full py-4 bg-primary text-on-primary font-label rounded-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <span>Send Connection Request</span>
+              <span class="material-symbols-outlined text-sm">send</span>
+            </button>
+          </div>
+        </article>
+        <!-- Profile Card 2 -->
+        <article
+          class="group relative bg-surface-container-low overflow-hidden rounded-xl transition-all duration-300 hover:shadow-[0_24px_48px_-12px_rgba(70,41,30,0.12)]"
+        >
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <img
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="handsome man in high-quality wool coat standing in a historic library with soft ambient lighting"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNRjevXKXJ7s9wv5pXU9ejY2Y2jZ2K5EF2pg8clHArVbUxy2av4r2wEn6nmf8k7Q_Lml7PzanqMLRfud5TxM7o3sOhCXtot8WKqGvFkx2UtqA2AnyGUOJYDTC6vgymKys4es4ITzIcXvkZjjRWzOSzJWNemDwEJF-LUURLP0P31sJXgJMa0JG6mp6KgKtqhvaz1uGdDNvDjWwp13E8G1_56N8UOnuFsWFYV3M2diDSnoCJCxKelrCOxAaLcvnMrznr_GteFBBy8IDV"
+            />
+            <div class="absolute top-4 right-4">
+              <button
+                class="w-10 h-10 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-primary shadow-sm"
+              >
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-primary/80 to-transparent"
+            >
+              <h3 class="font-headline text-3xl text-white">Vikram Mehta</h3>
+              <p
+                class="text-on-primary-container text-sm font-label uppercase tracking-widest mt-1"
+              >
+                Master Cordwainer • Milan
+              </p>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="grid grid-cols-2 gap-y-4 mb-8">
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Age &amp; Height
+                </p>
+                <p class="text-primary font-medium text-sm">31 yrs, 5'11"</p>
+              </div>
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Education
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  B.Tech, Leather Tech
+                </p>
+              </div>
+              <div class="col-span-2">
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Profession
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  Owner, Bespoke Sole Studio
+                </p>
+              </div>
+            </div>
+            <button
+              class="w-full py-4 bg-primary text-on-primary font-label rounded-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <span>Send Connection Request</span>
+              <span class="material-symbols-outlined text-sm">send</span>
+            </button>
+          </div>
+        </article>
+        <!-- Profile Card 3 - Featured Layout -->
+        <article
+          class="group relative bg-surface-container-low overflow-hidden rounded-xl transition-all duration-300 hover:shadow-[0_24px_48px_-12px_rgba(70,41,30,0.12)]"
+        >
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <img
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="portrait of a smiling woman with classic style in a sun-drenched outdoor courtyard with stone walls"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCN9O1Hg-xvOmQp4Y-VpYjiScJMBl2gU6JWCiTJuo2p4GluMKJau3pCLkwr0Ivk1XFEnVemGG8VsQ24fB1lC4jBblcb61Qj-iiQu5ckQjwnbddCSOiiWFvwfPZ48Dw9uoI6XiNID9i0UcTxwZO4qOqj9swEeG_lB6uHaQYk3VfalSKmC0rH06QeSOWRKA3qGgrNSOTN33Et2QuE1y6i66i7ErvfQGNpAtNQ3cj-6a8PYTqDaj7IS3KeZGopJi1UVM_sI44XLkTvPs7"
+            />
+            <div class="absolute top-4 right-4">
+              <button
+                class="w-10 h-10 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-primary shadow-sm"
+              >
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-primary/80 to-transparent"
+            >
+              <h3 class="font-headline text-3xl text-white">Sana Khan</h3>
+              <p
+                class="text-on-primary-container text-sm font-label uppercase tracking-widest mt-1"
+              >
+                Orthopedic Shoemaker • Dubai
+              </p>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="grid grid-cols-2 gap-y-4 mb-8">
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Age &amp; Height
+                </p>
+                <p class="text-primary font-medium text-sm">29 yrs, 5'5"</p>
+              </div>
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Education
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  Doctor of Podiatry
+                </p>
+              </div>
+              <div class="col-span-2">
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Profession
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  Senior Consultant at FootHealth
+                </p>
+              </div>
+            </div>
+            <button
+              class="w-full py-4 bg-primary text-on-primary font-label rounded-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <span>Send Connection Request</span>
+              <span class="material-symbols-outlined text-sm">send</span>
+            </button>
+          </div>
+        </article>
+        <!-- Profile Card 4 -->
+        <article
+          class="group relative bg-surface-container-low overflow-hidden rounded-xl transition-all duration-300 hover:shadow-[0_24px_48px_-12px_rgba(70,41,30,0.12)]"
+        >
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <img
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              data-alt="middle aged man with distinguished look wearing a linen shirt in a high-end leather workshop"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfhFxNWrpf3L8OVT_ISOJb9uE0Nvj5NyKhvsEshkd3EdZuTCuCeseTFVbvdX3CtE6qlFTUunqUh1LyX7pK92htaZrXgLrLeAhEVDfqIxFa5FhQbQGTXmdjWW0YgK1cOCG3iKa-kTTYaiouQPOAEtQJTytDPGAykXXSkNJLoxdph8koYWAMV5DHtylmxZH7IaR6R5YSwCQ1R8xvdj-Yt-Yo66_6WWw2GB-TplxFnf5CNuzKgHAfgYevyvlSgTWa2vyK41rV_FVa2tl7"
+            />
+            <div class="absolute top-4 right-4">
+              <button
+                class="w-10 h-10 rounded-full bg-surface-bright/80 backdrop-blur-md flex items-center justify-center text-primary shadow-sm"
+              >
+                <span class="material-symbols-outlined">favorite</span>
+              </button>
+            </div>
+            <div
+              class="absolute bottom-0 left-0 w-full p-6 bg-gradient-to-t from-primary/80 to-transparent"
+            >
+              <h3 class="font-headline text-3xl text-white">Rahul Deshmukh</h3>
+              <p
+                class="text-on-primary-container text-sm font-label uppercase tracking-widest mt-1"
+              >
+                Tannery Heir • Kanpur
+              </p>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="grid grid-cols-2 gap-y-4 mb-8">
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Age &amp; Height
+                </p>
+                <p class="text-primary font-medium text-sm">33 yrs, 6'0"</p>
+              </div>
+              <div>
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Education
+                </p>
+                <p class="text-primary font-medium text-sm">MBA, INSEAD</p>
+              </div>
+              <div class="col-span-2">
+                <p
+                  class="text-[10px] uppercase tracking-tighter text-outline font-bold mb-1"
+                >
+                  Profession
+                </p>
+                <p class="text-primary font-medium text-sm">
+                  Director, Deshmukh Leathers
+                </p>
+              </div>
+            </div>
+            <button
+              class="w-full py-4 bg-primary text-on-primary font-label rounded-lg transition-all duration-200 active:scale-95 flex items-center justify-center gap-2"
+            >
+              <span>Send Connection Request</span>
+              <span class="material-symbols-outlined text-sm">send</span>
+            </button>
+          </div>
+        </article>
+      </div>
+    </main>
+    <!-- BottomNavBar Implementation -->
+    <nav
+      class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-[#f1edea] dark:bg-stone-950 shadow-[0_-4px_24px_rgba(70,41,30,0.06)] border-t-[0.5px] border-[#46291e]/10"
+    >
+      <a
+        class="flex flex-col items-center justify-center text-[#964900] dark:text-[#ffb74d] font-bold"
+        href="#"
+      >
+        <span
+          class="material-symbols-outlined"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >search</span
+        >
+        <span
+          class="font-sans text-[11px] uppercase tracking-wider Manrope mt-1"
+          >Discover</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#603f33] dark:text-stone-500 hover:text-[#46291e] dark:hover:text-white transition-transform active:scale-90"
+        href="#"
+      >
+        <span class="material-symbols-outlined">favorite</span>
+        <span
+          class="font-sans text-[11px] uppercase tracking-wider Manrope mt-1"
+          >Requests</span
+        >
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#603f33] dark:text-stone-500 hover:text-[#46291e] dark:hover:text-white transition-transform active:scale-90 relative"
+        href="#"
+      >
+        <span class="material-symbols-outlined">mail</span>
+        <span
+          class="font-sans text-[11px] uppercase tracking-wider Manrope mt-1"
+          >Messages</span
+        >
+        <span
+          class="absolute -top-1 right-2 w-2 h-2 bg-secondary rounded-full"
+        ></span>
+      </a>
+      <a
+        class="flex flex-col items-center justify-center text-[#603f33] dark:text-stone-500 hover:text-[#46291e] dark:hover:text-white transition-transform active:scale-90"
+        href="#"
+      >
+        <span class="material-symbols-outlined">person</span>
+        <span
+          class="font-sans text-[11px] uppercase tracking-wider Manrope mt-1"
+          >Account</span
+        >
+      </a>
+    </nav>
+    <!-- Contextual FAB - Search Filters -->
+    <button
+      class="fixed bottom-28 right-6 w-14 h-14 bg-secondary text-on-secondary rounded-full flex items-center justify-center shadow-xl transition-all duration-200 hover:scale-105 active:scale-95 z-40 md:hidden"
+    >
+      <span class="material-symbols-outlined">tune</span>
+    </button>
+  </body>
+</html>

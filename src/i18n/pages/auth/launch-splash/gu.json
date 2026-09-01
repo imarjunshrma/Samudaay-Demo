@@ -1,0 +1,13 @@
+{
+  "title.loading": "લોડ થઈ રહ્યું છે",
+  "subtitle.syncingSession": "{tagline} અને સેશન સ્થિતિ સમન્વયિત થઈ રહી છે.",
+  "unlock.title": "તમારું એકાઉન્ટ અનલોક કરો",
+  "unlock.subtitle": "{method} સાથે આગળ વધો અથવા તમારો PIN વાપરો.",
+  "unlock.useBiometric": "Face ID વાપરો",
+  "unlock.usePin": "PIN વાપરો",
+  "unlock.faceId": "Face ID",
+  "unlock.fingerprint": "Fingerprint",
+  "unlock.biometric": "બાયોમેટ્રિક",
+  "unlock.biometricCancelled": "બાયોમેટ્રિક અનલોક રદ થયું.",
+  "unlock.biometricFailed": "બાયોમેટ્રિકથી અનલોક કરી શક્યા નથી."
+}

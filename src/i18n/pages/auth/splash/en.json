@@ -1,0 +1,16 @@
+{
+  "slides.0.title": "Connecting People",
+  "slides.0.subtitle": "Trusted member access",
+  "slides.0.description": "A simple place for people, updates, and community connections.",
+  "slides.0.buttonLabel": "Get Started",
+  "slides.1.title": "Discover Your Community Network",
+  "slides.1.subtitle": "Trusted Member Connections",
+  "slides.1.description": "Directories, family profiles, events, and updates in one place.",
+  "slides.1.buttonLabel": "Continue",
+  "slides.2.title": "Secure Digital ID\n& KYC Ready",
+  "slides.2.subtitle": "Built for Verified Access",
+  "slides.2.description": "Complete onboarding, upload documents, and unlock community services.",
+  "slides.2.buttonLabel": "Start Registration",
+  "footer.terms": "©2019-2026 Mochi Ekta Charitable Trust, Vadodara. All Rights Reserved",
+  "accessibility.onboardingStep": "Onboarding step {step}"
+}

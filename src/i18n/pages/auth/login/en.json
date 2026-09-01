@@ -1,0 +1,10 @@
+{
+  "title": "Login",
+  "subtitle": "Sign in to continue",
+  "phone.label": "Mobile Number",
+  "phone.placeholder": "Enter mobile number",
+  "otp.label": "OTP",
+  "otp.placeholder": "Enter OTP",
+  "actions.continue": "Continue",
+  "actions.submit": "Submit"
+}

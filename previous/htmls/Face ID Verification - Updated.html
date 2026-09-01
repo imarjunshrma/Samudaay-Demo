@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Face ID Verification</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#f2780d",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f5",
+                        "on-surface": "#241912",
+                        "surface-variant": "#f4ded3",
+                        "on-surface-variant": "#574236",
+                        "outline": "#dec1b0",
+                        "background": "#fff8f5",
+                        "surface-container": "#fff1ea"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "sans": ["Public Sans", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+            font-family: 'Public Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
+        }
+        .scan-focus-ring {
+            border: 2px solid #f2780d;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex flex-col items-center justify-center">
+<main class="relative w-full max-w-md min-h-screen flex flex-col bg-background shadow-xl overflow-hidden">
+<!-- Header -->
+<header class="flex items-center px-4 h-16 w-full shrink-0">
+<button class="flex items-center justify-center w-10 h-10 -ml-2">
+<span class="material-symbols-outlined text-on-surface text-2xl">arrow_back</span>
+</button>
+<h1 class="flex-1 text-center font-bold text-lg pr-8 text-on-surface">Security</h1>
+</header>
+<!-- Progress Step Indicator (Matching Screen 92 style) -->
+<div class="flex w-full flex-row items-center justify-center gap-4 py-5">
+<div class="h-2 w-12 rounded-full bg-primary"></div>
+<div class="h-2 w-12 rounded-full bg-primary"></div>
+<div class="h-2 w-12 rounded-full bg-primary"></div>
+</div>
+<!-- Main Content -->
+<div class="flex-1 flex flex-col items-center justify-center px-6 pt-4 pb-32">
+<!-- Scan Visual -->
+<div class="relative flex items-center justify-center mb-12">
+<!-- Central Face Circle -->
+<div class="w-48 h-48 rounded-full bg-white shadow-sm flex items-center justify-center border border-outline/30 z-10">
+<span class="material-symbols-outlined text-primary text-[100px] leading-none" style="font-variation-settings: 'FILL' 1;">face</span>
+</div>
+<!-- Scanning Corners (Matching the frame in the original, but cleaned up) -->
+<div class="absolute w-56 h-56 border-2 border-primary/10 rounded-3xl flex items-center justify-center">
+<div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-2xl"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-2xl"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-2xl"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-2xl"></div>
+</div>
+<!-- Animated Spin Ring -->
+<div class="absolute w-64 h-64 scan-focus-ring opacity-40"></div>
+</div>
+<!-- Text Labels -->
+<div class="text-center space-y-2">
+<h2 class="text-2xl font-bold tracking-tight text-on-surface">Face ID Verification</h2>
+<p class="text-on-surface-variant font-medium">Looking for Face...</p>
+</div>
+<!-- Information Card (Matching Screen 92 Card Style) -->
+<div class="mt-12 w-full bg-surface-container/50 border border-outline/20 rounded-xl p-5 flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-2xl">shield</span>
+</div>
+<div class="flex-1">
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-[0.1em]">Encryption Level</p>
+<p class="text-base font-semibold text-primary">Secure Modern Craft</p>
+</div>
+</div>
+</div>
+<!-- Actions (Matching Screen 92 Button Style) -->
+<footer class="mt-auto p-4 space-y-3 pb-8">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-xl">fingerprint</span>
+            Try Pin Code
+        </button>
+<button class="w-full bg-transparent border border-primary/30 text-on-surface-variant font-semibold py-4 rounded-xl hover:bg-surface-container transition-all">
+            Cancel
+        </button>
+</footer>
+</main>
+</body></html>

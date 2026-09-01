@@ -1,0 +1,22 @@
+{
+  "title": "Admin QR Scanner",
+  "tabs.attendance": "Event Attendance",
+  "tabs.addons": "Add-on Verification",
+  "services.redeemed": "Redeemed",
+  "actions.markUsed": "Mark as Used",
+  "sections.serviceVerification": "Service Verification",
+  "actions.nextScan": "Next Scan",
+  "status.alignQr": "Hold the QR near the center until the scanner locks",
+  "status.validating": "Validating pass...",
+  "result.entry.title": "Event Entry",
+  "result.entry.marked": "Attendance marked by this scan",
+  "result.entry.alreadyMarked": "Attendance was already marked for this pass",
+  "result.entry.ready": "Pass verified",
+  "result.addon.consumed": "Add-on consumed by this scan",
+  "result.addon.alreadyConsumed": "Add-on was already consumed for this pass",
+  "result.addon.ready": "Add-on verified",
+  "result.addon.none": "No add-on is attached to this event pass.",
+  "result.empty": "No verification details available for this pass.",
+  "errors.scanFailed": "Scan failed",
+  "errors.unableToValidate": "Unable to validate this event pass."
+}
