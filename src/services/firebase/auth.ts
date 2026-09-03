@@ -61,6 +61,8 @@ function toUserMessage(error: unknown) {
         return 'Enter a valid mobile number including country code.';
       case 'auth/too-many-requests':
         return 'Too many OTP attempts were made. Wait a moment and try again.';
+      case 'auth/operation-not-allowed':
+        return 'Phone OTP is not enabled for this Firebase project or SMS is not enabled for this region. Enable Phone sign-in and allow the phone number region in Firebase Authentication settings.';
       case 'auth/invalid-verification-code':
         return 'The OTP is invalid. Check the code and try again.';
       case 'auth/session-expired':

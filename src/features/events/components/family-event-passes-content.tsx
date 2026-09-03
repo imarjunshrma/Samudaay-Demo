@@ -188,7 +188,7 @@ export function FamilyEventPassesContent() {
             }
             .ticket {
               width: 100%;
-              border: 1px solid rgba(242,120,13,0.18);
+              border: 1px solid rgba(24,168,117,0.18);
               border-radius: 28px;
               background: #ffffff;
               overflow: hidden;
@@ -198,10 +198,10 @@ export function FamilyEventPassesContent() {
               justify-content: space-between;
               gap: 16px;
               padding: 26px 28px 18px;
-              background: linear-gradient(180deg, rgba(242,120,13,0.08), rgba(242,120,13,0.02));
+              background: linear-gradient(180deg, rgba(24,168,117,0.08), rgba(24,168,117,0.02));
             }
             .eyebrow {
-              color: #f2780d;
+              color: #18a875;
               font-size: 11px;
               font-weight: 700;
               letter-spacing: 0.18em;
@@ -257,7 +257,7 @@ export function FamilyEventPassesContent() {
             }
             .scan-note {
               margin-top: 16px;
-              color: #f2780d;
+              color: #18a875;
               font-size: 12px;
               font-weight: 700;
               letter-spacing: 0.14em;
@@ -283,9 +283,9 @@ export function FamilyEventPassesContent() {
               display: flex;
               align-items: center;
               gap: 10px;
-              border: 1px solid rgba(242,120,13,0.12);
+              border: 1px solid rgba(24,168,117,0.12);
               border-radius: 16px;
-              background: rgba(242,120,13,0.05);
+              background: rgba(24,168,117,0.05);
               padding: 14px 16px;
               font-size: 15px;
               font-weight: 600;
@@ -294,7 +294,7 @@ export function FamilyEventPassesContent() {
               width: 10px;
               height: 10px;
               border-radius: 999px;
-              background: #f2780d;
+              background: #18a875;
               flex-shrink: 0;
             }
             .empty-addon {

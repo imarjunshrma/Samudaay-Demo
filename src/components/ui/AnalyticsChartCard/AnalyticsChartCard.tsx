@@ -88,8 +88,8 @@ export function AnalyticsChartCard({
             dataPointsHeight={8}
             thickness={3}
             color={colors.primary.DEFAULT}
-            startFillColor="rgba(242,120,13,0.22)"
-            endFillColor="rgba(242,120,13,0.02)"
+            startFillColor="rgba(24,168,117,0.22)"
+            endFillColor="rgba(24,168,117,0.02)"
             startOpacity={1}
             endOpacity={0.1}
             maxValue={max}

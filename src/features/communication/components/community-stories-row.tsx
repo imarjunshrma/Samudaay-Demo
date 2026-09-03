@@ -17,7 +17,7 @@ export function CommunityStoriesRow() {
               height: 64,
               borderRadius: 32,
               padding: 4,
-              backgroundColor: story.active ? 'rgba(242,120,13,0.2)' : 'rgba(242,120,13,0.05)',
+              backgroundColor: story.active ? 'rgba(24,168,117,0.2)' : 'rgba(24,168,117,0.05)',
               borderWidth: story.active ? 2 : 1,
               borderColor: story.active ? colors.primary.DEFAULT : colors.primary.border,
             }}>

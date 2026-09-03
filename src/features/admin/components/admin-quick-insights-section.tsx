@@ -105,7 +105,7 @@ export function AdminQuickInsightsSection({
               gap: spacing[2],
               ...shadows.sm,
             }}>
-            <View style={{ width: 36, height: 36, borderRadius: radius.lg, backgroundColor: item.iconBackgroundColor ?? colors.primary.subtle ?? 'rgba(242,120,13,0.12)', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ width: 36, height: 36, borderRadius: radius.lg, backgroundColor: item.iconBackgroundColor ?? colors.primary.subtle ?? 'rgba(24,168,117,0.12)', alignItems: 'center', justifyContent: 'center' }}>
               <MaterialIcons name={item.icon} size={18} color={item.iconColor} />
             </View>
             <View style={{ gap: spacing[1] }}>

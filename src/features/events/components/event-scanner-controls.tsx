@@ -16,7 +16,7 @@ export function EventScannerControls({
 }) {
   return (
     <View style={{ position: 'absolute', left: 0, right: 0, bottom: spacing[8], flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: spacing[6] }}>
-      <Pressable onPress={onFlashlightPress} style={{ width: 48, height: 48, borderRadius: radius.full, alignItems: 'center', justifyContent: 'center', backgroundColor: flashlightOn ? 'rgba(242,120,13,0.28)' : 'rgba(0,0,0,0.5)', borderWidth: 1, borderColor: flashlightOn ? 'rgba(242,120,13,0.75)' : 'rgba(255,255,255,0.2)' }}>
+      <Pressable onPress={onFlashlightPress} style={{ width: 48, height: 48, borderRadius: radius.full, alignItems: 'center', justifyContent: 'center', backgroundColor: flashlightOn ? 'rgba(24,168,117,0.28)' : 'rgba(0,0,0,0.5)', borderWidth: 1, borderColor: flashlightOn ? 'rgba(24,168,117,0.75)' : 'rgba(255,255,255,0.2)' }}>
         <MaterialIcons name="flashlight-on" size={22} color="#ffffff" />
       </Pressable>
       {onScanPress ? (

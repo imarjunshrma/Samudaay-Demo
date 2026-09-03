@@ -44,7 +44,7 @@ export function SpotlightFeature({
   }
 
   return (
-    <View style={{ flexDirection: 'row', gap: spacing[4], padding: spacing[4], borderRadius: radius.xl, borderWidth: 1, borderColor: colors.primary.borderLight, backgroundColor: 'rgba(242,120,13,0.05)' }}>
+    <View style={{ flexDirection: 'row', gap: spacing[4], padding: spacing[4], borderRadius: radius.xl, borderWidth: 1, borderColor: colors.primary.borderLight, backgroundColor: 'rgba(24,168,117,0.05)' }}>
       <View style={{ width: 96, height: 128, borderRadius: radius.lg, overflow: 'hidden', backgroundColor: '#fff', borderWidth: 1, borderColor: '#e2e8f0', alignItems: 'center', justifyContent: 'center' }}>
         {image ? <Image source={{ uri: image }} resizeMode="cover" style={{ width: '100%', height: '100%' }} /> : <Icon name={icon} size={36} color={colors.primary.DEFAULT} />}
       </View>
@@ -59,7 +59,7 @@ export function SpotlightFeature({
           {description}
         </Text>
         {ctaLabel ? (
-          <Pressable onPress={onPress} style={{ marginTop: spacing[3], alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: spacing[2], backgroundColor: variant === 'ad' ? 'rgba(242,120,13,0.1)' : colors.primary.DEFAULT, paddingHorizontal: spacing[4], paddingVertical: spacing[2], borderRadius: radius.lg }}>
+          <Pressable onPress={onPress} style={{ marginTop: spacing[3], alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: spacing[2], backgroundColor: variant === 'ad' ? 'rgba(24,168,117,0.1)' : colors.primary.DEFAULT, paddingHorizontal: spacing[4], paddingVertical: spacing[2], borderRadius: radius.lg }}>
             <Icon name={variant === 'ad' ? 'campaign' : 'download'} size={16} color={variant === 'ad' ? colors.primary.DEFAULT : '#fff'} />
             <Text variant="caption" color={variant === 'ad' ? colors.primary.DEFAULT : '#fff'} style={{ fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
               {ctaLabel}

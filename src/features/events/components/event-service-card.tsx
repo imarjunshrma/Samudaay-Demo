@@ -23,9 +23,9 @@ export function EventServiceCard({
   const t = useTranslations('events.qr-scanner');
 
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: spacing[3], paddingVertical: spacing[3], borderBottomWidth: showDivider ? 1 : 0, borderBottomColor: 'rgba(242,120,13,0.1)', opacity: state === 'redeemed' ? 0.6 : 1 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: spacing[3], paddingVertical: spacing[3], borderBottomWidth: showDivider ? 1 : 0, borderBottomColor: 'rgba(24,168,117,0.1)', opacity: state === 'redeemed' ? 0.6 : 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], flex: 1 }}>
-        <View style={{ width: 40, height: 40, borderRadius: radius.lg, backgroundColor: state === 'redeemed' ? '#f1f5f9' : colors.primary.muted ?? 'rgba(242,120,13,0.1)', alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ width: 40, height: 40, borderRadius: radius.lg, backgroundColor: state === 'redeemed' ? '#f1f5f9' : colors.primary.muted ?? 'rgba(24,168,117,0.1)', alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name={icon} size={20} color={state === 'redeemed' ? '#64748b' : colors.primary.DEFAULT} />
         </View>
         <View style={{ flex: 1 }}>

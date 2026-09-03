@@ -96,10 +96,10 @@
   "deleteRequest.confirmDescription": "આ તમારા ઈમેઈલ એપમાં ટેનન્ટ સપોર્ટ ટીમને પ્રીફિલ્ડ વિનંતી ખોલશે.",
   "deleteRequest.confirmButton": "ઈમેઈલ ખોલો",
   "deleteRequest.errorTitle": "ઈમેઈલ ખોલી શકાયું નથી",
-  "deleteRequest.errorDescription": "કૃપા કરીને connect@mectv.org પર એકાઉન્ટ ડિલીટ વિનંતી મોકલો.",
+  "deleteRequest.errorDescription": "કૃપા કરીને connect@samudaay.co.in પર એકાઉન્ટ ડિલીટ વિનંતી મોકલો.",
   "kyc.inactiveTitle": "KYC મંજૂરી સુધી નિષ્ક્રિય",
   "kyc.inactiveDescription": "KYC મંજૂર થયા પછી તમારો પ્રોફાઇલ સક્રિય થશે.",
   "fallback.communityMember": "સમુદાય સભ્ય",
-  "meta.version": "વર્ષન 2.4.1 (Artisan Cordwain Edition)",
+  "meta.version": "વર્ષન 3.0.2",
   "meta.crafted": "ભારતની ગૌરવ સાથે બનાવેલ"
 }

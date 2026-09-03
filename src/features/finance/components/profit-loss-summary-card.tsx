@@ -33,9 +33,9 @@ export function ProfitLossSummaryCard({
         gap: spacing[1],
         borderRadius: 16,
         padding: spacing[5],
-        backgroundColor: accent ? 'rgba(242,120,13,0.1)' : '#ffffff',
+        backgroundColor: accent ? 'rgba(24,168,117,0.1)' : '#ffffff',
         borderWidth: 1,
-        borderColor: accent ? 'rgba(242,120,13,0.2)' : 'rgba(226,232,240,0.8)',
+        borderColor: accent ? 'rgba(24,168,117,0.2)' : 'rgba(226,232,240,0.8)',
         ...shadows.sm,
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2], marginBottom: spacing[1] }}>

@@ -283,7 +283,7 @@ export function QrScannerContent() {
               style={[
                 StyleSheet.absoluteFillObject,
                 {
-                  backgroundColor: flashlightOn ? 'rgba(242,120,13,0.08)' : 'transparent',
+                  backgroundColor: flashlightOn ? 'rgba(24,168,117,0.08)' : 'transparent',
                 },
               ]}
             />
@@ -359,7 +359,7 @@ export function QrScannerContent() {
                 bottom: 420,
                 zIndex: 30,
                 borderRadius: radius.xl,
-                backgroundColor: 'rgba(242,120,13,0.1)',
+                backgroundColor: 'rgba(24,168,117,0.1)',
                 padding: spacing[1],
               }}>
               <View style={{ flexDirection: 'row' }}>
@@ -414,8 +414,8 @@ export function QrScannerContent() {
                   style={{
                     borderRadius: 20,
                     borderWidth: 1,
-                    borderColor: 'rgba(242,120,13,0.18)',
-                    backgroundColor: 'rgba(242,120,13,0.05)',
+                    borderColor: 'rgba(24,168,117,0.18)',
+                    backgroundColor: 'rgba(24,168,117,0.05)',
                     padding: spacing[4],
                   }}>
                   <Text

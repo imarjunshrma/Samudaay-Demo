@@ -30,9 +30,9 @@ export function StatHighlightCard({
         gap: spacing[2],
         borderRadius: radius.xl,
         padding: spacing[6],
-        backgroundColor: isDark ? '#46291e' : isAccent ? colors.primary.DEFAULT : 'rgba(242,120,13,0.1)',
+        backgroundColor: isDark ? '#46291e' : isAccent ? colors.primary.DEFAULT : 'rgba(24,168,117,0.1)',
         borderWidth: isAccent || isDark ? 0 : 1,
-        borderColor: 'rgba(242,120,13,0.2)',
+        borderColor: 'rgba(24,168,117,0.2)',
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <Text

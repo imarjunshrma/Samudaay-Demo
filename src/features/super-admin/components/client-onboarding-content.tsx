@@ -33,7 +33,7 @@ export function ClientOnboardingContent() {
         </View>
       }>
       <View style={{ maxWidth: 1280, alignSelf: 'center', width: '100%', paddingBottom: spacing[5] }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing[6], paddingVertical: spacing[4], borderBottomWidth: 1, borderBottomColor: 'rgba(242,120,13,0.1)' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing[6], paddingVertical: spacing[4], borderBottomWidth: 1, borderBottomColor: 'rgba(24,168,117,0.1)' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[4] }}>
               <TouchableOpacity accessibilityRole="button" activeOpacity={0.85} style={{ width: 40, height: 40, borderRadius: radius.full, alignItems: 'center', justifyContent: 'center' }}>
                 <MaterialIcons name="arrow-back" size={24} color="#0f172a" />
@@ -83,7 +83,7 @@ export function ClientOnboardingContent() {
                   <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold, marginBottom: spacing[4] }}>
                     {t('sections.features.title')}
                   </Text>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)', backgroundColor: '#ffffff', padding: spacing[5] }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 20, borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)', backgroundColor: '#ffffff', padding: spacing[5] }}>
                     <View style={{ flex: 1, paddingRight: spacing[4] }}>
                       <Text variant="body" style={{ fontFamily: typography.fontFamily.bold, color: colors.primary.DEFAULT }}>
                         {t('fields.allowSubCommunities')}
@@ -124,7 +124,7 @@ export function ClientOnboardingContent() {
                       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3] }}>
                         {[t('palette.artisanBrown'), t('palette.flameTan'), t('palette.ironPatina'), t('palette.workshopHoney')].map((item, index) => (
                           <TouchableOpacity key={item} accessibilityRole="button" activeOpacity={0.85} style={{ width: '48%', flexDirection: 'row', alignItems: 'center', gap: spacing[2], borderRadius: 16, borderWidth: 1, borderColor: index === 0 ? colors.primary.DEFAULT : 'transparent', backgroundColor: '#ffffff', padding: spacing[3] }}>
-                            <View style={{ width: 32, height: 32, borderRadius: 999, backgroundColor: ['#46291e', '#964900', '#003733', '#ff8928'][index] }} />
+                            <View style={{ width: 32, height: 32, borderRadius: 999, backgroundColor: ['#46291e', '#256fd4', '#003733', '#2ecb98'][index] }} />
                             <Text variant="caption" style={{ fontFamily: typography.fontFamily.bold, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.8 }}>
                               {item}
                             </Text>

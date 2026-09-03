@@ -376,7 +376,7 @@ export function ProfitLossScreenContent({
     value: Math.abs(item.income - item.expense),
     label: item.label,
     frontColor: item.income >= item.expense
-      ? (index % 2 === 0 ? colors.primary.DEFAULT : 'rgba(242,120,13,0.72)')
+      ? (index % 2 === 0 ? colors.primary.DEFAULT : 'rgba(24,168,117,0.72)')
       : '#f97316',
   }));
 
@@ -433,7 +433,7 @@ export function ProfitLossScreenContent({
                       alignItems: 'center',
                       gap: spacing[2],
                       borderRadius: 16,
-                      backgroundColor: active ? colors.primary.DEFAULT : 'rgba(242,120,13,0.1)',
+                      backgroundColor: active ? colors.primary.DEFAULT : 'rgba(24,168,117,0.1)',
                       paddingHorizontal: spacing[4],
                       paddingVertical: spacing[2],
                     }}>
@@ -469,7 +469,7 @@ export function ProfitLossScreenContent({
                   </Text>
                 </View>
               </LinearGradient>
-              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: 'rgba(255,247,237,0.95)', padding: spacing[4], borderTopWidth: 1, borderTopColor: 'rgba(242,120,13,0.08)' }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', backgroundColor: 'rgba(255,247,237,0.95)', padding: spacing[4], borderTopWidth: 1, borderTopColor: 'rgba(24,168,117,0.08)' }}>
                 <View style={{ alignItems: 'center' }}>
                   <Text variant="caption" color={colors.text.muted}>
                     {t('yearly.summary.income')}
@@ -478,7 +478,7 @@ export function ProfitLossScreenContent({
                     {formatAnalyticsCurrency(analytics?.profitLoss.totalIncome ?? 0)}
                   </Text>
                 </View>
-                <View style={{ width: 1, height: 32, backgroundColor: 'rgba(242,120,13,0.1)' }} />
+                <View style={{ width: 1, height: 32, backgroundColor: 'rgba(24,168,117,0.1)' }} />
                 <View style={{ alignItems: 'center' }}>
                   <Text variant="caption" color={colors.text.muted}>
                     {t('yearly.summary.expenses')}
@@ -508,7 +508,7 @@ export function ProfitLossScreenContent({
           </View>
 
           <View style={{ paddingHorizontal: spacing[4], paddingVertical: spacing[4] }}>
-            <View style={{ borderRadius: 20, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)', padding: spacing[4], shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 }}>
+            <View style={{ borderRadius: 20, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)', padding: spacing[4], shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[3] }}>
                 <Text variant="h5" style={{ fontFamily: typography.fontFamily.bold }}>
                   {t('yearly.monthlyTrend')}

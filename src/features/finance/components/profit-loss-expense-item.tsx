@@ -22,7 +22,7 @@ export function ProfitLossExpenseItem({
   amount: string;
 }) {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing[4], backgroundColor: '#ffffff', borderRadius: 16, borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing[4], backgroundColor: '#ffffff', borderRadius: 16, borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)' }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], flex: 1 }}>
         <View style={{ width: 40, height: 40, borderRadius: 999, backgroundColor: '#f8fafc', alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name={icon} size={18} color="#64748b" />

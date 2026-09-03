@@ -59,7 +59,7 @@ export function PhotoUploadStrip({ label = 'Upload Photos (Max 5)', value, onCha
           if (photo) {
             return (
               <View key={`${photo.uri}-${index}`} style={{ position: 'relative' }}>
-                <TouchableOpacity activeOpacity={0.85} onPress={() => void handlePick(index)} style={{ width: 96, height: 96, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(242,120,13,0.2)' }}>
+                <TouchableOpacity activeOpacity={0.85} onPress={() => void handlePick(index)} style={{ width: 96, height: 96, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(24,168,117,0.2)' }}>
                   <Image source={{ uri: photo.uri }} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -97,8 +97,8 @@ export function PhotoUploadStrip({ label = 'Upload Photos (Max 5)', value, onCha
                 borderRadius: radius.lg,
                 borderWidth: 2,
                 borderStyle: 'dashed',
-                borderColor: index === 0 ? 'rgba(242,120,13,0.3)' : '#d1d5db',
-                backgroundColor: index === 0 ? 'rgba(242,120,13,0.05)' : '#f8fafc',
+                borderColor: index === 0 ? 'rgba(24,168,117,0.3)' : '#d1d5db',
+                backgroundColor: index === 0 ? 'rgba(24,168,117,0.05)' : '#f8fafc',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>

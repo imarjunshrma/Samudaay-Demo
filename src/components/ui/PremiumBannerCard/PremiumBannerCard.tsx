@@ -32,7 +32,7 @@ export function PremiumBannerCard({
       }}>
       <Text
         variant="caption"
-        color={dark ? 'rgba(255,255,255,0.68)' : '#f2780d'}
+        color={dark ? 'rgba(255,255,255,0.68)' : '#18a875'}
         style={{ letterSpacing: 1.1, textTransform: 'uppercase' }}>
         {eyebrow}
       </Text>

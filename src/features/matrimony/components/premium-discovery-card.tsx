@@ -20,7 +20,7 @@ export function PremiumDiscoveryCard({
         <TouchableOpacity activeOpacity={0.85} style={{ position: 'absolute', top: spacing[4], right: spacing[4], width: 40, height: 40, borderRadius: radius.full, backgroundColor: colors.background.surface, alignItems: 'center', justifyContent: 'center', shadowColor: '#000', shadowOpacity: 0.08, shadowRadius: 4, shadowOffset: { width: 0, height: 2 } }}>
           <MaterialIcons name="favorite" size={20} color={colors.primary.DEFAULT} />
         </TouchableOpacity>
-        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: spacing[4], backgroundColor: 'rgba(242,120,13,0.82)' }}>
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: spacing[4], backgroundColor: 'rgba(24,168,117,0.82)' }}>
           <Text variant="h2" color="#ffffff" style={{ fontFamily: typography.fontFamily.bold, fontSize: 30, lineHeight: 34 }}>
             {name}
           </Text>

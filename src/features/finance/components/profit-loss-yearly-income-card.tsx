@@ -20,7 +20,7 @@ export function ProfitLossYearlyIncomeCard({
   icon: ComponentProps<typeof MaterialIcons>['name'];
 }) {
   return (
-    <View style={{ flex: 1, minWidth: '47%', borderRadius: 16, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)', padding: spacing[4], shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 6, shadowOffset: { width: 0, height: 2 }, elevation: 1 }}>
+    <View style={{ flex: 1, minWidth: '47%', borderRadius: 16, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)', padding: spacing[4], shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 6, shadowOffset: { width: 0, height: 2 }, elevation: 1 }}>
       <MaterialIcons name={icon} size={18} color={colors.primary.DEFAULT} />
       <Text variant="caption" color={colors.text.muted} style={{ marginTop: spacing[2], textTransform: 'uppercase', letterSpacing: 1, fontFamily: typography.fontFamily.medium }}>
         {label}

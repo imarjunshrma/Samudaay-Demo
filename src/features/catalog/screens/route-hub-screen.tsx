@@ -37,14 +37,14 @@ export function RouteHubScreen() {
         <Text className="mt-2 text-sm leading-6 text-slate-600">
           Active Expo Router entry points backed by feature screens. Legacy previews and migration routes have been archived.
         </Text>
-        <Text className="mt-2 text-sm leading-6 text-[#f2780d]">
+        <Text className="mt-2 text-sm leading-6 text-[#18a875]">
           Start with the four flow entries below.
         </Text>
 
         <View className="mt-8 gap-8">
           {moduleGroups.map((group) => (
             <View key={group.title} className="gap-3">
-              <Text className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f2780d]">{group.title}</Text>
+              <Text className="text-xs font-semibold uppercase tracking-[0.18em] text-[#18a875]">{group.title}</Text>
               <Link href={group.href as never} asChild>
                 <TouchableOpacity
                   className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
@@ -52,7 +52,7 @@ export function RouteHubScreen() {
                 >
                   <Text className="text-base font-semibold text-slate-900">{group.label}</Text>
                   <Text className="mt-1 text-xs text-slate-500">{group.subtitle}</Text>
-                  <Text className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-[#f2780d]">
+                  <Text className="mt-2 text-xs font-medium uppercase tracking-[0.16em] text-[#18a875]">
                     {group.href}
                   </Text>
                 </TouchableOpacity>
@@ -61,7 +61,7 @@ export function RouteHubScreen() {
           ))}
 
           <View className="gap-3">
-            <Text className="text-xs font-semibold uppercase tracking-[0.18em] text-[#f2780d]">Utilities</Text>
+            <Text className="text-xs font-semibold uppercase tracking-[0.18em] text-[#18a875]">Utilities</Text>
             <Link href="/design-system" asChild>
               <TouchableOpacity className="rounded-2xl border border-slate-200 bg-white px-4 py-4" activeOpacity={0.85}>
                 <Text className="text-base font-semibold text-slate-900">Design System Showcase</Text>

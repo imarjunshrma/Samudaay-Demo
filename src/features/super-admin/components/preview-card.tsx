@@ -12,7 +12,7 @@ import type { FileValue } from '@/src/types';
 
 export function PreviewCard() {
   return (
-    <View style={{ borderRadius: 24, borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)', backgroundColor: '#ffffff', padding: spacing[5], gap: spacing[4] }}>
+    <View style={{ borderRadius: 24, borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)', backgroundColor: '#ffffff', padding: spacing[5], gap: spacing[4] }}>
       <Text variant="caption" color={colors.text.muted} style={{ fontFamily: typography.fontFamily.bold, textTransform: 'uppercase', letterSpacing: 1 }}>
         Real-time Interface Preview
       </Text>
@@ -21,7 +21,7 @@ export function PreviewCard() {
         <View style={{ flex: 1, padding: spacing[4], gap: spacing[3] }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3] }}>
             <View style={{ width: 32, height: 32, borderRadius: 12, backgroundColor: '#f3efe8', alignItems: 'center', justifyContent: 'center' }}>
-              <View style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: '#f2780d' }} />
+              <View style={{ width: 16, height: 16, borderRadius: 4, backgroundColor: '#18a875' }} />
             </View>
             <View style={{ gap: 4 }}>
               <View style={{ width: 96, height: 8, borderRadius: 999, backgroundColor: '#e5e7eb' }} />

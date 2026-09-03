@@ -54,7 +54,7 @@ export function EventDetailBody({
         />
       </View>
       <View style={{ paddingHorizontal: spacing[4], paddingTop: spacing[4] }}>
-        <View style={{ alignSelf: 'flex-start', borderRadius: radius.full, backgroundColor: 'rgba(242,120,13,0.1)', paddingHorizontal: spacing[3], paddingVertical: spacing[2], marginBottom: spacing[2] }}>
+        <View style={{ alignSelf: 'flex-start', borderRadius: radius.full, backgroundColor: 'rgba(24,168,117,0.1)', paddingHorizontal: spacing[3], paddingVertical: spacing[2], marginBottom: spacing[2] }}>
           <Text variant="caption" color={colors.primary.DEFAULT} style={{ fontFamily: typography.fontFamily.bold, fontSize: 11, textTransform: 'uppercase' }}>{t('badge')}</Text>
         </View>
         <Text variant="h2" style={{ fontFamily: typography.fontFamily.bold }}>{title || t('title')}</Text>
@@ -69,7 +69,7 @@ export function EventDetailBody({
         <Text variant="body" color="#475569" style={{ lineHeight: 24 }}>{aboutDescription || t('about.description')}</Text>
       </View>
       {addOns.length ? (
-        <View style={{ marginHorizontal: spacing[4], marginBottom: spacing[8], borderRadius: 24, borderWidth: 1, borderColor: 'rgba(242,120,13,0.12)', backgroundColor: 'rgba(242,120,13,0.05)', padding: spacing[4] }}>
+        <View style={{ marginHorizontal: spacing[4], marginBottom: spacing[8], borderRadius: 24, borderWidth: 1, borderColor: 'rgba(24,168,117,0.12)', backgroundColor: 'rgba(24,168,117,0.05)', padding: spacing[4] }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2], marginBottom: spacing[4] }}>
             <MaterialIcons name="add-circle" size={20} color={colors.primary.DEFAULT} />
             <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>{t('addons.title')}</Text>

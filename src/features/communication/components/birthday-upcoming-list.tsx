@@ -63,7 +63,7 @@ export function BirthdayUpcomingList({
               <Image
                 source={{ uri: item.image }}
                 resizeMode="cover"
-                style={{ width: 48, height: 48, borderRadius: 999, opacity: 0.8, borderWidth: 2, borderColor: 'rgba(242,120,13,0.2)' }}
+                style={{ width: 48, height: 48, borderRadius: 999, opacity: 0.8, borderWidth: 2, borderColor: 'rgba(24,168,117,0.2)' }}
               />
               <View style={{ flex: 1 }}>
                 <Text variant="body" style={{ fontFamily: typography.fontFamily.semibold, fontSize: 14 }}>

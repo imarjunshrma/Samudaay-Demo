@@ -36,7 +36,7 @@ export function StudentCard({
       <View style={{ position: 'relative', aspectRatio: 4 / 3 }}>
         <Image source={{ uri: image }} resizeMode="cover" style={{ width: '100%', height: '100%' }} />
         <View style={{ position: 'absolute', top: spacing[4], left: spacing[4] }}>
-          <View style={{ backgroundColor: 'rgba(242,120,13,0.1)', borderRadius: 999, paddingHorizontal: spacing[3], paddingVertical: 4, borderWidth: 1, borderColor: 'rgba(242,120,13,0.2)' }}>
+          <View style={{ backgroundColor: 'rgba(24,168,117,0.1)', borderRadius: 999, paddingHorizontal: spacing[3], paddingVertical: 4, borderWidth: 1, borderColor: 'rgba(24,168,117,0.2)' }}>
             <Text variant="caption" color={colors.primary.DEFAULT} style={{ fontFamily: typography.fontFamily.bold, fontSize: 10, textTransform: 'uppercase', letterSpacing: 1.2 }}>
               {classLabel}
             </Text>

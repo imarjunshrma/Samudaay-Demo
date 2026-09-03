@@ -69,7 +69,7 @@ export function MyProfileContent() {
       return;
     }
 
-    const supportEmail = 'connect@mectv.org';
+    const supportEmail = 'connect@samudaay.co.in';
     const subject = encodeURIComponent('Delete Account Request');
     const body = encodeURIComponent(
       [
@@ -259,7 +259,7 @@ export function MyProfileContent() {
                 </View>
                 <ProfileActionCard
                   icon="edit"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={t('actions.profileDetails')}
                   subtitle={isAdmin ? t('actions.profileDetailsSubtitleAdmin') : t('actions.profileDetailsSubtitleMember')}
@@ -267,7 +267,7 @@ export function MyProfileContent() {
                 />
                 <ProfileActionCard
                   icon="groups"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={t('actions.manageFamily')}
                   subtitle={t('actions.manageFamilySubtitle')}
@@ -275,7 +275,7 @@ export function MyProfileContent() {
                 />
                 <ProfileActionCard
                   icon="folder-shared"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={t('actions.manageDocs')}
                   subtitle={t('actions.manageDocsSubtitle')}
@@ -283,7 +283,7 @@ export function MyProfileContent() {
                 />
                 <ProfileActionCard
                   icon="description"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={t('actions.terms')}
                   subtitle={t('actions.termsSubtitle')}
@@ -291,7 +291,7 @@ export function MyProfileContent() {
                 />
                 <ProfileActionCard
                   icon="policy"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={t('actions.privacy')}
                   subtitle={t('actions.privacySubtitle')}
@@ -300,7 +300,7 @@ export function MyProfileContent() {
                 {securityConfig.authSecurityEnabled && isKycApproved ? (
                   <ProfileActionCard
                     icon="security"
-                    iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                    iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                     iconColor={colors.primary.DEFAULT}
                     title={t('actions.security')}
                     subtitle={t('actions.securitySubtitle')}
@@ -310,7 +310,7 @@ export function MyProfileContent() {
                 <NotificationPreferenceCard returnTo={profileReturnTo} />
                 <ProfileActionCard
                   icon="delete"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={t('actions.deleteAccountRequest')}
                   subtitle={t('actions.deleteAccountRequestSubtitle')}

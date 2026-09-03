@@ -54,7 +54,7 @@ export function BirthdayTodayList({
               gap: spacing[4],
               borderRadius: radius.xl,
               borderWidth: 1,
-              borderColor: 'rgba(242,120,13,0.05)',
+              borderColor: 'rgba(24,168,117,0.05)',
               backgroundColor: '#ffffff',
               padding: spacing[4],
               shadowColor: '#000',
@@ -72,7 +72,7 @@ export function BirthdayTodayList({
                   height: 56,
                   borderRadius: radius.full,
                   borderWidth: 2,
-                  borderColor: 'rgba(242,120,13,0.2)',
+                  borderColor: 'rgba(24,168,117,0.2)',
                 }}
               />
             ) : (
@@ -82,7 +82,7 @@ export function BirthdayTodayList({
                   height: 56,
                   borderRadius: radius.full,
                   borderWidth: 2,
-                  borderColor: 'rgba(242,120,13,0.2)',
+                  borderColor: 'rgba(24,168,117,0.2)',
                   backgroundColor: colors.primary.muted,
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -110,7 +110,7 @@ export function BirthdayTodayList({
                   justifyContent: 'center',
                   gap: 4,
                   borderRadius: radius.lg,
-                  backgroundColor: '#f2780d',
+                  backgroundColor: '#18a875',
                   minWidth: 92,
                   height: 36,
                   marginLeft: 'auto',

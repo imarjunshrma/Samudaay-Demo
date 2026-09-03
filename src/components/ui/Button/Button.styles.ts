@@ -45,7 +45,7 @@ export const buttonVariantStyles: Record<
     disabledTextColor: colors.text.disabled,
   },
   soft: {
-    backgroundColor: colors.primary.muted ?? 'rgba(242, 120, 13, 0.1)',
+    backgroundColor: colors.primary.muted ?? 'rgba(24, 168, 117, 0.1)',
     borderColor: 'transparent',
     borderWidth: 0,
     textColor: colors.primary.DEFAULT,

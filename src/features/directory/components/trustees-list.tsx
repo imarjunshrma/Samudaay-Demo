@@ -30,7 +30,7 @@ export function TrusteesList({ trustees }: { trustees: readonly Trustee[] }) {
             borderRadius: 20,
             borderTopWidth: 1,
             borderBottomWidth: 1,
-            borderColor: 'rgba(242,120,13,0.05)',
+            borderColor: 'rgba(24,168,117,0.05)',
           }}>
           <View
             style={{
@@ -39,7 +39,7 @@ export function TrusteesList({ trustees }: { trustees: readonly Trustee[] }) {
               borderRadius: 999,
               overflow: 'hidden',
               borderWidth: 2,
-              borderColor: 'rgba(242,120,13,0.2)',
+              borderColor: 'rgba(24,168,117,0.2)',
               backgroundColor: colors.primary.muted,
             }}>
             {item.image ? (
@@ -103,7 +103,7 @@ export function TrusteesList({ trustees }: { trustees: readonly Trustee[] }) {
               borderRadius: 10,
               minHeight: 36,
               paddingHorizontal: spacing[4],
-              backgroundColor: index === 0 ? colors.primary.DEFAULT : 'rgba(242,120,13,0.1)',
+              backgroundColor: index === 0 ? colors.primary.DEFAULT : 'rgba(24,168,117,0.1)',
               opacity: item.phone ? 1 : 0.55,
             }}>
             <Text

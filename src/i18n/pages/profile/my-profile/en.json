@@ -96,10 +96,10 @@
   "deleteRequest.confirmDescription": "This will open your email app with a prefilled request to the tenant support team.",
   "deleteRequest.confirmButton": "Open Email",
   "deleteRequest.errorTitle": "Unable to open email",
-  "deleteRequest.errorDescription": "Please send your delete account request to connect@mectv.org.",
+  "deleteRequest.errorDescription": "Please send your delete account request to connect@samudaay.co.in.",
   "kyc.inactiveTitle": "Inactive until KYC approval",
   "kyc.inactiveDescription": "Your profile will become active once KYC is approved.",
   "fallback.communityMember": "Community Member",
-  "meta.version": "Version 2.4.1 (Artisan Cordwain Edition)",
+  "meta.version": "Version 3.0.2",
   "meta.crafted": "Crafted with pride in India"
 }

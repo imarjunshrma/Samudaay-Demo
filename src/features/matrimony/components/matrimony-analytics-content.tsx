@@ -813,7 +813,7 @@ export function MatrimonyAnalyticsContent() {
                   <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
                     Recent Profile Approvals
                   </Text>
-                  <View style={{ borderRadius: 20, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(242,120,13,0.1)', overflow: 'hidden', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 }}>
+                  <View style={{ borderRadius: 20, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(24,168,117,0.1)', overflow: 'hidden', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 }}>
                     {analytics.recentApprovals.length ? (
                       analytics.recentApprovals.map((profile, index) => (
                         <View key={profile.id}>
@@ -823,7 +823,7 @@ export function MatrimonyAnalyticsContent() {
                             status={mapApprovalStatus(profile.status)}
                             image={profile.image}
                           />
-                          {index < analytics.recentApprovals.length - 1 ? <View style={{ height: 1, backgroundColor: 'rgba(242,120,13,0.06)' }} /> : null}
+                          {index < analytics.recentApprovals.length - 1 ? <View style={{ height: 1, backgroundColor: 'rgba(24,168,117,0.06)' }} /> : null}
                         </View>
                       ))
                     ) : (

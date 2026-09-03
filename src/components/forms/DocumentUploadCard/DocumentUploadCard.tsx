@@ -48,7 +48,7 @@ export function DocumentUploadCard({
           borderRadius: radius.xl,
           borderWidth: 2,
           borderStyle: 'dashed',
-          borderColor: error ? colors.status.error : 'rgba(242, 120, 13, 0.3)',
+          borderColor: error ? colors.status.error : 'rgba(24, 168, 117, 0.3)',
           padding: spacing[6],
           alignItems: 'center',
           gap: spacing[3],

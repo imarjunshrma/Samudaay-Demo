@@ -135,7 +135,7 @@ export function generateDonationReceiptHtml(
 <html lang="gu">
 <head>
 <meta charset="UTF-8">
-<title>Mochi Ekta Charitable Trust Receipt</title>
+<title>Samudaaay Receipt</title>
 <style>
     @page { size: A4 landscape; margin: 4mm; }
     html {
@@ -409,7 +409,7 @@ export function generateDonationReceiptHtml(
         <div class="header">
             <div class="logo-wrap">
                 <div class="logo-circle">
-                    <img src="${escapeHtml(logoUri)}" alt="Mochi Ekta Charitable Trust Logo">
+                    <img src="${escapeHtml(logoUri)}" alt="Samudaaay Logo">
                 </div>
             </div>
             <div class="header-center">
@@ -528,7 +528,7 @@ export function generateDonationReceiptHtml(
         <!-- FOOTER: Bank details (left) + QR code (right) -->
         <div class="footer">
             <div class="bank-details">
-                <strong>Name :</strong> MOCHI EKTA CHARITABLE TRUST<br>
+                <strong>Name :</strong> SAMUDAAAY<br>
                 <strong>Bank :</strong> ICICI BANK LTD. &nbsp;|&nbsp; <strong>Branch :</strong> WAGHODIA ROAD<br>
                 <strong>A/c No. :</strong> 437701000533 &nbsp;|&nbsp; <strong>IFSC No. :</strong> ICIC0004377<br>
                 <strong>80 G Registration No. :</strong> AAGTM2486CE2021001 &nbsp;|&nbsp; <strong>PAN Card No. :</strong> AAGTM2486C

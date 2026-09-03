@@ -26,7 +26,7 @@ export function EventPassCard({ name, eventTitle, qrImage, addOns, onSharePress 
         borderRadius: radius.xl,
         overflow: 'hidden',
         borderWidth: 1,
-        borderColor: 'rgba(242,120,13,0.1)',
+        borderColor: 'rgba(24,168,117,0.1)',
         backgroundColor: '#ffffff',
         ...shadows.lg,
       }}>
@@ -46,12 +46,12 @@ export function EventPassCard({ name, eventTitle, qrImage, addOns, onSharePress 
             justifyContent: 'center',
             backgroundColor: 'rgba(255,255,255,0.94)',
             borderWidth: 1,
-            borderColor: 'rgba(242,120,13,0.14)',
+            borderColor: 'rgba(24,168,117,0.14)',
           }}>
           <Icon name="share" size={18} color={colors.primary.DEFAULT} />
         </Pressable>
       ) : null}
-      <View style={{ alignItems: 'center', backgroundColor: 'rgba(242,120,13,0.05)', padding: spacing[8] }}>
+      <View style={{ alignItems: 'center', backgroundColor: 'rgba(24,168,117,0.05)', padding: spacing[8] }}>
         <View
           style={{
             width: '100%',
@@ -80,8 +80,8 @@ export function EventPassCard({ name, eventTitle, qrImage, addOns, onSharePress 
           {eventTitle}
         </Text>
         <View style={{ width: '100%', marginVertical: spacing[6], position: 'relative', borderTopWidth: 1, borderStyle: 'dashed', borderTopColor: '#e2e8f0' }}>
-          <View style={{ position: 'absolute', left: -36, top: -12, width: 24, height: 24, borderRadius: radius.full, backgroundColor: colors.background.DEFAULT, borderRightWidth: 1, borderRightColor: 'rgba(242,120,13,0.1)' }} />
-          <View style={{ position: 'absolute', right: -36, top: -12, width: 24, height: 24, borderRadius: radius.full, backgroundColor: colors.background.DEFAULT, borderLeftWidth: 1, borderLeftColor: 'rgba(242,120,13,0.1)' }} />
+          <View style={{ position: 'absolute', left: -36, top: -12, width: 24, height: 24, borderRadius: radius.full, backgroundColor: colors.background.DEFAULT, borderRightWidth: 1, borderRightColor: 'rgba(24,168,117,0.1)' }} />
+          <View style={{ position: 'absolute', right: -36, top: -12, width: 24, height: 24, borderRadius: radius.full, backgroundColor: colors.background.DEFAULT, borderLeftWidth: 1, borderLeftColor: 'rgba(24,168,117,0.1)' }} />
         </View>
         <View style={{ width: '100%' }}>
           <Text variant="caption" color="#94a3b8" style={{ marginBottom: spacing[2], fontFamily: typography.fontFamily.bold, fontSize: 12, textTransform: 'uppercase', letterSpacing: 1 }}>
@@ -98,8 +98,8 @@ export function EventPassCard({ name, eventTitle, qrImage, addOns, onSharePress 
                     gap: spacing[3],
                     borderRadius: radius.lg,
                     borderWidth: 1,
-                    borderColor: 'rgba(242,120,13,0.1)',
-                    backgroundColor: 'rgba(242,120,13,0.05)',
+                    borderColor: 'rgba(24,168,117,0.1)',
+                    backgroundColor: 'rgba(24,168,117,0.05)',
                     padding: spacing[3],
                   }}>
                   <Icon name={addOn.icon} size={20} color={colors.primary.DEFAULT} />

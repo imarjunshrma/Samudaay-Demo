@@ -15,7 +15,7 @@ export function EventMetaCard({
 }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[4], backgroundColor: colors.background.surface, padding: spacing[4], borderRadius: radius.xl, borderWidth: 1, borderColor: colors.primary.borderLight }}>
-      <View style={{ width: 48, height: 48, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary.muted ?? 'rgba(242,120,13,0.1)' }}>
+      <View style={{ width: 48, height: 48, borderRadius: radius.lg, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary.muted ?? 'rgba(24,168,117,0.1)' }}>
         <MaterialIcons name={icon} size={22} color={colors.primary.DEFAULT} />
       </View>
       <View style={{ flex: 1 }}>

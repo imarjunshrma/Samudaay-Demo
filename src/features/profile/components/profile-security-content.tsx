@@ -262,7 +262,7 @@ export function ProfileSecurityContent() {
                       height: 48,
                       borderRadius: 10,
                       borderWidth: 1,
-                      borderColor: 'rgba(242,120,13,0.20)',
+                      borderColor: 'rgba(24,168,117,0.20)',
                       alignItems: 'center',
                       justifyContent: 'center',
                       backgroundColor: colors.background.surface,
@@ -282,7 +282,7 @@ export function ProfileSecurityContent() {
               padding: spacing[4],
               borderRadius: radius.xl + 4,
               borderWidth: 1,
-              borderColor: 'rgba(242,120,13,0.10)',
+              borderColor: 'rgba(24,168,117,0.10)',
               flexDirection: 'row',
               gap: spacing[4],
             }}>

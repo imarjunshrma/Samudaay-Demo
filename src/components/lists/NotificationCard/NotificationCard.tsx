@@ -81,7 +81,7 @@ export function NotificationCard({
         borderRadius: radius.xl,
         borderWidth: 1,
         borderColor: variant === 'unread' ? colors.primary.border : variant === 'muted' ? 'transparent' : '#f1f5f9',
-        backgroundColor: variant === 'unread' ? 'rgba(242,120,13,0.05)' : variant === 'muted' ? 'rgba(241,245,249,0.5)' : '#ffffff',
+        backgroundColor: variant === 'unread' ? 'rgba(24,168,117,0.05)' : variant === 'muted' ? 'rgba(241,245,249,0.5)' : '#ffffff',
         padding: spacing[4],
         opacity: variant === 'muted' ? 0.8 : 1,
       }}>

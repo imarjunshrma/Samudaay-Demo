@@ -47,7 +47,7 @@ const variantStyleMap = {
     width: '100%' as const,
     padding: spacing[5],
     borderRadius: radius.xl,
-    backgroundColor: 'rgba(242,120,13,0.05)',
+    backgroundColor: 'rgba(24,168,117,0.05)',
     borderWidth: 1,
     borderColor: colors.primary.borderLight,
     gap: spacing[3],

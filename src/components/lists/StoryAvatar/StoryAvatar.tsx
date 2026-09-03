@@ -18,7 +18,7 @@ export function StoryAvatar({ label, image, active = false }: StoryAvatarProps) 
           height: 64,
           borderRadius: 32,
           padding: 4,
-          backgroundColor: active ? 'rgba(242,120,13,0.2)' : 'rgba(242,120,13,0.05)',
+          backgroundColor: active ? 'rgba(24,168,117,0.2)' : 'rgba(24,168,117,0.05)',
           borderWidth: active ? 2 : 1,
           borderColor: active ? colors.primary.DEFAULT : colors.primary.border,
         }}>

@@ -28,7 +28,7 @@ export function TransactionManagementRow({
   const tone = status === 'Completed' ? colors.status.success : status === 'Pending' ? colors.status.warning : colors.status.error;
   const toneBg = status === 'Completed' ? colors.status.successLight : status === 'Pending' ? colors.status.warningLight : colors.status.errorLight;
   const iconBg =
-    icon === 'event' ? 'rgba(59,130,246,0.12)' : icon === 'error' ? colors.status.errorLight : icon === 'card-membership' ? 'rgba(168,85,247,0.12)' : 'rgba(242,120,13,0.12)';
+    icon === 'event' ? 'rgba(59,130,246,0.12)' : icon === 'error' ? colors.status.errorLight : icon === 'card-membership' ? 'rgba(168,85,247,0.12)' : 'rgba(24,168,117,0.12)';
   const iconColor =
     icon === 'event' ? '#2563eb' : icon === 'error' ? colors.status.error : icon === 'card-membership' ? '#7c3aed' : colors.primary.DEFAULT;
 

@@ -67,7 +67,7 @@ function MyTransactionRowSkeleton() {
         backgroundColor: colors.background.surface,
         borderRadius: radius.xl,
         borderWidth: 1,
-        borderColor: 'rgba(242,120,13,0.08)',
+        borderColor: 'rgba(24,168,117,0.08)',
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], flex: 1 }}>
         <SkeletonBlock width={44} height={44} radiusSize={radius.full} />
@@ -291,7 +291,7 @@ export function MyTransactionsContent() {
                 {showInitialSkeleton ? (
                   <StatCardSkeleton />
                 ) : (
-                  <View style={{ gap: spacing[2], borderRadius: radius.xl, padding: spacing[6], backgroundColor: 'rgba(242,120,13,0.1)', borderWidth: 1, borderColor: 'rgba(242,120,13,0.2)', minHeight: 144 }}>
+                  <View style={{ gap: spacing[2], borderRadius: radius.xl, padding: spacing[6], backgroundColor: 'rgba(24,168,117,0.1)', borderWidth: 1, borderColor: 'rgba(24,168,117,0.2)', minHeight: 144 }}>
                     <Text variant="caption" color="#475569" style={{ fontFamily: typography.fontFamily.medium, textTransform: 'uppercase', letterSpacing: 1 }}>
                       {t('summary.title')}
                     </Text>

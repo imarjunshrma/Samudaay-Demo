@@ -55,7 +55,7 @@ export function CommunityUpcomingEvents({ returnTo = '/communication/community-h
 
           return (
           <View key={card.id} style={{ width: 288, borderRadius: radius.xl, overflow: 'hidden', backgroundColor: colors.background.surface, borderWidth: 1, borderColor: '#f1f5f9' }}>
-            <View style={{ minHeight: 160, backgroundColor: 'rgba(242,120,13,0.06)', padding: spacing[4], justifyContent: 'space-between' }}>
+            <View style={{ minHeight: 160, backgroundColor: 'rgba(24,168,117,0.06)', padding: spacing[4], justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
                 <View style={{ minWidth: 45, borderRadius: radius.lg, backgroundColor: 'rgba(255,255,255,0.92)', paddingHorizontal: spacing[2], paddingVertical: spacing[1], alignItems: 'center' }}>
                   <Text variant="caption" color={colors.primary.DEFAULT} style={{ fontFamily: typography.fontFamily.bold, textTransform: 'uppercase', fontSize: 10 }}>
@@ -83,7 +83,7 @@ export function CommunityUpcomingEvents({ returnTo = '/communication/community-h
                 </Text>
               </View>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginTop: spacing[3], marginBottom: spacing[4] }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, borderRadius: radius.md, backgroundColor: 'rgba(242,120,13,0.1)', paddingHorizontal: spacing[2], paddingVertical: spacing[1] }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, borderRadius: radius.md, backgroundColor: 'rgba(24,168,117,0.1)', paddingHorizontal: spacing[2], paddingVertical: spacing[1] }}>
                   <MaterialIcons name="event-available" size={12} color={colors.primary.DEFAULT} />
                   <Text variant="caption" color={colors.primary.DEFAULT} style={{ fontFamily: typography.fontFamily.bold, fontSize: 10 }}>
                     {card.registered ? 'Registered' : 'Open'}
@@ -92,7 +92,7 @@ export function CommunityUpcomingEvents({ returnTo = '/communication/community-h
               </View>
               <Pressable
                 onPress={() => router.push({ pathname: '/events/event-details-registration', params: { eventId: card.id, returnTo } } as never)}
-                style={{ width: '100%', borderRadius: radius.lg, backgroundColor: 'rgba(242,120,13,0.1)', paddingVertical: spacing[2], alignItems: 'center' }}>
+                style={{ width: '100%', borderRadius: radius.lg, backgroundColor: 'rgba(24,168,117,0.1)', paddingVertical: spacing[2], alignItems: 'center' }}>
                 <Text variant="caption" color={colors.primary.DEFAULT} style={{ fontFamily: typography.fontFamily.bold, fontSize: 14 }}>
                   Register Now
                 </Text>

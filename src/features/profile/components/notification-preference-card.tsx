@@ -30,7 +30,7 @@ export function NotificationPreferenceCard({ returnTo }: { returnTo?: string } =
   return (
     <ProfileActionCard
       icon="admin-panel-settings"
-      iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+      iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
       iconColor={colors.primary.DEFAULT}
       title={t('card.title')}
       subtitle={permissionStatus === 'granted' ? t('card.subtitle.granted') : t('card.subtitle.default')}

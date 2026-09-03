@@ -489,8 +489,8 @@ export function EventRegistrationsContent() {
                     style={{
                       borderRadius: 16,
                       borderWidth: 1,
-                      borderColor: 'rgba(242,120,13,0.1)',
-                      backgroundColor: 'rgba(242,120,13,0.05)',
+                      borderColor: 'rgba(24,168,117,0.1)',
+                      backgroundColor: 'rgba(24,168,117,0.05)',
                       padding: spacing[4],
                       gap: spacing[4],
                     }}>

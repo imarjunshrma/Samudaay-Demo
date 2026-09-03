@@ -94,7 +94,7 @@ export function MemberListItem({
     gap: spacing[4],
     borderRadius: radius.xl,
     borderWidth: 1,
-    borderColor: isTrustee ? 'rgba(242,120,13,0.05)' : '#f1f5f9',
+    borderColor: isTrustee ? 'rgba(24,168,117,0.05)' : '#f1f5f9',
     backgroundColor: '#ffffff',
     paddingHorizontal: spacing[4],
     paddingVertical: isTrustee ? spacing[5] : spacing[4],
@@ -103,7 +103,7 @@ export function MemberListItem({
     <>
       <View style={{ width: 64, height: 64, position: 'relative' }}>
         {avatarUrl ? (
-          <Image source={{ uri: avatarUrl }} resizeMode="cover" style={{ width: 64, height: 64, borderRadius: radius.full, borderWidth: 2, borderColor: 'rgba(242,120,13,0.2)' }} />
+          <Image source={{ uri: avatarUrl }} resizeMode="cover" style={{ width: 64, height: 64, borderRadius: radius.full, borderWidth: 2, borderColor: 'rgba(24,168,117,0.2)' }} />
         ) : (
           <View style={{ width: 64, height: 64, borderRadius: radius.full, borderWidth: 2, borderColor: colors.primary.border, backgroundColor: colors.primary.muted, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="person" size={32} color={colors.primary.DEFAULT} />
@@ -156,7 +156,7 @@ export function MemberListItem({
           accessibilityRole="button"
           accessibilityState={{ disabled: !resolvedActionPress }}
           disabled={!resolvedActionPress}
-          style={{ width: 40, height: 40, borderRadius: radius.full, backgroundColor: 'rgba(242,120,13,0.1)', opacity: resolvedActionPress ? 1 : 0.55, alignItems: 'center', justifyContent: 'center' }}>
+          style={{ width: 40, height: 40, borderRadius: radius.full, backgroundColor: 'rgba(24,168,117,0.1)', opacity: resolvedActionPress ? 1 : 0.55, alignItems: 'center', justifyContent: 'center' }}>
           <Icon name="call" size={20} color={colors.primary.DEFAULT} />
         </Pressable>
       )}

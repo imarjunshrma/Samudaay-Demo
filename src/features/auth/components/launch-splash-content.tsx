@@ -10,7 +10,7 @@ import { APP_LOGO_SOURCE, useLocalizedBrandText } from '@/src/core/config/brand'
 import { useSession } from '@/src/core/providers/session-provider';
 import { useTranslations } from '@/src/i18n/use-translations';
 
-const PRIMARY = '#f2780d';
+const PRIMARY = '#18a875';
 
 export function LaunchSplashContent() {
   const router = useRouter();

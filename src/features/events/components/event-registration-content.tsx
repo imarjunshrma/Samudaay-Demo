@@ -264,7 +264,7 @@ export function EventRegistrationContent() {
                   alignItems: 'center',
                   gap: 4,
                   borderRadius: radius.full,
-                  backgroundColor: 'rgba(242,120,13,0.08)',
+                  backgroundColor: 'rgba(24,168,117,0.08)',
                   alignSelf: 'flex-start',
                   paddingHorizontal: spacing[3],
                   paddingVertical: 6,
@@ -282,7 +282,7 @@ export function EventRegistrationContent() {
               style={{
                 alignSelf: 'flex-start',
                 borderRadius: radius.full,
-                backgroundColor: 'rgba(242,120,13,0.1)',
+                backgroundColor: 'rgba(24,168,117,0.1)',
                 paddingHorizontal: spacing[3],
                 paddingVertical: 6,
                 marginBottom: spacing[2],
@@ -322,7 +322,7 @@ export function EventRegistrationContent() {
           </View>
 
           <View style={{ paddingHorizontal: spacing[4], paddingBottom: spacing[4] }}>
-            <View style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(242,120,13,0.1)', backgroundColor: '#ffffff', padding: spacing[4], flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ borderRadius: 16, borderWidth: 1, borderColor: 'rgba(24,168,117,0.1)', backgroundColor: '#ffffff', padding: spacing[4], flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <View>
                 <Text variant="body" style={{ fontFamily: typography.fontFamily.bold }}>Attendees</Text>
                 <Text variant="caption" color="#64748b">Select number of people</Text>
@@ -341,8 +341,8 @@ export function EventRegistrationContent() {
               marginHorizontal: spacing[4],
               borderRadius: 16,
               borderWidth: 1,
-              borderColor: 'rgba(242,120,13,0.1)',
-              backgroundColor: 'rgba(242,120,13,0.05)',
+              borderColor: 'rgba(24,168,117,0.1)',
+              backgroundColor: 'rgba(24,168,117,0.05)',
               padding: spacing[4],
               gap: spacing[4],
             }}>
@@ -381,7 +381,7 @@ export function EventRegistrationContent() {
             bottom: 0,
             backgroundColor: 'rgba(255,255,255,0.96)',
             borderTopWidth: 1,
-            borderTopColor: 'rgba(242,120,13,0.1)',
+            borderTopColor: 'rgba(24,168,117,0.1)',
             padding: spacing[4],
           }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing[4] }}>

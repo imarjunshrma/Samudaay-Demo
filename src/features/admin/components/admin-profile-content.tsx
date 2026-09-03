@@ -235,7 +235,7 @@ export function AdminProfileContent() {
                 </View>
                 <ProfileActionCard
                   icon="edit"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title="Edit Profile"
                   subtitle="Update your profile details and photo"
@@ -243,7 +243,7 @@ export function AdminProfileContent() {
                 />
                 <ProfileActionCard
                   icon="groups"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={tProfile('actions.manageFamily')}
                   subtitle={tProfile('actions.manageFamilySubtitle')}
@@ -251,7 +251,7 @@ export function AdminProfileContent() {
                 />
                 <ProfileActionCard
                   icon="folder-shared"
-                  iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                  iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                   iconColor={colors.primary.DEFAULT}
                   title={tProfile('actions.manageDocs')}
                   subtitle={tProfile('actions.manageDocsSubtitle')}
@@ -261,7 +261,7 @@ export function AdminProfileContent() {
                 {securityConfig.authSecurityEnabled ? (
                   <ProfileActionCard
                     icon="security"
-                    iconBackground={colors.primary.subtle ?? 'rgba(242, 120, 13, 0.1)'}
+                    iconBackground={colors.primary.subtle ?? 'rgba(24, 168, 117, 0.1)'}
                     iconColor={colors.primary.DEFAULT}
                     title={tProfile('actions.security')}
                     subtitle={tProfile('actions.securitySubtitle')}

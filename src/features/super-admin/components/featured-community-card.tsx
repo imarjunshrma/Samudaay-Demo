@@ -12,8 +12,8 @@ import type { FileValue } from '@/src/types';
 
 export function FeaturedCommunityCard() {
   return (
-    <View style={{ borderRadius: 24, backgroundColor: '#ffffff', padding: spacing[6], borderWidth: 1, borderColor: 'rgba(242,120,13,0.04)', position: 'relative', overflow: 'hidden' }}>
-      <View style={{ position: 'absolute', right: -64, top: -64, width: 128, height: 128, borderRadius: 999, backgroundColor: 'rgba(242,120,13,0.04)' }} />
+    <View style={{ borderRadius: 24, backgroundColor: '#ffffff', padding: spacing[6], borderWidth: 1, borderColor: 'rgba(24,168,117,0.04)', position: 'relative', overflow: 'hidden' }}>
+      <View style={{ position: 'absolute', right: -64, top: -64, width: 128, height: 128, borderRadius: 999, backgroundColor: 'rgba(24,168,117,0.04)' }} />
       <View style={{ gap: spacing[4], marginBottom: spacing[6] }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing[4] }}>
           <View style={{ width: 64, height: 64, borderRadius: 18, backgroundColor: colors.primary.subtle, alignItems: 'center', justifyContent: 'center' }}>

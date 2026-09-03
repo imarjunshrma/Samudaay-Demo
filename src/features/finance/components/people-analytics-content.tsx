@@ -163,7 +163,7 @@ export function PeopleAnalyticsContent() {
                     onPress={() => setSelectedYear(filter)}
                     style={{
                       borderRadius: 16,
-                      backgroundColor: active ? colors.primary.DEFAULT : 'rgba(242,120,13,0.1)',
+                      backgroundColor: active ? colors.primary.DEFAULT : 'rgba(24,168,117,0.1)',
                       paddingHorizontal: spacing[4],
                       paddingVertical: spacing[2],
                     }}>
@@ -222,7 +222,7 @@ export function PeopleAnalyticsContent() {
           ) : null}
 
           <View style={{ flexDirection: 'row', gap: spacing[3] }}>
-            <View style={{ flex: 1, borderRadius: 20, backgroundColor: '#ffffff', padding: spacing[4], borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)' }}>
+            <View style={{ flex: 1, borderRadius: 20, backgroundColor: '#ffffff', padding: spacing[4], borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)' }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <MaterialIcons name="person-add" size={20} color={colors.primary.DEFAULT} />
                 <Text variant="caption" style={{ color: '#16a34a', fontFamily: typography.fontFamily.bold }}>
@@ -236,7 +236,7 @@ export function PeopleAnalyticsContent() {
                 {formatAnalyticsNumber(totalProfiles)}
               </Text>
             </View>
-            <View style={{ flex: 1, borderRadius: 20, backgroundColor: '#ffffff', padding: spacing[4], borderWidth: 1, borderColor: 'rgba(242,120,13,0.08)' }}>
+            <View style={{ flex: 1, borderRadius: 20, backgroundColor: '#ffffff', padding: spacing[4], borderWidth: 1, borderColor: 'rgba(24,168,117,0.08)' }}>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <MaterialIcons name="location-city" size={20} color={colors.primary.DEFAULT} />
                 <Text variant="caption" style={{ color: colors.primary.DEFAULT, fontFamily: typography.fontFamily.bold }}>

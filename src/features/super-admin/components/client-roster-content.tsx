@@ -106,7 +106,7 @@ export function ClientRosterContent() {
           width: 64,
           height: 64,
           borderRadius: 999,
-          backgroundColor: '#f2780d',
+          backgroundColor: '#18a875',
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 60,

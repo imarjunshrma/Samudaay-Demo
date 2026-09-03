@@ -23,7 +23,7 @@ export function DonationListItem({ amount, meta, onDownloadPress }: { amount: st
             width: 40,
             height: 40,
             borderRadius: radius.full,
-            backgroundColor: colors.primary.muted ?? 'rgba(242,120,13,0.1)',
+            backgroundColor: colors.primary.muted ?? 'rgba(24,168,117,0.1)',
             alignItems: 'center',
             justifyContent: 'center',
           }}>

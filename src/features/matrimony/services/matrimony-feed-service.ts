@@ -464,7 +464,7 @@ function buildMatrimonyInvoiceHtml(invoice: MatrimonyTransactionInvoiceInput) {
             object-fit: contain;
             border-radius: 18px;
             background: #ffffff;
-            border: 1px solid rgba(242, 120, 13, 0.18);
+            border: 1px solid rgba(24,168,117, 0.18);
             padding: 8px;
           }
           .eyebrow {

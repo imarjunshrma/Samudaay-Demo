@@ -17,7 +17,7 @@ const sizeMap = {
 const variantMap = {
   plain: { backgroundColor: 'transparent', borderWidth: 0, borderColor: 'transparent' },
   soft: {
-    backgroundColor: colors.primary.muted ?? 'rgba(242,120,13,0.1)',
+    backgroundColor: colors.primary.muted ?? 'rgba(24,168,117,0.1)',
     borderWidth: 0,
     borderColor: 'transparent',
   },

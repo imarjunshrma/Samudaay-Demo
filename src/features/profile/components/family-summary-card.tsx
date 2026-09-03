@@ -13,9 +13,9 @@ export function FamilySummaryCard({ totalMembers = '04', onAddMember }: { totalM
       <View
         style={{
           borderRadius: radius.xl,
-          backgroundColor: 'rgba(242,120,13,0.05)',
+          backgroundColor: 'rgba(24,168,117,0.05)',
           borderWidth: 1,
-          borderColor: 'rgba(242,120,13,0.2)',
+          borderColor: 'rgba(24,168,117,0.2)',
           padding: spacing[4],
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing[4] }}>

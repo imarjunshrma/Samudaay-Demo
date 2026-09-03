@@ -15,7 +15,7 @@ import { APP_LOGO_SOURCE, APP_SHORT_NAME, useLocalizedBrandText } from '@/src/co
 import { markOnboardingSeen } from '@/src/core/storage/onboarding-storage';
 import { useTranslations } from '@/src/i18n/use-translations';
 
-const PRIMARY = '#f2780d';
+const PRIMARY = '#18a875';
 
 type Slide = {
   title: string;
@@ -367,6 +367,6 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#f2780d55',
+    backgroundColor: '#18a87555',
   },
 });

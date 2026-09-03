@@ -2,12 +2,17 @@ import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 const firebaseOptions = {
-  apiKey: 'AIzaSyC8IlrfdE3FCIqdqZwyLu85_PQ-luFN_-8',
-  appId: '1:504802591134:android:f75a767980d303d35c568f',
-  databaseURL: 'https://community-app-45970.firebaseio.com',
-  messagingSenderId: '504802591134',
-  projectId: 'community-app-45970',
-  storageBucket: 'community-app-45970.firebasestorage.app',
+  apiKey: Platform.select({
+    ios: 'AIzaSyBFHUt4YiS2PMqPadDmDIAAH7CK18UFXmo',
+    default: 'AIzaSyDXBRaj9wGaq2ULsYgh8OvRF43GUYOVAmA',
+  }),
+  appId: Platform.select({
+    ios: '1:1086154976377:ios:80cb0b2204a21cc3ef78a8',
+    default: '1:1086154976377:android:550a56bcb8635611ef78a8',
+  }),
+  messagingSenderId: '1086154976377',
+  projectId: 'samudaaay-demo',
+  storageBucket: 'samudaaay-demo.firebasestorage.app',
 };
 
 function getFirebaseModuleError() {

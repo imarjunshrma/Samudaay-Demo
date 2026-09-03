@@ -8,7 +8,7 @@ function MemberCard() {
   return (
     <Card variant="elevated" padding="lg">
       <View style={{ gap: spacing[4], alignItems: 'center' }}>
-        <View style={{ width: 128, height: 128, borderRadius: 999, backgroundColor: '#f8fafc', borderWidth: 4, borderColor: 'rgba(242,120,13,0.1)' }} />
+        <View style={{ width: 128, height: 128, borderRadius: 999, backgroundColor: '#f8fafc', borderWidth: 4, borderColor: 'rgba(24,168,117,0.1)' }} />
         <View style={{ alignItems: 'center' }}>
           <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
             Rajesh Kumar

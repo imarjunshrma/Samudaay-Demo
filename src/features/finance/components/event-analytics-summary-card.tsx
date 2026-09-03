@@ -36,7 +36,7 @@ export function EventAnalyticsSummaryCard({
         padding: spacing[5],
         backgroundColor: '#ffffff',
         borderWidth: 1,
-        borderColor: 'rgba(242,120,13,0.05)',
+        borderColor: 'rgba(24,168,117,0.05)',
         shadowColor: '#000',
         shadowOpacity: 0.06,
         shadowRadius: 8,

@@ -44,7 +44,7 @@ export function TransactionItem({
           backgroundColor: colors.background.surface,
           borderRadius: radius.xl,
           borderWidth: 1,
-          borderColor: 'rgba(242,120,13,0.08)',
+          borderColor: 'rgba(24,168,117,0.08)',
           shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.06,
@@ -82,7 +82,7 @@ export function TransactionItem({
   }
 
   return (
-    <View style={{ borderRadius: radius.xl, padding: spacing[6], backgroundColor: 'rgba(242,120,13,0.1)', borderWidth: 1, borderColor: 'rgba(242,120,13,0.2)', gap: spacing[2] }}>
+    <View style={{ borderRadius: radius.xl, padding: spacing[6], backgroundColor: 'rgba(24,168,117,0.1)', borderWidth: 1, borderColor: 'rgba(24,168,117,0.2)', gap: spacing[2] }}>
       {meta ? (
         <Text variant="caption" color="#475569" style={{ fontFamily: typography.fontFamily.medium, textTransform: 'uppercase', letterSpacing: 1 }}>
           {meta}

@@ -817,7 +817,7 @@ export function ManageEventsContent({
         caption: t('insights.totalCaption'),
         icon: "event" as const,
         iconColor: colors.primary.DEFAULT,
-        iconBackgroundColor: colors.primary.subtle || 'rgba(242,120,13,0.12)',
+        iconBackgroundColor: colors.primary.subtle || 'rgba(24,168,117,0.12)',
       },
       {
         id: "upcoming",

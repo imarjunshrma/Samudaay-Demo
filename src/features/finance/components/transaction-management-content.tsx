@@ -202,7 +202,7 @@ export function TransactionManagementContent() {
         value: formatAnalyticsCurrency(analytics?.transactions.totalExpense ?? 0),
         icon: 'receipt-long' as const,
         iconColor: colors.primary.DEFAULT,
-        iconBackgroundColor: colors.primary.subtle || 'rgba(242,120,13,0.08)',
+        iconBackgroundColor: colors.primary.subtle || 'rgba(24,168,117,0.08)',
       },
       {
         id: 'pending',

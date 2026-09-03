@@ -42,7 +42,7 @@ export function ArchiveIssueCard({
         backgroundColor: '#ffffff',
         padding: spacing[4],
         borderWidth: 1,
-        borderColor: 'rgba(242,120,13,0.05)',
+        borderColor: 'rgba(24,168,117,0.05)',
         gap: spacing[4],
         ...shadows.sm,
       }}>

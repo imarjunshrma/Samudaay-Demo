@@ -197,7 +197,7 @@ export function EventAnalyticsContent() {
                         onPress={() => setSelectedYear(filter)}
                         style={{
                           borderRadius: 16,
-                          backgroundColor: active ? colors.primary.DEFAULT : 'rgba(242,120,13,0.1)',
+                          backgroundColor: active ? colors.primary.DEFAULT : 'rgba(24,168,117,0.1)',
                           paddingHorizontal: spacing[4],
                           paddingVertical: spacing[2],
                         }}>
@@ -334,7 +334,7 @@ export function EventAnalyticsContent() {
                           </View>
                         </View>
                         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3], paddingTop: spacing[1] }}>
-                          <View style={{ flex: 1, minWidth: '47%', borderRadius: 16, backgroundColor: 'rgba(242,120,13,0.06)', padding: spacing[4] }}>
+                          <View style={{ flex: 1, minWidth: '47%', borderRadius: 16, backgroundColor: 'rgba(24,168,117,0.06)', padding: spacing[4] }}>
                             <Text variant="caption" style={{ color: colors.text.muted, textTransform: 'uppercase', letterSpacing: 1 }}>
                               Net Profit
                             </Text>

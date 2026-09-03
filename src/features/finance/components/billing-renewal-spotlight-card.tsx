@@ -20,7 +20,7 @@ export function BillingRenewalSpotlightCard() {
         resizeMode="cover"
         style={{ flex: 1 }}>
         <LinearGradient
-          colors={['rgba(242,120,13,0.9)', 'rgba(242,120,13,0.56)', 'rgba(242,120,13,0.08)']}
+          colors={['rgba(24,168,117,0.9)', 'rgba(24,168,117,0.56)', 'rgba(24,168,117,0.08)']}
           locations={[0, 0.58, 1]}
           start={{ x: 0.5, y: 1 }}
           end={{ x: 0.5, y: 0 }}

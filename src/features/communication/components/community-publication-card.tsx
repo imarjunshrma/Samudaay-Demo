@@ -76,7 +76,7 @@ export function CommunityPublicationCard() {
           </Text>
         </Pressable>
       </View>
-      <View style={{ flexDirection: 'row', gap: spacing[4], padding: spacing[4], borderRadius: radius.xl, borderWidth: 1, borderColor: colors.primary.borderLight, backgroundColor: 'rgba(242,120,13,0.05)' }}>
+      <View style={{ flexDirection: 'row', gap: spacing[4], padding: spacing[4], borderRadius: radius.xl, borderWidth: 1, borderColor: colors.primary.borderLight, backgroundColor: 'rgba(24,168,117,0.05)' }}>
         {featuredPublication.coverImageUrl ? (
           <View style={{ width: 96, height: 128, borderRadius: radius.lg, overflow: 'hidden', backgroundColor: '#fff', borderWidth: 1, borderColor: '#e2e8f0' }}>
             <Image source={{ uri: featuredPublication.coverImageUrl }} resizeMode="cover" style={{ width: '100%', height: '100%' }} />

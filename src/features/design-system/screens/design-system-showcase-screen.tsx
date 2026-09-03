@@ -249,7 +249,7 @@ export function DesignSystemShowcaseScreen() {
               />
               <AppSidebar
                 variant="updated"
-                profileName="Rajesh Mochi"
+                profileName="Rajesh Kumar"
                 items={updatedSidebarItems}
                 profileImage="https://lh3.googleusercontent.com/aida-public/AB6AXuAFIUGZScdKNNMxDULnezEx5rj8pEQ2j4rbAeEkx4t3PaCU9ZyOTNSkvXCvZkDQrKLBSf4pUkLslr1IqWQp9gyj2fdGAQhXOFAkCW31Gj5C9L4UvcbzAjmtagVn5-tgErJszr_SHSuZAtkEDv3yMokBWg-SNYVUZevz1VESP7PhF4ab4KtO6kzydCmm0SoC9JJOm4QKipR3H8kvz_uSNGPqzedy2Zy7Fai_nbI9yNO3q_fFaaYiDxFFdA7tjg9-8GkKYTTksfVvRwk9"
               />
@@ -653,7 +653,7 @@ export function DesignSystemShowcaseScreen() {
               subtitle="Oct 24, 2023 • Temple Fund"
               amount="₹2,500"
               icon="volunteer-activism"
-              bg="rgba(242,120,13,0.1)"
+              bg="rgba(24,168,117,0.1)"
               tone={colors.primary.DEFAULT}
             />
             <ContentFeedCard
