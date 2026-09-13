@@ -3,16 +3,16 @@ import { Platform } from 'react-native';
 
 const firebaseOptions = {
   apiKey: Platform.select({
-    ios: 'AIzaSyBFHUt4YiS2PMqPadDmDIAAH7CK18UFXmo',
-    default: 'AIzaSyDXBRaj9wGaq2ULsYgh8OvRF43GUYOVAmA',
+    ios: 'AIzaSyBsI2fdJCZhrLh62NUgk1oF635avHYmfJQ',
+    default: 'AIzaSyAgaRKtvbS44PzZaquO25SOV-GxN4OgD3Q',
   }),
   appId: Platform.select({
-    ios: '1:1086154976377:ios:80cb0b2204a21cc3ef78a8',
-    default: '1:1086154976377:android:550a56bcb8635611ef78a8',
+    ios: '1:250408406241:ios:5d93e59e58555649027ba0',
+    default: '1:250408406241:android:5f7f6a7c3eb6c002027ba0',
   }),
-  messagingSenderId: '1086154976377',
-  projectId: 'samudaaay-demo',
-  storageBucket: 'samudaaay-demo.firebasestorage.app',
+  messagingSenderId: '250408406241',
+  projectId: 'samudaay-d0639',
+  storageBucket: 'samudaay-d0639.firebasestorage.app',
 };
 
 function getFirebaseModuleError() {

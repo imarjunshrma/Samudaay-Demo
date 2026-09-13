@@ -3,9 +3,10 @@ import { existsSync } from "fs";
 import { resolve } from "path";
 
 const DEFAULT_GOOGLE_SERVICES_JSON = "./firebase/google-services.json";
-const DEFAULT_GOOGLE_SERVICES_INFO_PLIST = "./firebase/GoogleService-Info.plist";
-const DEFAULT_ANDROID_PACKAGE = "com.samudaaay.demo";
-const DEFAULT_IOS_BUNDLE_ID = "com.samudaaay.demo";
+const DEFAULT_GOOGLE_SERVICES_INFO_PLIST =
+  "./firebase/GoogleService-Info.plist";
+const DEFAULT_ANDROID_PACKAGE = "com.samudaay";
+const DEFAULT_IOS_BUNDLE_ID = "com.samudaay";
 const APP_BACKGROUND_COLOR = "#f8f7f5";
 
 function resolveExistingFilePath(value: string | undefined, label: string) {
@@ -55,22 +56,21 @@ const apiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL?.trim() || "";
 const usesCleartextApi = apiBaseUrl.startsWith("http://");
 
 const config: ExpoConfig = {
-  name: "Samudaaay",
-  slug: "samudaaay",
+  name: "Samudaay",
+  slug: "samudaay",
   owner: "bhaumik.darji",
   version: "3.0.2",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
-  scheme: "samudaaay",
+  scheme: "samudaay",
   userInterfaceStyle: "automatic",
   newArchEnabled: true,
   runtimeVersion: {
-    "policy": "appVersion"
+    policy: "appVersion",
   },
   ios: {
     supportsTablet: true,
-    bundleIdentifier:
-      process.env.APP_IOS_BUNDLE_ID ?? DEFAULT_IOS_BUNDLE_ID,
+    bundleIdentifier: process.env.APP_IOS_BUNDLE_ID ?? DEFAULT_IOS_BUNDLE_ID,
     ...(googleMapsApiKey
       ? {
           config: {
@@ -79,7 +79,7 @@ const config: ExpoConfig = {
         }
       : {}),
     infoPlist: {
-      "ITSAppUsesNonExemptEncryption": false,
+      ITSAppUsesNonExemptEncryption: false,
       ...(usesCleartextApi
         ? {
             NSAppTransportSecurity: {
@@ -101,8 +101,7 @@ const config: ExpoConfig = {
       : {}),
   },
   android: {
-    package:
-      process.env.APP_ANDROID_PACKAGE ?? DEFAULT_ANDROID_PACKAGE,
+    package: process.env.APP_ANDROID_PACKAGE ?? DEFAULT_ANDROID_PACKAGE,
     ...(googleServicesJson ? { googleServicesFile: googleServicesJson } : {}),
     ...(googleMapsApiKey
       ? {
@@ -137,25 +136,33 @@ const config: ExpoConfig = {
     "@config-plugins/react-native-pdf",
     "./plugins/with-ios-non-modular-headers",
     ...(hasFirebaseNativeConfig
-      ? ["@react-native-firebase/app", "@react-native-firebase/auth", "@react-native-firebase/messaging"]
+      ? [
+          "@react-native-firebase/app",
+          "@react-native-firebase/auth",
+          "@react-native-firebase/messaging",
+        ]
       : []),
     [
       "expo-camera",
       {
-        cameraPermission: "Allow access to your camera to scan QR codes and capture photos for event and community features.",
+        cameraPermission:
+          "Allow access to your camera to scan QR codes and capture photos for event and community features.",
       },
     ],
     [
       "expo-image-picker",
       {
-        cameraPermission: "Allow access to your camera to capture photos for event and community features.",
-        photosPermission: "Allow access to your photos so you can upload profile images, chat images, event photos, and selected documents.",
+        cameraPermission:
+          "Allow access to your camera to capture photos for event and community features.",
+        photosPermission:
+          "Allow access to your photos so you can upload profile images, chat images, event photos, and selected documents.",
       },
     ],
     [
       "expo-local-authentication",
       {
-        faceIDPermission: "Allow $(PRODUCT_NAME) to use Face ID for biometric login.",
+        faceIDPermission:
+          "Allow $(PRODUCT_NAME) to use Face ID for biometric login.",
       },
     ],
     [
@@ -197,11 +204,11 @@ const config: ExpoConfig = {
     typedRoutes: true,
     reactCompiler: true,
   },
-    "extra": {
-      "eas": {
-        "projectId": "964c14ae-1212-4b7c-b8bc-2c375f0bbe8d"
-      }
-    }
+  extra: {
+    eas: {
+      projectId: "c22783bc-10f1-4150-8d8c-27a80aabc5a6",
+    },
+  },
 };
 
 export default config;

@@ -83,7 +83,7 @@ function buildChatSharePayload({
   const memberLine = memberCount ? `${memberCount} members` : null;
   const message = [
     title,
-    normalizedContext === 'community' ? 'Join this community group chat on Samudaaay.' : 'Open this chat on Samudaaay.',
+    normalizedContext === 'community' ? 'Join this community group chat on Samudaay.' : 'Open this chat on Samudaay.',
     memberLine,
     statusLine,
     link,

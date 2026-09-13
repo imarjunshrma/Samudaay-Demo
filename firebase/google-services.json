@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1086154976377",
-    "project_id": "samudaaay-demo",
-    "storage_bucket": "samudaaay-demo.firebasestorage.app"
+    "project_number": "250408406241",
+    "project_id": "samudaay-d0639",
+    "storage_bucket": "samudaay-d0639.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1086154976377:android:550a56bcb8635611ef78a8",
+        "mobilesdk_app_id": "1:250408406241:android:5f7f6a7c3eb6c002027ba0",
         "android_client_info": {
-          "package_name": "com.samudaaay.demo"
+          "package_name": "com.samudaay"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDXBRaj9wGaq2ULsYgh8OvRF43GUYOVAmA"
+          "current_key": "AIzaSyAgaRKtvbS44PzZaquO25SOV-GxN4OgD3Q"
         }
       ],
       "services": {

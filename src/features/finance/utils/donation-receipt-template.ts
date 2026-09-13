@@ -135,7 +135,7 @@ export function generateDonationReceiptHtml(
 <html lang="gu">
 <head>
 <meta charset="UTF-8">
-<title>Samudaaay Receipt</title>
+<title>Samudaay Receipt</title>
 <style>
     @page { size: A4 landscape; margin: 4mm; }
     html {
@@ -409,7 +409,7 @@ export function generateDonationReceiptHtml(
         <div class="header">
             <div class="logo-wrap">
                 <div class="logo-circle">
-                    <img src="${escapeHtml(logoUri)}" alt="Samudaaay Logo">
+                    <img src="${escapeHtml(logoUri)}" alt="Samudaay Logo">
                 </div>
             </div>
             <div class="header-center">
