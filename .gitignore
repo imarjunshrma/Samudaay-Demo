@@ -53,3 +53,6 @@ app-example
 .vscode
 .claude
 .agents
+
+
+.env
