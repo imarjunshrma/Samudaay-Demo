@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'expo-router';
 import { View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
@@ -10,6 +11,7 @@ import { useAppPreferences } from '@/src/core/providers/app-provider';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { donationService, type MemberTransactionItem } from '../services/donation-service';
 import { matrimonyFeedService } from '@/src/features/matrimony/services/matrimony-feed-service';
+import { appMembershipService } from '@/src/features/registration/services/app-membership-service';
 import { isPdfDownloadCancelledError } from '@/src/services/files/pdf-file';
 import { colors, radius, spacing, typography } from '@/src/theme';
 
@@ -21,6 +23,9 @@ type TransactionFeedItem = {
   subscriptionType?: 'PROFILE_CREATION' | 'VIEWER_ONLY' | null;
   subscriptionStartsAt?: string | null;
   subscriptionEndsAt?: string | null;
+  membershipId?: string;
+  membershipStartsAt?: string | null;
+  membershipEndsAt?: string | null;
   paymentRef?: string | null;
   title: string;
   meta: string;
@@ -67,7 +72,7 @@ function MyTransactionRowSkeleton() {
         backgroundColor: colors.background.surface,
         borderRadius: radius.xl,
         borderWidth: 1,
-        borderColor: 'rgba(24,168,117,0.08)',
+        borderColor: 'rgba(242,120,13,0.08)',
       }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], flex: 1 }}>
         <SkeletonBlock width={44} height={44} radiusSize={radius.full} />
@@ -85,6 +90,7 @@ function MyTransactionRowSkeleton() {
 }
 
 export function MyTransactionsContent() {
+  const router = useRouter();
   const navigateBack = useBackNavigation();
   const t = useTranslations('finance.my-transactions');
   const { language } = useAppPreferences();
@@ -93,6 +99,7 @@ export function MyTransactionsContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [viewingReceiptId, setViewingReceiptId] = useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = useState(false);
   const [page, setPage] = useState(1);
   const [receiptDialog, setReceiptDialog] = useState<{
@@ -112,14 +119,18 @@ export function MyTransactionsContent() {
       ? 'Event'
       : record.type === 'subscription'
         ? 'Subscription'
-        : 'Donation';
+        : record.type === 'membership'
+          ? 'Membership'
+        : 'Contribution';
     const icon = record.type === 'event'
       ? 'event'
       : record.type === 'subscription'
         ? 'favorite'
+        : record.type === 'membership'
+          ? 'card-membership'
         : 'volunteer-activism';
-    const bg = record.type === 'event' ? '#dbeafe' : record.type === 'subscription' ? '#fae8ff' : '#dcfce7';
-    const tone = record.type === 'event' ? '#2563eb' : record.type === 'subscription' ? '#a21caf' : '#16a34a';
+    const bg = record.type === 'event' ? '#dbeafe' : record.type === 'subscription' ? '#fae8ff' : record.type === 'membership' ? '#ede9fe' : '#dcfce7';
+    const tone = record.type === 'event' ? '#2563eb' : record.type === 'subscription' ? '#a21caf' : record.type === 'membership' ? '#7c3aed' : '#16a34a';
 
     return {
       id: record.id,
@@ -172,6 +183,9 @@ export function MyTransactionsContent() {
           subscriptionType: record.subscriptionType,
           subscriptionStartsAt: record.subscriptionStartsAt,
           subscriptionEndsAt: record.subscriptionEndsAt,
+          membershipId: record.membershipId,
+          membershipStartsAt: record.membershipStartsAt,
+          membershipEndsAt: record.membershipEndsAt,
           paymentRef: record.paymentRef,
         }));
 
@@ -213,11 +227,25 @@ export function MyTransactionsContent() {
   const showInitialSkeleton = isLoading && !transactions.length;
 
   async function handleDownloadReceipt(item: TransactionFeedItem) {
-    if (!item.donationId && !item.subscriptionId) {
+    if (!item.donationId && !item.subscriptionId && !item.membershipId) {
       return;
     }
 
     try {
+      if (item.membershipId) {
+        await appMembershipService.downloadMembershipReceipt({
+          transactionId: item.membershipId,
+          title: item.title,
+          amount: item.amountValue,
+          status: item.status,
+          createdAt: item.createdAt,
+          membershipStartsAt: item.membershipStartsAt,
+          membershipEndsAt: item.membershipEndsAt,
+          paymentRef: item.paymentRef,
+        });
+        return;
+      }
+
       if (item.subscriptionId) {
         await matrimonyFeedService.downloadSubscriptionInvoice({
           transactionId: item.subscriptionId,
@@ -260,6 +288,35 @@ export function MyTransactionsContent() {
     }
   }
 
+  async function handleViewReceipt(item: TransactionFeedItem) {
+    if (!item.donationId || item.subscriptionId) {
+      return;
+    }
+
+    setViewingReceiptId(item.donationId);
+    try {
+      const receipt = await donationService.openReceiptForDonationId(item.donationId);
+      if (receipt.fileUri) {
+        router.push({
+          pathname: '/pdf-viewer',
+          params: {
+            title: receipt.title,
+            fileUri: receipt.fileUri,
+          },
+        });
+      }
+    } catch (error) {
+      setReceiptDialog({
+        visible: true,
+        variant: 'error',
+        title: 'Unable to open receipt',
+        description: error instanceof Error ? error.message : 'Please try again.',
+      });
+    } finally {
+      setViewingReceiptId(null);
+    }
+  }
+
   return (
     <AppSafeAreaView style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
       <View style={{ flex: 1, maxWidth: 448, width: '100%', alignSelf: 'center', backgroundColor: colors.background.DEFAULT }}>
@@ -291,7 +348,7 @@ export function MyTransactionsContent() {
                 {showInitialSkeleton ? (
                   <StatCardSkeleton />
                 ) : (
-                  <View style={{ gap: spacing[2], borderRadius: radius.xl, padding: spacing[6], backgroundColor: 'rgba(24,168,117,0.1)', borderWidth: 1, borderColor: 'rgba(24,168,117,0.2)', minHeight: 144 }}>
+                  <View style={{ gap: spacing[2], borderRadius: radius.xl, padding: spacing[6], backgroundColor: 'rgba(242,120,13,0.1)', borderWidth: 1, borderColor: 'rgba(242,120,13,0.2)', minHeight: 144 }}>
                     <Text variant="caption" color="#475569" style={{ fontFamily: typography.fontFamily.medium, textTransform: 'uppercase', letterSpacing: 1 }}>
                       {t('summary.title')}
                     </Text>
@@ -341,12 +398,14 @@ export function MyTransactionsContent() {
                 tone={item.tone}
                 bg={item.bg}
                 ctaLabel={t('cta.receipt')}
-                onCtaPress={item.donationId || item.subscriptionId ? () => void handleDownloadReceipt(item) : undefined}
+                viewing={Boolean(item.donationId && viewingReceiptId === item.donationId)}
+                onViewPress={item.donationId && !item.subscriptionId ? () => void handleViewReceipt(item) : undefined}
+                onCtaPress={item.donationId || item.subscriptionId || item.membershipId ? () => void handleDownloadReceipt(item) : undefined}
               />
             </View>
           )}
           emptyTitle="No transactions found"
-          emptyDescription="Your donation receipts and paid activity will appear here once available."
+          emptyDescription="Your contribution receipts and paid activity will appear here once available."
         />
 
       </View>

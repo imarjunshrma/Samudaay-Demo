@@ -20,6 +20,14 @@ export interface DirectoryMemberItem extends ListItem {
   online?: boolean;
   userType?: 'user' | 'member' | 'community_member' | 'trustee' | 'admin' | string;
   roles?: string[];
+  roleAssignments?: DirectoryRoleAssignment[];
+  joinStatus?: 'INVITED' | 'REGISTERED' | string;
+  registered?: boolean;
+}
+
+export interface DirectoryRoleAssignment {
+  roleKey: string;
+  expiresAt?: string | null;
 }
 
 export interface DirectoryFamilyMemberItem {
@@ -41,6 +49,7 @@ type BackendDirectoryMember = {
   role?: string;
   userType?: string;
   roles?: string[];
+  roleAssignments?: DirectoryRoleAssignment[];
   phone?: string | null;
   phoneNumber?: string | null;
   mobileNumber?: string | null;
@@ -49,9 +58,39 @@ type BackendDirectoryMember = {
   familyMembers?: DirectoryFamilyMemberItem[];
   memberId?: string | null;
   status?: string | null;
+  joinStatus?: string | null;
+  registered?: boolean | null;
   online?: boolean;
   profilePic?: string | null;
 };
+
+export interface DirectoryImportFile {
+  uri: string;
+  name?: string | null;
+  mimeType?: string | null;
+}
+
+export interface DirectoryImportResultRow {
+  rowNumber: number;
+  status: 'CREATED' | 'SKIPPED' | 'FAILED' | string;
+  reason: string;
+  userId?: string | null;
+  memberId?: string | null;
+  name?: string | null;
+  phone?: string | null;
+  countryCode?: string | null;
+  registered?: boolean;
+}
+
+export interface DirectoryImportResult {
+  summary: {
+    totalRows: number;
+    created: number;
+    skipped: number;
+    failed: number;
+  };
+  rows: DirectoryImportResultRow[];
+}
 
 export interface DirectoryMemberFormValues {
   fullName: string;
@@ -68,7 +107,13 @@ export interface DirectoryMembersPagination {
   total: number;
   totalPages: number;
   hasNextPage: boolean;
-  summary?: DirectoryMemberTypeSummary;
+  summary?: DirectoryMemberTypeSummary | DirectoryRegistrationSummary;
+}
+
+export interface DirectoryRegistrationSummary {
+  invited: number;
+  registered: number;
+  total: number;
 }
 
 export interface DirectoryMembersPageResponse {
@@ -117,6 +162,8 @@ function mapDirectoryMemberItem(item: BackendDirectoryMember): DirectoryMemberIt
     meta: item.location || phone || item.email || item.memberId || '',
     memberId: item.memberId ?? null,
     status: item.online ? 'Online' : 'Active',
+    joinStatus: item.joinStatus || (item.registered ? 'REGISTERED' : 'INVITED'),
+    registered: Boolean(item.registered || item.joinStatus === 'REGISTERED'),
     city: item.city || '',
     state: item.state || '',
     pincode: item.pincode || '',
@@ -128,6 +175,7 @@ function mapDirectoryMemberItem(item: BackendDirectoryMember): DirectoryMemberIt
     online: item.online,
     userType: item.userType || item.role || 'user',
     roles: item.roles ?? [],
+    roleAssignments: item.roleAssignments ?? [],
   } satisfies DirectoryMemberItem;
 }
 
@@ -251,6 +299,70 @@ export const directoryService = {
 
     return response.data ?? { states: [], cities: [], citiesByState: {}, pincodes: [], bloodGroups: [], statuses: [], roles: [] };
   },
+  async loadRegistrationReport(query?: {
+    q?: string;
+    joinStatus?: 'all' | 'invited' | 'registered';
+    page?: number;
+    limit?: number;
+  }): Promise<DirectoryMembersPageResponse> {
+    const backendSession = await getBackendSessionContext();
+    if (!backendSession) {
+      return { items: [], pagination: null };
+    }
+
+    const params = new URLSearchParams();
+    if (query?.q) {
+      params.set('q', query.q);
+    }
+    if (query?.joinStatus && query.joinStatus !== 'all') {
+      params.set('joinStatus', query.joinStatus);
+    }
+    if (query?.page) {
+      params.set('page', String(query.page));
+    }
+    if (query?.limit) {
+      params.set('limit', String(query.limit));
+    }
+
+    const queryString = params.toString();
+    const response = await apiClient<{
+      data: BackendDirectoryMember[];
+      pagination?: DirectoryMembersPagination | null;
+    }>(
+      `${apiEndpoints.communityDirectoryRegistrationReport(backendSession.tenantId)}${queryString ? `?${queryString}` : ''}`,
+      { token: backendSession.token },
+    );
+
+    return {
+      items: (response.data ?? []).map(mapDirectoryMemberItem),
+      pagination: response.pagination ?? null,
+    };
+  },
+  async importMembers(file: DirectoryImportFile): Promise<DirectoryImportResult | null> {
+    const backendSession = await getBackendSessionContext();
+    if (!backendSession) {
+      return null;
+    }
+
+    const formData = new FormData();
+    formData.append('file', {
+      uri: file.uri,
+      name: file.name || 'members.xlsx',
+      type: file.mimeType || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    } as never);
+
+    const response = await apiClient<{ data: DirectoryImportResult }>(
+      apiEndpoints.communityDirectoryMembersImport(backendSession.tenantId),
+      {
+        method: 'POST',
+        token: backendSession.token,
+        body: formData,
+      },
+    );
+    await invalidateTenantApiData(backendSession.tenantId);
+
+    return response.data;
+  },
   async loadTrustees(): Promise<DirectoryMemberItem[]> {
     if (isBackendApiConfigured()) {
       const backendSession = await getBackendSessionContext();
@@ -338,7 +450,7 @@ export const directoryService = {
     );
     await invalidateTenantApiData(backendSession.tenantId);
   },
-  async assignMemberRoles(memberId: string, payload: { userType: string; roleKeys: string[] }): Promise<DirectoryMemberItem | null> {
+  async assignMemberRoles(memberId: string, payload: { userType: string; roleKeys: string[]; roleExpiresAt?: string | null }): Promise<DirectoryMemberItem | null> {
     const backendSession = await getBackendSessionContext();
     if (!backendSession) {
       return null;

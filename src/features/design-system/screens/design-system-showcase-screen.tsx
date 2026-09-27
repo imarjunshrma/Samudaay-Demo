@@ -74,7 +74,7 @@ import { memberImage } from '@/src/features/dashboard/constants/member-dashboard
 
 const bottomBarItems = [
   { key: 'home', icon: 'home', label: 'Home', route: '/dashboard/dashboard-id-card' },
-  { key: 'donations', icon: 'volunteer-activism', label: 'Donate', route: '/finance/donation-management' },
+  { key: 'donations', icon: 'volunteer-activism', label: 'Contribute', route: '/finance/donation-management' },
   { key: 'kyc', icon: 'badge', label: 'KYC', route: '/registration-kyc', badge: 2 },
   { key: 'profile', icon: 'person-outline', label: 'Profile', route: '/design-system' },
 ] as const;
@@ -102,7 +102,7 @@ const communityBottomBarItems = [
 const financeBottomBarItems = [
   { key: 'home', icon: 'home', label: 'Home' },
   { key: 'history', icon: 'history', label: 'History' },
-  { key: 'donate', icon: 'volunteer-activism', label: 'Donate', badge: 1 },
+  { key: 'donate', icon: 'volunteer-activism', label: 'Contribute', badge: 1 },
   { key: 'profile', icon: 'person-outline', label: 'Profile' },
 ] as const;
 
@@ -194,7 +194,7 @@ export function DesignSystemShowcaseScreen() {
         <View style={{ flexDirection: 'row', gap: spacing[3], flexWrap: 'wrap' }}>
           <Link href="/finance/donation-management" asChild>
             <Pressable>
-              <Badge label="Donation Management" />
+              <Badge label="Contribution Management" />
             </Pressable>
           </Link>
           <Link href="/dashboard/dashboard-id-card" asChild>
@@ -249,7 +249,7 @@ export function DesignSystemShowcaseScreen() {
               />
               <AppSidebar
                 variant="updated"
-                profileName="Rajesh Kumar"
+                profileName="Rajesh Mochi"
                 items={updatedSidebarItems}
                 profileImage="https://lh3.googleusercontent.com/aida-public/AB6AXuAFIUGZScdKNNMxDULnezEx5rj8pEQ2j4rbAeEkx4t3PaCU9ZyOTNSkvXCvZkDQrKLBSf4pUkLslr1IqWQp9gyj2fdGAQhXOFAkCW31Gj5C9L4UvcbzAjmtagVn5-tgErJszr_SHSuZAtkEDv3yMokBWg-SNYVUZevz1VESP7PhF4ab4KtO6kzydCmm0SoC9JJOm4QKipR3H8kvz_uSNGPqzedy2Zy7Fai_nbI9yNO3q_fFaaYiDxFFdA7tjg9-8GkKYTTksfVvRwk9"
               />
@@ -649,11 +649,11 @@ export function DesignSystemShowcaseScreen() {
             />
             <TransactionItem
               variant="history"
-              title="Temple Donation"
+              title="Temple Contribution"
               subtitle="Oct 24, 2023 • Temple Fund"
               amount="₹2,500"
               icon="volunteer-activism"
-              bg="rgba(24,168,117,0.1)"
+              bg="rgba(242,120,13,0.1)"
               tone={colors.primary.DEFAULT}
             />
             <ContentFeedCard
@@ -971,7 +971,7 @@ export function DesignSystemShowcaseScreen() {
                 <SubmitButton label="Submit Demo Form" />
                 <SubmitButton label="Outline Submit" variant="outline" />
                 <SubmitBar
-                  primaryAction={{ label: 'Record Donation' }}
+                  primaryAction={{ label: 'Record Contribution' }}
                   secondaryAction={{ label: 'Back', variant: 'soft' }}
                   sticky
                 />

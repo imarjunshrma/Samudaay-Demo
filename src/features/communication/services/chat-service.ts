@@ -33,6 +33,7 @@ function chatDebugLog(event: string, context: Record<string, unknown> = {}) {
 }
 
 type BackendChat = {
+  memberIds?: string[];
   id: string;
   title?: string | null;
   status?: string | null;
@@ -41,6 +42,7 @@ type BackendChat = {
   type?: string | null;
   canPost?: boolean;
   canManage?: boolean;
+  canManageMembers?: boolean;
   members?: {
     user?: {
       id?: string | null;
@@ -52,6 +54,7 @@ type BackendChat = {
     } | null;
   }[];
   _count?: {
+    members?: number;
     messages?: number;
   };
   messages?: {
@@ -109,6 +112,7 @@ export type CommunityChatFeedItem = {
   type?: string;
   canPost?: boolean;
   canManage?: boolean;
+  canManageMembers?: boolean;
   memberIds?: string[];
   members?: CommunityChatMember[];
   memberCount?: number;
@@ -206,7 +210,8 @@ function mapChat(chat: BackendChat): CommunityChatFeedItem {
     type: chat.type || undefined,
     canPost: chat.canPost,
     canManage: chat.canManage,
-    memberIds: (chat.members ?? []).map((member) => member.user?.id).filter((value): value is string => Boolean(value)),
+    canManageMembers: chat.canManageMembers,
+    memberIds: chat.memberIds ?? (chat.members ?? []).map((member) => member.user?.id).filter((value): value is string => Boolean(value)),
     members: (chat.members ?? []).map((member) => ({
       id: String(member.user?.id || ''),
       name: String(member.user?.name || member.user?.phone || 'Community member'),
@@ -215,7 +220,7 @@ function mapChat(chat: BackendChat): CommunityChatFeedItem {
       isOnline: Boolean(member.user?.isOnline),
       lastSeenAt: member.user?.lastSeenAt || null,
     })).filter((member) => Boolean(member.id)),
-    memberCount: chat.members?.length ?? 0,
+    memberCount: chat._count?.members ?? chat.members?.length ?? 0,
     messageCount: Number(chat._count?.messages || 0),
   };
 }
@@ -305,12 +310,19 @@ async function getChatSocket() {
 }
 
 export const chatService = {
+  async markChatRead(chatId: string, messageId: string) {
+    const session = await getBackendSessionContext();
+    if (!session) return;
+    await apiClient(`${apiEndpoints.communityChatById(session.tenantId, chatId)}/read`, {
+      method: 'POST', token: session.token, body: JSON.stringify({ messageId }),
+    });
+  },
   async loadChats(options: { context?: 'communication' | 'event' | 'matrimony' } = {}) {
     const result = await this.loadChatsPage(options);
     return result.items;
   },
 
-  async loadChatsPage(options: { context?: 'communication' | 'event' | 'matrimony'; page?: number; limit?: number; search?: string } = {}): Promise<CommunityChatsPage> {
+  async loadChatsPage(options: { context?: 'communication' | 'event' | 'matrimony'; page?: number; limit?: number; search?: string; includeMemberIds?: boolean; notificationGroups?: boolean; unreadOnly?: boolean } = {}): Promise<CommunityChatsPage> {
     if (!isBackendApiConfigured()) {
       return { items: [], pagination: null };
     }
@@ -322,6 +334,9 @@ export const chatService = {
 
     try {
       const params = new URLSearchParams();
+      if (options.includeMemberIds) params.set('includeMemberIds', 'true');
+      if (options.notificationGroups) params.set('notificationGroups', 'true');
+      if (options.unreadOnly) params.set('unreadOnly', 'true');
       if (options.context) params.set('context', options.context);
       if (options.page) params.set('page', String(options.page));
       if (options.limit) params.set('limit', String(options.limit));
@@ -335,7 +350,8 @@ export const chatService = {
         items: (response.data ?? []).map(mapChat),
         pagination: response.pagination ?? null,
       };
-    } catch {
+    } catch (error) {
+      if (options.notificationGroups) throw error;
       return { items: [], pagination: null };
     }
   },
@@ -451,6 +467,7 @@ export const chatService = {
       onPresence?: (payload: { userId: string; isOnline: boolean; lastSeenAt?: string | null }) => void;
       onError?: (message: string) => void;
       onJoined?: () => void;
+      onConnectionChange?: (connected: boolean) => void;
     },
   ) {
     const socket = await getChatSocket();
@@ -474,9 +491,20 @@ export const chatService = {
     const handlePresence = (payload: { userId: string; isOnline: boolean; lastSeenAt?: string | null }) => {
       handlers.onPresence?.(payload);
     };
+    const handleConnect = () => {
+      handlers.onConnectionChange?.(true);
+    };
+    const handleDisconnect = () => {
+      handlers.onConnectionChange?.(false);
+    };
 
     socket.on('chat:message', handleMessage);
     socket.on(CHAT_PRESENCE_EVENT, handlePresence);
+    socket.on('connect', handleConnect);
+    socket.on('disconnect', handleDisconnect);
+    if (socket.connected) {
+      handlers.onConnectionChange?.(true);
+    }
     const requestId = createChatRequestId('chat-join');
     const startedAt = Date.now();
     socket.emit('chat:join', { chatId, requestId }, (response) => {
@@ -506,6 +534,8 @@ export const chatService = {
     return () => {
       socket.off('chat:message', handleMessage);
       socket.off(CHAT_PRESENCE_EVENT, handlePresence);
+      socket.off('connect', handleConnect);
+      socket.off('disconnect', handleDisconnect);
       socket.emit('chat:leave', { chatId, requestId: createChatRequestId('chat-leave') });
     };
   },
@@ -587,6 +617,16 @@ export const chatService = {
     });
 
     return true;
+  },
+
+  async loadChatMembersPage(chatId: string, options: { page: number; q?: string; candidates?: boolean }) {
+    const session = await getBackendSessionContext();
+    if (!session) throw new Error('Backend session is not available.');
+    const query = new URLSearchParams({ page: String(options.page), limit: '20', q: options.q || '', candidates: String(Boolean(options.candidates)) });
+    const response = await apiClient<{ data: { items: CommunityChatMember[]; pagination: { page: number; total: number; hasNextPage: boolean } } }>(
+      `${apiEndpoints.communityChatMembers(session.tenantId, chatId)}?${query}`, { token: session.token },
+    );
+    return response.data;
   },
 
   async addChatMembers(chatId: string, payload: { memberIds?: string[]; cities?: string[]; roleKeys?: string[]; audienceSegments?: string[]; allUsers?: boolean }) {

@@ -1,4 +1,4 @@
-import { Platform, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
 import { AppBottomBar } from '@/src/components';
@@ -22,22 +22,21 @@ export function MainNavigationMenuContent({
   const profileImage = session?.user.profilePhotoUrl || undefined;
   const isNormalUser = isPlainUserSession(session);
   const navItemsBase: readonly {
-    key: string;
     icon: string;
     label: string;
     active?: boolean;
   }[] = [
-    { key: 'home', icon: 'dashboard', label: t('nav.dashboard'), active: true },
-    { key: 'profile', icon: 'person', label: t('nav.profile') },
-    { key: 'family', icon: 'group', label: t('nav.family') },
-    { key: 'events', icon: 'event', label: t('nav.events') },
-    { key: 'donations', icon: 'volunteer-activism', label: t('nav.donations') },
-    { key: 'news', icon: 'newspaper', label: t('nav.news') },
-    { key: 'matrimony', icon: 'favorite', label: t('nav.matrimony') },
-    { key: 'transactions', icon: 'payments', label: t('nav.transactions') },
-    { key: 'chats', icon: 'chat', label: t('nav.chats') },
-    { key: 'notifications', icon: 'notifications', label: t('nav.notifications') },
-    { key: 'birthdays', icon: 'cake', label: t('nav.birthdays') },
+    { icon: 'dashboard', label: t('nav.dashboard'), active: true },
+    { icon: 'person', label: t('nav.profile') },
+    { icon: 'group', label: t('nav.family') },
+    { icon: 'event', label: t('nav.events') },
+    { icon: 'volunteer-activism', label: t('nav.donations') },
+    { icon: 'newspaper', label: t('nav.news') },
+    { icon: 'favorite', label: t('nav.matrimony') },
+    { icon: 'payments', label: t('nav.transactions') },
+    { icon: 'chat', label: t('nav.chats') },
+    { icon: 'notifications', label: t('nav.notifications') },
+    { icon: 'cake', label: t('nav.birthdays') },
   ];
   const updatedSidebarItems = [
     { key: 'home', icon: 'dashboard', label: t('nav.dashboard'), active: true },
@@ -55,22 +54,8 @@ export function MainNavigationMenuContent({
     { key: 'matrimony', icon: 'favorite', label: t('nav.matrimony') },
     { key: 'notifications', icon: 'notifications', label: t('nav.notifications') },
     { key: 'profile', icon: 'person', label: t('nav.profile') },
-  ].filter((item) => {
-    if (Platform.OS === 'ios' && item.key === 'donations') {
-      return false;
-    }
-
-    return !(isNormalUser && (item.key === 'finance' || item.key === 'expenses'));
-  });
-  const navItems = updated
-    ? updatedSidebarItems
-    : navItemsBase.filter((item) => {
-        if (Platform.OS === 'ios' && item.key === 'donations') {
-          return false;
-        }
-
-        return !(isNormalUser && item.key === 'transactions');
-      });
+  ].filter((item) => !(isNormalUser && (item.key === 'finance' || item.key === 'expenses')));
+  const navItems = updated ? updatedSidebarItems : navItemsBase.filter((item) => !(isNormalUser && item.label === t('nav.transactions')));
 
   return (
     <AppSafeAreaView style={{ flex: 1, backgroundColor: '#fdf9f6' }}>

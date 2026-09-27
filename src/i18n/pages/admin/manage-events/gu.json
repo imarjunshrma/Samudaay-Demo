@@ -1,4 +1,5 @@
 {
+  "actions.view": "જુઓ",
   "title": "ઇવેન્ટ્સ મેનેજ કરો",
   "form.createTitle": "નવું ઇવેન્ટ બનાવો",
   "form.editTitle": "ઇવેન્ટ સંપાદિત કરો",
@@ -93,6 +94,11 @@
   "form.startTime.placeholder": "શરૂઆતનો સમય પસંદ કરો",
   "form.endTime": "અંતનો સમય",
   "form.endTime.placeholder": "અંતનો સમય પસંદ કરો",
+  "form.reminders": "રીમાઇન્ડર સૂચનાઓ",
+  "form.reminders.helper": "ઇવેન્ટ પહેલાં આ ઇવેન્ટના દર્શકોને રીમાઇન્ડર મોકલો.",
+  "form.reminders.15": "15 દિવસ પહેલાં",
+  "form.reminders.7": "7 દિવસ પહેલાં",
+  "form.reminders.0": "ઇવેન્ટના દિવસે",
   "form.locationSearch": "સ્થળ શોધો",
   "form.locationSearch.placeholder": "વેન્યુ, બિલ્ડિંગ, લેન્ડમાર્ક અથવા સરનામું શોધો",
   "form.locationSearch.loading": "સ્થળો શોધી રહ્યા છે...",

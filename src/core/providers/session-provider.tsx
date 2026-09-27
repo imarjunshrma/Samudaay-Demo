@@ -68,6 +68,7 @@ function hasMeaningfulSessionChanges(current: UserSession | null, next: UserSess
     current.user.communityMembershipId === next.user.communityMembershipId &&
     current.user.communityMembershipStatus === next.user.communityMembershipStatus &&
     current.user.kycStatus === next.user.kycStatus &&
+    JSON.stringify(current.user.appMembership ?? null) === JSON.stringify(next.user.appMembership ?? null) &&
     current.user.subCommunity === next.user.subCommunity &&
     current.user.profilePhotoUrl === next.user.profilePhotoUrl &&
     areArraysEqual(current.user.permissions, next.user.permissions) &&

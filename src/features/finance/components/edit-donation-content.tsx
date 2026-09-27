@@ -6,5 +6,5 @@ export function EditDonationContent() {
   const params = useLocalSearchParams<{ donationId?: string }>();
   const donationId = typeof params.donationId === 'string' ? params.donationId : undefined;
 
-  return <RecordManualDonationContent donationId={donationId} editMode title="Edit Donation" submitLabel="Update Donation" />;
+  return <RecordManualDonationContent donationId={donationId} editMode title="Edit Contribution" submitLabel="Update Contribution" />;
 }

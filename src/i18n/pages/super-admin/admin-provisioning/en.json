@@ -13,7 +13,7 @@
   "permissions.contentModeration.title": "Content Moderation",
   "permissions.contentModeration.description": "Can delete posts and comments",
   "permissions.financialReporting.title": "Financial Reporting",
-  "permissions.financialReporting.description": "Can view and export donation reports",
+  "permissions.financialReporting.description": "Can view and export contribution reports",
   "actions.cancel": "Cancel",
   "actions.create": "Create Admin",
   "note": "The user will be notified of their new role via SMS and App Notification."

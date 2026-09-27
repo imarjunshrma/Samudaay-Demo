@@ -175,11 +175,6 @@ async function resolveExpoPermission(
     return current;
   }
 
-  if (await hasPermissionPromptBeenShown(kind)) {
-    maybeShowPermissionAlert(current, copy, resolvedOptions);
-    return current;
-  }
-
   const existingRequest = pendingPermissionRequests.get(kind);
   if (existingRequest) {
     return existingRequest;

@@ -8,6 +8,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { AppHeader, Dialog, Text, type DialogVariant } from '@/src/components';
 import { ImageViewer } from '@/src/components/media';
 import { useTranslations } from '@/src/i18n/use-translations';
+import { useSession } from '@/src/core/providers/session-provider';
 import { ensureCameraPermission } from '@/src/services/device/app-permissions';
 import { isAllowedUploadImageFile, showInvalidUploadFormatAlert } from '@/src/services/files/upload-file-policy';
 import { colors, radius, spacing, typography } from '@/src/theme';
@@ -24,6 +25,7 @@ type GalleryImage = {
 
 export function EventPhotoGalleryContent() {
   const t = useTranslations('events.event-photo-gallery');
+  const { session } = useSession();
   const params = useLocalSearchParams<{ eventId?: string | string[] }>();
   const eventId = Array.isArray(params.eventId) ? params.eventId[0] : params.eventId;
   const [event, setEvent] = useState<EventRecord | null>(null);
@@ -38,7 +40,7 @@ export function EventPhotoGalleryContent() {
     description?: string;
   }>({ visible: false, variant: 'info', title: '' });
   const galleryImages = useMemo(
-    () => [
+    (): GalleryImage[] => [
       ...capturedImages,
       ...galleryRecords.map((item) => ({
         uri: item.fileUrl,
@@ -50,29 +52,87 @@ export function EventPhotoGalleryContent() {
   );
   const visibleImages = useMemo(() => galleryImages, [galleryImages]);
   const viewerImages = useMemo(() => visibleImages.map((image) => ({ uri: image.uri })), [visibleImages]);
+  const effectivePermissions = useMemo(
+    () => new Set([...(session?.user.permissions ?? []), ...(session?.user.communityPermissions ?? [])].map((permission) => String(permission || ''))),
+    [session],
+  );
+  const hasEventPhotoUploadAccess = useMemo(
+    () =>
+      ['admin'].includes(String(session?.user.role || '').toLowerCase()) ||
+      effectivePermissions.has('event.manage') ||
+      effectivePermissions.has('events.manage') ||
+      effectivePermissions.has('event.photo_upload') ||
+      effectivePermissions.has('events.photo_upload'),
+    [effectivePermissions, session],
+  );
 
   useEffect(() => {
     let active = true;
     const load = async () => {
       const resolvedEventId = eventId || (await eventService.loadEventOverview()).eventId;
       if (!resolvedEventId) return null;
-      const [eventRecord, gallery, myPasses] = await Promise.all([
+      const [eventRecord, gallery] = await Promise.all([
         eventService.loadEvent(resolvedEventId),
         eventService.loadEventGallery(resolvedEventId),
-        eventService.loadMyEventPasses(),
       ]);
-      return { eventRecord, gallery, myPasses, resolvedEventId };
+      return { eventRecord, gallery };
     };
     load().then((result) => {
       if (!active || !result) return;
       setEvent(result.eventRecord);
       setGalleryRecords(result.gallery);
-      setCanUpload(result.myPasses.some((item) => item.eventId === result.resolvedEventId));
+      setCanUpload(hasEventPhotoUploadAccess);
     });
     return () => {
       active = false;
     };
-  }, [eventId]);
+  }, [eventId, hasEventPhotoUploadAccess]);
+
+  async function uploadSelectedAssets(assets: ImagePicker.ImagePickerAsset[]) {
+    if (!assets.length) {
+      return;
+    }
+
+    const files = assets.map((asset, index) => ({
+      uri: asset.uri,
+      name: asset.fileName || `event-${event?.id || eventId || 'photo'}-${Date.now()}-${index + 1}.jpg`,
+      mimeType: asset.mimeType || 'image/jpeg',
+    }));
+    const invalidFile = files.find((file) => !isAllowedUploadImageFile(file));
+    if (invalidFile) {
+      showInvalidUploadFormatAlert();
+      return;
+    }
+
+    const optimisticImages = assets.map((asset) => ({ uri: asset.uri, workshop: false, isUploading: true }));
+    setCapturedImages((current) => [...optimisticImages, ...current]);
+    try {
+      const resolvedEventId = event?.id || eventId || (await eventService.loadEventOverview()).eventId;
+      if (!resolvedEventId) {
+        throw new Error(t('errors.eventUnavailable'));
+      }
+      const uploaded = await eventService.uploadEventGalleryImages(
+        resolvedEventId,
+        files.map((file) => ({
+          uri: file.uri,
+          name: file.name,
+          type: file.mimeType || 'image/jpeg',
+        })),
+      );
+      const optimisticUris = new Set(optimisticImages.map((image) => image.uri));
+      setCapturedImages((current) => current.filter((image) => !optimisticUris.has(image.uri)));
+      setGalleryRecords((current) => [...uploaded, ...current]);
+    } catch (error) {
+      const optimisticUris = new Set(optimisticImages.map((image) => image.uri));
+      setCapturedImages((current) => current.filter((image) => !optimisticUris.has(image.uri)));
+      setDialog({
+        visible: true,
+        variant: 'error',
+        title: t('errors.uploadTitle'),
+        description: error instanceof Error ? error.message : t('errors.uploadDescription'),
+      });
+    }
+  }
 
   const handleCapturePress = async () => {
     const permission = await ensureCameraPermission({
@@ -90,39 +150,21 @@ export function EventPhotoGalleryContent() {
     });
 
     if (!result.canceled && result.assets?.length) {
-      const asset = result.assets[0];
-      const nextFile = {
-        uri: asset.uri,
-        name: asset.fileName || `event-${event?.id || eventId || 'capture'}-${Date.now()}.jpg`,
-        mimeType: asset.mimeType || 'image/jpeg',
-      };
-      if (!isAllowedUploadImageFile(nextFile)) {
-        showInvalidUploadFormatAlert();
-        return;
-      }
-      const optimistic = { uri: asset.uri, workshop: false, isUploading: true };
-      setCapturedImages((current) => [optimistic, ...current]);
-      try {
-        const resolvedEventId = event?.id || eventId || (await eventService.loadEventOverview()).eventId;
-        if (!resolvedEventId) {
-          throw new Error(t('errors.eventUnavailable'));
-        }
-        const uploaded = await eventService.uploadEventGalleryImage(resolvedEventId, {
-          uri: nextFile.uri,
-          name: nextFile.name,
-          type: nextFile.mimeType || 'image/jpeg',
-        });
-        setCapturedImages((current) => current.filter((image) => image.uri !== optimistic.uri));
-        setGalleryRecords((current) => [uploaded, ...current]);
-      } catch (error) {
-        setCapturedImages((current) => current.filter((image) => image.uri !== optimistic.uri));
-        setDialog({
-          visible: true,
-          variant: 'error',
-          title: t('errors.uploadTitle'),
-          description: error instanceof Error ? error.message : t('errors.uploadDescription'),
-        });
-      }
+      await uploadSelectedAssets(result.assets.slice(0, 1));
+    }
+  };
+
+  const handleLibraryPress = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      allowsMultipleSelection: true,
+      selectionLimit: 20,
+      quality: 0.7,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
+
+    if (!result.canceled && result.assets?.length) {
+      await uploadSelectedAssets(result.assets.slice(0, 20));
     }
   };
 
@@ -247,7 +289,8 @@ export function EventPhotoGalleryContent() {
         />
 
         {canUpload ? (
-          <View style={{ position: 'absolute', right: spacing[6], bottom: 92 }}>
+          <View style={{ position: 'absolute', right: spacing[6], bottom: 92, gap: spacing[3], alignItems: 'flex-end' }}>
+            <EventFloatingAction icon="photo-library" onPress={() => void handleLibraryPress()} />
             <EventFloatingAction icon="photo-camera" onPress={() => void handleCapturePress()} />
           </View>
         ) : null}

@@ -77,6 +77,7 @@ function toStoredSession(session: UserSession): StoredUserSession {
       ...(session.user.communityMembershipId ? { communityMembershipId: session.user.communityMembershipId } : {}),
       ...(session.user.communityMembershipStatus ? { communityMembershipStatus: session.user.communityMembershipStatus } : {}),
       ...(session.user.kycStatus ? { kycStatus: session.user.kycStatus } : {}),
+      ...(session.user.appMembership ? { appMembership: session.user.appMembership } : {}),
       ...(extraCommunityPermissions.length ? { communityPermissions: extraCommunityPermissions } : {}),
       ...(session.user.subCommunity ? { subCommunity: session.user.subCommunity } : {}),
       ...(session.user.profilePhotoUrl ? { profilePhotoUrl: session.user.profilePhotoUrl } : {}),

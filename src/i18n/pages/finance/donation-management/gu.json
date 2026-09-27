@@ -44,7 +44,7 @@
   "section.viewAll": "બધું જુઓ",
   "section.donationType": "દાન",
   "section.empty": "હજુ સુધી કોઈ દાન નથી",
-  "fallback.totalContributions": "કુલ સમુદાય ફાળો",
+  "fallback.totalDonations": "કુલ સમુદાય ફાળો",
   "error.loadFailed": "દાન લોડ કરી શક્યાં નથી",
   "checkout.title": "દાનની સમીક્ષા",
   "checkout.subtitle": "સુરક્ષિત Razorpay પેમેન્ટ પહેલાં દાનની સમીક્ષા કરો.",

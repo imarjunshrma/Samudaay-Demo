@@ -1,7 +1,7 @@
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
-import { Platform, ScrollView, View } from 'react-native';
+import { useCallback, useRef, useState } from 'react';
+import { AppState, ScrollView, View } from 'react-native';
 
 import { AppSafeAreaView, Card, CardGridSkeleton, DetailPageSkeleton, Text } from '@/src/components';
 import { useLocalizedBrandText } from '@/src/core/config/brand';
@@ -36,41 +36,55 @@ export function AdminDashboardContent() {
   const [error, setError] = useState<string | null>(null);
   const hasLoadedRef = useRef(false);
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
+    if (!session?.user.id) return;
     let active = true;
     if (!hasLoadedRef.current) {
       setIsLoading(true);
     }
     setError(null);
 
-    adminService
-      .loadTenantSummary()
-      .then((result) => {
-        if (!active) return;
-        setSummary(result);
-      })
-      .catch((loadError) => {
-        if (!active) return;
-        setError(loadError instanceof Error ? loadError.message : t('errors.loadFailed'));
-      })
-      .finally(() => {
-        if (!active) return;
-        hasLoadedRef.current = true;
-        setIsLoading(false);
-      });
+    let loading = false;
+    const refresh = () => {
+      if (loading || AppState.currentState === 'background' || AppState.currentState === 'inactive') return;
+      loading = true;
+      void adminService
+        .loadTenantSummary()
+        .then((result) => {
+          if (!active) return;
+          if (!result) throw new Error(t('errors.loadFailed'));
+          setSummary(result);
+          setError(null);
+        })
+        .catch((loadError) => {
+          if (!active) return;
+          setError(loadError instanceof Error ? loadError.message : t('errors.loadFailed'));
+        })
+        .finally(() => {
+          loading = false;
+          if (!active) return;
+          hasLoadedRef.current = true;
+          setIsLoading(false);
+        });
+    };
+    refresh();
+    const timer = setInterval(refresh, 15000);
+    const appStateSubscription = AppState.addEventListener('change', (state) => { if (state === 'active') refresh(); });
 
     return () => {
       active = false;
+      clearInterval(timer);
+      appStateSubscription.remove();
     };
-  }, [t]);
+  }, [t, session?.user.id]));
 
   const managementItems = [
     { key: 'donations', title: t('cards.donation'), subtitle: t('cards.donation.subtitle'), icon: 'volunteer-activism' as const, onPress: () => router.push('/admin/manage-donations' as never) },
     { key: 'events', title: t('cards.event'), subtitle: t('cards.event.subtitle'), icon: 'calendar-today' as const, onPress: () => router.push('/admin/manage-events' as never) },
-    { key: 'registration', title: t('cards.kyc'), subtitle: t('cards.kyc.subtitle'), icon: 'verified' as const, highlight: true, onPress: () => router.push('/admin/kyc-approvals' as never) },
+    { key: 'registration', title: t('cards.kyc'), subtitle: t('cards.kyc.subtitle'), icon: 'verified' as const, onPress: () => router.push('/admin/kyc-approvals' as never) },
     { key: 'profile-requests', title: t('cards.profileRequests'), subtitle: t('cards.profileRequests.subtitle'), icon: 'manage-accounts' as const, onPress: () => router.push('/admin/profile-requests' as never) },
     { key: 'matrimony-profiles', title: t('cards.matrimony'), subtitle: t('cards.matrimony.subtitle'), icon: 'favorite' as const, onPress: () => router.push('/admin/matrimony-profiles' as never) },
-    { key: 'invoices', title: t('cards.expense'), subtitle: t('cards.expense.subtitle'), icon: 'receipt-long' as const, onPress: () => router.push('/admin/invoices' as never) },
+    { key: 'invoices', title: t('cards.expense'), subtitle: t('cards.expense.subtitle'), icon: 'receipt-long' as const, onPress: () => router.push({ pathname: '/admin/invoices', params: { status: 'submitted' } } as never) },
     { key: 'invoices', title: t('cards.myExpenses'), subtitle: t('cards.myExpenses.subtitle'), icon: 'list-alt' as const, onPress: () => router.push('/admin/my-expenses' as never) },
     { key: 'clients', title: t('cards.users'), subtitle: t('cards.users.subtitle'), icon: 'person' as const, onPress: () => router.push('/admin/users' as never) },
     { key: 'family-registry', title: t('cards.familyRegistry'), subtitle: t('cards.familyRegistry.subtitle'), icon: 'family-restroom' as const, onPress: () => router.push('/admin/family-registry' as never) },
@@ -83,13 +97,7 @@ export function AdminDashboardContent() {
     { key: 'roles', title: t('cards.permissions'), subtitle: t('cards.permissions.subtitle'), icon: 'lock-open' as const, onPress: () => router.push('/admin/permissions' as never) },
     { key: 'chats', title: t('cards.chats'), subtitle: t('cards.chats.subtitle'), icon: 'forum' as const, onPress: () => router.push('/admin/community-chats' as never) },
     { key: 'analytics', title: t('cards.analytics'), subtitle: t('cards.analytics.subtitle'), icon: 'trending-up' as const, onPress: () => router.push('/admin/analytics' as never) },
-  ].filter((item) => {
-    if (Platform.OS === 'ios' && item.key === 'donations') {
-      return false;
-    }
-
-    return canAccessAdminNavKey(item.key, session);
-  });
+  ].filter((item) => canAccessAdminNavKey(item.key, session));
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>

@@ -9,7 +9,7 @@
   "roles.superAdmin.description": "Full access to all modules and system settings",
   "roles.eventAdmin.title": "Event Admin",
   "roles.eventAdmin.description": "Manage community meetups, workshops, and exhibitions",
-  "roles.donationAdmin.title": "Donation Admin",
+  "roles.donationAdmin.title": "Contribution Admin",
   "roles.donationAdmin.description": "Manage crowdfunding and charity distribution records",
   "roles.matrimonyAdmin.title": "Matrimony Admin",
   "roles.matrimonyAdmin.description": "Review profiles and facilitate community matches",
@@ -20,7 +20,7 @@
   "permissions.contentModeration.title": "Content Moderation",
   "permissions.contentModeration.description": "Can delete posts and comments",
   "permissions.financialReporting.title": "Financial Reporting",
-  "permissions.financialReporting.description": "Can view and export donation reports",
+  "permissions.financialReporting.description": "Can view and export contribution reports",
   "actions.cancel": "Cancel",
   "actions.create": "Assign Access"
 }

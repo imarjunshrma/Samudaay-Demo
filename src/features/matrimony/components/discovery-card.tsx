@@ -62,7 +62,7 @@ export function DiscoveryCard({
         <View style={{ position: 'absolute', top: spacing[4], right: spacing[4], width: 40, height: 40, borderRadius: radius.full, backgroundColor: colors.background.surface, alignItems: 'center', justifyContent: 'center' }}>
           <MaterialIcons name="favorite" size={20} color={favoriteTone === 'primary' ? colors.primary.DEFAULT : colors.text.muted} />
         </View>
-        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: spacing[4], backgroundColor: 'rgba(24,168,117,0.82)' }}>
+        <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: spacing[4], backgroundColor: 'rgba(242,120,13,0.82)' }}>
           <Text variant="h2" color="#ffffff" style={{ fontFamily: typography.fontFamily.bold, fontWeight: '700', fontSize: 30, lineHeight: 34 }}>
             {name}
           </Text>

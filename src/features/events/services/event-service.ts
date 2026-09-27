@@ -121,7 +121,16 @@ type EventRegistrationResult = {
   qrImage?: string | null;
 };
 
+export type EventAudience = {
+  allUsers?: boolean;
+  roleKeys?: string[];
+  cities?: string[];
+  memberIds?: string[];
+  audienceSegments?: string[];
+};
+
 export type EventPayload = {
+  audience?: EventAudience;
   title: string;
   description?: string | null;
   eventType?: string | null;
@@ -145,10 +154,12 @@ export type EventPayload = {
   maxAttendees?: number | null;
   reviewEnabled?: boolean;
   chatEnabled?: boolean;
+  reminderDays?: number[];
   addOns?: { title: string; amount: number; quantityLimit?: number | null }[];
 };
 
 export type EventRecord = {
+  audience?: EventAudience;
   id: string;
   title: string;
   description?: string | null;
@@ -173,6 +184,7 @@ export type EventRecord = {
   maxAttendees?: number | null;
   reviewEnabled?: boolean;
   chatEnabled?: boolean;
+  reminderDays?: number[];
   addOns?: { id: string; title: string; amount: number; quantityLimit?: number | null; sortOrder?: number }[];
   reviewSummary?: { count: number; averageRating: number };
   galleryCount?: number;
@@ -243,6 +255,8 @@ export type EventAnalyticsRecord = {
     id: string;
     userId: string;
     memberName: string;
+    memberNameEnglish?: string | null;
+    memberNameSecondLanguage?: string | null;
     memberId?: string | null;
     phone?: string | null;
     city?: string | null;
@@ -1007,7 +1021,7 @@ export const eventService = {
     }
   },
 
-  async uploadEventGalleryImage(eventId: string, file: { uri: string; name?: string; type?: string }, payload?: { caption?: string | null; category?: string | null }) {
+  async uploadEventGalleryImages(eventId: string, files: { uri: string; name?: string; type?: string }[], payload?: { caption?: string | null; category?: string | null }) {
     if (!isBackendApiConfigured()) {
       throw new Error('Backend API is not configured.');
     }
@@ -1018,11 +1032,13 @@ export const eventService = {
     }
 
     const formData = new FormData();
-    formData.append('file', {
-      uri: file.uri,
-      name: file.name || `event-${eventId}.jpg`,
-      type: file.type || 'image/jpeg',
-    } as never);
+    files.forEach((file, index) => {
+      formData.append('files', {
+        uri: file.uri,
+        name: file.name || `event-${eventId}-${index + 1}.jpg`,
+        type: file.type || 'image/jpeg',
+      } as never);
+    });
     if (payload?.caption) {
       formData.append('caption', payload.caption);
     }
@@ -1030,7 +1046,7 @@ export const eventService = {
       formData.append('category', payload.category);
     }
 
-    const response = await apiClient<{ data: EventGalleryRecord }>(
+    const response = await apiClient<{ data: EventGalleryRecord | EventGalleryRecord[] }>(
       apiEndpoints.communityEventGallery(backendSession.tenantId, eventId),
       {
         method: 'POST',
@@ -1040,7 +1056,12 @@ export const eventService = {
     );
     await invalidateTenantApiData(backendSession.tenantId);
 
-    return mapEventGalleryRecord(response.data);
+    return (Array.isArray(response.data) ? response.data : [response.data]).map(mapEventGalleryRecord);
+  },
+
+  async uploadEventGalleryImage(eventId: string, file: { uri: string; name?: string; type?: string }, payload?: { caption?: string | null; category?: string | null }) {
+    const records = await this.uploadEventGalleryImages(eventId, [file], payload);
+    return records[0];
   },
 
   async registerForEvent(eventId: string, payload: EventRegistrationPayload) {

@@ -86,7 +86,7 @@ export function TransactionAnalyticsContent() {
         label: label || t('fallback.unknownLocation'),
         value,
         widthPercent: Math.max(12, Math.round((value / max) * 100)),
-        color: index === 0 ? '#18a875' : index === 1 ? '#fb923c' : '#fdba74',
+        color: index === 0 ? '#f2780d' : index === 1 ? '#fb923c' : '#fdba74',
       }));
   }, [analytics, showAllLocations, t]);
   const reportTransactions = useMemo(
@@ -191,7 +191,7 @@ export function TransactionAnalyticsContent() {
                       onPress={() => setSelectedYear(filter)}
                       style={{
                         borderRadius: 16,
-                        backgroundColor: active ? colors.primary.DEFAULT : 'rgba(24,168,117,0.1)',
+                        backgroundColor: active ? colors.primary.DEFAULT : 'rgba(242,120,13,0.1)',
                         paddingHorizontal: spacing[4],
                         paddingVertical: spacing[2],
                       }}>
@@ -303,7 +303,7 @@ export function TransactionAnalyticsContent() {
                       width: '100%',
                       borderRadius: 16,
                       borderWidth: 1,
-                      borderColor: 'rgba(24,168,117,0.2)',
+                      borderColor: 'rgba(242,120,13,0.2)',
                       paddingVertical: spacing[3],
                       alignItems: 'center',
                     }}>
@@ -335,7 +335,7 @@ export function TransactionAnalyticsContent() {
                       subtitle={item.subtitle || item.type}
                       amount={formatAnalyticsCurrency(item.amount)}
                       status={item.status}
-                      icon={item.type === 'Donation' ? 'volunteer-activism' : item.type === 'Event' ? 'event' : item.type === 'Expense' ? 'receipt-long' : 'person'}
+                      icon={item.type === 'Donation' || item.type === 'Contribution' ? 'volunteer-activism' : item.type === 'Event' ? 'event' : item.type === 'Expense' ? 'receipt-long' : 'person'}
                     />
                   ))}
                 </View>

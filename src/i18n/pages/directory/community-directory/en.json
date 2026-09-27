@@ -55,7 +55,7 @@
   "errors.load": "Unable to load the community directory.",
   "stats.users": "Users",
   "stats.members": "Members",
-  "stats.communityMembers": "Community Members",
+  "stats.communityMembers": "Committee Member",
   "stats.trustees": "Trustees",
   "stats.admins": "Admins",
   "actions.clearAll": "Clear all",

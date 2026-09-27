@@ -22,7 +22,7 @@ const DRAWER_ALLOWED_PREFIXES = [
   '/profile/my-profile',
 ];
 
-type AppHeaderVariant = 'back' | 'back-inline' | 'centered' | 'menu-notification' | 'title-action' | 'brand';
+type AppHeaderVariant = 'plain' | 'back' | 'back-inline' | 'centered' | 'menu-notification' | 'title-action' | 'brand';
 
 export interface AppHeaderAction {
   key: string;
@@ -43,6 +43,7 @@ export interface AppHeaderProps {
   rightIcon?: React.ComponentProps<typeof IconButton>['icon'];
   onLeftPress?: () => void;
   onRightPress?: () => void;
+  onBackPress?: () => void;
   actions?: AppHeaderAction[];
   sticky?: boolean;
   transparent?: boolean;
@@ -69,6 +70,7 @@ function AppHeaderInner({
   rightIcon,
   onLeftPress,
   onRightPress,
+  onBackPress,
   actions,
   transparent = false,
   rightSlot,
@@ -109,7 +111,7 @@ function AppHeaderInner({
   }, [pathname, safePush]);
   const unreadNotificationCount = useNotificationSummary(variant === 'menu-notification');
   const resolvedLeftPress = onLeftPress
-    ?? (inlineBack ? handleBack : usesMenuLeftAction && canOpenDrawer ? openDrawer : undefined);
+    ?? (inlineBack ? (onBackPress ?? handleBack) : usesMenuLeftAction && canOpenDrawer ? openDrawer : undefined);
   const resolvedRightPress = onRightPress ?? (variant === 'menu-notification' ? handleNotificationsPress : undefined);
   const backgroundColor =
     variant === 'brand' || translucentBack ? 'rgba(248,247,245,0.92)' : transparent ? 'transparent' : colors.background.DEFAULT;

@@ -18,6 +18,7 @@
   "fields.bloodGroup": "Blood Group",
   "fields.addressEn": "Address (English)",
   "fields.addressGu": "Address",
+  "fields.area": "Area",
   "fields.city": "City",
   "fields.pincode": "Pincode",
   "fields.notProvided": "Not provided",
@@ -58,6 +59,8 @@
   "edit.fields.selectStateFirst": "Select state first",
   "edit.fields.city": "City",
   "edit.fields.selectCity": "Select city",
+  "edit.fields.area": "Area",
+  "edit.fields.selectArea": "Select area",
   "edit.fields.pan": "PAN Card Number",
   "edit.fields.panPlaceholder": "ABCDE1234F",
   "edit.fields.bloodGroup": "Blood Group",
@@ -71,6 +74,7 @@
   "edit.photo.emptyTitle": "Upload profile picture",
   "edit.photo.emptyDescription": "Choose a clear photo for your profile.",
   "edit.validation.dobFuture": "Date of birth cannot be in the future",
+  "edit.validation.areaRequired": "Area is required",
   "edit.validation.cityRequired": "City is required",
   "edit.validation.stateRequired": "State is required",
   "edit.validation.countryRequired": "Country is required",
@@ -100,6 +104,6 @@
   "kyc.inactiveTitle": "Inactive until KYC approval",
   "kyc.inactiveDescription": "Your profile will become active once KYC is approved.",
   "fallback.communityMember": "Community Member",
-  "meta.version": "Version 3.0.2",
+  "meta.version": "Version 2.4.1 (Artisan Cordwain Edition)",
   "meta.crafted": "Crafted with pride in India"
 }

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
 import {
@@ -322,10 +322,11 @@ function AdminNotificationsView() {
 }
 
 function AdminNotificationInboxView() {
+  const { unread } = useLocalSearchParams<{ unread?: string }>();
   const router = useRouter();
   const navigateBack = useBackNavigation();
   const t = useTranslations('communication.notifications');
-  const [activeTab, setActiveTab] = useState<'all' | 'unread'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'unread'>(() => unread === 'true' ? 'unread' : 'all');
   const [isMarkingRead, setIsMarkingRead] = useState(false);
   const [items, setItems] = useState<CommunityNotificationFeedItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);

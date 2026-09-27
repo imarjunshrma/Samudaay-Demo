@@ -26,7 +26,7 @@ export function useDonations({ mine = true }: { mine?: boolean } = {}) {
       await donationService.recordDonation(item);
       await query.refetch();
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Unable to record this donation.';
+      const message = error instanceof Error ? error.message : 'Unable to record this contribution.';
       throw new Error(message);
     } finally {
       setIsSubmitting(false);

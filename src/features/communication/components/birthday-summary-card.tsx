@@ -5,12 +5,15 @@ import { Text } from '@/src/components';
 import { SkeletonBlock } from '@/src/components/ui/skeleton';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
-import { useBirthdayFeed } from '../hooks/use-communication-feeds';
 
-export function BirthdaySummaryCard() {
+export function BirthdaySummaryCard({
+  todayCount = 0,
+  loading = false,
+}: {
+  todayCount?: number;
+  loading?: boolean;
+}) {
   const t = useTranslations('communication.birthday-reminders');
-  const { todayItems, isLoading } = useBirthdayFeed();
-  const birthdayCount = todayItems.length;
 
   return (
     <View style={{ paddingHorizontal: spacing[4], paddingVertical: spacing[6], backgroundColor: colors.background.DEFAULT }}>
@@ -20,11 +23,11 @@ export function BirthdaySummaryCard() {
           Today&apos;s Birthdays
         </Text>
       </View>
-      {isLoading ? (
+      {loading ? (
         <SkeletonBlock width="72%" height={14} style={{ marginTop: 2 }} />
       ) : (
         <Text variant="body" color={colors.text.secondary} style={{ fontSize: 14 }}>
-          {birthdayCount ? t('summary.todayActive') : t('summary.noneToday')}
+          {todayCount ? t('summary.todayActive') : t('summary.noneToday')}
         </Text>
       )}
     </View>

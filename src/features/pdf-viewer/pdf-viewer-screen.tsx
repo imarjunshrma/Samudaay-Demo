@@ -89,9 +89,10 @@ async function downloadPdfToCache(url: string, headers?: Record<string, string>)
 
 export function PdfViewerScreen() {
   const navigateBack = useBackNavigation();
-  const params = useLocalSearchParams<{ title?: string; url?: string; headers?: string }>();
+  const params = useLocalSearchParams<{ title?: string; url?: string; fileUri?: string; headers?: string }>();
   const title = params.title || 'PDF';
   const url = params.url || '';
+  const fileUri = params.fileUri || '';
   const headers = useMemo(() => parseHeaders(params.headers), [params.headers]);
   const [localUri, setLocalUri] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -101,6 +102,13 @@ export function PdfViewerScreen() {
 
     setLocalUri(null);
     setErrorMessage(null);
+
+    if (fileUri && Platform.OS !== 'web') {
+      setLocalUri(fileUri);
+      return () => {
+        active = false;
+      };
+    }
 
     if (!url || Platform.OS === 'web') {
       return () => {
@@ -123,13 +131,13 @@ export function PdfViewerScreen() {
     return () => {
       active = false;
     };
-  }, [headers, url]);
+  }, [fileUri, headers, url]);
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
       <AppHeader title={title} variant="back" onLeftPress={navigateBack} />
       <View style={{ flex: 1, backgroundColor: colors.background.muted }}>
-        {url ? (
+        {url || fileUri ? (
           <>
             {localUri ? (
               <Pdf

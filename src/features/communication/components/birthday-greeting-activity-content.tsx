@@ -1,16 +1,17 @@
+import type { ComponentProps } from 'react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
-import { AppHeaderSearch, Card, FilterChips, FilterSheet, InfiniteScrollList, Text } from '@/src/components';
+import { AppHeaderSearch, Button, Card, Dialog, FilterChips, FilterSheet, InfiniteScrollList, Text } from '@/src/components';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import { getPaginationTotal } from '@/src/utils/pagination';
 import { birthdayGreetingService, type BirthdayGreetingListResult } from '../services/birthday-greeting-service';
-import { type BirthdayGreetingSortKey } from '../services/birthday-greeting-log-utils';
+import { formatBirthdayGreetingDateTime, type BirthdayGreetingSortKey } from '../services/birthday-greeting-log-utils';
 import type { BirthdayGreetingLog } from '../constants';
 
 const PAGE_SIZE = 20;
@@ -18,54 +19,137 @@ const PAGE_SIZE = 20;
 type ActivityStatusFilter = 'all' | 'Delivered' | 'Scheduled';
 type ActivityChannelFilter = 'all' | 'In-app' | 'Scheduled';
 
+function ActivityMetaChip({
+  icon,
+  label,
+}: {
+  icon: ComponentProps<typeof MaterialIcons>['name'];
+  label: string;
+}) {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 5,
+        borderRadius: radius.full,
+        backgroundColor: colors.background.surface,
+        borderWidth: 1,
+        borderColor: colors.border.light,
+        paddingHorizontal: spacing[2],
+        paddingVertical: 5,
+      }}>
+      <MaterialIcons name={icon} size={13} color={colors.text.muted} />
+      <Text variant="caption" color={colors.text.secondary} style={{ fontFamily: typography.fontFamily.medium, fontSize: 12 }}>
+        {label}
+      </Text>
+    </View>
+  );
+}
+
 function ActivityLogCard({
   item,
   statusLabel,
+  cancelLabel,
+  cancelling,
+  onCancel,
 }: {
   item: BirthdayGreetingLog;
   statusLabel: string;
+  cancelLabel: string;
+  cancelling: boolean;
+  onCancel?: () => void;
 }) {
+  const activityIcon = item.status === 'Delivered' ? 'mark-email-read' : 'schedule-send';
+  const activityIconColor = item.status === 'Delivered' ? '#15803d' : '#b45309';
+  const activityIconBackground = item.status === 'Delivered' ? '#dcfce7' : '#fef3c7';
+
   return (
-    <Card variant="default" padding="md" style={{ borderColor: colors.primary.borderLight }}>
-      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing[3] }}>
+    <Card variant="default" padding="lg" style={{ borderColor: colors.primary.borderLight }}>
+      <View style={{ gap: spacing[3] }}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing[3] }}>
+          <View
+            style={{
+              width: 42,
+              height: 42,
+              borderRadius: radius.full,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: activityIconBackground,
+            }}>
+            <MaterialIcons name={activityIcon} size={20} color={activityIconColor} />
+          </View>
+          <View style={{ flex: 1, minWidth: 0, gap: 3 }}>
+            <Text variant="body" style={{ fontFamily: typography.fontFamily.bold }}>
+              {item.recipient}
+            </Text>
+            <Text variant="caption" color={colors.text.secondary} numberOfLines={1}>
+              {item.sender ? `From ${item.sender}` : 'Birthday greeting'}
+            </Text>
+          </View>
+          <View
+            style={{
+              borderRadius: radius.full,
+              backgroundColor: item.status === 'Delivered' ? '#dcfce7' : '#fef3c7',
+              paddingHorizontal: spacing[2],
+              paddingVertical: 5,
+            }}>
+            <Text
+              variant="caption"
+              color={item.status === 'Delivered' ? '#166534' : '#92400e'}
+              style={{ fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
+              {statusLabel}
+            </Text>
+          </View>
+        </View>
+
         <View
           style={{
-            width: 40,
-            height: 40,
-            borderRadius: radius.full,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: colors.primary.muted,
+            borderRadius: radius.lg,
+            borderWidth: 1,
+            borderColor: colors.border.light,
+            backgroundColor: colors.background.DEFAULT,
+            padding: spacing[3],
+            gap: spacing[2],
           }}>
-          <MaterialIcons name="outgoing-mail" size={18} color={colors.primary.DEFAULT} />
-        </View>
-        <View style={{ flex: 1, gap: spacing[1] }}>
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: spacing[2] }}>
-            <Text variant="body" style={{ flex: 1, fontFamily: typography.fontFamily.semibold }}>
-              {item.sender ? `${item.sender} -> ${item.recipient}` : item.recipient}
-            </Text>
-            <View
-              style={{
-                borderRadius: radius.full,
-                backgroundColor: item.status === 'Delivered' ? '#dcfce7' : '#fef3c7',
-                paddingHorizontal: spacing[2],
-                paddingVertical: 4,
-              }}>
-              <Text
-                variant="caption"
-                color={item.status === 'Delivered' ? '#166534' : '#92400e'}
-                style={{ fontFamily: typography.fontFamily.bold }}>
-                {statusLabel}
-              </Text>
-            </View>
-          </View>
-          <Text variant="caption" color={colors.text.secondary}>
+          <Text variant="caption" color={colors.text.muted} style={{ fontFamily: typography.fontFamily.bold, textTransform: 'uppercase', letterSpacing: 0.8 }}>
+            Template
+          </Text>
+          <Text variant="body" color={colors.text.primary} style={{ fontFamily: typography.fontFamily.semibold }}>
             {item.template}
           </Text>
-          <Text variant="caption" color={colors.text.muted}>
-            {[item.channel, item.sentAt].filter(Boolean).join(' • ')}
-          </Text>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginTop: spacing[1] }}>
+            <ActivityMetaChip icon="notifications" label={item.channel} />
+            <ActivityMetaChip icon={item.status === 'Delivered' ? 'event-available' : 'event'} label={formatBirthdayGreetingDateTime(item.sentAt)} />
+          </View>
         </View>
+
+        {item.status === 'Scheduled' && onCancel ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: spacing[3],
+              borderTopWidth: 1,
+              borderTopColor: colors.border.muted,
+              paddingTop: spacing[3],
+            }}>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text variant="caption" color={colors.text.muted}>
+                This greeting has not been delivered yet.
+              </Text>
+            </View>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={cancelling}
+              leftIcon={<MaterialIcons name="cancel-schedule-send" size={16} color={colors.primary.DEFAULT} />}
+              onPress={onCancel}>
+              {cancelLabel}
+            </Button>
+          </View>
+        ) : null}
       </View>
     </Card>
   );
@@ -85,6 +169,8 @@ export function BirthdayGreetingActivityContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [cancelTarget, setCancelTarget] = useState<BirthdayGreetingLog | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
   const hasLoadedRef = useRef(false);
 
   const loadActivity = useCallback(
@@ -143,6 +229,24 @@ export function BirthdayGreetingActivityContent() {
     [items, pagination],
   );
 
+  async function handleCancelScheduledGreeting() {
+    if (!cancelTarget?.id) {
+      setCancelTarget(null);
+      return;
+    }
+
+    try {
+      setCancellingId(cancelTarget.id);
+      await birthdayGreetingService.cancel(cancelTarget.id);
+      setCancelTarget(null);
+      await loadActivity('replace');
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : t('error.title'));
+    } finally {
+      setCancellingId(null);
+    }
+  }
+
   return (
     <AppSafeAreaView style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
       <View style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
@@ -167,6 +271,9 @@ export function BirthdayGreetingActivityContent() {
             <ActivityLogCard
               item={item}
               statusLabel={t(`admin.activity.status.${item.status}`)}
+              cancelLabel={t('admin.activity.cancel')}
+              cancelling={Boolean(item.id && cancellingId === item.id)}
+              onCancel={item.id && item.status === 'Scheduled' ? () => setCancelTarget(item) : undefined}
             />
           )}
           loadingInitial={isLoading}
@@ -285,6 +392,18 @@ export function BirthdayGreetingActivityContent() {
               onSelect: (key) => setChannelFilter(key as ActivityChannelFilter),
             },
           ]}
+        />
+        <Dialog
+          visible={Boolean(cancelTarget)}
+          variant="confirm"
+          title={t('admin.activity.cancelTitle')}
+          description={cancelTarget ? t('admin.activity.cancelDescription').replace('{recipient}', cancelTarget.recipient) : undefined}
+          confirmLabel={t('admin.activity.cancelConfirm')}
+          cancelLabel={t('admin.activity.cancelKeep')}
+          onConfirm={() => {
+            void handleCancelScheduledGreeting();
+          }}
+          onCancel={() => setCancelTarget(null)}
         />
       </View>
     </AppSafeAreaView>

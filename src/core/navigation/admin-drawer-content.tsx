@@ -55,7 +55,7 @@ export function AdminDrawerContent(props: DrawerContentComponentProps) {
         };
         const tabScreen = tabScreenByKey[key];
         if (tabScreen) {
-          props.navigation.navigate('(tabs)' as never, { screen: tabScreen } as never);
+          props.navigation.navigate('(tabs)' as never);
           return;
         }
         safeNavigateRoot(getAdminSidebarRoute(key));

@@ -96,8 +96,22 @@ export function NavigationGuard({ children }: { children: ReactNode }) {
     if (
       session.user.onboardingComplete &&
       !isAdminLikeRole &&
+      session.user.communityMembershipStatus === 'APP_PAYMENT_REQUIRED' &&
+      topLevelSegment !== 'app-membership-renewal'
+    ) {
+      return '/app-membership-renewal';
+    }
+
+    if (topLevelSegment === 'app-membership-renewal' && session.user.communityMembershipStatus !== 'APP_PAYMENT_REQUIRED') {
+      return getDefaultRouteForSession(session, appViewMode);
+    }
+
+    if (
+      session.user.onboardingComplete &&
+      !isAdminLikeRole &&
       session.user.communityMembershipStatus &&
       session.user.communityMembershipStatus !== 'ACTIVE' &&
+      session.user.communityMembershipStatus !== 'APP_PAYMENT_REQUIRED' &&
       topLevelSegment !== 'pending-approval'
     ) {
       return '/pending-approval';

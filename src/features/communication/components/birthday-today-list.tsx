@@ -1,10 +1,10 @@
 import { Image, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { EmptyState, SkeletonList, Text } from '@/src/components';
+import { Button, EmptyState, SkeletonList, Text } from '@/src/components';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import { useTranslations } from '@/src/i18n/use-translations';
-import { type BirthdayFeedItem, useBirthdayFeed } from '../hooks/use-communication-feeds';
+import { type BirthdayFeedItem } from '../hooks/use-communication-feeds';
 
 export function BirthdayTodayList({
   onWishPress,
@@ -13,19 +13,24 @@ export function BirthdayTodayList({
   loading = false,
   wishedRecipientIds = [],
   scheduledRecipientIds = [],
+  scheduledGreetingIdsByRecipientId = {},
+  cancellingGreetingId,
+  onCancelScheduledPress,
   currentUserId,
 }: {
   onWishPress?: (item: BirthdayFeedItem) => void;
   compact?: boolean;
-  items?: ReturnType<typeof useBirthdayFeed>['todayItems'];
+  items?: BirthdayFeedItem[];
   loading?: boolean;
   wishedRecipientIds?: string[];
   scheduledRecipientIds?: string[];
+  scheduledGreetingIdsByRecipientId?: Record<string, string>;
+  cancellingGreetingId?: string | null;
+  onCancelScheduledPress?: (greetingId: string, item: BirthdayFeedItem) => void;
   currentUserId?: string | null;
 }) {
   const t = useTranslations('communication.birthday-reminders');
-  const fallbackFeed = useBirthdayFeed();
-  const resolvedItems = items ?? fallbackFeed.todayItems;
+  const resolvedItems = items ?? [];
   const wishedRecipientIdSet = new Set(wishedRecipientIds);
   const scheduledRecipientIdSet = new Set(scheduledRecipientIds);
 
@@ -42,6 +47,7 @@ export function BirthdayTodayList({
         const isSelf = Boolean(currentUserId) && item.id === currentUserId;
         const wished = wishedRecipientIdSet.has(item.id);
         const scheduled = scheduledRecipientIdSet.has(item.id);
+        const scheduledGreetingId = scheduledGreetingIdsByRecipientId[item.id];
         const actionLocked = wished || scheduled;
         const ageLabel = t('list.turningToday').replace('{age}', item.meta?.match(/\d+/)?.[0] ?? '').trim();
 
@@ -54,7 +60,7 @@ export function BirthdayTodayList({
               gap: spacing[4],
               borderRadius: radius.xl,
               borderWidth: 1,
-              borderColor: 'rgba(24,168,117,0.05)',
+              borderColor: 'rgba(242,120,13,0.05)',
               backgroundColor: '#ffffff',
               padding: spacing[4],
               shadowColor: '#000',
@@ -72,7 +78,7 @@ export function BirthdayTodayList({
                   height: 56,
                   borderRadius: radius.full,
                   borderWidth: 2,
-                  borderColor: 'rgba(24,168,117,0.2)',
+                  borderColor: 'rgba(242,120,13,0.2)',
                 }}
               />
             ) : (
@@ -82,7 +88,7 @@ export function BirthdayTodayList({
                   height: 56,
                   borderRadius: radius.full,
                   borderWidth: 2,
-                  borderColor: 'rgba(24,168,117,0.2)',
+                  borderColor: 'rgba(242,120,13,0.2)',
                   backgroundColor: colors.primary.muted,
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -99,37 +105,47 @@ export function BirthdayTodayList({
               </Text>
             </View>
             {isSelf ? null : (
-              <TouchableOpacity
-                accessibilityRole="button"
-                disabled={actionLocked}
-                onPress={actionLocked ? undefined : () => onWishPress?.(item)}
-                activeOpacity={0.88}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 4,
-                  borderRadius: radius.lg,
-                  backgroundColor: '#18a875',
-                  minWidth: 92,
-                  height: 36,
-                  marginLeft: 'auto',
-                  paddingHorizontal: spacing[4],
-                  flexShrink: 0,
-                  opacity: actionLocked ? 0.96 : 1,
-                }}>
-                <MaterialIcons
-                  name={wished ? 'check-circle' : scheduled ? 'schedule-send' : 'send'}
-                  size={14}
-                  color="#ffffff"
-                />
-                <Text
-                  variant="caption"
-                  color="#ffffff"
-                  style={{ fontFamily: typography.fontFamily.bold, fontSize: 14 }}>
-                  {wished ? t('actions.wished') : scheduled ? t('admin.activity.status.Scheduled') : t('actions.wish')}
-                </Text>
-              </TouchableOpacity>
+              <View style={{ marginLeft: 'auto', alignItems: 'flex-end', gap: spacing[2], flexShrink: 0 }}>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  disabled={actionLocked}
+                  onPress={actionLocked ? undefined : () => onWishPress?.(item)}
+                  activeOpacity={0.88}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 4,
+                    borderRadius: radius.lg,
+                    backgroundColor: '#f2780d',
+                    minWidth: 92,
+                    height: 36,
+                    paddingHorizontal: spacing[4],
+                    opacity: actionLocked ? 0.96 : 1,
+                  }}>
+                  <MaterialIcons
+                    name={wished ? 'check-circle' : scheduled ? 'schedule-send' : 'send'}
+                    size={14}
+                    color="#ffffff"
+                  />
+                  <Text
+                    variant="caption"
+                    color="#ffffff"
+                    style={{ fontFamily: typography.fontFamily.bold, fontSize: 14 }}>
+                    {wished ? t('actions.wished') : scheduled ? t('admin.activity.status.Scheduled') : t('actions.wish')}
+                  </Text>
+                </TouchableOpacity>
+                {scheduled && scheduledGreetingId ? (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    disabled={cancellingGreetingId === scheduledGreetingId}
+                    leftIcon={<MaterialIcons name="cancel-schedule-send" size={15} color={colors.status.error} />}
+                    onPress={() => onCancelScheduledPress?.(scheduledGreetingId, item)}>
+                    {t('admin.activity.cancel')}
+                  </Button>
+                ) : null}
+              </View>
             )}
           </View>
         );

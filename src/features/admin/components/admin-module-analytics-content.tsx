@@ -227,27 +227,27 @@ async function buildDonationAnalytics(): Promise<AnalyticsModuleData> {
   }, {});
 
   return {
-    title: 'Donation Analytics',
-    subtitle: 'Fund collection, donor behaviour and receipt coverage.',
+    title: 'Contribution Analytics',
+    subtitle: 'Fund collection, contributor behaviour and receipt coverage.',
     icon: 'volunteer-activism',
-    primaryActionLabel: 'Open donation records',
+    primaryActionLabel: 'Open contribution records',
     primaryActionHref: '/admin/manage-donations',
     metrics: [
       { label: 'Paid collection', value: formatCurrency(totalAmount), helper: `${paidItems.length} settled records`, tone: 'primary' },
       { label: 'Pending approvals', value: formatCompactNumber(pendingItems.length), helper: 'Needs review or payment confirmation', tone: 'warning' },
-      { label: 'Recurring donors', value: formatCompactNumber(recurringDonors.size), helper: 'Unique paid donors', tone: 'success' },
-      { label: 'Average donation', value: formatCurrency(averageAmount), helper: 'Across paid receipts', tone: 'muted' },
+      { label: 'Recurring contributors', value: formatCompactNumber(recurringDonors.size), helper: 'Unique paid contributors', tone: 'success' },
+      { label: 'Average contribution', value: formatCurrency(averageAmount), helper: 'Across paid receipts', tone: 'muted' },
     ],
     breakdown: [
       ...topEntries(modeCounts).map(([label, value]) => ({
         label: `${label} mode`,
         value: formatCompactNumber(value),
-        helper: 'Paid donation records',
+        helper: 'Paid contribution records',
       })),
       ...topEntries(purposeCounts, 2).map(([label, value]) => ({
         label,
         value: formatCompactNumber(value),
-        helper: 'Top donation purpose',
+        helper: 'Top contribution purpose',
       })),
       {
         label: 'Cancelled records',
@@ -257,16 +257,16 @@ async function buildDonationAnalytics(): Promise<AnalyticsModuleData> {
     ],
     recent: items.slice(0, 5).map((item) => ({
       id: item.id,
-      title: item.donorName || 'Donation record',
+      title: item.donorName || 'Contribution record',
       subtitle: formatCurrency(item.amount || 0),
-      detail: item.receiptNo ? `Receipt ${item.receiptNo}` : item.donationPurpose || item.purpose || 'Donation entry',
+      detail: item.receiptNo ? `Receipt ${item.receiptNo}` : item.donationPurpose || item.purpose || 'Contribution entry',
       meta: [humanizeEnum(item.status), humanizeEnum(item.paymentMode), formatRelativeDate(item.createdAt)],
       icon: 'receipt-long',
       accentColor: item.status === 'PAID' ? colors.status.success : item.status === 'PENDING' ? colors.status.warning : colors.status.error,
     })),
     insights: [
-      pendingItems.length > paidItems.length ? 'Pending donation records are higher than completed receipts.' : 'Settled donations are ahead of pending receipts.',
-      recurringDonors.size ? `${formatCompactNumber(recurringDonors.size)} donors have contributed at least once in current data.` : 'No recurring donor trend is available yet.',
+      pendingItems.length > paidItems.length ? 'Pending contribution records are higher than completed receipts.' : 'Settled donations are ahead of pending receipts.',
+      recurringDonors.size ? `${formatCompactNumber(recurringDonors.size)} contributors have contributed at least once in current data.` : 'No recurring contributor trend is available yet.',
     ],
   };
 }

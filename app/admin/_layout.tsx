@@ -64,6 +64,7 @@ export default function AdminDrawerLayout() {
         <Drawer.Screen name="kyc-approvals" options={hiddenDrawerItemOptions} />
         <Drawer.Screen name="transaction-management" options={hiddenDrawerItemOptions} />
         <Drawer.Screen name="transaction-analytics" options={hiddenDrawerItemOptions} />
+        <Drawer.Screen name="registration-analytics" options={hiddenDrawerItemOptions} />
         <Drawer.Screen name="people-analytics" options={hiddenDrawerItemOptions} />
         <Drawer.Screen name="event-analytics" options={hiddenDrawerItemOptions} />
         <Drawer.Screen name="event-registrations" options={hiddenDrawerItemOptions} />

@@ -10,6 +10,7 @@ import type {
   BirthdayReminderControl,
   BirthdayTemplateManagementItem,
 } from '../constants';
+import { formatBirthdayGreetingDateTime } from '../services/birthday-greeting-log-utils';
 
 export function BirthdayAdminMetricGrid({ items }: { items: readonly BirthdayAdminMetric[] }) {
   return (
@@ -194,11 +195,15 @@ export function BirthdayGreetingLogRow({
   item: BirthdayGreetingLog;
   statusLabel: string;
 }) {
+  const activityIcon = item.status === 'Delivered' ? 'mark-email-read' : 'schedule-send';
+  const activityIconColor = item.status === 'Delivered' ? '#15803d' : '#b45309';
+  const activityIconBackground = item.status === 'Delivered' ? '#dcfce7' : '#fef3c7';
+
   return (
     <View
       style={{
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         gap: spacing[3],
         paddingVertical: spacing[3],
         borderBottomWidth: 1,
@@ -211,17 +216,49 @@ export function BirthdayGreetingLogRow({
           borderRadius: radius.full,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: colors.primary.muted,
+          backgroundColor: activityIconBackground,
         }}>
-        <MaterialIcons name="outgoing-mail" size={18} color={colors.primary.DEFAULT} />
+        <MaterialIcons name={activityIcon} size={18} color={activityIconColor} />
       </View>
-      <View style={{ flex: 1, gap: spacing[1] }}>
+      <View style={{ flex: 1, minWidth: 0, gap: spacing[1] }}>
         <Text variant="body" style={{ fontFamily: typography.fontFamily.semibold }}>
-          {item.sender ? `${item.sender} -> ${item.recipient}` : item.recipient}
+          {item.recipient}
         </Text>
-        <Text variant="caption" color={colors.text.muted}>
-          {item.template} • {item.channel} • {item.sentAt}
+        <Text variant="caption" color={colors.text.secondary} numberOfLines={1}>
+          {item.sender ? `From ${item.sender}` : item.template}
         </Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginTop: 2 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 4,
+              borderRadius: radius.full,
+              backgroundColor: colors.background.surface,
+              paddingHorizontal: spacing[2],
+              paddingVertical: 4,
+            }}>
+            <MaterialIcons name="style" size={12} color={colors.text.muted} />
+            <Text variant="caption" color={colors.text.muted} numberOfLines={1} style={{ fontSize: 12 }}>
+              {item.template}
+            </Text>
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 4,
+              borderRadius: radius.full,
+              backgroundColor: colors.background.surface,
+              paddingHorizontal: spacing[2],
+              paddingVertical: 4,
+            }}>
+            <MaterialIcons name={item.status === 'Delivered' ? 'event-available' : 'event'} size={12} color={colors.text.muted} />
+            <Text variant="caption" color={colors.text.muted} style={{ fontSize: 12 }}>
+              {formatBirthdayGreetingDateTime(item.sentAt)}
+            </Text>
+          </View>
+        </View>
       </View>
       <Badge label={statusLabel} variant={item.status === 'Delivered' ? 'success' : 'warning'} />
     </View>

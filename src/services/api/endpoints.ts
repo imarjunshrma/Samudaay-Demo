@@ -15,6 +15,13 @@ export const apiEndpoints = {
   communityProfileUpdateRequestDecision: (tenantId: string, requestId: string, action: 'approve' | 'reject') =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/profile-update-requests/${encodeURIComponent(requestId)}/${action}`,
   communitySaintPdf: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/saint/pdf`,
+  communityAppMembershipMe: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/app-membership/me`,
+  communityAppMembershipReport: (tenantId: string, query?: string) =>
+    `/api/v1/community/${encodeURIComponent(tenantId)}/app-membership/report${query ? `?${query}` : ''}`,
+  communityAdminAuditLogs: (tenantId: string, query?: string) =>
+    `/api/v1/community/${encodeURIComponent(tenantId)}/admin-audit-logs${query ? `?${query}` : ''}`,
+  communityAppMembershipPaymentOrder: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/app-membership/payment-order`,
+  communityAppMembershipPaymentVerify: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/app-membership/payment-verify`,
   communityRegistrationMe: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/registration/me`,
   communityRegistration: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/registration`,
   communityRegistrationById: (tenantId: string, registrationId: string) =>
@@ -50,6 +57,8 @@ export const apiEndpoints = {
   communityFamilyMember: (tenantId: string, familyMemberId: string) =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/family/${encodeURIComponent(familyMemberId)}`,
   communityDirectoryMembers: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/directory/members`,
+  communityDirectoryMembersImport: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/directory/members/import`,
+  communityDirectoryRegistrationReport: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/directory/members/registration-report`,
   communityDirectoryFilterOptions: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/directory/filter-options`,
   communityDirectoryMember: (tenantId: string, memberId: string) =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/directory/members/${encodeURIComponent(memberId)}`,
@@ -58,7 +67,14 @@ export const apiEndpoints = {
   communityDirectoryMemberRoles: (tenantId: string, memberId: string) =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/directory/members/${encodeURIComponent(memberId)}/roles`,
   communityDirectoryTrustees: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/directory/trustees`,
-  communityBirthdays: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/birthdays/list`,
+  communityBirthdays: (tenantId: string, query?: { windowDays?: number; month?: number; city?: string }) => {
+    const params = new URLSearchParams();
+    if (typeof query?.windowDays === 'number') params.set('windowDays', String(query.windowDays));
+    if (typeof query?.month === 'number') params.set('month', String(query.month));
+    if (query?.city) params.set('city', query.city);
+    const queryString = params.toString();
+    return `/api/v1/community/${encodeURIComponent(tenantId)}/birthdays/list${queryString ? `?${queryString}` : ''}`;
+  },
   communityBirthdaySettings: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/birthdays/settings`,
   communityBirthdayTemplates: (tenantId: string, includeInactive = false, page?: number, limit?: number) => {
     const params = new URLSearchParams();
@@ -93,10 +109,18 @@ export const apiEndpoints = {
     const queryString = params.toString();
     return `/api/v1/community/${encodeURIComponent(tenantId)}/birthdays/greetings${queryString ? `?${queryString}` : ''}`;
   },
+  communityBirthdayGreeting: (tenantId: string, greetingId: string) =>
+    `/api/v1/community/${encodeURIComponent(tenantId)}/birthdays/greetings/${encodeURIComponent(greetingId)}`,
   communityChildren: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/children`,
-  communityMarksheetReport: (tenantId: string, academicYear?: string) => {
+  communityMarksheetReport: (tenantId: string, query?: { academicYear?: string; page?: number; limit?: number; search?: string; department?: string; uploadStatus?: string } | string) => {
     const params = new URLSearchParams();
-    if (academicYear) params.set('academicYear', academicYear);
+    const normalizedQuery = typeof query === 'string' ? { academicYear: query } : query;
+    if (normalizedQuery?.academicYear) params.set('academicYear', normalizedQuery.academicYear);
+    if (normalizedQuery?.page) params.set('page', String(normalizedQuery.page));
+    if (normalizedQuery?.limit) params.set('limit', String(normalizedQuery.limit));
+    if (normalizedQuery?.search?.trim()) params.set('search', normalizedQuery.search.trim());
+    if (normalizedQuery?.department?.trim()) params.set('department', normalizedQuery.department.trim());
+    if (normalizedQuery?.uploadStatus?.trim()) params.set('uploadStatus', normalizedQuery.uploadStatus.trim());
     const queryString = params.toString();
     return `/api/v1/community/${encodeURIComponent(tenantId)}/children/marksheets/report${queryString ? `?${queryString}` : ''}`;
   },
@@ -106,6 +130,8 @@ export const apiEndpoints = {
     const queryString = params.toString();
     return `/api/v1/community/${encodeURIComponent(tenantId)}/children/marksheets/report/pdf${queryString ? `?${queryString}` : ''}`;
   },
+  communityMarksheetRecordMarks: (tenantId: string, marksheetId: string) =>
+    `/api/v1/community/${encodeURIComponent(tenantId)}/children/marksheets/${encodeURIComponent(marksheetId)}/marks`,
   communityChildMarksheetRecords: (tenantId: string, familyMemberId: string) =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/children/${encodeURIComponent(familyMemberId)}/marksheets`,
   communityEvents: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/events`,
@@ -149,7 +175,9 @@ export const apiEndpoints = {
     `/api/v1/community/${encodeURIComponent(tenantId)}/chat/${encodeURIComponent(chatId)}/media`,
   communityChatMessageById: (tenantId: string, chatId: string, messageId: string) =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/chat/${encodeURIComponent(chatId)}/messages/${encodeURIComponent(messageId)}`,
+  communityAppSettings: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/settings/app`,
   communityDonations: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/donations`,
+  communityDonationSettings: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/donations/settings`,
   communityDonationById: (tenantId: string, donationId: string) =>
     `/api/v1/community/${encodeURIComponent(tenantId)}/donations/${encodeURIComponent(donationId)}`,
   communityTransactions: (tenantId: string) => `/api/v1/community/${encodeURIComponent(tenantId)}/transactions`,

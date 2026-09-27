@@ -53,7 +53,8 @@ export function BirthdayRemindersContent({
   const insets = useSafeAreaInsets();
   const { session } = useSession();
   const t = useTranslations('communication.birthday-reminders');
-  const templates = useBirthdayTemplates();
+  const adminMode = mode === 'admin';
+  const templates = useBirthdayTemplates(adminMode);
   const birthdayFeed = useBirthdayFeed();
   const [controlState, setControlState] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(birthdayReminderControls.map((control) => [control.key, control.enabled])),
@@ -62,9 +63,10 @@ export function BirthdayRemindersContent({
   const [deliveredGreetingLogs, setDeliveredGreetingLogs] = useState<BirthdayGreetingLog[]>([]);
   const [greetingLogTotal, setGreetingLogTotal] = useState(0);
   const [templateToDelete, setTemplateToDelete] = useState<string | null>(null);
+  const [cancelGreetingTarget, setCancelGreetingTarget] = useState<{ id: string; recipient: string } | null>(null);
+  const [cancellingGreetingId, setCancellingGreetingId] = useState<string | null>(null);
   const [isDeletingTemplate, setIsDeletingTemplate] = useState(false);
   const [deleteError, setDeleteError] = useState<string>('');
-  const adminMode = mode === 'admin';
 
   const handleToggleControl = (key: string, nextValue: boolean) => {
     setControlState((current) => {
@@ -156,6 +158,20 @@ export function BirthdayRemindersContent({
         ),
       )
     : [];
+  const scheduledGreetingIdsByRecipientId = session?.user.id
+    ? Object.fromEntries(
+        deliveredGreetingLogs
+          .filter(
+            (log) =>
+              log.status === 'Scheduled' &&
+              Boolean(log.id) &&
+              Boolean(log.senderId) &&
+              Boolean(log.recipientId) &&
+              log.senderId === session.user.id,
+          )
+          .map((log) => [log.recipientId as string, log.id as string]),
+      )
+    : {};
   const templatePendingDelete = templateToDelete
     ? localizedTemplates.find((template) => template.id === templateToDelete) ?? null
     : null;
@@ -165,16 +181,24 @@ export function BirthdayRemindersContent({
       setTemplateToDelete(null);
       setDeleteError('');
       let active = true;
-      Promise.all([
-        birthdayGreetingService.listPaginated({ page: 1, limit: GREETING_ACTIVITY_PREVIEW_COUNT, sort: 'latest' }),
-        birthdayGreetingService.listPaginated({ page: 1, limit: 100, sort: 'latest' }),
-      ])
-        .then(([previewResult, greetingResult]) => {
+      const greetingLimit = adminMode ? 100 : 50;
+      if (!adminMode && !birthdayFeed.todayItems.length) {
+        setRecentGreetingLogs([]);
+        setDeliveredGreetingLogs([]);
+        setGreetingLogTotal(0);
+        return () => {
+          active = false;
+        };
+      }
+
+      birthdayGreetingService
+        .listPaginated({ page: 1, limit: greetingLimit, sort: 'latest' })
+        .then((greetingResult) => {
           if (!active) {
             return;
           }
-          setRecentGreetingLogs(previewResult.items);
-          setGreetingLogTotal(previewResult.pagination.total);
+          setRecentGreetingLogs(greetingResult.items.slice(0, GREETING_ACTIVITY_PREVIEW_COUNT));
+          setGreetingLogTotal(greetingResult.pagination.total);
           setDeliveredGreetingLogs(greetingResult.items);
         })
         .catch(() => {
@@ -189,7 +213,7 @@ export function BirthdayRemindersContent({
       return () => {
         active = false;
       };
-    }, []),
+    }, [adminMode, birthdayFeed.todayItems.length]),
   );
 
   async function handleDeleteTemplate() {
@@ -206,6 +230,31 @@ export function BirthdayRemindersContent({
       setDeleteError(error instanceof Error ? error.message : t('admin.delete.error'));
     } finally {
       setIsDeletingTemplate(false);
+    }
+  }
+
+  async function reloadGreetingLogs() {
+    const greetingLimit = adminMode ? 100 : 50;
+    const greetingResult = await birthdayGreetingService.listPaginated({ page: 1, limit: greetingLimit, sort: 'latest' });
+    setRecentGreetingLogs(greetingResult.items.slice(0, GREETING_ACTIVITY_PREVIEW_COUNT));
+    setGreetingLogTotal(greetingResult.pagination.total);
+    setDeliveredGreetingLogs(greetingResult.items);
+  }
+
+  async function handleCancelScheduledGreeting() {
+    if (!cancelGreetingTarget) {
+      return;
+    }
+
+    setCancellingGreetingId(cancelGreetingTarget.id);
+    try {
+      await birthdayGreetingService.cancel(cancelGreetingTarget.id);
+      setCancelGreetingTarget(null);
+      await reloadGreetingLogs();
+    } catch {
+      return;
+    } finally {
+      setCancellingGreetingId(null);
     }
   }
 
@@ -248,6 +297,9 @@ export function BirthdayRemindersContent({
                   loading={birthdayFeed.isLoading}
                   wishedRecipientIds={wishedRecipientIds}
                   scheduledRecipientIds={scheduledRecipientIds}
+                  scheduledGreetingIdsByRecipientId={scheduledGreetingIdsByRecipientId}
+                  cancellingGreetingId={cancellingGreetingId}
+                  onCancelScheduledPress={(greetingId, item) => setCancelGreetingTarget({ id: greetingId, recipient: item.name })}
                   currentUserId={session?.user.id ?? null}
                 />
               </BirthdayAdminSection>
@@ -323,7 +375,7 @@ export function BirthdayRemindersContent({
               </View>
             ) : (
               <>
-                <BirthdaySummaryCard />
+                <BirthdaySummaryCard todayCount={birthdayFeed.todayItems.length} loading={birthdayFeed.isLoading} />
                 {birthdayFeed.errorMessage ? (
                   <View style={{ paddingHorizontal: spacing[4], paddingTop: spacing[4] }}>
                     <ErrorState
@@ -344,6 +396,9 @@ export function BirthdayRemindersContent({
                       loading={birthdayFeed.isLoading}
                       wishedRecipientIds={wishedRecipientIds}
                       scheduledRecipientIds={scheduledRecipientIds}
+                      scheduledGreetingIdsByRecipientId={scheduledGreetingIdsByRecipientId}
+                      cancellingGreetingId={cancellingGreetingId}
+                      onCancelScheduledPress={(greetingId, item) => setCancelGreetingTarget({ id: greetingId, recipient: item.name })}
                       currentUserId={session?.user.id ?? null}
                     />
                     <BirthdayUpcomingList
@@ -406,6 +461,25 @@ export function BirthdayRemindersContent({
           }
           setDeleteError('');
           setTemplateToDelete(null);
+        }}
+      />
+      <Dialog
+        visible={Boolean(cancelGreetingTarget)}
+        variant="confirm"
+        title={t('admin.activity.cancelTitle')}
+        description={
+          cancelGreetingTarget
+            ? t('admin.activity.cancelDescription').replace('{recipient}', cancelGreetingTarget.recipient)
+            : undefined
+        }
+        confirmLabel={t('admin.activity.cancelConfirm')}
+        cancelLabel={t('admin.activity.cancelKeep')}
+        onConfirm={() => { void handleCancelScheduledGreeting(); }}
+        onCancel={() => {
+          if (cancellingGreetingId) {
+            return;
+          }
+          setCancelGreetingTarget(null);
         }}
       />
     </>

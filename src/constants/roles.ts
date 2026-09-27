@@ -15,6 +15,7 @@ export const rolePermissions: Record<UserRole, Permission[]> = {
     'users.block',
     'events.view',
     'events.manage',
+    'event.photo_upload',
     'events.attendance',
     'donations.view',
     'donations.manage',

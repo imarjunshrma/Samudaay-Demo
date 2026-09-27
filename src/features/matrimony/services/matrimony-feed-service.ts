@@ -10,6 +10,7 @@ import { invalidateTenantApiData } from '@/src/services/api/cache-invalidation';
 import { createAndDeliverPdf } from '@/src/services/files/pdf-file';
 import type { RazorpayCheckoutOptions, RazorpayPaymentError, RazorpayPaymentSuccess } from 'react-native-razorpay';
 import { DONATION_RECEIPT_LOGO_URI } from '@/src/features/finance/services/donation-receipt-assets';
+import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 
 type MatrimonyDiscoveryItem = {
   id: string;
@@ -100,6 +101,8 @@ export type MatrimonyAnalyticsRecord = {
   recentApprovals: {
     id: string;
     name: string;
+    nameEnglish?: string | null;
+    nameSecondLanguage?: string | null;
     locationAge: string;
     status: 'APPROVED' | 'ACTIVE' | 'PENDING_APPROVAL' | 'REJECTED' | string;
     image?: string | null;
@@ -167,9 +170,11 @@ export type MatrimonyProfileRecord = {
   firstName: string;
   lastName: string;
   dob?: string | null;
+  age?: number | null;
   height?: string | null;
   gender?: string | null;
   maritalStatus?: string | null;
+  childrenCount?: number | null;
   education?: string | null;
   occupation?: string | null;
   income?: string | null;
@@ -178,6 +183,7 @@ export type MatrimonyProfileRecord = {
   familyBackground?: string | null;
   caste?: string | null;
   community?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -219,12 +225,14 @@ export type MatrimonyProfileInput = {
   photos?: FileValue[];
   gender?: string | null;
   maritalStatus?: string | null;
+  childrenCount?: number | null;
   income?: string | null;
   aboutMe?: string | null;
   familyType?: string | null;
   familyBackground?: string | null;
   caste?: string | null;
   community?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -464,7 +472,7 @@ function buildMatrimonyInvoiceHtml(invoice: MatrimonyTransactionInvoiceInput) {
             object-fit: contain;
             border-radius: 18px;
             background: #ffffff;
-            border: 1px solid rgba(24,168,117, 0.18);
+            border: 1px solid rgba(242, 120, 13, 0.18);
             padding: 8px;
           }
           .eyebrow {
@@ -687,17 +695,20 @@ function mapProfileRecord(profile: {
   firstName: string;
   lastName?: string | null;
   dob?: string | null;
+  age?: number | null;
   height?: string | null;
   education?: string | null;
   occupation?: string | null;
   gender?: string | null;
   maritalStatus?: string | null;
+  childrenCount?: number | null;
   income?: string | null;
   aboutMe?: string | null;
   familyType?: string | null;
   familyBackground?: string | null;
   caste?: string | null;
   community?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -718,6 +729,7 @@ function mapProfileRecord(profile: {
     phone?: string | null;
     email?: string | null;
   } | null;
+  connection?: MatrimonyDiscoveryItem['connection'];
   createdAt?: string | null;
   updatedAt?: string | null;
 }): MatrimonyProfileRecord {
@@ -727,9 +739,11 @@ function mapProfileRecord(profile: {
     firstName: normalizeProfileText(profile.firstName),
     lastName: normalizeProfileText(profile.lastName),
     dob: profile.dob || null,
+    age: typeof profile.age === 'number' ? profile.age : null,
     height: profile.height || null,
     gender: normalizeProfileText(profile.gender) || null,
     maritalStatus: normalizeProfileText(profile.maritalStatus) || null,
+    childrenCount: typeof profile.childrenCount === 'number' ? profile.childrenCount : null,
     education: normalizeProfileText(profile.education) || null,
     occupation: normalizeProfileText(profile.occupation) || null,
     income: normalizeProfileText(profile.income) || null,
@@ -738,6 +752,7 @@ function mapProfileRecord(profile: {
     familyBackground: normalizeProfileText(profile.familyBackground) || null,
     caste: normalizeProfileText(profile.caste) || null,
     community: normalizeProfileText(profile.community) || null,
+    area: normalizeProfileText(profile.area) || null,
     city: normalizeProfileText(profile.city) || null,
     state: normalizeProfileText(profile.state) || null,
     country: normalizeProfileText(profile.country) || null,
@@ -807,7 +822,17 @@ export const matrimonyFeedService = {
       { token: backendSession.token },
     );
 
-    return response.data;
+    return {
+      ...response.data,
+      recentApprovals: await Promise.all((response.data.recentApprovals ?? []).map(async (profile) => {
+        const nameEnglish = profile.nameEnglish || profile.name;
+        return {
+          ...profile,
+          nameEnglish,
+          nameSecondLanguage: await resolveSecondaryLanguageText(nameEnglish, null),
+        };
+      })),
+    };
   },
 
   async updateSettings(payload: MatrimonySettingsInput): Promise<MatrimonyAccessRecord['settings']> {
@@ -1025,6 +1050,7 @@ export const matrimonyFeedService = {
     formData.append('height', payload.height || '');
     formData.append('gender', payload.gender || '');
     formData.append('maritalStatus', payload.maritalStatus || '');
+    formData.append('childrenCount', payload.childrenCount !== null && payload.childrenCount !== undefined ? String(payload.childrenCount) : '');
     formData.append('education', payload.education || '');
     formData.append('occupation', payload.occupation || '');
     formData.append('remarks', payload.remarks || '');
@@ -1034,6 +1060,7 @@ export const matrimonyFeedService = {
     formData.append('familyBackground', payload.familyBackground || '');
     formData.append('caste', payload.caste || '');
     formData.append('community', payload.community || '');
+    formData.append('area', payload.area || '');
     formData.append('city', payload.city || '');
     formData.append('state', payload.state || '');
     formData.append('country', payload.country || '');

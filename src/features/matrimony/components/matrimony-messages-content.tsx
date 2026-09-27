@@ -135,7 +135,7 @@ export function MatrimonyMessagesContent({
     : 'Send or accept a matrimony request to start a private conversation.';
   const requestsLockedBySubscription = access?.canSendRequest === false;
   const requestsLockedByProfile = myProfileLoaded && !myProfile;
-  const requestsLockedByApproval = myProfileLoaded && Boolean(myProfile) && !['APPROVED', 'ACTIVE'].includes(myProfile.status);
+  const requestsLockedByApproval = myProfileLoaded && myProfile !== null && !['APPROVED', 'ACTIVE'].includes(myProfile.status);
 
   let lockTitle: string | null = null;
   let lockDescription: string | null = null;

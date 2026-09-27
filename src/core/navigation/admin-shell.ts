@@ -1,7 +1,6 @@
 import type { AppBottomBarItem } from '@/src/components/layout/AppBottomBar/AppBottomBar';
 import type { AppSidebarItem } from '@/src/components/layout/AppSidebar/AppSidebar';
 import type { Permission, UserSession } from '@/src/types/app';
-import { Platform } from 'react-native';
 
 export const adminPrimaryRoutes = {
   home: '/admin/dashboard',
@@ -151,13 +150,7 @@ export function canAccessAdminNavKey(key: string, session: UserSession | null | 
 }
 
 export function getVisibleAdminSidebarItems(session: UserSession | null | undefined) {
-  return adminSidebarItems.filter((item) => {
-    if (Platform.OS === 'ios' && item.key === 'donations') {
-      return false;
-    }
-
-    return canAccessAdminNavKey(String(item.key), session);
-  });
+  return adminSidebarItems.filter((item) => canAccessAdminNavKey(String(item.key), session));
 }
 
 export function getVisibleAdminBottomBarItems(session: UserSession | null | undefined) {

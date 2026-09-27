@@ -53,28 +53,10 @@ function getSnapshot() {
 
 function formatSentAt(status: BirthdayGreetingLog['status'], scheduledAt?: string) {
   if (status === 'Scheduled') {
-    if (scheduledAt) {
-      const parsedDate = new Date(scheduledAt);
-      if (!Number.isNaN(parsedDate.getTime())) {
-        return parsedDate.toLocaleString('en-IN', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-          hour: 'numeric',
-          minute: '2-digit',
-        });
-      }
-    }
-
-    return 'Tomorrow, 8:00 AM';
+    return scheduledAt || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   }
 
-  return new Date().toLocaleString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    hour: 'numeric',
-    minute: '2-digit',
-  });
+  return new Date().toISOString();
 }
 
 function applyLocalQuery(logs: BirthdayGreetingLog[], query: BirthdayGreetingListQuery = {}): BirthdayGreetingListResult {
@@ -174,6 +156,30 @@ export const birthdayGreetingService = {
     greetingLogs = [...nextLogs, ...greetingLogs];
     emitChange();
     return nextLogs[0];
+  },
+
+  async cancel(greetingId: string) {
+    const id = String(greetingId || '').trim();
+    if (!id) {
+      throw new Error('Birthday greeting id is required.');
+    }
+
+    if (isBackendApiConfigured()) {
+      const backendSession = await getBackendSessionContext();
+      if (backendSession) {
+        await apiClient<{ data: BirthdayGreetingLog }>(
+          apiEndpoints.communityBirthdayGreeting(backendSession.tenantId, id),
+          {
+            method: 'DELETE',
+            token: backendSession.token,
+          },
+        );
+      }
+    }
+
+    greetingLogs = greetingLogs.filter((log) => log.id !== id);
+    emitChange();
+    return { id };
   },
 };
 

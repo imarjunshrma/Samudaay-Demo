@@ -72,10 +72,10 @@ const manualSections: ManualSection[] = [
     icon: 'volunteer-activism',
     summary: 'Make donations, view receipts, and track your paid activity.',
     steps: [
-      'Open Donations and enter amount, purpose, and donor details.',
-      'Donate as yourself or on behalf of another person where supported.',
+      'Open Donations and enter amount, purpose, and contributor details.',
+      'Contribute as yourself or on behalf of another person where supported.',
       'Complete online payment and wait for the success receipt confirmation.',
-      'Open Transactions to view donation receipts, event payments, and subscription activity.',
+      'Open Transactions to view contribution receipts, event payments, and subscription activity.',
     ],
   },
   {

@@ -414,11 +414,14 @@ export const birthdayTemplateService = {
   },
 };
 
-export function useBirthdayTemplates() {
+export function useBirthdayTemplates(enabled = true) {
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
     hydrateTemplates();
     hydrateBackendTemplates();
-  }, []);
+  }, [enabled]);
 
   return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 }

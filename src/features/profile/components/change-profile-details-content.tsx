@@ -15,6 +15,7 @@ import { useAppForm } from '@/src/hooks/useForm';
 import { useProfile } from '@/src/features/profile/hooks';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { useTranslations } from '@/src/i18n/use-translations';
+import { isVadodaraCity, resolveVadodaraArea, vadodaraAreaOptions } from '@/src/services/location/vadodara-area-options';
 import { colors, spacing, typography } from '@/src/theme';
 import type { FileValue } from '@/src/types';
 
@@ -29,6 +30,7 @@ type ProfileEditValues = {
   dob: Date | undefined;
   addressLine1: string;
   addressLine2: string;
+  area: string;
   city: string;
   state: string;
   country: string;
@@ -93,6 +95,7 @@ export function ChangeProfileDetailsContent() {
       dob: parseDate(profile?.dob),
       addressLine1: profile?.addressLine1 || '',
       addressLine2: profile?.addressLine2 || '',
+      area: isVadodaraCity(profile?.city) ? resolveVadodaraArea(profile?.city || '', profile?.area) : profile?.area || '',
       city: profile?.city || '',
       state: profile?.state || '',
       country: 'India',
@@ -107,6 +110,11 @@ export function ChangeProfileDetailsContent() {
       gender: fieldSchemas.requiredSelect,
       dob: fieldSchemas.date.max(today, t('edit.validation.dobFuture')),
       addressLine1: fieldSchemas.address,
+      area: Yup.string().when('city', {
+        is: (city: string) => isVadodaraCity(city),
+        then: (schema) => schema.required(t('edit.validation.areaRequired')),
+        otherwise: (schema) => schema.optional(),
+      }),
       city: Yup.string().required(t('edit.validation.cityRequired')),
       state: Yup.string().required(t('edit.validation.stateRequired')),
       country: Yup.string().required(t('edit.validation.countryRequired')),
@@ -138,6 +146,7 @@ export function ChangeProfileDetailsContent() {
           dob: values.dob ? values.dob.toISOString() : null,
           addressLine1: values.addressLine1.trim(),
           addressLine2: values.addressLine2.trim(),
+          area: isVadodaraCity(values.city) ? values.area.trim() : '',
           city: values.city.trim(),
           state: values.state.trim(),
           country: values.country.trim(),
@@ -147,6 +156,7 @@ export function ChangeProfileDetailsContent() {
           addressEn: [
             values.addressLine1,
             values.addressLine2,
+            isVadodaraCity(values.city) ? values.area : '',
             values.city,
             values.state,
             values.country,
@@ -167,6 +177,7 @@ export function ChangeProfileDetailsContent() {
             dob: parseDate(saved.dob) || values.dob,
             addressLine1: saved.addressLine1 || values.addressLine1,
             addressLine2: saved.addressLine2 || values.addressLine2,
+            area: saved.area || values.area,
             city: saved.city || values.city,
             state: saved.state || values.state,
             country: saved.country || values.country,
@@ -360,6 +371,7 @@ export function ChangeProfileDetailsContent() {
                   formik.setFieldValue('country', value);
                   formik.setFieldValue('state', '');
                   formik.setFieldValue('city', '');
+                  formik.setFieldValue('area', '');
                 }}
                 options={countryOptions}
                 required
@@ -377,6 +389,8 @@ export function ChangeProfileDetailsContent() {
                       formik.setFieldTouched('state', true, false);
                       formik.setFieldValue('city', '');
                       formik.setFieldTouched('city', false, false);
+                      formik.setFieldValue('area', '');
+                      formik.setFieldTouched('area', false, false);
                     }}
                     options={formik.values.country ? stateOptions : []}
                     disabled={!formik.values.country || isLoadingStates}
@@ -393,7 +407,9 @@ export function ChangeProfileDetailsContent() {
                     value={formik.values.city}
                     onSelect={(value) => {
                       formik.setFieldValue('city', value);
+                      formik.setFieldValue('area', resolveVadodaraArea(value, formik.values.area));
                       formik.setFieldTouched('city', true, false);
+                      formik.setFieldTouched('area', false, false);
                     }}
                     options={formik.values.state ? cityOptions : []}
                     disabled={!formik.values.state || isLoadingCities}
@@ -402,6 +418,22 @@ export function ChangeProfileDetailsContent() {
                   />
                 </View>
               </View>
+              {isVadodaraCity(formik.values.city) ? (
+                <SelectField
+                  label={t('edit.fields.area')}
+                  labelVariant="default"
+                  variant="registration"
+                  placeholder={t('edit.fields.selectArea')}
+                  value={formik.values.area}
+                  onSelect={(value) => {
+                    formik.setFieldValue('area', value);
+                    formik.setFieldTouched('area', true, false);
+                  }}
+                  options={vadodaraAreaOptions}
+                  error={formik.touched.area ? formik.errors.area : undefined}
+                  required
+                />
+              ) : null}
               <TextField
                 name="pincode"
                 label={t('fields.pincode')}

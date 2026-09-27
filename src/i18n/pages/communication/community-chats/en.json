@@ -1,4 +1,5 @@
 {
+  "filters.unreadOnly": "Unread chats only",
   "title": "Community Chats",
   "search.placeholder": "Search groups...",
   "tabs.all": "All",

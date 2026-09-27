@@ -15,6 +15,7 @@ import {
 import { matrimonyFeedService, type MatrimonyAccessRecord, type MatrimonyAnalyticsRecord } from '../services/matrimony-feed-service';
 import { MatrimonyAnalyticsSkeleton } from './matrimony-loading-states';
 import { downloadAnalyticsReport, type AnalyticsExportFormat } from '@/src/features/finance/services/analytics-report-service';
+import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 
 function formatNumber(value: number) {
   return new Intl.NumberFormat('en-IN').format(value);
@@ -310,6 +311,28 @@ export function MatrimonyAnalyticsContent() {
     setIsDownloadingReport(true);
     try {
       const profiles = await matrimonyFeedService.loadAllProfilesForReport();
+      const profileReportRows = await Promise.all(profiles.map(async (profile) => {
+        const nameEnglish = [profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Matrimony Profile';
+        return [
+          nameEnglish,
+          await resolveSecondaryLanguageText(nameEnglish, null),
+          profile.memberId || '',
+          profile.status || '',
+          profile.gender || '',
+          profile.dob || '',
+          profile.age ?? '',
+          profile.maritalStatus || '',
+          profile.childrenCount ?? '',
+          profile.education || '',
+          profile.occupation || '',
+          profile.city || '',
+          profile.state || '',
+          profile.community || '',
+          profile.caste || '',
+          profile.createdAt || '',
+          profile.updatedAt || '',
+        ];
+      }));
       await downloadAnalyticsReport({
         title: 'Matrimony Report',
         subtitle: 'All matrimony profiles and analytics summary',
@@ -326,30 +349,15 @@ export function MatrimonyAnalyticsContent() {
         tables: [
           {
             title: 'All matrimony profiles',
-            columns: ['Name', 'Member ID', 'Status', 'Gender', 'DOB', 'Age', 'Marital Status', 'Education', 'Occupation', 'City', 'State', 'Community', 'Caste', 'Created At', 'Updated At'],
-            rows: profiles.map((profile) => [
-              [profile.firstName, profile.lastName].filter(Boolean).join(' ') || 'Matrimony Profile',
-              profile.memberId || '',
-              profile.status || '',
-              profile.gender || '',
-              profile.dob || '',
-              profile.age ?? '',
-              profile.maritalStatus || '',
-              profile.education || '',
-              profile.occupation || '',
-              profile.city || '',
-              profile.state || '',
-              profile.community || '',
-              profile.caste || '',
-              profile.createdAt || '',
-              profile.updatedAt || '',
-            ]),
+            columns: ['Name (English)', 'Name (Second Language)', 'Member ID', 'Status', 'Gender', 'DOB', 'Age', 'Marital Status', 'Number of Children', 'Education', 'Occupation', 'City', 'State', 'Community', 'Caste', 'Created At', 'Updated At'],
+            rows: profileReportRows,
           },
           {
             title: 'Recent approvals',
-            columns: ['Name', 'Location / Age', 'Status', 'Updated At'],
+            columns: ['Name (English)', 'Name (Second Language)', 'Location / Age', 'Status', 'Updated At'],
             rows: analytics.recentApprovals.map((profile) => [
-              profile.name,
+              profile.nameEnglish || profile.name,
+              profile.nameSecondLanguage || profile.name,
               profile.locationAge,
               profile.status,
               profile.updatedAt || '',
@@ -813,7 +821,7 @@ export function MatrimonyAnalyticsContent() {
                   <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
                     Recent Profile Approvals
                   </Text>
-                  <View style={{ borderRadius: 20, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(24,168,117,0.1)', overflow: 'hidden', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 }}>
+                  <View style={{ borderRadius: 20, backgroundColor: '#ffffff', borderWidth: 1, borderColor: 'rgba(242,120,13,0.1)', overflow: 'hidden', shadowColor: '#000', shadowOpacity: 0.06, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 1 }}>
                     {analytics.recentApprovals.length ? (
                       analytics.recentApprovals.map((profile, index) => (
                         <View key={profile.id}>
@@ -823,7 +831,7 @@ export function MatrimonyAnalyticsContent() {
                             status={mapApprovalStatus(profile.status)}
                             image={profile.image}
                           />
-                          {index < analytics.recentApprovals.length - 1 ? <View style={{ height: 1, backgroundColor: 'rgba(24,168,117,0.06)' }} /> : null}
+                          {index < analytics.recentApprovals.length - 1 ? <View style={{ height: 1, backgroundColor: 'rgba(242,120,13,0.06)' }} /> : null}
                         </View>
                       ))
                     ) : (

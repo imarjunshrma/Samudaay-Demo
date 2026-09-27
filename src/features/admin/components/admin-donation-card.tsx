@@ -1,4 +1,4 @@
-import { TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { EntityActionCard, Text } from '@/src/components';
@@ -49,15 +49,42 @@ function formatDonationDateTime(value?: string | null) {
   });
 }
 
+function formatDonationSource(record: DonationRecordItem) {
+  if (record.paymentProvider || record.paymentOrderId) {
+    return 'Online';
+  }
+
+  return 'Offline';
+}
+
+function formatDonationFor(record: DonationRecordItem) {
+  const receivedBy = String(record.receivedBy || '').trim();
+  const memberSearch = String(record.memberSearch || '').trim();
+
+  if (receivedBy) {
+    return `On behalf of ${receivedBy}`;
+  }
+
+  if (memberSearch) {
+    return `For ${memberSearch}`;
+  }
+
+  return 'Self contribution';
+}
+
 export function AdminDonationCard({
   record,
+  onViewPress,
   onDownloadPress,
   onEditPress,
+  viewing = false,
   downloading = false,
 }: {
   record: DonationRecordItem;
+  onViewPress?: () => void;
   onDownloadPress?: () => void;
   onEditPress?: () => void;
+  viewing?: boolean;
   downloading?: boolean;
 }) {
   const t = useTranslations('admin.manage-donations');
@@ -77,6 +104,8 @@ export function AdminDonationCard({
     : record.memberSearch
       ? t('detail.member').replace('{member}', record.memberSearch)
       : t('detail.manualRecord');
+  const donationSource = formatDonationSource(record);
+  const donationFor = formatDonationFor(record);
 
   return (
     <EntityActionCard
@@ -97,12 +126,12 @@ export function AdminDonationCard({
         </View>
       }
       headerRight={
-        onDownloadPress || onEditPress ? (
+        onViewPress || onDownloadPress || onEditPress ? (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
             {onEditPress ? (
               <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Edit donation"
+                accessibilityLabel="Edit contribution"
                 activeOpacity={0.85}
                 onPress={onEditPress}
                 style={{
@@ -118,10 +147,35 @@ export function AdminDonationCard({
                 <MaterialIcons name="edit" size={20} color={colors.primary.DEFAULT} />
               </TouchableOpacity>
             ) : null}
+            {onViewPress ? (
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityLabel="View contribution receipt"
+                activeOpacity={0.85}
+                disabled={viewing}
+                onPress={onViewPress}
+                style={{
+                  width: 38,
+                  height: 38,
+                  borderRadius: radius.full,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: colors.primary.subtle,
+                  borderWidth: 1,
+                  borderColor: colors.primary.borderLight,
+                  opacity: viewing ? 0.65 : 1,
+                }}>
+                {viewing ? (
+                  <ActivityIndicator size="small" color={colors.primary.DEFAULT} />
+                ) : (
+                  <MaterialIcons name="visibility" size={20} color={colors.primary.DEFAULT} />
+                )}
+              </TouchableOpacity>
+            ) : null}
             {onDownloadPress ? (
               <TouchableOpacity
                 accessibilityRole="button"
-                accessibilityLabel="Download donation slip"
+                accessibilityLabel="Download contribution slip"
                 activeOpacity={0.85}
                 disabled={downloading}
                 onPress={onDownloadPress}
@@ -153,6 +207,18 @@ export function AdminDonationCard({
           key: 'mode',
           icon: <MaterialIcons name="payments" size={14} color={colors.text.muted} />,
           label: paymentLabel,
+          color: colors.text.muted,
+        },
+        {
+          key: 'source',
+          icon: <MaterialIcons name={donationSource === 'Online' ? 'language' : 'edit-note'} size={14} color={colors.text.muted} />,
+          label: donationSource,
+          color: colors.text.muted,
+        },
+        {
+          key: 'donationFor',
+          icon: <MaterialIcons name={donationFor.startsWith('On behalf') ? 'supervisor-account' : 'person'} size={14} color={colors.text.muted} />,
+          label: donationFor,
           color: colors.text.muted,
         },
       ]}

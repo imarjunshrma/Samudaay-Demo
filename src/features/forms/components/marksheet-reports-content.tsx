@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Linking, ScrollView, TouchableOpacity, View } from 'react-native';
+import { memo, useCallback, useEffect, useRef, useMemo, useState } from 'react';
+import { Linking, Modal, Pressable, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
@@ -15,6 +16,7 @@ import { AdminQuickInsightsSection } from '@/src/features/admin/components/admin
 const ALL_YEARS_VALUE = '__all__';
 const ALL_UPLOAD_STATUS_VALUE = '__all__';
 const ALL_DEPARTMENTS_VALUE = '__all__';
+const REPORT_PAGE_SIZE = 20;
 
 type MarksheetReportsContentProps = {
   mode?: 'forms' | 'admin';
@@ -64,25 +66,46 @@ function ReportInfoItem({
   );
 }
 
-function AdminMarksheetReportsTable({
+function formatMarksValue(value?: number | null) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) {
+    return '-';
+  }
+
+  return Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+}
+
+function formatPercentageValue(value?: number | null) {
+  if (value === null || value === undefined || Number.isNaN(Number(value))) {
+    return '-';
+  }
+
+  return `${Number(value).toLocaleString('en-IN', { maximumFractionDigits: 2 })}%`;
+}
+
+const AdminMarksheetReportsTable = memo(function AdminMarksheetReportsTable({
   records,
   onDownload,
+  onEditMarks,
   t,
 }: {
   records: MarksheetReportItem[];
   onDownload: (record: MarksheetReportItem) => void;
+  onEditMarks: (record: MarksheetReportItem) => void;
   t: ReturnType<typeof useTranslations>;
 }) {
-  const columns: Array<{ key: string; label: string; width: number; align?: 'center' | 'flex-start' }> = [
+  const columns: { key: string; label: string; width: number; align?: 'center' | 'flex-start' }[] = [
     { key: 'number', label: t('list.columns.number'), width: 56, align: 'center' as const },
     { key: 'student', label: t('list.columns.student'), width: 180 },
     { key: 'parent', label: t('list.columns.parent'), width: 180 },
     { key: 'standard', label: t('list.columns.standard'), width: 120 },
     { key: 'department', label: t('list.columns.department'), width: 130 },
     { key: 'year', label: t('list.columns.year'), width: 110 },
+    { key: 'totalMarks', label: 'Total Marks', width: 120, align: 'center' as const },
+    { key: 'gainedMarks', label: 'Gain Marks', width: 120, align: 'center' as const },
+    { key: 'percentage', label: 'Percentage', width: 120, align: 'center' as const },
     { key: 'uploaded', label: t('list.columns.uploaded'), width: 110, align: 'center' as const },
     { key: 'file', label: t('list.columns.file'), width: 220 },
-    { key: 'action', label: t('list.columns.action'), width: 118, align: 'center' as const },
+    { key: 'action', label: t('list.columns.action'), width: 210, align: 'center' as const },
   ];
 
   return (
@@ -155,6 +178,21 @@ function AdminMarksheetReportsTable({
               </Text>
             </View>
             <View style={{ width: columns[6].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], borderRightWidth: 1, borderRightColor: colors.primary.borderLight, alignItems: 'center', justifyContent: 'center' }}>
+              <Text variant="body" color={colors.text.secondary}>
+                {formatMarksValue(record.totalMarks)}
+              </Text>
+            </View>
+            <View style={{ width: columns[7].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], borderRightWidth: 1, borderRightColor: colors.primary.borderLight, alignItems: 'center', justifyContent: 'center' }}>
+              <Text variant="body" color={colors.text.secondary}>
+                {formatMarksValue(record.gainedMarks)}
+              </Text>
+            </View>
+            <View style={{ width: columns[8].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], borderRightWidth: 1, borderRightColor: colors.primary.borderLight, alignItems: 'center', justifyContent: 'center' }}>
+              <Text variant="body" color={colors.text.secondary}>
+                {formatPercentageValue(record.percentage)}
+              </Text>
+            </View>
+            <View style={{ width: columns[9].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], borderRightWidth: 1, borderRightColor: colors.primary.borderLight, alignItems: 'center', justifyContent: 'center' }}>
               <View
                 style={{
                   borderRadius: radius.full,
@@ -167,39 +205,211 @@ function AdminMarksheetReportsTable({
                 </Text>
               </View>
             </View>
-            <View style={{ width: columns[7].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], borderRightWidth: 1, borderRightColor: colors.primary.borderLight, justifyContent: 'center' }}>
+            <View style={{ width: columns[10].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], borderRightWidth: 1, borderRightColor: colors.primary.borderLight, justifyContent: 'center' }}>
               <Text variant="body" color={colors.text.secondary}>
                 {getMarksheetFileLabel(record)}
               </Text>
             </View>
-            <View style={{ width: columns[8].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], alignItems: 'center', justifyContent: 'center' }}>
-              <TouchableOpacity
-                accessibilityRole="button"
-                activeOpacity={0.86}
-                disabled={!record.fileUrl}
-                onPress={() => onDownload(record)}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: spacing[1],
-                  borderRadius: radius.full,
-                  backgroundColor: record.fileUrl ? colors.primary.subtle : colors.background.surfaceAlt,
-                  paddingHorizontal: spacing[3],
-                  paddingVertical: spacing[2],
-                  opacity: record.fileUrl ? 1 : 0.55,
-                }}>
-                <MaterialIcons name="download" size={16} color={colors.primary.DEFAULT} />
-                <Text variant="caption" style={{ color: colors.primary.DEFAULT, fontFamily: typography.fontFamily.bold }}>
-                  {t('actions.downloadFile')}
-                </Text>
-              </TouchableOpacity>
+            <View style={{ width: columns[11].width, paddingHorizontal: spacing[3], paddingVertical: spacing[3], alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ flexDirection: 'row', gap: spacing[2] }}>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  activeOpacity={0.86}
+                  onPress={() => onEditMarks(record)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: spacing[1],
+                    borderRadius: radius.full,
+                    backgroundColor: colors.status.infoLight,
+                    paddingHorizontal: spacing[3],
+                    paddingVertical: spacing[2],
+                  }}>
+                  <MaterialIcons name="edit" size={16} color={colors.status.info} />
+                  <Text variant="caption" style={{ color: colors.status.info, fontFamily: typography.fontFamily.bold }}>
+                    Edit
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  activeOpacity={0.86}
+                  disabled={!record.fileUrl}
+                  onPress={() => onDownload(record)}
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: spacing[1],
+                    borderRadius: radius.full,
+                    backgroundColor: record.fileUrl ? colors.primary.subtle : colors.background.surfaceAlt,
+                    paddingHorizontal: spacing[3],
+                    paddingVertical: spacing[2],
+                    opacity: record.fileUrl ? 1 : 0.55,
+                  }}>
+                  <MaterialIcons name="download" size={16} color={colors.primary.DEFAULT} />
+                  <Text variant="caption" style={{ color: colors.primary.DEFAULT, fontFamily: typography.fontFamily.bold }}>
+                    {t('actions.downloadFile')}
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         ))}
       </View>
     </ScrollView>
   );
-}
+});
+
+const MarksheetMarksEditorModal = memo(function MarksheetMarksEditorModal({
+  record,
+  visible,
+  onCancel,
+  onSave,
+}: {
+  record: MarksheetReportItem | null;
+  visible: boolean;
+  onCancel: () => void;
+  onSave: (record: MarksheetReportItem, payload: { totalMarks: number | null; gainedMarks: number | null; percentage: number | null }) => Promise<void>;
+}) {
+  const [marksForm, setMarksForm] = useState({ totalMarks: '', gainedMarks: '', percentage: '' });
+  const [savingMarks, setSavingMarks] = useState(false);
+  const [marksError, setMarksError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!record) {
+      return;
+    }
+
+    setMarksForm({
+      totalMarks: record.totalMarks === null || record.totalMarks === undefined ? '' : String(record.totalMarks),
+      gainedMarks: record.gainedMarks === null || record.gainedMarks === undefined ? '' : String(record.gainedMarks),
+      percentage: record.percentage === null || record.percentage === undefined ? '' : String(record.percentage),
+    });
+    setMarksError(null);
+  }, [record]);
+
+  const updateMarksField = useCallback((field: keyof typeof marksForm, value: string) => {
+    setMarksForm((current) => ({ ...current, [field]: value.replace(/[^\d.]/g, '') }));
+    setMarksError(null);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    if (!savingMarks) {
+      onCancel();
+    }
+  }, [onCancel, savingMarks]);
+
+  const handleSave = useCallback(async () => {
+    if (!record) {
+      return;
+    }
+
+    const totalMarks = marksForm.totalMarks.trim() ? Number(marksForm.totalMarks) : null;
+    const gainedMarks = marksForm.gainedMarks.trim() ? Number(marksForm.gainedMarks) : null;
+    const percentage = marksForm.percentage.trim() ? Number(marksForm.percentage) : null;
+
+    if ([totalMarks, gainedMarks, percentage].some((value) => value !== null && (!Number.isFinite(value) || value < 0))) {
+      setMarksError('Enter valid non-negative numbers.');
+      return;
+    }
+    if (totalMarks !== null && gainedMarks !== null && gainedMarks > totalMarks) {
+      setMarksError('Gain marks cannot be greater than total marks.');
+      return;
+    }
+    if (percentage !== null && percentage > 100) {
+      setMarksError('Percentage cannot be greater than 100.');
+      return;
+    }
+
+    setSavingMarks(true);
+    try {
+      await onSave(record, { totalMarks, gainedMarks, percentage });
+    } catch (error) {
+      setMarksError(error instanceof Error ? error.message : 'Unable to update marks.');
+    } finally {
+      setSavingMarks(false);
+    }
+  }, [marksForm, onSave, record]);
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      presentationStyle="overFullScreen"
+      onRequestClose={handleCancel}>
+      <View style={{ flex: 1, backgroundColor: 'rgba(17,24,39,0.48)', justifyContent: 'center', padding: spacing[4] }}>
+        <Pressable
+          onPress={(event) => event.stopPropagation()}
+          style={{
+            maxHeight: '92%',
+            borderRadius: radius.xl,
+            backgroundColor: colors.background.surface,
+            borderWidth: 1,
+            borderColor: colors.primary.borderLight,
+            overflow: 'hidden',
+          }}>
+          <View style={{ padding: spacing[4], borderBottomWidth: 1, borderBottomColor: colors.primary.borderLight, backgroundColor: colors.primary.subtle }}>
+            <Text variant="h4" style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold }}>
+              {record ? `Edit marks for ${record.studentName}` : 'Edit marks'}
+            </Text>
+          </View>
+          <KeyboardAwareScrollView
+            bottomOffset={96}
+            keyboardDismissMode="interactive"
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            style={{ flexGrow: 0 }}
+            contentContainerStyle={{ padding: spacing[4], gap: spacing[3] }}>
+            {[
+              ['totalMarks', 'Total Marks'],
+              ['gainedMarks', 'Gain Marks'],
+              ['percentage', 'Percentage'],
+            ].map(([field, label]) => (
+              <View key={field} style={{ gap: spacing[1] }}>
+                <Text variant="caption" style={{ color: colors.text.muted, fontFamily: typography.fontFamily.bold }}>
+                  {label}
+                </Text>
+                <TextInput
+                  accessibilityLabel={label}
+                  value={marksForm[field as keyof typeof marksForm]}
+                  onChangeText={(value) => updateMarksField(field as keyof typeof marksForm, value)}
+                  keyboardType="numeric"
+                  style={{
+                    minHeight: 44,
+                    borderRadius: radius.lg,
+                    borderWidth: 1,
+                    borderColor: colors.border.light,
+                    backgroundColor: colors.background.surface,
+                    paddingHorizontal: spacing[3],
+                    color: colors.text.primary,
+                    fontFamily: typography.fontFamily.medium,
+                  }}
+                />
+              </View>
+            ))}
+            {marksError ? (
+              <Text variant="caption" color={colors.status.error}>
+                {marksError}
+              </Text>
+            ) : null}
+            <View style={{ flexDirection: 'row', gap: spacing[3], paddingTop: spacing[2] }}>
+              <View style={{ flex: 1 }}>
+                <Button variant="outline" fullWidth rounded disabled={savingMarks} onPress={handleCancel}>
+                  Cancel
+                </Button>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Button fullWidth rounded loading={savingMarks} onPress={() => void handleSave()}>
+                  Save
+                </Button>
+              </View>
+            </View>
+          </KeyboardAwareScrollView>
+        </Pressable>
+      </View>
+    </Modal>
+  );
+});
 
 export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsContentProps) {
   const router = useRouter();
@@ -212,9 +422,15 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
   const [selectedUploadStatus, setSelectedUploadStatus] = useState<UploadStatusFilter>(ALL_UPLOAD_STATUS_VALUE);
   const [selectedDepartment, setSelectedDepartment] = useState(ALL_DEPARTMENTS_VALUE);
   const [academicYears, setAcademicYears] = useState<string[]>([]);
+  const [availableDepartments, setAvailableDepartments] = useState<string[]>([]);
   const [records, setRecords] = useState<MarksheetReportItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [editingRecord, setEditingRecord] = useState<MarksheetReportItem | null>(null);
   const [downloadDialog, setDownloadDialog] = useState<{
     visible: boolean;
     variant: 'success' | 'error' | 'info' | 'confirm';
@@ -226,20 +442,60 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
     title: '',
     description: undefined,
   });
-  const loadReport = useCallback(async (academicYear: string) => {
-    setLoading(true);
-    try {
-      const result = await childrenEducationService.loadMarksheetReport(academicYear);
-      setAcademicYears(result.academicYears);
-      setRecords(result.items);
-    } finally {
-      setLoading(false);
+  const requestIdRef = useRef(0);
+
+  const loadReport = useCallback(async ({ page, append = false }: { page: number; append?: boolean }) => {
+    const requestId = ++requestIdRef.current;
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+      setRecords([]);
+      setCurrentPage(1);
+      setHasNextPage(false);
+      setTotalCount(0);
     }
-  }, []);
+
+    try {
+      const result = await childrenEducationService.loadMarksheetReport({
+        academicYear: selectedAcademicYear,
+        page,
+        limit: REPORT_PAGE_SIZE,
+        search,
+        department: selectedDepartment,
+        uploadStatus: selectedUploadStatus,
+      });
+
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
+
+      setAcademicYears(result.academicYears);
+      setAvailableDepartments(result.availableDepartments);
+      setRecords((current) => {
+        if (!append) {
+          return result.items;
+        }
+        const existingIds = new Set(current.map((record) => record.id));
+        return [...current, ...result.items.filter((record) => !existingIds.has(record.id))];
+      });
+      setCurrentPage(result.pagination?.page ?? page);
+      setHasNextPage(Boolean(result.pagination?.hasNextPage));
+      setTotalCount(result.pagination?.total ?? result.pagination?.totalCount ?? result.items.length);
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    }
+  }, [search, selectedAcademicYear, selectedDepartment, selectedUploadStatus]);
 
   useEffect(() => {
-    void loadReport(selectedAcademicYear);
-  }, [loadReport, selectedAcademicYear]);
+    const timer = setTimeout(() => {
+      void loadReport({ page: 1 });
+    }, search.trim() ? 250 : 0);
+    return () => clearTimeout(timer);
+  }, [loadReport, search]);
 
   const academicYearOptions = useMemo(
     () => [
@@ -255,11 +511,11 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
   const departmentOptions = useMemo(
     () => [
       { label: t('filters.allDepartments'), value: ALL_DEPARTMENTS_VALUE },
-      ...Array.from(new Set(records.map((record) => String(record.department || '').trim()).filter(Boolean)))
+      ...Array.from(new Set(availableDepartments.map((department) => String(department || '').trim()).filter(Boolean)))
         .sort((a, b) => a.localeCompare(b))
         .map((department) => ({ label: department, value: department })),
     ],
-    [records, t],
+    [availableDepartments, t],
   );
   const uploadStatusChips = useMemo(
     () => [
@@ -270,30 +526,14 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
     [t],
   );
 
-  const filteredRecords = useMemo(() => {
-    const searchTerm = search.trim().toLowerCase();
-    return records.filter((record) => {
-      const matchesSearch = !searchTerm || [
-        record.studentName,
-        record.parentName,
-        record.standardSemester,
-        record.department,
-        record.academicYear,
-        record.fileName,
-      ].some((value) => String(value || '').toLowerCase().includes(searchTerm));
+  const filteredRecords = records;
 
-      const matchesUploadStatus =
-        selectedUploadStatus === ALL_UPLOAD_STATUS_VALUE ||
-        (selectedUploadStatus === 'uploaded' && record.uploadedMarksheet) ||
-        (selectedUploadStatus === 'missing' && !record.uploadedMarksheet);
-
-      const matchesDepartment =
-        selectedDepartment === ALL_DEPARTMENTS_VALUE ||
-        String(record.department || '').trim() === selectedDepartment;
-
-      return matchesSearch && matchesUploadStatus && matchesDepartment;
-    });
-  }, [records, search, selectedDepartment, selectedUploadStatus]);
+  const handleLoadMore = useCallback(() => {
+    if (loading || loadingMore || !hasNextPage) {
+      return;
+    }
+    void loadReport({ page: currentPage + 1, append: true });
+  }, [currentPage, hasNextPage, loadReport, loading, loadingMore]);
 
   const handleDownload = useCallback(async () => {
     try {
@@ -318,12 +558,73 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
     setDownloadDialog((current) => ({ ...current, visible: false }));
   }, []);
 
+  const openMarksEditor = useCallback((record: MarksheetReportItem) => {
+    setEditingRecord(record);
+  }, []);
+
+  const closeMarksEditor = useCallback(() => {
+    setEditingRecord(null);
+  }, []);
+
+  const handleDownloadFile = useCallback((record: MarksheetReportItem) => {
+    if (record.fileUrl) {
+      void Linking.openURL(record.fileUrl);
+    }
+  }, []);
+
+  const handleSaveMarks = useCallback(async (
+    recordToUpdate: MarksheetReportItem,
+    payload: { totalMarks: number | null; gainedMarks: number | null; percentage: number | null },
+  ) => {
+    const optimisticPercentage =
+      payload.percentage ??
+      (payload.totalMarks && payload.gainedMarks !== null
+        ? Math.round((payload.gainedMarks / payload.totalMarks) * 10000) / 100
+        : null);
+
+    setEditingRecord(null);
+    setRecords((current) => current.map((record) => (
+      record.id === recordToUpdate.id
+        ? {
+            ...record,
+            totalMarks: payload.totalMarks,
+            gainedMarks: payload.gainedMarks,
+            percentage: optimisticPercentage,
+          }
+        : record
+    )));
+
+    try {
+      const updated = await childrenEducationService.updateMarksheetMarks(recordToUpdate.id, payload);
+      setRecords((current) => current.map((record) => (
+        record.id === recordToUpdate.id
+          ? {
+              ...record,
+              totalMarks: updated.totalMarks ?? null,
+              gainedMarks: updated.gainedMarks ?? null,
+              percentage: updated.percentage ?? null,
+            }
+          : record
+      )));
+    } catch (error) {
+      setRecords((current) => current.map((record) => (
+        record.id === recordToUpdate.id ? recordToUpdate : record
+      )));
+      setDownloadDialog({
+        visible: true,
+        variant: 'error',
+        title: 'Unable to update marks',
+        description: error instanceof Error ? error.message : 'Please try again.',
+      });
+    }
+  }, []);
+
   const quickInsightItems = useMemo(
     () => [
       {
         id: 'records',
         label: t('insights.records'),
-        value: String(filteredRecords.length),
+        value: String(totalCount || filteredRecords.length),
         icon: 'description' as const,
         iconColor: colors.primary.DEFAULT,
         iconBackgroundColor: colors.primary.subtle,
@@ -345,7 +646,7 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
         iconBackgroundColor: colors.status.warningLight,
       },
     ],
-    [filteredRecords, records, t],
+    [filteredRecords, records, t, totalCount],
   );
 
   return (
@@ -391,6 +692,13 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
 
         <ScrollView
           showsVerticalScrollIndicator={false}
+          scrollEventThrottle={250}
+          onScroll={({ nativeEvent }) => {
+            const distanceFromBottom = nativeEvent.contentSize.height - nativeEvent.layoutMeasurement.height - nativeEvent.contentOffset.y;
+            if (distanceFromBottom < 240) {
+              handleLoadMore();
+            }
+          }}
           contentContainerStyle={{
             paddingTop: spacing[6],
             paddingHorizontal: spacing[4],
@@ -541,11 +849,8 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
                 <AdminMarksheetReportsTable
                   records={filteredRecords}
                   t={t}
-                  onDownload={(item) => {
-                    if (item.fileUrl) {
-                      void Linking.openURL(item.fileUrl);
-                    }
-                  }}
+                  onEditMarks={openMarksEditor}
+                  onDownload={handleDownloadFile}
                 />
               ) : (
                 <View style={{ gap: spacing[3] }}>
@@ -583,6 +888,9 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
                       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3] }}>
                         <ReportInfoItem label={t('list.columns.standard')} value={record.standardSemester} />
                         <ReportInfoItem label={t('list.columns.year')} value={record.academicYear} />
+                        <ReportInfoItem label="Total Marks" value={formatMarksValue(record.totalMarks)} />
+                        <ReportInfoItem label="Gain Marks" value={formatMarksValue(record.gainedMarks)} />
+                        <ReportInfoItem label="Percentage" value={formatPercentageValue(record.percentage)} />
                         <ReportInfoItem label={t('list.columns.uploaded')} value={record.uploadedMarksheet ? t('list.uploadedYes') : t('list.uploadedNo')} />
                         <ReportInfoItem label={t('list.columns.file')} value={getMarksheetFileLabel(record)} />
                       </View>
@@ -612,6 +920,19 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
                 </View>
               )}
             </Card>
+            {loadingMore ? (
+              <View style={{ alignItems: 'center', paddingVertical: spacing[2] }}>
+                <Text variant="caption" color={colors.text.muted}>
+                  Loading more records...
+                </Text>
+              </View>
+            ) : hasNextPage ? (
+              <View style={{ alignItems: 'center', paddingVertical: spacing[2] }}>
+                <Text variant="caption" color={colors.text.muted}>
+                  Scroll to load more
+                </Text>
+              </View>
+            ) : null}
           </View>
         </ScrollView>
 
@@ -652,6 +973,12 @@ export function MarksheetReportsContent({ mode = 'forms' }: MarksheetReportsCont
           description={downloadDialog.description}
           confirmLabel="OK"
           onConfirm={handleDownloadDialogCancel}
+        />
+        <MarksheetMarksEditorModal
+          visible={Boolean(editingRecord)}
+          record={editingRecord}
+          onCancel={closeMarksEditor}
+          onSave={handleSaveMarks}
         />
       </View>
     </AppSafeAreaView>

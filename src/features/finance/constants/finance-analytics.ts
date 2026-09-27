@@ -5,7 +5,7 @@ export const billingInvoices = [
 ] as const;
 
 export const transactionManagementItems = [
-  ['TXN-82451', 'Donation • ₹12,500 • Completed'],
+  ['TXN-82451', 'Contribution • ₹12,500 • Completed'],
   ['TXN-82450', 'Matrimony Premium • ₹2,999 • Pending'],
   ['TXN-82449', 'Event Registration • ₹1,200 • Refunded'],
 ] as const;
@@ -14,7 +14,7 @@ export const transactionTrendHeights = [42, 58, 76, 74, 108, 100] as const;
 export const transactionTrendLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'] as const;
 
 export const topDonationPincodes = [
-  ['390001', '₹1,82,500', '88%', '#18a875'],
+  ['390001', '₹1,82,500', '88%', '#f2780d'],
   ['390007', '₹1,21,000', '68%', '#fb923c'],
   ['391110', '₹98,400', '56%', '#fdba74'],
   ['390015', '₹77,250', '44%', '#fed7aa'],
@@ -41,7 +41,7 @@ export const peopleSummaryStats = [
 ] as const;
 
 export const membersByCity = [
-  ['Vadodara', '3,840', '100%', '#18a875'],
+  ['Vadodara', '3,840', '100%', '#f2780d'],
   ['Ahmedabad', '2,960', '78%', '#fb923c'],
   ['Surat', '2,420', '64%', '#fdba74'],
   ['Rajkot', '1,710', '45%', '#fed7aa'],

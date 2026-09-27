@@ -2,9 +2,7 @@ import { TouchableOpacity, View } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { AppBottomBar, AppHeader, Text } from '@/src/components';
-
-import { adminBottomBarItems } from '@/src/core/navigation/admin-shell';
+import { Text } from '@/src/components';
 
 import { colors, radius, shadows, spacing, typography } from '@/src/theme';
 
@@ -12,7 +10,7 @@ export function AdminDashboardManagementGrid({
   items,
   onItemPress,
 }: {
-  items: readonly { title: string; subtitle: string; icon: React.ComponentProps<typeof MaterialIcons>['name']; highlight?: boolean; onPress?: () => void }[];
+  items: readonly { title: string; subtitle: string; icon: React.ComponentProps<typeof MaterialIcons>['name']; badgeCount?: number; highlight?: boolean; onPress?: () => void }[];
   onItemPress?: (item: { title: string; subtitle: string; icon: React.ComponentProps<typeof MaterialIcons>['name']; highlight?: boolean; onPress?: () => void }) => void;
 }) {
   const rows: typeof items[] = [];
@@ -48,7 +46,11 @@ export function AdminDashboardManagementGrid({
               <View style={{ width: 32, height: 32, borderRadius: radius.lg, backgroundColor: item.highlight ? colors.primary.DEFAULT : colors.background.elevated, alignItems: 'center', justifyContent: 'center', marginBottom: spacing[4] }}>
                 <MaterialIcons name={item.icon} size={18} color={item.highlight ? colors.text.inverse : colors.primary.DEFAULT} />
               </View>
-              {item.highlight ? <View style={{ position: 'absolute', top: spacing[4], right: spacing[4], width: 8, height: 8, borderRadius: radius.full, backgroundColor: colors.primary.DEFAULT }} /> : null}
+              {(item.badgeCount ?? 0) > 0 ? (
+                <View style={{ position: 'absolute', top: spacing[4], right: spacing[4], minWidth: 26, height: 24, paddingHorizontal: 6, borderRadius: radius.full, backgroundColor: colors.status.error, alignItems: 'center', justifyContent: 'center' }}>
+                  <Text variant="caption" style={{ color: colors.text.inverse, fontFamily: typography.fontFamily.bold }}>{item.badgeCount! > 99 ? '99+' : item.badgeCount}</Text>
+                </View>
+              ) : null}
               <Text variant="body" style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, lineHeight: 18 }}>
                 {item.title}
               </Text>

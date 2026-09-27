@@ -48,6 +48,20 @@ const bloodGroupSchema = Yup.string()
   .nullable()
   .optional();
 
+const MAX_UPLOAD_FILE_SIZE_BYTES = 5 * 1024 * 1024;
+const MAX_UPLOAD_FILE_SIZE_LABEL = '5MB';
+
+function isAllowedFileSize(value: unknown) {
+  if (!value || typeof value !== 'object' || !('size' in value)) {
+    return true;
+  }
+
+  const size = Number((value as { size?: number | null }).size);
+  return !Number.isFinite(size) || size <= MAX_UPLOAD_FILE_SIZE_BYTES;
+}
+
+const fileSizeMessage = `File must be ${MAX_UPLOAD_FILE_SIZE_LABEL} or smaller.`;
+
 export const fieldSchemas = {
   mobile: Yup.string().test('mobile', 'Enter a valid mobile number', (value) => !value || isValidMobileNumber(value)).required('Mobile number is required'),
   otp: Yup.string().matches(/^\d{6}$/, 'Enter 6-digit OTP').required('OTP is required'),
@@ -62,12 +76,14 @@ export const fieldSchemas = {
   dateOptional: Yup.date().nullable(),
   consent: Yup.boolean().oneOf([true], 'You must accept the terms'),
   aadhaar: Yup.string().matches(/^\d{12}$/, 'Enter valid 12-digit Aadhaar number').required('Aadhaar number is required'),
+  aadhaarOptional: Yup.string().matches(/^\d{12}$/, { message: 'Enter valid 12-digit Aadhaar number', excludeEmptyString: true }).nullable().optional(),
   pan: Yup.string().matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Enter valid PAN number').required('PAN number is required'),
   panOptional: Yup.string().matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, { message: 'Enter valid PAN number', excludeEmptyString: true }).nullable().optional(),
+  passportOptional: Yup.string().matches(/^[A-Z0-9]{6,12}$/i, { message: 'Enter valid passport number', excludeEmptyString: true }).nullable().optional(),
   address: Yup.string().min(10, 'Address must be at least 10 characters').max(200, 'Address must be less than 200 characters').required('Address is required'),
   phoneOptional: Yup.string().test('phone-optional', 'Enter a valid mobile number', (value) => !value || isValidMobileNumber(value)).nullable().optional(),
-  file: Yup.mixed().required('Please upload a file'),
-  fileOptional: Yup.mixed().nullable(),
+  file: Yup.mixed().test('file-size', fileSizeMessage, isAllowedFileSize).required('Please upload a file'),
+  fileOptional: Yup.mixed().nullable().test('file-size', fileSizeMessage, isAllowedFileSize),
 };
 
 export const formSchemas = {
@@ -93,15 +109,33 @@ export const formSchemas = {
     state: Yup.string().required('State is required'),
     country: Yup.string().required('Country is required'),
     pincode: fieldSchemas.pincode,
+    aadhaarNumber: fieldSchemas.aadhaarOptional.when('country', {
+      is: (country: string) => String(country || '').trim().toLowerCase() === 'india',
+      then: () => fieldSchemas.aadhaar,
+    }),
     panNumber: fieldSchemas.panOptional,
+    passportNumber: fieldSchemas.passportOptional.when('country', {
+      is: (country: string) => String(country || '').trim().toLowerCase() !== 'india',
+      then: () => fieldSchemas.passportOptional.required('Passport number is required'),
+    }),
     bloodGroup: bloodGroupSchema,
   }),
   registrationKyc: Yup.object({
-    aadhaarDocument: fieldSchemas.file,
+    aadhaarDocument: fieldSchemas.fileOptional,
+    passportDocument: fieldSchemas.fileOptional,
     jatiNoDakhloDocument: fieldSchemas.fileOptional,
     schoolCertificateDocument: fieldSchemas.fileOptional,
     profilePhoto: fieldSchemas.file.required('Profile photo is required'),
     consent: fieldSchemas.consent,
+  }).test('identity-document-required', 'Upload Aadhaar or Passport', function (value) {
+    if (value?.aadhaarDocument || value?.passportDocument) {
+      return true;
+    }
+
+    return this.createError({
+      path: 'aadhaarDocument',
+      message: 'Upload Aadhaar or Passport',
+    });
   }).test('supporting-document-required', 'Upload Caste Certificate or School Certificate', function (value) {
     if (value?.jatiNoDakhloDocument || value?.schoolCertificateDocument) {
       return true;
@@ -147,7 +181,7 @@ export const formSchemas = {
   }),
   manualDonationRecord: Yup.object({
     registeredMemberSearch: Yup.string().max(80, 'Search text must be less than 80 characters').optional(),
-    manualDonorName: Yup.string().max(80, 'Donor name must be less than 80 characters').optional(),
+    manualDonorName: Yup.string().max(80, 'Contributor name must be less than 80 characters').optional(),
     amount: fieldSchemas.amount,
     donationDate: fieldSchemas.date,
     paymentMode: fieldSchemas.requiredSelect,
@@ -158,7 +192,7 @@ export const formSchemas = {
     proof: fieldSchemas.fileOptional,
   }).test(
     'donor-name-required',
-    'Search a member or enter a manual donor name',
+    'Search a member or enter a manual contributor name',
     function (value) {
       if (value?.registeredMemberSearch?.trim() || value?.manualDonorName?.trim()) {
         return true;
@@ -166,7 +200,7 @@ export const formSchemas = {
 
       return this.createError({
         path: 'manualDonorName',
-        message: 'Search a member or enter a manual donor name',
+        message: 'Search a member or enter a manual contributor name',
       });
     },
   ),

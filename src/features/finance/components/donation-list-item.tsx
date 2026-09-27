@@ -1,10 +1,22 @@
-import { TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { Text } from '@/src/components';
 import { colors, radius, spacing, typography } from '@/src/theme';
 
-export function DonationListItem({ amount, meta, onDownloadPress }: { amount: string; meta: string; onDownloadPress?: () => void }) {
+export function DonationListItem({
+  amount,
+  meta,
+  onViewPress,
+  onDownloadPress,
+  viewing = false,
+}: {
+  amount: string;
+  meta: string;
+  onViewPress?: () => void;
+  onDownloadPress?: () => void;
+  viewing?: boolean;
+}) {
   return (
     <View
       style={{
@@ -23,7 +35,7 @@ export function DonationListItem({ amount, meta, onDownloadPress }: { amount: st
             width: 40,
             height: 40,
             borderRadius: radius.full,
-            backgroundColor: colors.primary.muted ?? 'rgba(24,168,117,0.1)',
+            backgroundColor: colors.primary.muted ?? 'rgba(242,120,13,0.1)',
             alignItems: 'center',
             justifyContent: 'center',
           }}>
@@ -38,9 +50,26 @@ export function DonationListItem({ amount, meta, onDownloadPress }: { amount: st
           </Text>
         </View>
       </View>
-      <TouchableOpacity accessibilityRole="button" activeOpacity={0.9} onPress={onDownloadPress} style={{ padding: spacing[2], borderRadius: radius.full }}>
-        <MaterialIcons name="picture-as-pdf" size={22} color={colors.primary.DEFAULT} />
-      </TouchableOpacity>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1] }}>
+        {onViewPress ? (
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="View contribution receipt"
+            activeOpacity={0.9}
+            disabled={viewing}
+            onPress={onViewPress}
+            style={{ padding: spacing[2], borderRadius: radius.full, opacity: viewing ? 0.65 : 1 }}>
+            {viewing ? (
+              <ActivityIndicator size="small" color={colors.primary.DEFAULT} />
+            ) : (
+              <MaterialIcons name="visibility" size={22} color={colors.primary.DEFAULT} />
+            )}
+          </TouchableOpacity>
+        ) : null}
+        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Download contribution receipt" activeOpacity={0.9} onPress={onDownloadPress} style={{ padding: spacing[2], borderRadius: radius.full }}>
+          <MaterialIcons name="picture-as-pdf" size={22} color={colors.primary.DEFAULT} />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }

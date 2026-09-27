@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   AppHeaderSearch,
+  DateField,
   Dialog,
   type DialogVariant,
   FilterChips,
@@ -101,6 +102,73 @@ const familyTypeFilterOptions = [
   { key: 'Joint', label: 'Joint' },
   { key: 'Nuclear', label: 'Nuclear' },
 ];
+
+const DAY_IN_MS = 24 * 60 * 60 * 1000;
+
+function startOfDay(value: Date) {
+  const date = new Date(value);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function endOfDay(value: Date) {
+  const date = new Date(value);
+  date.setHours(23, 59, 59, 999);
+  return date;
+}
+
+function getTime(value?: string | null) {
+  if (!value) {
+    return null;
+  }
+  const time = new Date(value).getTime();
+  return Number.isNaN(time) ? null : time;
+}
+
+function matchesCreatedPeriod(
+  createdAt: string,
+  period: MatrimonyPeriodFilterKey,
+  customFrom: Date | null,
+  customTo: Date | null,
+) {
+  if (period === 'all') {
+    return true;
+  }
+
+  const createdTime = getTime(createdAt);
+  if (createdTime === null) {
+    return false;
+  }
+
+  const todayStart = startOfDay(new Date());
+  const todayEnd = endOfDay(new Date());
+
+  if (period === 'today') {
+    return createdTime >= todayStart.getTime() && createdTime <= todayEnd.getTime();
+  }
+
+  if (period === 'last7Days') {
+    return createdTime >= todayStart.getTime() - (6 * DAY_IN_MS) && createdTime <= todayEnd.getTime();
+  }
+
+  if (period === 'thisMonth') {
+    const monthStart = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1).getTime();
+    return createdTime >= monthStart && createdTime <= todayEnd.getTime();
+  }
+
+  if (period === 'older') {
+    const monthStart = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1).getTime();
+    return createdTime < monthStart;
+  }
+
+  if (!customFrom && !customTo) {
+    return true;
+  }
+
+  const fromTime = customFrom ? startOfDay(customFrom).getTime() : Number.NEGATIVE_INFINITY;
+  const toTime = customTo ? endOfDay(customTo).getTime() : Number.POSITIVE_INFINITY;
+  return createdTime >= Math.min(fromTime, toTime) && createdTime <= Math.max(fromTime, toTime);
+}
 
 function normalizeOption(value?: string | null) {
   return String(value ?? '').trim();
@@ -201,6 +269,7 @@ function mapReviewProfile(profile: MatrimonyProfileRecord, status: MatrimonyStat
     photoUrls,
     status,
     submittedAt: profile.updatedAt || profile.createdAt || new Date().toISOString(),
+    createdAt: profile.createdAt || profile.updatedAt || new Date().toISOString(),
     city,
     state,
     age,
@@ -254,6 +323,8 @@ export function ApproveMatrimonyProfilesContent() {
   const [searchInHeader, setSearchInHeader] = useState(false);
   const [activeTab, setActiveTab] = useState<MatrimonyTabKey>('new');
   const [activePeriodFilter, setActivePeriodFilter] = useState<MatrimonyPeriodFilterKey>('all');
+  const [customCreatedFrom, setCustomCreatedFrom] = useState<Date | null>(null);
+  const [customCreatedTo, setCustomCreatedTo] = useState<Date | null>(null);
   const [filters, setFilters] = useState<Record<AdminMatrimonyFilterKey, string>>(emptyFilters);
   const [filterVisible, setFilterVisible] = useState(false);
   const [rejectPopupVisible, setRejectPopupVisible] = useState(false);
@@ -382,8 +453,6 @@ export function ApproveMatrimonyProfilesContent() {
 
   const filteredReviews = useMemo(() => {
     const term = effectiveSearch.trim().toLowerCase();
-    const now = Date.now();
-
     return reviewProfiles.filter((item) => {
       const tabMatches =
         activeTab === 'new'
@@ -405,24 +474,7 @@ export function ApproveMatrimonyProfilesContent() {
         (filters.minAge === ALL_FILTERS || item.age === null || item.age >= Number(filters.minAge)) &&
         (filters.maxAge === ALL_FILTERS || item.age === null || item.age <= Number(filters.maxAge));
 
-      const submittedAt = new Date(item.submittedAt).getTime();
-      const periodMatches = (() => {
-        if (activePeriodFilter === 'all') return true;
-        if (Number.isNaN(submittedAt)) return false;
-
-        const itemDate = new Date(item.submittedAt);
-        const currentDate = new Date(now);
-        const sameMonth =
-          itemDate.getMonth() === currentDate.getMonth() &&
-          itemDate.getFullYear() === currentDate.getFullYear();
-        const inNext30Days = submittedAt >= now - 1000 * 60 * 60 * 24 * 30;
-        const isPast = submittedAt < now - 1000 * 60 * 60 * 24 * 7;
-
-        if (activePeriodFilter === 'thisMonth') return sameMonth;
-        if (activePeriodFilter === 'next30Days') return inNext30Days;
-        if (activePeriodFilter === 'past') return isPast;
-        return true;
-      })();
+      const periodMatches = matchesCreatedPeriod(item.createdAt, activePeriodFilter, customCreatedFrom, customCreatedTo);
 
       const searchMatches =
         !term ||
@@ -432,7 +484,7 @@ export function ApproveMatrimonyProfilesContent() {
 
       return tabMatches && profileFilterMatches && periodMatches && searchMatches;
     });
-  }, [activePeriodFilter, activeTab, effectiveSearch, filters, reviewProfiles]);
+  }, [activePeriodFilter, activeTab, customCreatedFrom, customCreatedTo, effectiveSearch, filters, reviewProfiles]);
 
   const reviewCounts = useMemo(
     () => reviewTotals,
@@ -469,11 +521,15 @@ export function ApproveMatrimonyProfilesContent() {
     [reviewTotals, t],
   );
 
+  const activeFilterCount =
+    Object.values(filters).filter((value) => value !== ALL_FILTERS).length +
+    (activePeriodFilter !== 'all' ? 1 : 0);
+
   const statusChips = [
     {
       key: 'filters',
-      label: Object.values(filters).filter((value) => value !== ALL_FILTERS).length > 0
-        ? `${t('filters.filters')} (${Object.values(filters).filter((value) => value !== ALL_FILTERS).length})`
+      label: activeFilterCount > 0
+        ? `${t('filters.filters')} (${activeFilterCount})`
         : t('filters.filters'),
       icon: 'tune' as const,
     },
@@ -572,16 +628,39 @@ export function ApproveMatrimonyProfilesContent() {
       onSelect: (key: string) => setFilters((current) => ({ ...current, caste: key })),
     },
     {
-      title: t('filters.period'),
+      title: t('filters.created'),
       activeKey: activePeriodFilter,
       icon: 'date-range' as const,
       items: [
         { key: 'all', label: t('filters.allPeriods') },
+        { key: 'today', label: t('filters.today') },
+        { key: 'last7Days', label: t('filters.last7Days') },
         { key: 'thisMonth', label: t('filters.thisMonth') },
-        { key: 'next30Days', label: t('filters.next30Days') },
-        { key: 'past', label: t('filters.past') },
+        { key: 'older', label: t('filters.older') },
+        { key: 'custom', label: t('filters.custom') },
       ],
       onSelect: (key: string) => setActivePeriodFilter(key as MatrimonyPeriodFilterKey),
+      renderContent: () => activePeriodFilter === 'custom' ? (
+        <View style={{ gap: spacing[3], marginTop: spacing[3] }}>
+          <DateField
+            label={t('filters.fromDate')}
+            labelVariant="default"
+            variant="registration"
+            value={customCreatedFrom ?? undefined}
+            onChange={setCustomCreatedFrom}
+            maximumDate={customCreatedTo ?? new Date()}
+          />
+          <DateField
+            label={t('filters.toDate')}
+            labelVariant="default"
+            variant="registration"
+            value={customCreatedTo ?? undefined}
+            onChange={setCustomCreatedTo}
+            minimumDate={customCreatedFrom ?? undefined}
+            maximumDate={new Date()}
+          />
+        </View>
+      ) : null,
     },
   ];
 
@@ -945,6 +1024,8 @@ export function ApproveMatrimonyProfilesContent() {
           onReset={() => {
             setFilters(emptyFilters);
             setActivePeriodFilter('all');
+            setCustomCreatedFrom(null);
+            setCustomCreatedTo(null);
           }}
           applyLabel={t('filters.apply')}
           resetLabel={t('filters.reset')}

@@ -11,6 +11,7 @@ export type TextVariant =
   | 'h5'
   | 'bodyLg'
   | 'body'
+  | 'bodySmall'
   | 'label'
   | 'caption'
   | 'navLabel';
@@ -22,7 +23,8 @@ interface TextProps extends RNTextProps {
 
 export function Text({ variant = 'body', color = colors.text.primary, style, ...props }: TextProps) {
   const { language } = useAppPreferences();
-  const resolvedStyle = StyleSheet.flatten([typography.text[variant], { color }, style]);
+  const resolvedVariant = variant === 'bodySmall' ? 'caption' : variant;
+  const resolvedStyle = StyleSheet.flatten([typography.text[resolvedVariant], { color }, style]);
 
   const normalizedStyle =
     language === 'gu'

@@ -30,6 +30,7 @@ const routeRules: Record<string, RouteAccessRule> = {
   'registration-kyc': { allowAnonymous: true },
   'kyc-approval': {},
   'pending-approval': {},
+  'app-membership-renewal': {},
   profile: {},
   directory: {},
   communication: {},

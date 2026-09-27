@@ -136,7 +136,7 @@ export const expenseService = {
     offset = 0,
     limit = 20,
     filterKey: ExpenseFilterKey = 'all',
-    options?: { mine?: boolean; excludeMine?: boolean },
+    options?: { mine?: boolean; excludeMine?: boolean; month?: string; year?: string; sort?: 'latest' | 'oldest' },
   ): Promise<ExpenseListResponse | null> {
     if (!isBackendApiConfigured()) {
       return null;
@@ -151,6 +151,9 @@ export const expenseService = {
       const searchParams = new URLSearchParams();
       searchParams.set('offset', String(offset));
       searchParams.set('limit', String(limit));
+      if (options?.month) searchParams.set('month', options.month);
+      if (options?.year) searchParams.set('year', options.year);
+      if (options?.sort) searchParams.set('sort', options.sort);
       if (options?.mine) {
         searchParams.set('mine', 'true');
       }

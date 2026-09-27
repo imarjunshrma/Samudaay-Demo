@@ -3,7 +3,6 @@ import { apiEndpoints } from '@/src/services/api/endpoints';
 import { getBackendSessionContext, isBackendApiConfigured } from '@/src/features/auth/services/backend-session';
 import { isPlainUserSession } from '@/src/core/navigation/default-route';
 import type { ListItem, MetricItem } from '@/src/types/app';
-import { Platform } from 'react-native';
 
 export interface DashboardCardItem extends ListItem {
   icon: string;
@@ -48,6 +47,7 @@ function resolveDashboardCardRoute(card: Pick<DashboardCardItem, 'icon' | 'title
         case 'Birthdays':
           return '/member/birthday-reminders';
         case 'Donations':
+        case 'Donations':
           return '/member/donations';
         case 'News':
           return '/publications/archive';
@@ -80,6 +80,7 @@ function resolveDashboardCardSubtitle(card: DashboardCardItem, summary?: MemberD
     case 'Events':
       return (summary?.eventsJoined ?? 0) > 0 ? `${summary?.eventsJoined} joined` : card.subtitle;
     case 'Donations':
+    case 'Donations':
       return `${summary?.donationCount ?? 0} records`;
     case 'Birthdays':
       return (summary?.birthdayTodayCount ?? 0) > 0 ? `${summary?.birthdayTodayCount} today` : 'Upcoming wishes';
@@ -96,10 +97,6 @@ function filterDashboardCards(
 ) {
   return cards.filter((card) => {
     if (options.hideFinance && (['Expenses', 'Finance'].includes(card.title) || card.route?.startsWith('/finance'))) {
-      return false;
-    }
-
-    if (Platform.OS === 'ios' && (card.title === 'Donations' || card.route === '/member/donations')) {
       return false;
     }
 

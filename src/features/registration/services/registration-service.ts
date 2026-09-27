@@ -54,7 +54,9 @@ type BackendRegistrationSummary = {
   state?: string | null;
   country?: string | null;
   pincode?: string | null;
+  aadhaarNumber?: string | null;
   panNumber?: string | null;
+  passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
   fullNameGu?: string | null;
@@ -89,6 +91,9 @@ export type KycApprovalRecord = {
   addressLine1?: string;
   addressLine2?: string;
   country?: string;
+  aadhaarNumber?: string;
+  panNumber?: string;
+  passportNumber?: string;
   dob?: string;
   gender?: string;
   submittedAt?: string;
@@ -129,6 +134,7 @@ type KycQueuePageResult = {
 
 type RegistrationKycDraft = {
   aadhaarDocument: FileValue | null;
+  passportDocument: FileValue | null;
   jatiNoDakhloDocument: FileValue | null;
   schoolCertificateDocument: FileValue | null;
   profilePhoto: FileValue | null;
@@ -139,6 +145,9 @@ function inferDocumentTypeFromName(name: string) {
   const normalized = String(name || '').trim().toLowerCase();
   if (normalized.includes('aadhaar')) {
     return 'AADHAAR_CARD';
+  }
+  if (normalized.includes('passport')) {
+    return 'PASSPORT';
   }
   if (normalized.includes('jati') || normalized.includes('dakhlo')) {
     return 'JATI_NO_DAKHLO';
@@ -157,6 +166,8 @@ function formatDocumentTitle(type?: string | null, fileName?: string | null) {
   switch (normalizedType) {
     case 'AADHAAR_CARD':
       return 'Aadhaar Card';
+    case 'PASSPORT':
+      return 'Passport';
     case 'JATI_NO_DAKHLO':
       return 'Caste Certificate';
     case 'SCHOOL_CERTIFICATE':
@@ -171,6 +182,8 @@ function formatDocumentTitle(type?: string | null, fileName?: string | null) {
   switch (inferredType) {
     case 'AADHAAR_CARD':
       return 'Aadhaar Card';
+    case 'PASSPORT':
+      return 'Passport';
     case 'JATI_NO_DAKHLO':
       return 'Caste Certificate';
     case 'SCHOOL_CERTIFICATE':
@@ -370,7 +383,9 @@ async function mapBackendMembershipToDraft(membership: BackendRegistrationSummar
     state: membership.state ?? undefined,
     country: membership.country ?? undefined,
     pincode: membership.pincode ?? undefined,
+    aadhaarNumber: membership.aadhaarNumber ?? undefined,
     panNumber: membership.panNumber ?? undefined,
+    passportNumber: membership.passportNumber ?? undefined,
     bloodGroup: membership.bloodGroup ?? undefined,
     subCommunity: membership.subCommunity ?? undefined,
     fullNameEn: fallbackFullName,
@@ -403,6 +418,9 @@ function mapBackendSummaryToApprovalRecord(record: BackendRegistrationSummary): 
     addressLine1: record.addressLine1 || undefined,
     addressLine2: record.addressLine2 || undefined,
     country: record.country || undefined,
+    aadhaarNumber: record.aadhaarNumber || undefined,
+    panNumber: record.panNumber || undefined,
+    passportNumber: record.passportNumber || undefined,
     dob: record.dob || undefined,
     gender: record.gender || undefined,
     submittedAt: record.updatedAt || record.createdAt || undefined,
@@ -576,7 +594,9 @@ export const registrationService = {
               state: nextDraft.state || null,
               country: nextDraft.country || null,
               pincode: nextDraft.pincode || null,
+              aadhaarNumber: nextDraft.aadhaarNumber || null,
               panNumber: nextDraft.panNumber || null,
+              passportNumber: nextDraft.passportNumber || null,
               bloodGroup: nextDraft.bloodGroup || null,
               subCommunity: nextDraft.subCommunity || null,
               photoUrl: nextDraft.documents.find((document) => document.name.toLowerCase().includes('photo'))?.downloadUrl || null,
@@ -622,6 +642,7 @@ export const registrationService = {
 
         const uploads: { type: string; file: FileValue | null }[] = [
           { type: 'AADHAAR_CARD', file: kycDraft.aadhaarDocument },
+          { type: 'PASSPORT', file: kycDraft.passportDocument },
           { type: 'JATI_NO_DAKHLO', file: kycDraft.jatiNoDakhloDocument },
           { type: 'SCHOOL_CERTIFICATE', file: kycDraft.schoolCertificateDocument },
         ];
@@ -690,6 +711,9 @@ export const registrationService = {
     let nextDocuments = existingDraft?.documents ?? [];
     if (kycDraft.aadhaarDocument) {
       nextDocuments = upsertDraftDocument(nextDocuments, toFallbackDocument(kycDraft.aadhaarDocument, 'Aadhaar Card'));
+    }
+    if (kycDraft.passportDocument) {
+      nextDocuments = upsertDraftDocument(nextDocuments, toFallbackDocument(kycDraft.passportDocument, 'Passport'));
     }
     if (kycDraft.jatiNoDakhloDocument) {
       nextDocuments = upsertDraftDocument(nextDocuments, toFallbackDocument(kycDraft.jatiNoDakhloDocument, 'Caste Certificate'));

@@ -1,5 +1,6 @@
 import ImageCropPicker from 'react-native-image-crop-picker';
 
+import { ensureCameraPermission } from '@/src/services/device/app-permissions';
 import { isAllowedUploadImageFile, showInvalidUploadFormatAlert } from '@/src/services/files/upload-file-policy';
 import { colors } from '@/src/theme';
 import type { FileValue } from '@/src/types';
@@ -106,5 +107,29 @@ export function useCroppedImagePicker() {
     }
   }
 
-  return { cropImage, pickImage, cropper: null };
+  async function captureImage(options?: CropPickerOptions) {
+    try {
+      const permission = await ensureCameraPermission({
+        deniedMessage: 'Allow camera access to take a photo.',
+        blockedMessage: 'Camera access is blocked. Enable it from settings to take a photo.',
+      });
+      if (!permission.granted) {
+        return null;
+      }
+
+      const result = await ImageCropPicker.openCamera(getCropperOptions(options?.aspect));
+      const fallbackName = `${options?.fileNamePrefix || 'photo'}-${Date.now()}.jpg`;
+      const croppedFile = buildCroppedFile(result, fallbackName);
+
+      return validateImageFile(croppedFile) ? croppedFile : null;
+    } catch (error) {
+      if (isCropCancelled(error)) {
+        return null;
+      }
+
+      throw error;
+    }
+  }
+
+  return { cropImage, pickImage, captureImage, cropper: null };
 }

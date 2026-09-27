@@ -1,5 +1,5 @@
 import { useField } from 'formik';
-import { Image, Pressable, View } from 'react-native';
+import { Alert, Image, Pressable, View } from 'react-native';
 import { useState } from 'react';
 
 import { Icon, Text } from '@/src/components/ui';
@@ -36,6 +36,8 @@ type FileUploadProps = {
     aspect?: [number, number];
   };
 };
+
+type ImageSourceChoice = 'camera' | 'gallery';
 
 function isImageFile(file?: FileValue | null) {
   return isAllowedUploadImageFile(file);
@@ -100,6 +102,16 @@ async function pickFile(multiple = false, documentTypes?: string | string[]) {
   return nextFile;
 }
 
+function chooseImageSource() {
+  return new Promise<ImageSourceChoice | null>((resolve) => {
+    Alert.alert('Upload image', 'Choose how you want to add the image.', [
+      { text: 'Take Photo', onPress: () => resolve('camera') },
+      { text: 'Choose from Gallery', onPress: () => resolve('gallery') },
+      { text: 'Cancel', style: 'cancel', onPress: () => resolve(null) },
+    ]);
+  });
+}
+
 function FileUploadBody({
   label,
   value,
@@ -117,7 +129,7 @@ function FileUploadBody({
   imagePickerOptions,
 }: FileUploadProps & { onChange: (value: FileValue | null) => void }) {
   const [localValue, setLocalValue] = useState<FileValue | null>(value ?? null);
-  const { pickImage, cropper } = useCroppedImagePicker();
+  const { pickImage, captureImage, cropper } = useCroppedImagePicker();
   const resolvedValue = value === undefined ? localValue : value;
   const hasImagePreview = isImageFile(resolvedValue);
   const previewUri = resolvedValue?.uri ?? existingPreviewUri ?? null;
@@ -126,9 +138,19 @@ function FileUploadBody({
   const isMarksheet = variant === 'marksheet';
 
   async function handlePick() {
-    const nextFile = imagePickerOptions?.enabled
-      ? await pickImage({ fileNamePrefix: 'image', aspect: imagePickerOptions.aspect }) ?? undefined
-      : await pickFile(multiple, documentTypes);
+    let nextFile: FileValue | undefined;
+    if (imagePickerOptions?.enabled) {
+      const source = await chooseImageSource();
+      if (!source) {
+        return;
+      }
+      nextFile = source === 'camera'
+        ? await captureImage({ fileNamePrefix: 'image', aspect: imagePickerOptions.aspect }) ?? undefined
+        : await pickImage({ fileNamePrefix: 'image', aspect: imagePickerOptions.aspect }) ?? undefined;
+    } else {
+      nextFile = await pickFile(multiple, documentTypes);
+    }
+
     if (nextFile === undefined) {
       return;
     }

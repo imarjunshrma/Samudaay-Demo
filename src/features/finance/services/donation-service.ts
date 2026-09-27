@@ -13,6 +13,7 @@ import type { ListItem, MetricItem } from '@/src/types/app';
 import { getActiveTenantRequestHeaders } from '@/src/core/config/community';
 import { colors } from '@/src/theme';
 import { createAndDeliverPdf } from '@/src/services/files/pdf-file';
+import { resolveBackendMediaUrl } from '@/src/services/api/media-url';
 import type { RazorpayCheckoutOptions, RazorpayPaymentError, RazorpayPaymentSuccess } from 'react-native-razorpay';
 
 export type DonationStatus = 'PAID' | 'PENDING' | 'CANCELLED';
@@ -28,13 +29,19 @@ export type DonationRecordItem = {
   receiptNo: string | null;
   donorName: string;
   receivedBy: string | null;
+  relation: string | null;
   paymentMode: 'cash' | 'transfer' | 'cheque' | null;
+  paymentProvider: string | null;
+  paymentOrderId: string | null;
+  paymentReferenceId: string | null;
   memberSearch: string | null;
   proofLabel: string | null;
+  proofUrl: string | null;
   referenceNumber: string | null;
   message: string | null;
   addressLine1: string | null;
   addressLine2: string | null;
+  area: string | null;
   city: string | null;
   state: string | null;
   country: string | null;
@@ -42,6 +49,10 @@ export type DonationRecordItem = {
   panNumber: string | null;
   phoneNumber: string | null;
   totalFamilyMembers: string | null;
+  user: {
+    name?: string | null;
+    phone?: string | null;
+  } | null;
   searchText: string;
 };
 
@@ -69,6 +80,14 @@ export type DonationRecordsPageResponse = {
   summary: DonationRecordsSummary;
 };
 
+export type DonationSettings = {
+  minimumDonationAmount: number;
+};
+
+const defaultDonationSettings: DonationSettings = {
+  minimumDonationAmount: 1,
+};
+
 const emptyDonationRecordsSummary: DonationRecordsSummary = {
   statusCounts: {
     all: 0,
@@ -87,7 +106,7 @@ function markDonationRecordsChanged() {
 
 export type MemberTransactionItem = {
   id: string;
-  type: 'donation' | 'event' | 'subscription';
+  type: 'donation' | 'event' | 'subscription' | 'membership';
   title: string;
   subtitle: string;
   amount: number;
@@ -100,6 +119,9 @@ export type MemberTransactionItem = {
   subscriptionType?: 'PROFILE_CREATION' | 'VIEWER_ONLY' | null;
   subscriptionStartsAt?: string | null;
   subscriptionEndsAt?: string | null;
+  membershipId?: string;
+  membershipStartsAt?: string | null;
+  membershipEndsAt?: string | null;
   paymentRef?: string | null;
 };
 
@@ -132,8 +154,21 @@ export type ManualDonationRecordPayload = {
   panNumber?: string | null;
   referenceNumber?: string | null;
   message?: string | null;
+  donationPurpose?: string | null;
+  receivedBy?: string | null;
+  relation?: string | null;
+  addressLine1?: string | null;
+  addressLine2?: string | null;
+  area?: string | null;
+  city?: string | null;
+  state?: string | null;
+  country?: string | null;
+  pincode?: string | null;
+  phoneNumber?: string | null;
+  totalFamilyMembers?: string | null;
   proofFile?: FileValue | null;
   proofLabel?: string | null;
+  proofUrl?: string | null;
   registeredMemberSearch?: string | null;
   onBehalfUserId?: string | null;
 };
@@ -145,10 +180,12 @@ type ParsedDonationPurpose = {
   memberSearch: string | null;
   receivedBy: string | null;
   proofLabel: string | null;
+  proofUrl: string | null;
   referenceNumber: string | null;
   message: string | null;
   addressLine1: string | null;
   addressLine2: string | null;
+  area: string | null;
   city: string | null;
   state: string | null;
   country: string | null;
@@ -157,6 +194,78 @@ type ParsedDonationPurpose = {
   phoneNumber: string | null;
   totalFamilyMembers: string | null;
 };
+
+function appendOptionalFormValue(formData: FormData, key: string, value: unknown) {
+  if (value !== undefined && value !== null && String(value).trim() !== '') {
+    formData.append(key, String(value));
+  }
+}
+
+function buildManualDonationRequestBody(payload: ManualDonationRecordPayload) {
+  if (!payload.proofFile) {
+    return JSON.stringify({
+      donorName: payload.donorName,
+      amount: payload.amount,
+      donationDate: payload.donationDate ?? undefined,
+      paymentMode: payload.paymentMode,
+      purpose: payload.donationPurpose ?? null,
+      status: payload.status,
+      donationStatus: payload.status,
+      paymentStatus: payload.status,
+      addressLine1: payload.addressLine1 ?? null,
+      addressLine2: payload.addressLine2 ?? null,
+      area: payload.area ?? null,
+      city: payload.city ?? null,
+      state: payload.state ?? null,
+      country: payload.country ?? null,
+      pincode: payload.pincode ?? null,
+      panNumber: payload.panNumber ?? null,
+      phoneNumber: payload.phoneNumber ?? null,
+      totalFamilyMembers: payload.totalFamilyMembers ?? null,
+      referenceNumber: payload.referenceNumber ?? null,
+      message: payload.message ?? null,
+      receivedBy: payload.receivedBy ?? null,
+      proofLabel: payload.proofLabel ?? null,
+      proofUrl: payload.proofUrl ?? null,
+      memberSearch: payload.registeredMemberSearch ?? null,
+      onBehalfUserId: payload.onBehalfUserId ?? null,
+    });
+  }
+
+  const formData = new FormData();
+  appendOptionalFormValue(formData, 'donorName', payload.donorName);
+  appendOptionalFormValue(formData, 'amount', payload.amount);
+  appendOptionalFormValue(formData, 'donationDate', payload.donationDate);
+  appendOptionalFormValue(formData, 'paymentMode', payload.paymentMode);
+  appendOptionalFormValue(formData, 'purpose', payload.donationPurpose);
+  appendOptionalFormValue(formData, 'status', payload.status);
+  appendOptionalFormValue(formData, 'donationStatus', payload.status);
+  appendOptionalFormValue(formData, 'paymentStatus', payload.status);
+  appendOptionalFormValue(formData, 'addressLine1', payload.addressLine1);
+  appendOptionalFormValue(formData, 'addressLine2', payload.addressLine2);
+  appendOptionalFormValue(formData, 'area', payload.area);
+  appendOptionalFormValue(formData, 'city', payload.city);
+  appendOptionalFormValue(formData, 'state', payload.state);
+  appendOptionalFormValue(formData, 'country', payload.country);
+  appendOptionalFormValue(formData, 'pincode', payload.pincode);
+  appendOptionalFormValue(formData, 'panNumber', payload.panNumber);
+  appendOptionalFormValue(formData, 'phoneNumber', payload.phoneNumber);
+  appendOptionalFormValue(formData, 'totalFamilyMembers', payload.totalFamilyMembers);
+  appendOptionalFormValue(formData, 'referenceNumber', payload.referenceNumber);
+  appendOptionalFormValue(formData, 'message', payload.message);
+  appendOptionalFormValue(formData, 'receivedBy', payload.receivedBy);
+  appendOptionalFormValue(formData, 'proofLabel', payload.proofLabel);
+  appendOptionalFormValue(formData, 'proofUrl', payload.proofUrl);
+  appendOptionalFormValue(formData, 'memberSearch', payload.registeredMemberSearch);
+  appendOptionalFormValue(formData, 'onBehalfUserId', payload.onBehalfUserId);
+  formData.append('proof', {
+    uri: payload.proofFile.uri,
+    name: payload.proofFile.name,
+    type: payload.proofFile.mimeType || 'image/jpeg',
+  } as never);
+
+  return formData;
+}
 
 function normalizeOptionalText(value?: string | null) {
   const normalized = String(value || '').trim();
@@ -257,10 +366,12 @@ function parseDonationPurpose(purpose?: string | null) {
     memberSearch: null as string | null,
     receivedBy: null as string | null,
     proofLabel: null as string | null,
+    proofUrl: null as string | null,
     referenceNumber: null as string | null,
     message: null as string | null,
     addressLine1: addressParts[0] ?? null,
     addressLine2: addressParts[1] ?? null,
+    area: null as string | null,
     city: addressParts[2] ?? null,
     state: addressParts[3] ?? null,
     country: addressParts[4] ?? null,
@@ -305,7 +416,7 @@ function parseDonationPurpose(purpose?: string | null) {
     }
 
     if (part.startsWith('Area:')) {
-      parsed.addressLine2 = part.replace(/^Area:\s*/i, '').trim() || parsed.addressLine2;
+      parsed.area = part.replace(/^Area:\s*/i, '').trim() || null;
       continue;
     }
 
@@ -359,6 +470,11 @@ function parseDonationPurpose(purpose?: string | null) {
       continue;
     }
 
+    if (part.startsWith('Proof Url:')) {
+      parsed.proofUrl = normalizeOptionalText(part.replace(/^Proof Url:\s*/i, ''));
+      continue;
+    }
+
     if (part.startsWith('Received By:')) {
       parsed.receivedBy = normalizeOptionalText(part.replace(/^Received By:\s*/i, ''));
       continue;
@@ -388,11 +504,13 @@ function mapDonationRecord(record: {
   memberSearch?: string | null;
   receivedBy?: string | null;
   proofLabel?: string | null;
+  proofUrl?: string | null;
   referenceNumber?: string | null;
   message?: string | null;
   donorUser?: { name?: string | null } | null;
   addressLine1?: string | null;
   addressLine2?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -400,13 +518,19 @@ function mapDonationRecord(record: {
   panNumber?: string | null;
   phoneNumber?: string | null;
   totalFamilyMembers?: string | number | null;
+  paymentProvider?: string | null;
+  paymentOrderId?: string | null;
+  paymentReferenceId?: string | null;
+  relation?: string | null;
+  user?: { name?: string | null; phone?: string | null } | null;
 }) {
   const parsedPurpose = parseDonationPurpose(record.purpose);
   const directPaymentMode = normalizeDonationPaymentMode(record.paymentMode);
-  const donorName = parsedPurpose.donorName || record.donorName || record.donorUser?.name || 'Donation';
+  const donorName = parsedPurpose.donorName || record.donorName || record.donorUser?.name || 'Contribution';
   const amount = Number(record.amount || 0);
   const addressLine1 = normalizeOptionalText(parsedPurpose.addressLine1 || record.addressLine1);
   const addressLine2 = normalizeOptionalText(parsedPurpose.addressLine2 || record.addressLine2);
+  const area = normalizeOptionalText(parsedPurpose.area || record.area);
   const city = normalizeOptionalText(parsedPurpose.city || record.city);
   const state = normalizeOptionalText(parsedPurpose.state || record.state);
   const country = normalizeOptionalText(parsedPurpose.country || record.country);
@@ -414,6 +538,7 @@ function mapDonationRecord(record: {
   const panNumber = normalizeOptionalText(parsedPurpose.panNumber || record.panNumber)?.toUpperCase() || null;
   const phoneNumber = normalizeOptionalText(parsedPurpose.phoneNumber || record.phoneNumber);
   const totalFamilyMembers = normalizeOptionalText(parsedPurpose.totalFamilyMembers || (record.totalFamilyMembers != null ? String(record.totalFamilyMembers) : null));
+  const proofUrl = resolveBackendMediaUrl(parsedPurpose.proofUrl || record.proofUrl) ?? null;
   const normalizedStatus = normalizeDonationStatus(record.status || record.donationStatus || record.paymentStatus);
   const searchText = [
     donorName,
@@ -426,9 +551,11 @@ function mapDonationRecord(record: {
     directPaymentMode || parsedPurpose.paymentMode,
     record.referenceNumber || parsedPurpose.referenceNumber,
     record.proofLabel || parsedPurpose.proofLabel,
+    proofUrl,
     record.receivedBy || parsedPurpose.receivedBy,
     addressLine1,
     addressLine2,
+    area,
     city,
     state,
     country,
@@ -454,13 +581,19 @@ function mapDonationRecord(record: {
     receiptNo: record.receiptNo || null,
     donorName,
     receivedBy: parsedPurpose.receivedBy || record.receivedBy || null,
+    relation: record.relation || null,
     paymentMode: parsedPurpose.paymentMode || directPaymentMode,
+    paymentProvider: record.paymentProvider || null,
+    paymentOrderId: record.paymentOrderId || null,
+    paymentReferenceId: record.paymentReferenceId || record.referenceNumber || parsedPurpose.referenceNumber || null,
     memberSearch: parsedPurpose.memberSearch || record.memberSearch || null,
     proofLabel: parsedPurpose.proofLabel || record.proofLabel || null,
+    proofUrl,
     referenceNumber: parsedPurpose.referenceNumber || record.referenceNumber || null,
     message: parsedPurpose.message || record.message || null,
     addressLine1,
     addressLine2,
+    area,
     city,
     state,
     country,
@@ -468,6 +601,7 @@ function mapDonationRecord(record: {
     panNumber,
     phoneNumber,
     totalFamilyMembers,
+    user: record.user || null,
     searchText,
   } satisfies DonationRecordItem;
 }
@@ -493,6 +627,22 @@ async function loadDonationRecords(mine = true) {
 }
 
 async function loadDonationRecordById(recordId: string, mine = true) {
+  if (isBackendApiConfigured()) {
+    const backendSession = await getBackendSessionContext();
+    if (backendSession) {
+      try {
+        const response = await apiClient<{ data: Parameters<typeof mapDonationRecord>[0] }>(
+          apiEndpoints.communityDonationById(backendSession.tenantId, recordId),
+          { token: backendSession.token },
+        );
+
+        return response.data ? mapDonationRecord(response.data) : null;
+      } catch {
+        return null;
+      }
+    }
+  }
+
   const records = await loadDonationRecords(mine);
   return records.find((record) => record.id === recordId) ?? null;
 }
@@ -617,6 +767,16 @@ function formatCompactCurrency(amount: number) {
   return `₹${amount.toLocaleString('en-IN')}`;
 }
 
+function mapDonationSettings(value?: Partial<DonationSettings> | null): DonationSettings {
+  const minimumDonationAmount = Number(value?.minimumDonationAmount || defaultDonationSettings.minimumDonationAmount);
+
+  return {
+    minimumDonationAmount: Number.isFinite(minimumDonationAmount) && minimumDonationAmount > 0
+      ? minimumDonationAmount
+      : defaultDonationSettings.minimumDonationAmount,
+  };
+}
+
 async function downloadPdfFromBackend(url: string, fileName: string, token: string) {
   const headers: Record<string, string> = {
     ...getActiveTenantRequestHeaders(),
@@ -636,6 +796,43 @@ async function downloadPdfFromBackend(url: string, fileName: string, token: stri
 }
 
 export const donationService = {
+  async loadDonationSettings(): Promise<DonationSettings> {
+    if (!isBackendApiConfigured()) {
+      return defaultDonationSettings;
+    }
+
+    const backendSession = await getBackendSessionContext();
+    if (!backendSession) {
+      return defaultDonationSettings;
+    }
+
+    const response = await apiClient<{ data: Partial<DonationSettings> }>(
+      apiEndpoints.communityDonationSettings(backendSession.tenantId),
+      { token: backendSession.token },
+    );
+
+    return mapDonationSettings(response.data);
+  },
+
+  async updateDonationSettings(payload: DonationSettings): Promise<DonationSettings> {
+    const backendSession = await getBackendSessionContext();
+    if (!backendSession) {
+      throw new Error('Unable to resolve the current community session.');
+    }
+
+    const response = await apiClient<{ data: Partial<DonationSettings> }>(
+      apiEndpoints.communityDonationSettings(backendSession.tenantId),
+      {
+        method: 'PATCH',
+        token: backendSession.token,
+        body: JSON.stringify(payload),
+      },
+    );
+    await invalidateTenantApiData(backendSession.tenantId);
+
+    return mapDonationSettings(response.data);
+  },
+
   async loadDonationRecordsPage(params?: {
     mine?: boolean;
     page?: number;
@@ -673,11 +870,11 @@ export const donationService = {
       receiptRecord: record,
       id: record.id,
       receiptNo: record.receiptNo,
-      title: record.donorName || 'Donation',
-      meta: `${formatDonationDateTime(record.createdAt)} • ${record.donationType || 'Donation'}`,
+      title: record.donorName || 'Contribution',
+      meta: `${formatDonationDateTime(record.createdAt)} • ${record.donationType || 'Contribution'}`,
       amount: `-₹${Number(record.amount || 0).toLocaleString('en-IN')}`,
       date: formatDonationDateTime(record.createdAt),
-      transactionType: record.donationType || 'Donation',
+      transactionType: record.donationType || 'Contribution',
       icon: 'volunteer-activism',
       tone: '#16a34a',
       bg: '#dcfce7',
@@ -696,7 +893,7 @@ export const donationService = {
     return [
       { label: 'Collected this month', value: formatCompactCurrency(total), accent: 'accent' },
       { label: 'Offline receipts', value: String(records.length), accent: 'warning' },
-      { label: 'Recurring donors', value: String(recurringDonors.size), accent: 'primary' },
+      { label: 'Recurring contributors', value: String(recurringDonors.size), accent: 'primary' },
     ] satisfies MetricItem[];
   },
 
@@ -711,7 +908,7 @@ export const donationService = {
       (record) =>
         ({
           title: `₹${Number(record.amount || 0).toLocaleString('en-IN')}`,
-          subtitle: record.receiptNo || record.purpose || record.donorName || 'Donation',
+          subtitle: record.receiptNo || record.purpose || record.donorName || 'Contribution',
           meta: record.createdAt ? new Date(record.createdAt).toLocaleDateString('en-IN') : '',
           status: formatDonationStatusLabel(record.status),
         }) satisfies ListItem,
@@ -727,21 +924,7 @@ export const donationService = {
           {
             method: 'POST',
             token: backendSession.token,
-            body: JSON.stringify({
-              donorName: payload.donorName,
-              amount: payload.amount,
-              donationDate: payload.donationDate ?? undefined,
-              paymentMode: payload.paymentMode,
-              status: payload.status,
-              donationStatus: payload.status,
-              paymentStatus: payload.status,
-              panNumber: payload.panNumber ?? null,
-              referenceNumber: payload.referenceNumber ?? null,
-              message: payload.message ?? null,
-              proofLabel: payload.proofFile?.name ?? payload.proofLabel ?? null,
-              memberSearch: payload.registeredMemberSearch ?? null,
-              onBehalfUserId: payload.onBehalfUserId ?? null,
-            }),
+            body: buildManualDonationRequestBody(payload),
           },
         );
         await invalidateTenantApiData(backendSession.tenantId);
@@ -781,21 +964,7 @@ export const donationService = {
           {
             method: 'PATCH',
             token: backendSession.token,
-            body: JSON.stringify({
-              donorName: payload.donorName,
-              amount: payload.amount,
-              donationDate: payload.donationDate ?? undefined,
-              paymentMode: payload.paymentMode,
-              status: payload.status,
-              donationStatus: payload.status,
-              paymentStatus: payload.status,
-              panNumber: payload.panNumber ?? null,
-              referenceNumber: payload.referenceNumber ?? null,
-              message: payload.message ?? null,
-              proofLabel: payload.proofFile?.name ?? payload.proofLabel ?? null,
-              memberSearch: payload.registeredMemberSearch ?? null,
-              onBehalfUserId: payload.onBehalfUserId ?? null,
-            }),
+            body: buildManualDonationRequestBody(payload),
           },
         );
         await invalidateTenantApiData(backendSession.tenantId);
@@ -822,6 +991,7 @@ export const donationService = {
     relation?: string | null;
     addressLine1?: string | null;
     addressLine2?: string | null;
+    area?: string | null;
     city?: string | null;
     state?: string | null;
     country?: string | null;
@@ -830,7 +1000,7 @@ export const donationService = {
     phoneNumber?: string | null;
     totalFamilyMembers?: string | number | null;
     message?: string | null;
-  }) {
+  }): Promise<DonationPaymentOrder> {
     const backendSession = await getBackendSessionContext();
     if (!backendSession) {
       throw new Error('Unable to resolve the current community session.');
@@ -899,6 +1069,19 @@ export const donationService = {
 
   async verifyDonationPayment(payload: {
     donorName: string;
+    donorType?: string;
+    purpose?: string | null;
+    relation?: string | null;
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    area?: string | null;
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    pincode?: string | null;
+    panNumber?: string | null;
+    phoneNumber?: string | null;
+    totalFamilyMembers?: string | null;
     message?: string | null;
     razorpay: RazorpayPaymentSuccess;
   }) {
@@ -914,6 +1097,19 @@ export const donationService = {
         token: backendSession.token,
         body: JSON.stringify({
           donorName: payload.donorName,
+          donorType: payload.donorType ?? null,
+          purpose: payload.purpose ?? null,
+          relation: payload.relation ?? null,
+          addressLine1: payload.addressLine1 ?? null,
+          addressLine2: payload.addressLine2 ?? null,
+          area: payload.area ?? null,
+          city: payload.city ?? null,
+          state: payload.state ?? null,
+          country: payload.country ?? null,
+          pincode: payload.pincode ?? null,
+          panNumber: payload.panNumber ?? null,
+          phoneNumber: payload.phoneNumber ?? null,
+          totalFamilyMembers: payload.totalFamilyMembers ?? null,
           message: payload.message ?? null,
           razorpayOrderId: payload.razorpay.razorpay_order_id,
           razorpayPaymentId: payload.razorpay.razorpay_payment_id,
@@ -922,6 +1118,7 @@ export const donationService = {
       },
     );
     await invalidateTenantApiData(backendSession.tenantId);
+    markDonationRecordsChanged();
 
     return mapDonationRecord(response.data);
   },
@@ -957,6 +1154,54 @@ export const donationService = {
     });
   },
 
+  async generateReceiptAndOpen(record: DonationRecordItem) {
+    const html = generateDonationReceiptHtml(record, DONATION_RECEIPT_LOGO_URI, DONATION_RECEIPT_QR_URI);
+    const fileName = `receipt-${record.receiptNo || record.id}.pdf`;
+    const title = `Donation Receipt ${record.receiptNo || record.id}`;
+
+    if (Platform.OS === 'web') {
+      const win = globalThis.window?.open('', '_blank');
+      if (!win) {
+        throw new Error('Unable to open receipt preview.');
+      }
+
+      win.document.write(html);
+      win.document.close();
+
+      return {
+        fileName,
+        title,
+        method: 'open' as const,
+        uri: '',
+        fileUri: '',
+        size: 0,
+      };
+    }
+
+    const result = await createAndDeliverPdf({
+      source: {
+        type: 'html',
+        html,
+        width: 842,
+        height: 595,
+      },
+      fileName,
+      delivery: 'persist',
+    });
+
+    if (!result?.fileUri && !result?.uri) {
+      throw new Error('Unable to prepare receipt preview.');
+    }
+
+    return {
+      ...result,
+      title,
+      fileUri: result.fileUri || result.uri,
+      uri: result.uri || result.fileUri,
+      method: 'open' as const,
+    };
+  },
+
   async generateReceiptForDonationId(recordId: string) {
     const record = await loadDonationRecordById(recordId, true);
     if (!record) {
@@ -964,6 +1209,15 @@ export const donationService = {
     }
 
     return this.generateReceiptAndShare(record);
+  },
+
+  async openReceiptForDonationId(recordId: string) {
+    const record = await loadDonationRecordById(recordId, true);
+    if (!record) {
+      throw new Error('Donation receipt details were not found.');
+    }
+
+    return this.generateReceiptAndOpen(record);
   },
 
   async recordDonation(item: ListItem) {

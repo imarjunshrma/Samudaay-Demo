@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import { ActivityIndicator, FlatList, Modal, Pressable, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { FormikProvider } from 'formik';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Yup from 'yup';
 
 import { AppHeader, Button, Checkbox, Dialog, FileUpload, FormScreenLayout, SearchInput, SelectField, Text, TextField } from '@/src/components';
-import { SkeletonBlock } from '@/src/components/ui/skeleton';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useAppForm } from '@/src/hooks/useForm';
 import { useTranslations } from '@/src/i18n/use-translations';
@@ -62,10 +61,16 @@ export function CreateNotificationContent() {
   const t = useTranslations('communication.create-notification');
   const [recipient, setRecipient] = useState<RecipientKey>('all');
   const [isSending, setIsSending] = useState(false);
-  const [isLoadingAudience, setIsLoadingAudience] = useState(true);
   const [groupSearch, setGroupSearch] = useState('');
   const [availableGroups, setAvailableGroups] = useState<CommunityChatFeedItem[]>([]);
-  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
+  const [selectedGroups, setSelectedGroups] = useState<CommunityChatFeedItem[]>([]);
+  const selectedGroupIds = selectedGroups.map((group) => group.id);
+  const [showGroups, setShowGroups] = useState(false);
+  const [groupsPage, setGroupsPage] = useState(1);
+  const [groupsHasNext, setGroupsHasNext] = useState(false);
+  const [groupsLoading, setGroupsLoading] = useState(false);
+  const [groupsError, setGroupsError] = useState<string | null>(null);
+  const [groupsRetry, setGroupsRetry] = useState(0);
   const [trusteeUserIds, setTrusteeUserIds] = useState<string[]>([]);
   const [customRoleKey, setCustomRoleKey] = useState('');
   const [roleOptions, setRoleOptions] = useState<{ label: string; value: string }[]>([]);
@@ -137,7 +142,7 @@ export function CreateNotificationContent() {
         setRecipient('all');
         setCustomRoleKey('');
         setGroupSearch('');
-        setSelectedGroupIds([]);
+        setSelectedGroups([]);
         setFeedbackDialog({
           visible: true,
           variant: 'success',
@@ -161,8 +166,9 @@ export function CreateNotificationContent() {
     setRecipient('all');
     setCustomRoleKey('');
     setGroupSearch('');
-    setSelectedGroupIds([]);
+    setSelectedGroups([]);
     setIsSending(false);
+    setShowGroups(false);
     setFeedbackDialog({
       visible: false,
       variant: 'success',
@@ -174,25 +180,16 @@ export function CreateNotificationContent() {
   const loadAudience = useCallback(() => {
     let active = true;
 
-    setIsLoadingAudience(true);
     void Promise.all([
-      chatService.loadChatsPage({ context: 'communication', page: 1, limit: 100 }),
       directoryService.loadTrustees(),
       directoryService.loadFilterOptions({ userType: 'all' }),
       roleManagementService.loadCatalog().catch(() => null),
     ])
-      .then(([groupsResult, trustees, filters, catalog]) => {
+      .then(([trustees, filters, catalog]) => {
         if (!active) {
           return;
         }
 
-        setAvailableGroups(
-          groupsResult.items.filter((group) => {
-            const type = String(group.type || '').toUpperCase();
-            const status = String(group.status || '').toUpperCase();
-            return type !== 'DIRECT' && status !== 'DISABLED';
-          }),
-        );
         setTrusteeUserIds(
           Array.from(new Set(trustees.map((trustee) => trustee.id).filter(Boolean))),
         );
@@ -210,24 +207,14 @@ export function CreateNotificationContent() {
           return;
         }
 
-        setAvailableGroups([]);
         setTrusteeUserIds([]);
         setRoleOptions([]);
-      })
-      .finally(() => {
-        if (active) {
-          setIsLoadingAudience(false);
-        }
       });
 
     return () => {
       active = false;
     };
   }, []);
-
-  useEffect(() => {
-    return loadAudience();
-  }, [loadAudience]);
 
   useFocusEffect(
     useCallback(() => {
@@ -240,44 +227,43 @@ export function CreateNotificationContent() {
     }, [loadAudience, resetComposer]),
   );
 
-  const filteredGroups = useMemo(() => {
-    const query = groupSearch.trim().toLowerCase();
-    if (!query) {
-      return availableGroups;
-    }
-
-    return availableGroups.filter((group) => {
-      const searchText = `${group.title} ${group.preview} ${group.status || ''}`.toLowerCase();
-      return searchText.includes(query);
-    });
-  }, [availableGroups, groupSearch]);
-
-  const selectedGroupUserIds = useMemo(() => {
-    const ids = new Set<string>();
-    availableGroups.forEach((group) => {
-      if (!selectedGroupIds.includes(group.id)) {
-        return;
-      }
-
-      (group.memberIds ?? []).forEach((userId) => {
-        if (userId) {
-          ids.add(userId);
-        }
+  useEffect(() => {
+    if (!showGroups) return;
+    let active = true;
+    setGroupsLoading(true);
+    setGroupsError(null);
+    const timer = setTimeout(() => {
+      chatService.loadChatsPage({
+        context: 'communication', page: groupsPage, limit: 20,
+        search: groupSearch.trim(), notificationGroups: true, includeMemberIds: true,
+      }).then((result) => {
+        if (!active) return;
+        setAvailableGroups((current) => groupsPage === 1 ? result.items : [
+          ...current, ...result.items.filter((group) => !current.some((item) => item.id === group.id)),
+        ]);
+        setGroupsHasNext(Boolean(result.pagination?.hasNextPage));
+      }).catch((error) => {
+        if (active) setGroupsError(error instanceof Error ? error.message : 'Unable to load groups.');
+      }).finally(() => {
+        if (active) setGroupsLoading(false);
       });
-    });
-    return Array.from(ids);
-  }, [availableGroups, selectedGroupIds]);
+    }, groupSearch.trim() ? 300 : 0);
+    return () => { active = false; clearTimeout(timer); };
+  }, [showGroups, groupsPage, groupSearch, groupsRetry]);
+
+  const selectedGroupUserIds = useMemo(
+    () => [...new Set(selectedGroups.flatMap((group) => group.memberIds ?? []).filter(Boolean))],
+    [selectedGroups],
+  );
 
   function formatGroupMemberCount(count: number) {
     return `${count} ${count === 1 ? t('field.selectGroup.member') : t('field.selectGroup.members')}`;
   }
 
-  function toggleGroup(groupId: string) {
-    setSelectedGroupIds((current) =>
-      current.includes(groupId)
-        ? current.filter((value) => value !== groupId)
-        : [...current, groupId],
-    );
+  function toggleGroup(group: CommunityChatFeedItem) {
+    setSelectedGroups((current) => current.some((item) => item.id === group.id)
+      ? current.filter((item) => item.id !== group.id)
+      : [...current, group]);
   }
 
   return (
@@ -382,77 +368,89 @@ export function CreateNotificationContent() {
                   <Text variant="caption" style={{ fontFamily: typography.fontFamily.bold, textTransform: 'uppercase', letterSpacing: 1 }}>
                     {t('field.selectGroup')}
                   </Text>
-                  <SearchInput
-                    placeholder={t('field.searchGroup.placeholder')}
-                    value={groupSearch}
-                    onChangeText={setGroupSearch}
-                  />
-                  <View style={{ gap: spacing[2] }}>
-                    {isLoadingAudience ? (
-                      Array.from({ length: 3 }, (_, index) => (
-                        <View
-                          key={index}
-                          style={{
-                            borderRadius: radius.lg,
-                            borderWidth: 1,
-                            borderColor: colors.primary.borderLight,
-                            backgroundColor: colors.background.surface,
-                            paddingHorizontal: spacing[4],
-                            paddingVertical: spacing[3],
-                            gap: spacing[2],
-                          }}>
-                          <SkeletonBlock width={`${64 - index * 8}%`} height={16} radiusSize={radius.sm} />
-                          <SkeletonBlock width="28%" height={12} radiusSize={radius.sm} />
-                        </View>
-                      ))
-                    ) : filteredGroups.length ? (
-                      filteredGroups.map((group) => {
-                        const selected = selectedGroupIds.includes(group.id);
-                        return (
-                          <Pressable
-                            key={group.id}
-                            accessibilityRole="button"
-                            onPress={() => toggleGroup(group.id)}
-                            style={{
-                              borderRadius: radius.lg,
-                              borderWidth: 1,
-                              borderColor: selected ? colors.primary.DEFAULT : colors.primary.borderLight,
-                              backgroundColor: selected ? colors.primary.subtle : colors.background.surface,
-                              paddingHorizontal: spacing[4],
-                              paddingVertical: spacing[3],
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              gap: spacing[3],
-                            }}>
-                            <View style={{ flex: 1, gap: 2 }}>
-                              <Text variant="body" style={{ fontFamily: typography.fontFamily.semibold }}>
-                                {group.title}
-                              </Text>
-                              <Text variant="caption" color={colors.text.muted}>
-                                {formatGroupMemberCount(group.memberCount ?? group.memberIds?.length ?? 0)}
-                              </Text>
-                            </View>
-                            <MaterialIcons
-                              name={selected ? 'check-circle' : 'radio-button-unchecked'}
-                              size={20}
-                              color={selected ? colors.primary.DEFAULT : colors.text.muted}
-                            />
-                          </Pressable>
-                        );
-                      })
-                    ) : (
-                      <Text variant="caption" color={colors.text.muted}>
-                        {groupSearch.trim() ? t('field.selectGroup.emptySearch') : t('field.selectGroup.empty')}
-                      </Text>
-                    )}
-                  </View>
+                  <Button variant="outline" onPress={() => {
+                    setAvailableGroups([]);
+                    setGroupSearch('');
+                    setGroupsPage(1);
+                    setGroupsHasNext(false);
+                    setGroupsError(null);
+                    setGroupsLoading(true);
+                    setShowGroups(true);
+                  }} leftIcon={<MaterialIcons name="groups" size={20} color={colors.primary.DEFAULT} />}>
+                    {selectedGroups.length ? `Selected groups (${selectedGroups.length})` : t('field.selectGroup')}
+                  </Button>
+                  {selectedGroups.map((group) => (
+                    <Pressable key={group.id} accessibilityRole="button" accessibilityLabel={`Remove ${group.title}`}
+                      onPress={() => toggleGroup(group)}
+                      style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2], paddingVertical: spacing[2] }}>
+                      <Text style={{ flex: 1 }}>{group.title}</Text>
+                      <MaterialIcons name="close" size={20} color={colors.text.secondary} />
+                    </Pressable>
+                  ))}
                 </View>
               </View>
             </View>
           </View>
         </FormikProvider>
       </FormScreenLayout>
+
+      <Modal visible={showGroups} transparent animationType="fade" onRequestClose={() => setShowGroups(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', padding: spacing[4], backgroundColor: 'rgba(0,0,0,0.35)' }}>
+          <View style={{ height: '70%', borderRadius: radius.lg, backgroundColor: colors.background.surface, padding: spacing[4], gap: spacing[3] }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing[2] }}>
+              <Text variant="h5" style={{ flex: 1 }}>{t('field.selectGroup')} ({selectedGroups.length})</Text>
+              <Pressable accessibilityRole="button" accessibilityLabel="Close" onPress={() => setShowGroups(false)}>
+                <MaterialIcons name="close" size={24} color={colors.text.secondary} />
+              </Pressable>
+            </View>
+            <SearchInput placeholder={t('field.searchGroup.placeholder')} value={groupSearch} onChangeText={(value) => {
+              setGroupSearch(value);
+              setAvailableGroups([]);
+              setGroupsPage(1);
+              setGroupsHasNext(false);
+              setGroupsError(null);
+              setGroupsLoading(true);
+            }} />
+            <FlatList
+              style={{ flex: 1 }}
+              data={availableGroups}
+              extraData={selectedGroups}
+              keyExtractor={(group) => group.id}
+              keyboardShouldPersistTaps="handled"
+              onEndReachedThreshold={0.4}
+              onEndReached={() => {
+                if (groupsHasNext && !groupsLoading && !groupsError) {
+                  setGroupsLoading(true);
+                  setGroupsPage((page) => page + 1);
+                }
+              }}
+              contentContainerStyle={{ gap: spacing[2] }}
+              ListEmptyComponent={!groupsLoading && !groupsError ? <Text variant="caption">{groupSearch.trim() ? t('field.selectGroup.emptySearch') : t('field.selectGroup.empty')}</Text> : null}
+              ListFooterComponent={groupsLoading ? <ActivityIndicator style={{ padding: spacing[3] }} color={colors.primary.DEFAULT} /> : groupsError ? (
+                <Pressable onPress={() => setGroupsRetry((value) => value + 1)}>
+                  <Text color={colors.status.error}>{groupsError}</Text><Text color={colors.primary.DEFAULT}>Retry</Text>
+                </Pressable>
+              ) : null}
+              renderItem={({ item: group }) => {
+                const selected = selectedGroupIds.includes(group.id);
+                return (
+                  <Pressable accessibilityRole="checkbox" accessibilityState={{ checked: selected }} onPress={() => toggleGroup(group)}
+                    style={{ borderRadius: radius.lg, borderWidth: 1, borderColor: selected ? colors.primary.DEFAULT : colors.primary.borderLight,
+                      backgroundColor: selected ? colors.primary.subtle : colors.background.surface, padding: spacing[3],
+                      flexDirection: 'row', alignItems: 'center', gap: spacing[3] }}>
+                    <View style={{ flex: 1 }}>
+                      <Text style={{ fontFamily: typography.fontFamily.semibold }}>{group.title}</Text>
+                      <Text variant="caption" color={colors.text.muted}>{formatGroupMemberCount(group.memberCount ?? 0)}</Text>
+                    </View>
+                    <MaterialIcons name={selected ? 'check-box' : 'check-box-outline-blank'} size={22} color={colors.primary.DEFAULT} />
+                  </Pressable>
+                );
+              }}
+            />
+            <Button onPress={() => setShowGroups(false)}>Done</Button>
+          </View>
+        </View>
+      </Modal>
 
       <Dialog
         visible={feedbackDialog.visible}

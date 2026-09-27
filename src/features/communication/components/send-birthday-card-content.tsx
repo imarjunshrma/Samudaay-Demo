@@ -90,6 +90,7 @@ export function SendBirthdayCardContent({
     () => (requestedRecipientId ? allBirthdayItems.find((item) => item.id === requestedRecipientId) : undefined),
     [allBirthdayItems, requestedRecipientId],
   );
+  const targetedRecipientMode = Boolean(requestedRecipient);
   const [message, setMessage] = useState(selectedTemplate?.defaultMessage ?? '');
   const [scheduledDate, setScheduledDate] = useState<Date>(() => createDefaultScheduleDate());
   const [scheduledTime, setScheduledTime] = useState<Date>(() => createDefaultScheduleDate());
@@ -130,11 +131,11 @@ export function SendBirthdayCardContent({
   );
 
   const selectedRecipients = useMemo(() => {
-    if (!adminMode) {
-      if (requestedRecipient) {
-        return [requestedRecipient];
-      }
+    if (requestedRecipient) {
+      return [requestedRecipient];
+    }
 
+    if (!adminMode) {
       if (todayItems[0]) {
         return [todayItems[0]];
       }
@@ -153,8 +154,10 @@ export function SendBirthdayCardContent({
     return todayItems;
   }, [adminMode, allBirthdayItems, cityReference, recipientScope, requestedRecipient, todayItems, upcomingItems]);
 
-  const recipientLabel = adminMode
-    ? t('admin.recipients.summary').replace('{count}', String(selectedRecipients.length))
+  const recipientLabel = targetedRecipientMode
+    ? selectedRecipients[0]?.name ?? ''
+    : adminMode
+      ? t('admin.recipients.summary').replace('{count}', String(selectedRecipients.length))
     : selectedRecipients[0]?.name ?? '';
   const canSubmit = Boolean(selectedTemplate?.active && message.trim() && selectedRecipients.length);
   const recipientSummary = selectedRecipients
@@ -164,11 +167,13 @@ export function SendBirthdayCardContent({
   const templateHeaderActionLabel = adminMode ? t('admin.actions.createTemplate') : t('templates.scrollMore');
   const scheduledDateTime = combineScheduleDateTime(scheduledDate, scheduledTime);
   const canSchedule = canSubmit && scheduledDateTime.getTime() > Date.now();
-  const queueContextLabel = recipientScope === 'city'
-    ? t('admin.recipients.cityQueue').replace('{city}', cityReference || t('admin.recipients.cityFallback'))
-    : recipientScope === 'week'
-      ? t('admin.recipients.weekQueue')
-      : t('admin.recipients.todayQueue');
+  const queueContextLabel = targetedRecipientMode
+    ? selectedRecipients[0]?.name ?? t('admin.recipients.todayQueue')
+    : recipientScope === 'city'
+      ? t('admin.recipients.cityQueue').replace('{city}', cityReference || t('admin.recipients.cityFallback'))
+      : recipientScope === 'week'
+        ? t('admin.recipients.weekQueue')
+        : t('admin.recipients.todayQueue');
 
   async function handleGreetingSubmit(status: 'Delivered' | 'Scheduled') {
     if (!selectedTemplate) {
@@ -392,17 +397,19 @@ export function SendBirthdayCardContent({
                     </Text>
                   </View>
                 </View>
-                <FilterChips
-                  items={[
-                    { key: 'today', label: t('admin.recipients.today'), icon: 'cake' },
-                    { key: 'week', label: t('admin.recipients.week'), icon: 'calendar-month' },
-                    { key: 'city', label: t('admin.recipients.city'), icon: 'location-city' },
-                  ]}
-                  activeKey={recipientScope}
-                  onPress={(key) => setRecipientScope(key as RecipientScope)}
-                  scrollable
-                  showIcons
-                />
+                {targetedRecipientMode ? null : (
+                  <FilterChips
+                    items={[
+                      { key: 'today', label: t('admin.recipients.today'), icon: 'cake' },
+                      { key: 'week', label: t('admin.recipients.week'), icon: 'calendar-month' },
+                      { key: 'city', label: t('admin.recipients.city'), icon: 'location-city' },
+                    ]}
+                    activeKey={recipientScope}
+                    onPress={(key) => setRecipientScope(key as RecipientScope)}
+                    scrollable
+                    showIcons
+                  />
+                )}
                 <View
                   style={{
                     borderRadius: radius.lg,
@@ -636,93 +643,93 @@ export function SendBirthdayCardContent({
             />
           </Card>
 
-          {adminMode ? (
-            <Card variant="default" padding="lg" style={{ borderColor: colors.primary.borderLight }}>
-              <View style={{ gap: spacing[3] }}>
-                <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
-                  {t('admin.delivery.title')}
+          <Card variant="default" padding="lg" style={{ borderColor: colors.primary.borderLight }}>
+            <View style={{ gap: spacing[3] }}>
+              <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
+                {t('admin.schedule.title')}
+              </Text>
+              <View
+                style={{
+                  borderRadius: radius.lg,
+                  backgroundColor: colors.background.DEFAULT,
+                  borderWidth: 1,
+                  borderColor: colors.primary.borderLight,
+                  padding: spacing[3],
+                  gap: spacing[3],
+                }}>
+                <Text variant="caption" color={colors.text.secondary}>
+                  {t('admin.schedule.helper')}
                 </Text>
+                <View style={{ flexDirection: windowWidth < 390 ? 'column' : 'row', gap: spacing[3] }}>
+                  <View style={{ flex: 1 }}>
+                    <DateField
+                      label={t('admin.schedule.dateLabel')}
+                      value={scheduledDate}
+                      onChange={setScheduledDate}
+                      minimumDate={new Date()}
+                      variant="registration"
+                      labelVariant="default"
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <DateField
+                      label={t('admin.schedule.timeLabel')}
+                      value={scheduledTime}
+                      onChange={setScheduledTime}
+                      mode="time"
+                      variant="registration"
+                      labelVariant="default"
+                    />
+                  </View>
+                </View>
                 <View
                   style={{
                     borderRadius: radius.lg,
-                    backgroundColor: colors.background.DEFAULT,
+                    backgroundColor: colors.background.surface,
                     borderWidth: 1,
-                    borderColor: colors.primary.borderLight,
+                    borderColor: colors.border.light,
                     padding: spacing[3],
-                    gap: spacing[3],
+                    gap: spacing[1],
                   }}>
-                  <View style={{ gap: spacing[1] }}>
-                    <Text variant="body" style={{ fontFamily: typography.fontFamily.bold }}>
-                      {t('admin.schedule.title')}
-                    </Text>
-                    <Text variant="caption" color={colors.text.secondary}>
-                      {t('admin.schedule.helper')}
-                    </Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', gap: spacing[3] }}>
-                    <View style={{ flex: 1 }}>
-                      <DateField
-                        label={t('admin.schedule.dateLabel')}
-                        value={scheduledDate}
-                        onChange={setScheduledDate}
-                        minimumDate={new Date()}
-                        variant="registration"
-                        labelVariant="default"
-                      />
-                    </View>
-                    <View style={{ flex: 1 }}>
-                      <DateField
-                        label={t('admin.schedule.timeLabel')}
-                        value={scheduledTime}
-                        onChange={setScheduledTime}
-                        mode="time"
-                        variant="registration"
-                        labelVariant="default"
-                      />
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      borderRadius: radius.lg,
-                      backgroundColor: colors.background.surface,
-                      borderWidth: 1,
-                      borderColor: colors.border.light,
-                      padding: spacing[3],
-                      gap: spacing[1],
-                    }}>
-                    <Text variant="caption" color={colors.text.muted}>
-                      {t('admin.schedule.selectedLabel')}
-                    </Text>
-                    <Text variant="body" style={{ fontFamily: typography.fontFamily.bold }}>
-                      {formatSchedulePreview(scheduledDateTime)}
-                    </Text>
-                  </View>
+                  <Text variant="caption" color={colors.text.muted}>
+                    {t('admin.schedule.selectedLabel')}
+                  </Text>
+                  <Text variant="body" style={{ fontFamily: typography.fontFamily.bold }}>
+                    {formatSchedulePreview(scheduledDateTime)}
+                  </Text>
                 </View>
-                {[
-                  [t('admin.delivery.inApp'), 'notifications-active'],
-                  [t('admin.delivery.schedule'), 'schedule-send'],
-                  [t('admin.delivery.rateLimit'), 'security'],
-                ].map(([label, icon]) => (
-                  <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3] }}>
-                    <View
-                      style={{
-                        width: 34,
-                        height: 34,
-                        borderRadius: radius.full,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        backgroundColor: colors.primary.muted,
-                      }}>
-                      <MaterialIcons name={icon as ComponentProps<typeof MaterialIcons>['name']} size={17} color={colors.primary.DEFAULT} />
-                    </View>
-                    <Text variant="body" color={colors.text.secondary} style={{ flex: 1 }}>
-                      {label}
-                    </Text>
-                  </View>
-                ))}
               </View>
-            </Card>
-          ) : null}
+              {adminMode ? (
+                <>
+                  <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
+                    {t('admin.delivery.title')}
+                  </Text>
+                  {[
+                    [t('admin.delivery.inApp'), 'notifications-active'],
+                    [t('admin.delivery.schedule'), 'schedule-send'],
+                    [t('admin.delivery.rateLimit'), 'security'],
+                  ].map(([label, icon]) => (
+                    <View key={label} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3] }}>
+                      <View
+                        style={{
+                          width: 34,
+                          height: 34,
+                          borderRadius: radius.full,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: colors.primary.muted,
+                        }}>
+                        <MaterialIcons name={icon as ComponentProps<typeof MaterialIcons>['name']} size={17} color={colors.primary.DEFAULT} />
+                      </View>
+                      <Text variant="body" color={colors.text.secondary} style={{ flex: 1 }}>
+                        {label}
+                      </Text>
+                    </View>
+                  ))}
+                </>
+              ) : null}
+            </View>
+          </Card>
         </ScrollView>
 
         <View
@@ -734,15 +741,13 @@ export function SendBirthdayCardContent({
             backgroundColor: colors.background.DEFAULT,
           }}>
           <SubmitBar
-            secondaryAction={adminMode
-              ? {
-                  label: t('admin.actions.schedule'),
-                  variant: 'outline',
-                  disabled: !canSchedule || submitting,
-                  rightIcon: <MaterialIcons name="schedule-send" size={18} color={colors.primary.DEFAULT} />,
-                  onPress: () => handleGreetingSubmit('Scheduled'),
-                }
-              : undefined}
+            secondaryAction={{
+              label: t('admin.actions.schedule'),
+              variant: 'outline',
+              disabled: !canSchedule || submitting,
+              rightIcon: <MaterialIcons name="schedule-send" size={18} color={colors.primary.DEFAULT} />,
+              onPress: () => handleGreetingSubmit('Scheduled'),
+            }}
             primaryAction={{
               label: adminMode ? t('actions.saveAdmin') : t('actions.save'),
               disabled: !canSubmit || submitting,

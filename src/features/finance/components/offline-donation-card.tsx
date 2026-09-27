@@ -36,7 +36,7 @@ export function OfflineDonationCard({ onAddRecord }: { onAddRecord?: () => void 
             Record Offline Donation
           </Text>
           <Text variant="caption" color="#64748b">
-            Log manual cash or check contributions
+            Log manual cash or check donations
           </Text>
         </View>
       </View>

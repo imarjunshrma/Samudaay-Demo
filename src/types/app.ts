@@ -29,6 +29,7 @@ export type Permission =
   | 'events.view'
   | 'events.manage'
   | 'event.manage'
+  | 'event.photo_upload'
   | 'events.attendance'
   | 'donations.view'
   | 'donations.manage'
@@ -59,8 +60,17 @@ export interface SessionUser {
   onboardingComplete: boolean;
   tenantId: string;
   communityMembershipId?: string;
-  communityMembershipStatus?: 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'REJECTED' | 'SUSPENDED';
+  communityMembershipStatus?: 'PENDING' | 'ACTIVE' | 'INACTIVE' | 'REJECTED' | 'SUSPENDED' | 'APP_PAYMENT_REQUIRED';
   kycStatus?: 'NOT_UPLOADED' | 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED' | 'RESUBMISSION_REQUIRED';
+  appMembership?: {
+    required: boolean;
+    status: 'NOT_REQUIRED' | 'ACTIVE' | 'PAYMENT_PENDING' | 'PAYMENT_OVERDUE' | string;
+    locked: boolean;
+    amount: number;
+    currency: string;
+    graceEndsAt?: string | null;
+    expiresAt?: string | null;
+  };
   communityRoleKeys?: string[];
   communityPermissions?: Permission[];
   subCommunity?: string;

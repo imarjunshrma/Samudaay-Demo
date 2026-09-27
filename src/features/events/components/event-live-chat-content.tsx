@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Dimensions, Image, Modal, Platform, Pressable, Share, useWindowDimensions, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { ActivityIndicator, AppState, FlatList, Dimensions, Image, Modal, Platform, Pressable, Share, useWindowDimensions, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
 import * as WebBrowser from 'expo-web-browser';
@@ -7,7 +8,7 @@ import { SafeAreaView as SafeAreaViewNative, useSafeAreaInsets } from 'react-nat
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
 
-import { AppHeader, Dialog, SelectionPopup, Text, TextField, type DialogVariant } from '@/src/components';
+import { AppHeader, Dialog, SearchInput, SelectionPopup, Text, TextField, type DialogVariant } from '@/src/components';
 import { SkeletonBlock } from '@/src/components/ui/skeleton';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useSession } from '@/src/core/providers/session-provider';
@@ -15,7 +16,7 @@ import { useTranslations } from '@/src/i18n/use-translations';
 import { pickDocumentWithGuard } from '@/src/services/device/document-picker-consent';
 import { ALLOWED_IMAGE_DOCUMENT_TYPES, isAllowedUploadImageFile, showInvalidUploadFormatAlert } from '@/src/services/files/upload-file-policy';
 import { colors, radius, spacing, typography } from '@/src/theme';
-import { chatDebugEnabled, chatDebugLog, chatService, type CommunityChatFeedItem, type CommunityChatMessage } from '@/src/features/communication/services/chat-service';
+import { chatDebugEnabled, chatDebugLog, chatService, type CommunityChatMember, type CommunityChatFeedItem, type CommunityChatMessage } from '@/src/features/communication/services/chat-service';
 import { EventChatBubble } from './event-shared-blocks';
 import { eventService, type EventRecord } from '../services/event-service';
 import { buildEventSharePayload } from '../services/event-share';
@@ -49,6 +50,15 @@ function getYoutubeEmbedUrl(url?: string | null) {
 function getYoutubeThumbnailUrl(url?: string | null) {
   const videoId = getYoutubeVideoId(url);
   return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
+}
+
+function getVisibleChatMessageText(message: CommunityChatMessage) {
+  const text = String(message.text || '').trim();
+  if (!message.mediaUrl) {
+    return text;
+  }
+
+  return /^image$/i.test(text) ? '' : text;
 }
 
 function buildChatSharePayload({
@@ -120,8 +130,22 @@ export function EventLiveChatContent() {
   const [selectedChatTitle, setSelectedChatTitle] = useState(t('title'));
   const [chatAccessBlocked, setChatAccessBlocked] = useState(false);
   const [messages, setMessages] = useState<CommunityChatMessage[]>([]);
+  const chatIsFocused = useIsFocused();
+  const [chatAppState, setChatAppState] = useState(AppState.currentState);
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', setChatAppState);
+    return () => subscription.remove();
+  }, []);
+  const newestVisibleMessageId = messages[messages.length - 1]?.id;
+  useEffect(() => {
+    if (!selectedChatId || !newestVisibleMessageId || !chatIsFocused || chatAppState !== 'active') return;
+    const timer = setTimeout(() => {
+      void chatService.markChatRead(selectedChatId, newestVisibleMessageId).catch(() => {});
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [selectedChatId, newestVisibleMessageId, chatIsFocused, chatAppState]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
-  const [isJoiningChat, setIsJoiningChat] = useState(false);
+  const [chatConnectionLost, setChatConnectionLost] = useState(false);
   const [hasOlderMessages, setHasOlderMessages] = useState(false);
   const [olderMessagesCursor, setOlderMessagesCursor] = useState<string | null>(null);
   const [isLoadingOlderMessages, setIsLoadingOlderMessages] = useState(false);
@@ -133,6 +157,16 @@ export function EventLiveChatContent() {
   const [showChatSettings, setShowChatSettings] = useState(false);
   const [showMembersModal, setShowMembersModal] = useState(false);
   const [pendingChatStatus, setPendingChatStatus] = useState<'ACTIVE' | 'RESTRICTED' | 'DISABLED'>('ACTIVE');
+  const [memberSearch, setMemberSearch] = useState('');
+  const [addingMembers, setAddingMembers] = useState(false);
+  const [membersPage, setMembersPage] = useState(1);
+  const [membersHasNext, setMembersHasNext] = useState(false);
+  const [membersTotal, setMembersTotal] = useState(0);
+  const [membersRevision, setMembersRevision] = useState(0);
+  const [membersError, setMembersError] = useState<string | null>(null);
+  const [availableMembers, setAvailableMembers] = useState<CommunityChatMember[]>([]);
+  const [isLoadingMemberOptions, setIsLoadingMemberOptions] = useState(false);
+  const [updatingMemberId, setUpdatingMemberId] = useState<string | null>(null);
   const [dialog, setDialog] = useState<{
     visible: boolean;
     variant: DialogVariant;
@@ -232,7 +266,8 @@ export function EventLiveChatContent() {
 
   const canAccessCurrentEventChat = !isEventChat || Boolean(selectedChatId) || canManageEventChat;
   const showEventStream = isEventChat && youtubeUrl && canAccessCurrentEventChat && !chatAccessBlocked;
-  const visibleMembers = selectedChat?.members ?? [];
+  const visibleMembers = useMemo(() => selectedChat?.members ?? [], [selectedChat?.members]);
+  const canManageChatMembers = Boolean(selectedChat?.canManageMembers);
   const matrimonyOtherMember = isMatrimonyChat
     ? visibleMembers.find((member) => member.id && member.id !== session?.user.id) ?? null
     : null;
@@ -245,13 +280,47 @@ export function EventLiveChatContent() {
     : undefined;
 
   useEffect(() => {
+    if (!showMembersModal || !selectedChatId) return;
+    let active = true;
+    setIsLoadingMemberOptions(true);
+    setMembersError(null);
+    const timer = setTimeout(() => {
+      chatService.loadChatMembersPage(selectedChatId, {
+        page: membersPage, q: addingMembers ? memberSearch.trim() : undefined, candidates: addingMembers,
+      }).then((result) => {
+        if (!active) return;
+        setAvailableMembers((current) => membersPage === 1 ? result.items : [
+          ...current, ...result.items.filter((item) => !current.some((member) => member.id === item.id)),
+        ]);
+        setMembersTotal(result.pagination.total);
+        setMembersHasNext(result.pagination.hasNextPage);
+      }).catch((error) => {
+        if (active) setMembersError(error instanceof Error ? error.message : 'Unable to load members.');
+      }).finally(() => {
+        if (active) setIsLoadingMemberOptions(false);
+      });
+    }, addingMembers ? 250 : 0);
+    return () => { active = false; clearTimeout(timer); };
+  }, [showMembersModal, selectedChatId, addingMembers, memberSearch, membersPage, membersRevision]);
+
+  const resetMemberList = () => {
+    setAvailableMembers([]);
+    setMembersPage(1);
+    setMembersHasNext(false);
+    setMembersError(null);
+    setMembersTotal(0);
+    setIsLoadingMemberOptions(true);
+    setMembersRevision((value) => value + 1);
+  };
+
+  useEffect(() => {
     let active = true;
     let unsubscribe: (() => void) | undefined;
 
     if (!selectedChatId) {
       setMessages([]);
       setIsLoadingMessages(false);
-      setIsJoiningChat(false);
+      setChatConnectionLost(false);
       loadedOlderMessagesRef.current = false;
       return () => {
         active = false;
@@ -259,7 +328,7 @@ export function EventLiveChatContent() {
     }
     loadedOlderMessagesRef.current = false;
     setIsLoadingMessages(true);
-    setIsJoiningChat(true);
+    setChatConnectionLost(false);
 
     const loadMessages = () => chatService.loadChatMessages(selectedChatId).then((result) => {
       if (active) {
@@ -310,12 +379,17 @@ export function EventLiveChatContent() {
       },
       onJoined: () => {
         if (active) {
-          setIsJoiningChat(false);
+          setChatConnectionLost(false);
         }
       },
       onError: () => {
         if (active) {
-          setIsJoiningChat(false);
+          setChatConnectionLost(true);
+        }
+      },
+      onConnectionChange: (connected) => {
+        if (active) {
+          setChatConnectionLost(!connected);
         }
       },
     }).then((cleanup) => {
@@ -461,6 +535,15 @@ export function EventLiveChatContent() {
     }
   };
 
+  const closeMembersModal = () => {
+    setAddingMembers(false);
+    resetMemberList();
+    setShowMembersModal(false);
+    setMemberSearch('');
+    setAvailableMembers([]);
+  };
+
+
   const handleDeleteMessage = async (messageId: string) => {
     if (!selectedChatId || !selectedChat?.canManage) {
       return;
@@ -495,6 +578,50 @@ export function EventLiveChatContent() {
         title: 'Unable to update chat',
         description: error instanceof Error ? error.message : 'Please try again.',
       });
+    }
+  };
+
+  const handleAddMember = async (memberId: string) => {
+    if (!selectedChatId || !canManageChatMembers || updatingMemberId) {
+      return;
+    }
+
+    try {
+      setUpdatingMemberId(memberId);
+      const updated = await chatService.addChatMembers(selectedChatId, { memberIds: [memberId] });
+      setSelectedChat(updated);
+      resetMemberList();
+    } catch (error) {
+      setDialog({
+        visible: true,
+        variant: 'error',
+        title: 'Unable to add member',
+        description: error instanceof Error ? error.message : 'Please try again.',
+      });
+    } finally {
+      setUpdatingMemberId(null);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    if (!selectedChatId || !canManageChatMembers || updatingMemberId || memberId === session?.user.id) {
+      return;
+    }
+
+    try {
+      setUpdatingMemberId(memberId);
+      const updated = await chatService.removeChatMember(selectedChatId, memberId);
+      setSelectedChat(updated);
+      resetMemberList();
+    } catch (error) {
+      setDialog({
+        visible: true,
+        variant: 'error',
+        title: 'Unable to remove member',
+        description: error instanceof Error ? error.message : 'Please try again.',
+      });
+    } finally {
+      setUpdatingMemberId(null);
     }
   };
 
@@ -647,11 +774,11 @@ export function EventLiveChatContent() {
                   )}
                 </Pressable>
               ) : null}
-              {isJoiningChat ? (
-                <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: spacing[2], borderRadius: radius.full, backgroundColor: colors.background.surface, borderWidth: 1, borderColor: colors.primary.borderLight, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
-                  <ActivityIndicator size="small" color={colors.primary.DEFAULT} />
+              {chatConnectionLost ? (
+                <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: spacing[2], borderRadius: radius.full, backgroundColor: colors.status.warningLight, borderWidth: 1, borderColor: colors.border.muted, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
+                  <MaterialIcons name="wifi-off" size={14} color={colors.status.warning} />
                   <Text variant="caption" color={colors.text.secondary}>
-                    Connecting to live chat...
+                    Live chat connection lost. Reconnecting...
                   </Text>
                 </View>
               ) : null}
@@ -682,9 +809,9 @@ export function EventLiveChatContent() {
                 });
               }}
               style={{ gap: spacing[2] }}>
-              <EventChatBubble name={message.name} time={message.time} avatar={message.avatar} message={message.text || (message.mediaUrl ? 'Image' : '')} />
+              <EventChatBubble name={message.name} time={message.time} avatar={message.avatar} message={getVisibleChatMessageText(message)} />
               {message.mediaUrl ? (
-                <Image source={{ uri: message.mediaUrl }} style={{ alignSelf: 'flex-start', width: 180, height: 180, borderRadius: radius.lg, backgroundColor: colors.background.muted }} resizeMode="cover" />
+                <Image source={{ uri: message.mediaUrl }} style={{ alignSelf: 'flex-start', width: 220, height: 220, borderRadius: radius.lg, backgroundColor: colors.background.muted }} resizeMode="contain" />
               ) : null}
             </Pressable>
               )) : (
@@ -783,47 +910,79 @@ export function EventLiveChatContent() {
             confirmLabel="Save settings"
           />
         ) : null}
-        <Modal visible={showMembersModal} transparent animationType="fade" onRequestClose={() => setShowMembersModal(false)}>
+        <Modal visible={showMembersModal} transparent animationType="fade" onRequestClose={closeMembersModal}>
           <View style={{ flex: 1, backgroundColor: 'rgba(15,23,42,0.35)', justifyContent: 'center', padding: spacing[4] }}>
             <View style={{ borderRadius: radius.xl, backgroundColor: colors.background.surface, padding: spacing[4], gap: spacing[3], maxHeight: '70%' }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Text variant="h4" style={{ fontFamily: typography.fontFamily.bold }}>
                   {isEventChat ? 'Event participants' : 'Group members'}
                 </Text>
-                <Pressable accessibilityRole="button" onPress={() => setShowMembersModal(false)}>
+                <Pressable accessibilityRole="button" onPress={closeMembersModal}>
                   <MaterialIcons name="close" size={22} color={colors.text.secondary} />
                 </Pressable>
               </View>
               <Text variant="caption" color={colors.text.secondary}>
-                {visibleMembers.length
-                  ? `${visibleMembers.length} ${isEventChat ? 'participants' : 'members'} in this chat`
-                  : `No ${isEventChat ? 'participant' : 'member'} details available for this chat.`}
+                {addingMembers ? 'Add member' : `${membersTotal} ${isEventChat ? 'participants' : 'members'}`}
               </Text>
-              <KeyboardAwareScrollView
-                bottomOffset={0}
+              {canManageChatMembers ? (
+                <Pressable accessibilityRole="button" onPress={() => {
+                  setAddingMembers((value) => !value);
+                  setMemberSearch('');
+                  resetMemberList();
+                }} style={{ flexDirection: 'row', gap: spacing[2], alignItems: 'center', paddingVertical: spacing[2] }}>
+                  <MaterialIcons name={addingMembers ? 'arrow-back' : 'person-add'} size={22} color={colors.primary.DEFAULT} />
+                  <Text color={colors.primary.DEFAULT}>{addingMembers ? 'Group members' : 'Add member'}</Text>
+                </Pressable>
+              ) : null}
+              {addingMembers ? (
+                <SearchInput value={memberSearch} onChangeText={(value) => {
+                  setMemberSearch(value);
+                  resetMemberList();
+                }} placeholder="Search members to add" />
+              ) : null}
+              <FlatList
+                style={{ flexShrink: 1 }}
+                data={availableMembers}
+                keyExtractor={(member) => member.id}
                 keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={{ gap: spacing[2] }}>
-                {visibleMembers.map((member) => (
-                  <View
-                    key={member.id}
-                    style={{
-                      borderRadius: radius.lg,
-                      borderWidth: 1,
-                      borderColor: colors.primary.borderLight,
-                      backgroundColor: colors.background.DEFAULT,
-                      padding: spacing[3],
-                      gap: spacing[1],
-                    }}>
-                    <Text variant="body" style={{ fontFamily: typography.fontFamily.bold, color: colors.text.primary }}>
-                      {member.name}
-                    </Text>
-                    <Text variant="caption" color={colors.text.secondary}>
-                      {[member.memberId ? `ID: ${member.memberId}` : null, member.phone].filter(Boolean).join(' • ') || 'Community member'}
-                    </Text>
+                onEndReachedThreshold={0.4}
+                onEndReached={() => {
+                  if (membersHasNext && !isLoadingMemberOptions && !membersError) {
+                    setIsLoadingMemberOptions(true);
+                    setMembersPage((page) => page + 1);
+                  }
+                }}
+                contentContainerStyle={{ gap: spacing[2] }}
+                ListEmptyComponent={!isLoadingMemberOptions && !membersError ? <Text>{addingMembers ? 'No members available to add.' : 'No members found.'}</Text> : null}
+                ListFooterComponent={isLoadingMemberOptions ? <ActivityIndicator style={{ padding: spacing[3] }} color={colors.primary.DEFAULT} /> : membersError ? (
+                  <Pressable onPress={() => setMembersRevision((value) => value + 1)}>
+                    <Text color={colors.status.error}>{membersError}</Text>
+                    <Text color={colors.primary.DEFAULT}>Retry</Text>
+                  </Pressable>
+                ) : null}
+                renderItem={({ item: member }) => (
+                  <View style={{ padding: spacing[3], flexDirection: 'row', alignItems: 'center', gap: spacing[3], borderBottomWidth: 1, borderBottomColor: colors.border.light }}>
+                    <View style={{ flex: 1 }}>
+                      <Text variant="body" style={{ fontFamily: typography.fontFamily.bold }}>{member.name}</Text>
+                      <Text variant="caption" color={colors.text.secondary}>
+                        {[member.memberId ? `ID: ${member.memberId}` : null, member.phone].filter(Boolean).join(' • ')}
+                      </Text>
+                    </View>
+                    {canManageChatMembers && (addingMembers || member.id !== session?.user.id) ? (
+                      <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={addingMembers ? 'Add member' : 'Remove member'}
+                        disabled={Boolean(updatingMemberId)}
+                        onPress={() => void (addingMembers ? handleAddMember(member.id) : handleRemoveMember(member.id))}
+                        style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center', opacity: updatingMemberId ? 0.65 : 1 }}>
+                        {updatingMemberId === member.id ? <ActivityIndicator size="small" color={colors.primary.DEFAULT} /> : (
+                          <MaterialIcons name={addingMembers ? 'person-add' : 'person-remove'} size={22} color={addingMembers ? colors.primary.DEFAULT : colors.status.error} />
+                        )}
+                      </Pressable>
+                    ) : null}
                   </View>
-                ))}
-              </KeyboardAwareScrollView>
+                )}
+              />
             </View>
           </View>
         </Modal>

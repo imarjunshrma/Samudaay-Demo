@@ -27,7 +27,7 @@ import {
   TransactionManagementRow,
 } from './finance-blocks';
 
-type TransactionTypeFilterKey = 'all' | 'donation' | 'event' | 'matrimony' | 'expense';
+type TransactionTypeFilterKey = 'all' | 'donation' | 'event' | 'matrimony' | 'membership' | 'expense';
 type TransactionStatusFilterKey = 'all' | 'completed' | 'pending' | 'failed';
 
 function getTransactionTypeLabel(filter: TransactionTypeFilterKey, t: (key: string) => string) {
@@ -38,6 +38,8 @@ function getTransactionTypeLabel(filter: TransactionTypeFilterKey, t: (key: stri
       return t('filters.types.event');
     case 'matrimony':
       return t('filters.types.matrimony');
+    case 'membership':
+      return t('filters.types.membership');
     case 'expense':
       return t('filters.types.expense');
     default:
@@ -62,6 +64,7 @@ function transactionIcon(type: string, status: string) {
   if (status === 'FAILED') return 'error' as const;
   if (type === 'Event') return 'event' as const;
   if (type === 'Matrimony') return 'favorite' as const;
+  if (type === 'Membership') return 'card-membership' as const;
   if (type === 'Expense') return 'receipt-long' as const;
   return 'volunteer-activism' as const;
 }
@@ -202,7 +205,7 @@ export function TransactionManagementContent() {
         value: formatAnalyticsCurrency(analytics?.transactions.totalExpense ?? 0),
         icon: 'receipt-long' as const,
         iconColor: colors.primary.DEFAULT,
-        iconBackgroundColor: colors.primary.subtle || 'rgba(24,168,117,0.08)',
+        iconBackgroundColor: colors.primary.subtle || 'rgba(242,120,13,0.08)',
       },
       {
         id: 'pending',
@@ -237,6 +240,7 @@ export function TransactionManagementContent() {
     { key: 'donation', label: `${t('filters.types.donation')} (${transactionTypeCounts.donation})`, icon: 'volunteer-activism' as const },
     { key: 'event', label: `${t('filters.types.event')} (${transactionTypeCounts.event})`, icon: 'event' as const },
     { key: 'matrimony', label: `${t('filters.types.matrimony')} (${transactionTypeCounts.matrimony})`, icon: 'favorite' as const },
+    { key: 'membership', label: `${t('filters.types.membership')} (${transactionTypeCounts.membership})`, icon: 'card-membership' as const },
     { key: 'expense', label: `${t('filters.types.expense')} (${transactionTypeCounts.expense})`, icon: 'receipt-long' as const },
   ], [appliedFilterCount, t, transactionTypeCounts]);
   const appliedFilters = useMemo(() => {
@@ -508,6 +512,7 @@ export function TransactionManagementContent() {
                     { key: 'donation', label: t('filters.types.donation') },
                     { key: 'event', label: t('filters.types.event') },
                     { key: 'matrimony', label: t('filters.types.matrimony') },
+                    { key: 'membership', label: t('filters.types.membership') },
                     { key: 'expense', label: t('filters.types.expense') },
                   ],
                   onSelect: (key) => setDraftTypeFilter(key as TransactionTypeFilterKey),

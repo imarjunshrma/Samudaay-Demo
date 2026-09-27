@@ -308,6 +308,7 @@ async function finalizeFirebaseSessionFromPendingContext(
         communityMembershipId: payloadData.membership.id,
         communityMembershipStatus,
         kycStatus,
+        appMembership: payloadData.membership.appMembership ?? undefined,
         communityPermissions: permissions,
         communityRoleKeys: payloadData.roleKeys,
         subCommunity: payloadData.membership.subCommunity ?? undefined,
@@ -381,6 +382,7 @@ type BackendCommunitySessionResponse = {
     status: SessionUser['communityMembershipStatus'];
     kycStatus: SessionUser['kycStatus'];
     onboardingCompleted: boolean;
+    appMembership?: SessionUser['appMembership'] | null;
     subCommunity?: string | null;
   };
 };
@@ -403,6 +405,7 @@ type BackendMeResponse = {
     kycStatus?: SessionUser['kycStatus'] | null;
     onboardingCompleted?: boolean | null;
     subCommunity?: string | null;
+    appMembership?: SessionUser['appMembership'] | null;
   } | null;
 };
 
@@ -436,6 +439,9 @@ function normalizeMembershipStatus(status: string | null | undefined): SessionUs
   }
   if (nextStatus === 'SUSPENDED') {
     return 'SUSPENDED';
+  }
+  if (nextStatus === 'APP_PAYMENT_REQUIRED') {
+    return 'APP_PAYMENT_REQUIRED';
   }
   return 'PENDING';
 }
@@ -547,6 +553,7 @@ async function refreshBackendSession(storedSession: UserSession) {
       permissions,
       communityMembershipStatus,
       kycStatus,
+      appMembership: data.registration?.appMembership ?? storedSession.user.appMembership,
       onboardingComplete: normalizeOnboardingComplete(Boolean(data.registration?.onboardingCompleted ?? storedSession.user.onboardingComplete), kycStatus, communityMembershipStatus),
       communityMembershipId: data.registration?.id ?? storedSession.user.communityMembershipId,
       subCommunity: data.registration?.subCommunity ?? storedSession.user.subCommunity,

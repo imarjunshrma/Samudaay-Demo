@@ -5,6 +5,7 @@ export interface LoginFormValues {
   preferredLanguage: AppLanguage;
   tenantId?: string;
   subCommunity?: string;
+  pin?: string;
 }
 
 export interface OtpRequestPayload {

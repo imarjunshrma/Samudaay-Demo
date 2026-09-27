@@ -117,7 +117,7 @@ const config: ExpoConfig = {
           },
         }
       : {}),
-    permissions: ["android.permission.POST_NOTIFICATIONS"],
+    permissions: ["android.permission.POST_NOTIFICATIONS", "android.permission.CAMERA"],
     ...(usesCleartextApi ? { usesCleartextTraffic: true } : {}),
     adaptiveIcon: {
       backgroundColor: "#ffffff",

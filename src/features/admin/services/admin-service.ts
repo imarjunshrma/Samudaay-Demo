@@ -3,6 +3,7 @@ import { apiEndpoints } from '@/src/services/api/endpoints';
 import { getBackendSessionContext, isBackendApiConfigured } from '@/src/features/auth/services/backend-session';
 
 export type TenantSummary = {
+  attention?: { kyc: number; expenses: number; notifications: number; chats: number };
   tenant: {
     id: string;
     slug: string;

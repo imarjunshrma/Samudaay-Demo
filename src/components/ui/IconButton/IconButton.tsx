@@ -17,7 +17,7 @@ const sizeMap = {
 const variantMap = {
   plain: { backgroundColor: 'transparent', borderWidth: 0, borderColor: 'transparent' },
   soft: {
-    backgroundColor: colors.primary.muted ?? 'rgba(24,168,117,0.1)',
+    backgroundColor: colors.primary.muted ?? 'rgba(242,120,13,0.1)',
     borderWidth: 0,
     borderColor: 'transparent',
   },
@@ -34,6 +34,7 @@ export interface IconButtonProps {
   backgroundColor?: string;
   bordered?: boolean;
   disabled?: boolean;
+  accessibilityLabel?: string;
 }
 
 function IconButtonInner({
@@ -45,6 +46,7 @@ function IconButtonInner({
   backgroundColor,
   bordered = false,
   disabled = false,
+  accessibilityLabel,
 }: IconButtonProps) {
   const config = sizeMap[size];
   const resolvedVariant = variant ?? (bordered ? 'outlined' : backgroundColor ? 'filled' : 'plain');
@@ -56,6 +58,7 @@ function IconButtonInner({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
       accessibilityState={disabled ? disabledState : enabledState}
       disabled={disabled}
       hitSlop={10}

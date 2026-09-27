@@ -10,6 +10,7 @@ import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
 import { downloadAnalyticsReport, type AnalyticsExportFormat } from '@/src/features/finance/services/analytics-report-service';
+import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 import { EventAddOnUsageCard } from './event-shared-blocks';
 import { eventService, type EventAnalyticsRecord } from '../services/event-service';
 import { buildEventPerformanceSharePayload } from '../services/event-share';
@@ -114,6 +115,24 @@ export function EventPerformanceDashboardContent({
     }
 
     try {
+      const registrationReportRows = await Promise.all((analytics.registrationDetails ?? []).map(async (item) => {
+        const memberNameEnglish = item.memberNameEnglish || item.memberName;
+        return [
+          memberNameEnglish,
+          await resolveSecondaryLanguageText(memberNameEnglish, null),
+          item.memberId || '',
+          item.phone || '',
+          item.registeredAttendees,
+          item.attendedAttendees,
+          item.pendingAttendees,
+          item.attendanceStatus,
+          item.registeredAt || '',
+          item.attendedAt || '',
+          formatCurrency(item.amountPaid),
+          item.addOn || '',
+        ];
+      }));
+
       await downloadAnalyticsReport({
         title: analytics.event.title || t('title'),
         subtitle: [
@@ -151,20 +170,8 @@ export function EventPerformanceDashboardContent({
           },
           {
             title: 'Registered vs attended people',
-            columns: ['Name', 'Member ID', 'Phone', 'Registered', 'Attended', 'Pending', 'Status', 'Registered At', 'Attended At', 'Amount', 'Add-on'],
-            rows: (analytics.registrationDetails ?? []).map((item) => [
-              item.memberName,
-              item.memberId || '',
-              item.phone || '',
-              item.registeredAttendees,
-              item.attendedAttendees,
-              item.pendingAttendees,
-              item.attendanceStatus,
-              item.registeredAt || '',
-              item.attendedAt || '',
-              formatCurrency(item.amountPaid),
-              item.addOn || '',
-            ]),
+            columns: ['Name (English)', 'Name (Second Language)', 'Member ID', 'Phone', 'Registered', 'Attended', 'Pending', 'Status', 'Registered At', 'Attended At', 'Amount', 'Add-on'],
+            rows: registrationReportRows,
           },
         ],
       });

@@ -1,7 +1,7 @@
 import { Formik } from 'formik';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, View } from 'react-native';
 
 import { AppHeader, Button, DateField, FormScreenLayout, IconButton, OTPInput, PhoneInput, ProgressStepper, SelectField, Text, TextField } from '@/src/components';
 import { bloodGroupOptions } from '@/src/constants/blood-groups';
@@ -17,7 +17,6 @@ import { apiClient, apiEndpoints, apiQueryKeys, useConfiguredApiQuery } from '@/
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { registrationService } from '@/src/features/registration/services/registration-service';
 import { isPhoneNumberHintAvailable, requestPhoneNumberHint } from '@/src/services/device/phone-number-hint';
-import { pickImageFromMediaLibrary } from '@/src/services/device/media-picker';
 import { useCroppedImagePicker } from '@/src/services/device/use-cropped-image-picker';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
@@ -34,10 +33,38 @@ type CommunityOption = {
   description?: string | null;
 };
 
-async function pickSingleFile(onPicked: (file: FileValue) => void) {
-  const nextFile = await pickImageFromMediaLibrary({
-    fileNamePrefix: 'kyc',
+type ImageSourceChoice = 'camera' | 'gallery';
+
+function chooseImageSource() {
+  return new Promise<ImageSourceChoice | null>((resolve) => {
+    Alert.alert('Upload image', 'Choose how you want to add the image.', [
+      { text: 'Take Photo', onPress: () => resolve('camera') },
+      { text: 'Choose from Gallery', onPress: () => resolve('gallery') },
+      { text: 'Cancel', style: 'cancel', onPress: () => resolve(null) },
+    ]);
   });
+}
+
+async function pickSingleFile({
+  onPicked,
+  pickImage,
+  captureImage,
+}: {
+  onPicked: (file: FileValue) => void;
+  pickImage: ReturnType<typeof useCroppedImagePicker>['pickImage'];
+  captureImage: ReturnType<typeof useCroppedImagePicker>['captureImage'];
+}) {
+  const source = await chooseImageSource();
+  if (!source) {
+    return;
+  }
+
+  const pickerOptions = {
+    fileNamePrefix: 'kyc',
+  };
+  const nextFile = source === 'camera'
+    ? await captureImage(pickerOptions)
+    : await pickImage(pickerOptions);
   if (!nextFile) {
     return;
   }
@@ -48,7 +75,7 @@ async function pickSingleFile(onPicked: (file: FileValue) => void) {
 export function RegistrationKycScreen() {
   const router = useRouter();
   const t = useTranslations('auth.registration-kyc');
-  const { pickImage, cropper } = useCroppedImagePicker();
+  const { pickImage, captureImage, cropper } = useCroppedImagePicker();
   const { tenantName } = useLocalizedBrandText();
   const { session, status, setSession, setStatus } = useSession();
   const [step, setStep] = useState<RegistrationStep>(() => (session ? 2 : 1));
@@ -56,6 +83,7 @@ export function RegistrationKycScreen() {
   const [resendCountdown, setResendCountdown] = useState(0);
   const [isDetectingPhone, setIsDetectingPhone] = useState(false);
   const [savedRegistrationId, setSavedRegistrationId] = useState<string | null>(null);
+  const [registrationCountry, setRegistrationCountry] = useState('India');
   const [registrationError, setRegistrationError] = useState<string | null>(null);
   const [stepOneFormVersion, setStepOneFormVersion] = useState(0);
   const { signIn, confirmOtp, resendOtp, clearPendingOtp, errorMessage, isSubmitting, isResending } = useAuthActions();
@@ -329,7 +357,9 @@ export function RegistrationKycScreen() {
                 state: '',
                 country: 'India',
                 pincode: '',
+                aadhaarNumber: '',
                 panNumber: '',
+                passportNumber: '',
                 bloodGroup: '',
               }}
               validationSchema={formSchemas.registrationProfile}
@@ -340,6 +370,7 @@ export function RegistrationKycScreen() {
                 });
                 setSession(nextSession);
                 setStatus('signedIn');
+                setRegistrationCountry(values.country || 'India');
 
                 const savedDraft = await registrationService.saveDraft({
                   registrationId: savedRegistrationId ?? undefined,
@@ -355,7 +386,9 @@ export function RegistrationKycScreen() {
                   state: values.state,
                   country: values.country,
                   pincode: values.pincode,
+                  aadhaarNumber: values.aadhaarNumber.replace(/\D/g, '') || undefined,
                   panNumber: values.panNumber.trim().toUpperCase() || undefined,
+                  passportNumber: values.passportNumber.trim().toUpperCase() || undefined,
                   bloodGroup: values.bloodGroup,
                   subCommunity: nextSession.user.subCommunity ?? undefined,
                   fullNameEn: [values.firstName, values.middleName, values.lastName].filter(Boolean).join(' '),
@@ -529,6 +562,8 @@ export function RegistrationKycScreen() {
                       setFieldValue('country', value);
                       setFieldValue('state', '');
                       setFieldValue('city', '');
+                      setFieldValue('aadhaarNumber', '');
+                      setFieldValue('passportNumber', '');
                       selectCountry(value);
                     }}
                     options={countryOptions}
@@ -584,6 +619,33 @@ export function RegistrationKycScreen() {
                     labelVariant="default"
                     required
                   />
+                  {String(values.country || '').trim().toLowerCase() === 'india' ? (
+                    <TextField
+                      label={t('field.aadhaarNumber')}
+                      value={values.aadhaarNumber}
+                      onChangeText={(value) => setFieldValue('aadhaarNumber', value.replace(/\D/g, '').slice(0, 12))}
+                      placeholder={t('field.aadhaarNumber.placeholder')}
+                      keyboardType="number-pad"
+                      maxLength={12}
+                      error={touched.aadhaarNumber ? errors.aadhaarNumber : undefined}
+                      variant="registration"
+                      labelVariant="default"
+                      required
+                    />
+                  ) : (
+                    <TextField
+                      label={t('field.passportNumber')}
+                      value={values.passportNumber}
+                      onChangeText={(value) => setFieldValue('passportNumber', value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12))}
+                      placeholder={t('field.passportNumber.placeholder')}
+                      autoCapitalize="characters"
+                      maxLength={12}
+                      error={touched.passportNumber ? errors.passportNumber : undefined}
+                      variant="registration"
+                      labelVariant="default"
+                      required
+                    />
+                  )}
                   <TextField
                     label={t('field.panNumber')}
                     value={values.panNumber}
@@ -614,7 +676,9 @@ export function RegistrationKycScreen() {
                       setFieldTouched('state', true);
                       setFieldTouched('country', true);
                       setFieldTouched('pincode', true);
+                      setFieldTouched('aadhaarNumber', true);
                       setFieldTouched('panNumber', true);
+                      setFieldTouched('passportNumber', true);
                       setFieldTouched('bloodGroup', true);
                       void submitForm();
                     }}>
@@ -629,6 +693,7 @@ export function RegistrationKycScreen() {
             <Formik
               initialValues={{
                 aadhaarDocument: null as FileValue | null,
+                passportDocument: null as FileValue | null,
                 jatiNoDakhloDocument: null as FileValue | null,
                 schoolCertificateDocument: null as FileValue | null,
                 profilePhoto: null as FileValue | null,
@@ -665,11 +730,37 @@ export function RegistrationKycScreen() {
                         subtitle: t('document.aadhaar.subtitle'),
                         value: values.aadhaarDocument,
                         onPress: async () => {
-                          await pickSingleFile((file) => setFieldValue('aadhaarDocument', file));
+                          await pickSingleFile({
+                            onPicked: (file) => {
+                              setFieldValue('aadhaarDocument', file);
+                              setFieldTouched('aadhaarDocument', true);
+                            },
+                            pickImage,
+                            captureImage,
+                          });
                         },
                         onDelete: () => setFieldValue('aadhaarDocument', null),
                         error: touched.aadhaarDocument ? errors.aadhaarDocument : undefined,
                       },
+                      ...(String(registrationCountry || '').trim().toLowerCase() !== 'india' ? [{
+                        key: 'passportDocument',
+                        icon: 'badge' as const,
+                        title: t('document.passport.title'),
+                        subtitle: t('document.passport.subtitle'),
+                        value: values.passportDocument,
+                        onPress: async () => {
+                          await pickSingleFile({
+                            onPicked: (file) => {
+                              setFieldValue('passportDocument', file);
+                              setFieldTouched('passportDocument', true);
+                            },
+                            pickImage,
+                            captureImage,
+                          });
+                        },
+                        onDelete: () => setFieldValue('passportDocument', null),
+                        error: touched.passportDocument ? errors.passportDocument : undefined,
+                      }] : []),
                       {
                         key: 'jatiNoDakhloDocument',
                         icon: 'description',
@@ -677,7 +768,14 @@ export function RegistrationKycScreen() {
                         subtitle: t('document.jati.subtitle'),
                         value: values.jatiNoDakhloDocument,
                         onPress: async () => {
-                          await pickSingleFile((file) => setFieldValue('jatiNoDakhloDocument', file));
+                          await pickSingleFile({
+                            onPicked: (file) => {
+                              setFieldValue('jatiNoDakhloDocument', file);
+                              setFieldTouched('jatiNoDakhloDocument', true);
+                            },
+                            pickImage,
+                            captureImage,
+                          });
                         },
                         onDelete: () => setFieldValue('jatiNoDakhloDocument', null),
                         error: touched.jatiNoDakhloDocument ? errors.jatiNoDakhloDocument : undefined,
@@ -689,7 +787,14 @@ export function RegistrationKycScreen() {
                         subtitle: t('document.school.subtitle'),
                         value: values.schoolCertificateDocument,
                         onPress: async () => {
-                          await pickSingleFile((file) => setFieldValue('schoolCertificateDocument', file));
+                          await pickSingleFile({
+                            onPicked: (file) => {
+                              setFieldValue('schoolCertificateDocument', file);
+                              setFieldTouched('schoolCertificateDocument', true);
+                            },
+                            pickImage,
+                            captureImage,
+                          });
                         },
                         onDelete: () => setFieldValue('schoolCertificateDocument', null),
                         error: touched.schoolCertificateDocument ? errors.schoolCertificateDocument : undefined,
@@ -701,9 +806,16 @@ export function RegistrationKycScreen() {
                         subtitle: t('document.photo.subtitle'),
                         value: values.profilePhoto,
                         onPress: async () => {
-                          const file = await pickImage({ fileNamePrefix: 'profile-photo', aspect: [1, 1] });
+                          const source = await chooseImageSource();
+                          if (!source) {
+                            return;
+                          }
+                          const file = source === 'camera'
+                            ? await captureImage({ fileNamePrefix: 'profile-photo', aspect: [1, 1] })
+                            : await pickImage({ fileNamePrefix: 'profile-photo', aspect: [1, 1] });
                           if (file) {
                             setFieldValue('profilePhoto', file);
+                            setFieldTouched('profilePhoto', true);
                           }
                         },
                         onDelete: () => setFieldValue('profilePhoto', null),
@@ -718,6 +830,7 @@ export function RegistrationKycScreen() {
                     primaryActionLoading={isFormSubmitting}
                     onPrimaryAction={() => {
                       setFieldTouched('aadhaarDocument', true);
+                      setFieldTouched('passportDocument', true);
                       setFieldTouched('jatiNoDakhloDocument', true);
                       setFieldTouched('schoolCertificateDocument', true);
                       setFieldTouched('profilePhoto', true);

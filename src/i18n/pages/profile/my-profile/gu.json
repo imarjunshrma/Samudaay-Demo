@@ -18,6 +18,7 @@
   "fields.bloodGroup": "બ્લડ ગ્રુપ",
   "fields.addressEn": "સરનામું (અંગ્રેજી)",
   "fields.addressGu": "સરનામું",
+  "fields.area": "વિસ્તાર",
   "fields.city": "શહેર",
   "fields.pincode": "પિનકોડ",
   "fields.notProvided": "ઉપલબ્ધ નથી",
@@ -58,6 +59,8 @@
   "edit.fields.selectStateFirst": "પહેલાં રાજ્ય પસંદ કરો",
   "edit.fields.city": "શહેર",
   "edit.fields.selectCity": "શહેર પસંદ કરો",
+  "edit.fields.area": "વિસ્તાર",
+  "edit.fields.selectArea": "વિસ્તાર પસંદ કરો",
   "edit.fields.pan": "PAN કાર્ડ નંબર",
   "edit.fields.panPlaceholder": "ABCDE1234F",
   "edit.fields.bloodGroup": "બ્લડ ગ્રુપ",
@@ -71,6 +74,7 @@
   "edit.photo.emptyTitle": "પ્રોફાઇલ ફોટો અપલોડ કરો",
   "edit.photo.emptyDescription": "તમારી પ્રોફાઇલ માટે સ્પષ્ટ ફોટો પસંદ કરો.",
   "edit.validation.dobFuture": "જન્મ તારીખ ભવિષ્યમાં હોઈ શકતી નથી",
+  "edit.validation.areaRequired": "વિસ્તાર જરૂરી છે",
   "edit.validation.cityRequired": "શહેર જરૂરી છે",
   "edit.validation.stateRequired": "રાજ્ય જરૂરી છે",
   "edit.validation.countryRequired": "દેશ જરૂરી છે",
@@ -100,6 +104,6 @@
   "kyc.inactiveTitle": "KYC મંજૂરી સુધી નિષ્ક્રિય",
   "kyc.inactiveDescription": "KYC મંજૂર થયા પછી તમારો પ્રોફાઇલ સક્રિય થશે.",
   "fallback.communityMember": "સમુદાય સભ્ય",
-  "meta.version": "વર્ષન 3.0.2",
+  "meta.version": "વર્ષન 2.4.1 (Artisan Cordwain Edition)",
   "meta.crafted": "ભારતની ગૌરવ સાથે બનાવેલ"
 }

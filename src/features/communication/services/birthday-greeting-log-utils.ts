@@ -58,6 +58,21 @@ export function getBirthdayGreetingTimestamp(sentAt: string) {
   return 0;
 }
 
+export function formatBirthdayGreetingDateTime(sentAt: string) {
+  const timestamp = getBirthdayGreetingTimestamp(sentAt);
+  if (!timestamp) {
+    return sentAt;
+  }
+
+  return new Date(timestamp).toLocaleString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+  });
+}
+
 export function getBirthdayGreetingSearchText(log: BirthdayGreetingLog) {
   return [
     log.sender,

@@ -16,6 +16,7 @@ export function AdminEventRow({
   icon,
   muted = false,
   onEditPress,
+  onViewPress,
   onDeletePress,
   onTogglePublishPress,
   onAnalyticsPress,
@@ -30,6 +31,7 @@ export function AdminEventRow({
   icon: React.ComponentProps<typeof MaterialIcons>['name'];
   muted?: boolean;
   onEditPress?: (id: string) => void;
+  onViewPress?: (id: string) => void;
   onDeletePress?: (id: string) => void;
   onTogglePublishPress?: (id: string, nextStatus: 'PUBLISHED' | 'DRAFT') => void;
   onAnalyticsPress?: (id: string) => void;
@@ -49,6 +51,7 @@ export function AdminEventRow({
       muted={muted}
       accentColor={accentColor}
       leading={
+        <View style={{ alignItems: 'center', gap: spacing[1] }}>
         <View
           style={{
             width: 48,
@@ -59,6 +62,15 @@ export function AdminEventRow({
             justifyContent: 'center',
           }}>
           <MaterialIcons name={icon} size={24} color={active ? colors.primary.DEFAULT : colors.text.muted} />
+        </View>
+        {onViewPress ? (
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel={t('actions.view')}
+            onPress={() => onViewPress(id)} activeOpacity={0.85}
+            style={{ minHeight: 36, flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MaterialIcons name="visibility" size={16} color={colors.primary.DEFAULT} />
+            <Text variant="caption" color={colors.primary.DEFAULT}>{t('actions.view')}</Text>
+          </TouchableOpacity>
+        ) : null}
         </View>
       }
       title={title}

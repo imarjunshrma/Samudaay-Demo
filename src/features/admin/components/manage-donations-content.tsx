@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, TouchableOpacity, View } from 'react-native';
+import { Pressable, TextInput, TouchableOpacity, View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -118,6 +118,7 @@ export function ManageDonationsContent() {
   const [activePaymentFilter, setActivePaymentFilter] = useState<DonationPaymentFilterKey>('all');
   const [draftStatusFilter, setDraftStatusFilter] = useState<DonationStatusFilterKey>('all');
   const [draftPaymentFilter, setDraftPaymentFilter] = useState<DonationPaymentFilterKey>('all');
+  const [viewingId, setViewingId] = useState<string | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [receiptDialog, setReceiptDialog] = useState<{
     visible: boolean;
@@ -133,6 +134,9 @@ export function ManageDonationsContent() {
   const [searchInHeader, setSearchInHeader] = useState(false);
   const [fabMenuOpen, setFabMenuOpen] = useState(false);
   const [filterVisible, setFilterVisible] = useState(false);
+  const [minimumDonationAmount, setMinimumDonationAmount] = useState('1');
+  const [isSavingSettings, setIsSavingSettings] = useState(false);
+  const [settingsMessage, setSettingsMessage] = useState<string | null>(null);
   const hasFocusedOnceRef = useRef(false);
   const requestIdRef = useRef(0);
   const showHeaderSkeleton = isLoading && !items.length;
@@ -219,6 +223,45 @@ export function ManageDonationsContent() {
   );
 
   useEffect(() => {
+    let active = true;
+    donationService.loadDonationSettings()
+      .then((settings) => {
+        if (active) {
+          setMinimumDonationAmount(String(settings.minimumDonationAmount));
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setSettingsMessage('Unable to load contribution settings.');
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  async function handleSaveDonationSettings() {
+    const amount = Number(minimumDonationAmount);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setSettingsMessage('Minimum contribution must be greater than 0.');
+      return;
+    }
+
+    setIsSavingSettings(true);
+    setSettingsMessage(null);
+    try {
+      const settings = await donationService.updateDonationSettings({ minimumDonationAmount: amount });
+      setMinimumDonationAmount(String(settings.minimumDonationAmount));
+      setSettingsMessage('Contribution settings saved.');
+    } catch (error) {
+      setSettingsMessage(error instanceof Error ? error.message : 'Unable to save contribution settings.');
+    } finally {
+      setIsSavingSettings(false);
+    }
+  }
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       void loadDonationPage({ page: 1 });
     }, search.trim() ? 250 : 0);
@@ -302,6 +345,32 @@ export function ManageDonationsContent() {
       setDownloadingId(null);
     }
   }, [t]);
+
+  const handleViewSlip = useCallback(async (record: (typeof items)[number]) => {
+    setViewingId(record.id);
+    try {
+      const receipt = await donationService.generateReceiptAndOpen(record);
+      if (receipt.fileUri) {
+        router.push({
+          pathname: '/pdf-viewer',
+          params: {
+            title: receipt.title,
+            fileUri: receipt.fileUri,
+          },
+        });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : t('receipt.errorDescription');
+      setReceiptDialog({
+        visible: true,
+        variant: 'error',
+        title: t('receipt.errorTitle'),
+        description: message,
+      });
+    } finally {
+      setViewingId(null);
+    }
+  }, [router, t]);
 
   if (errorMessage && !isLoading && !items.length) {
     return (
@@ -418,6 +487,66 @@ export function ManageDonationsContent() {
                 )}
               </View>
 
+              <View
+                style={{
+                  borderRadius: radius.xl,
+                  padding: spacing[4],
+                  backgroundColor: colors.background.surface,
+                  borderWidth: 1,
+                  borderColor: colors.primary.borderLight,
+                  gap: spacing[3],
+                }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
+                  <MaterialIcons name="settings" size={20} color={colors.primary.DEFAULT} />
+                  <Text style={{ fontFamily: typography.fontFamily.semibold }}>
+                    Minimum contribution
+                  </Text>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3] }}>
+                  <TextInput
+                    accessibilityLabel="Minimum contribution amount"
+                    value={minimumDonationAmount}
+                    onChangeText={(value) => {
+                      setMinimumDonationAmount(value.replace(/[^\d.]/g, ''));
+                      setSettingsMessage(null);
+                    }}
+                    keyboardType="numeric"
+                    style={{
+                      flex: 1,
+                      minHeight: 44,
+                      borderRadius: radius.lg,
+                      borderWidth: 1,
+                      borderColor: colors.border.light,
+                      backgroundColor: '#ffffff',
+                      paddingHorizontal: spacing[3],
+                      color: colors.text.primary,
+                      fontFamily: typography.fontFamily.medium,
+                    }}
+                  />
+                  <TouchableOpacity
+                    accessibilityRole="button"
+                    accessibilityLabel="Save minimum contribution"
+                    activeOpacity={0.85}
+                    disabled={isSavingSettings}
+                    onPress={handleSaveDonationSettings}
+                    style={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: radius.full,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: isSavingSettings ? colors.primary.muted : colors.primary.DEFAULT,
+                    }}>
+                    <MaterialIcons name="save" size={20} color="#ffffff" />
+                  </TouchableOpacity>
+                </View>
+                {settingsMessage ? (
+                  <Text variant="caption" color={settingsMessage.includes('saved') ? colors.status.success : colors.status.error}>
+                    {settingsMessage}
+                  </Text>
+                ) : null}
+              </View>
+
               <FilterChips
                 items={[
                   {
@@ -485,7 +614,11 @@ export function ManageDonationsContent() {
           renderItem={({ item }) => (
             <AdminDonationCard
               record={item}
+              viewing={viewingId === item.id}
               downloading={downloadingId === item.id}
+              onViewPress={() => {
+                void handleViewSlip(item);
+              }}
               onDownloadPress={() => {
                 void handleDownloadSlip(item);
               }}
@@ -547,7 +680,7 @@ export function ManageDonationsContent() {
         {fabMenuOpen ? (
           <Pressable
             accessibilityRole="button"
-            accessibilityLabel="Close donation actions"
+            accessibilityLabel="Close contribution actions"
             onPress={() => setFabMenuOpen(false)}
             style={{
               position: 'absolute',

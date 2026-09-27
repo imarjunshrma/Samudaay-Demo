@@ -227,8 +227,10 @@ export function ExpenseManagementContent({
   const isRejectedExpense = editingExpenseStatus === 'REJECTED';
   const [summary, setSummary] = useState<ExpenseSummary | null>(null);
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
-  const [activeFilter, setActiveFilter] = useState<ExpenseFilterKey>('all');
+  const [activeFilter, setActiveFilter] = useState<ExpenseFilterKey>(() => mode === 'list' && firstParam(params.status).toLowerCase() === 'submitted' ? 'submitted' : 'all');
   const [draftFilter, setDraftFilter] = useState<ExpenseFilterKey>('all');
+  const [period, setPeriod] = useState({ month: '', year: '', sort: 'latest' as 'latest' | 'oldest' });
+  const [draftPeriod, setDraftPeriod] = useState(period);
   const [filterVisible, setFilterVisible] = useState(false);
   const [offset, setOffset] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(false);
@@ -262,6 +264,7 @@ export function ExpenseManagementContent({
 
   const loadExpensePage = useCallback(async (pageOffset: number) => {
     const result = await expenseService.loadExpenses(pageOffset, 20, activeFilter, {
+      ...period,
       mine: isMemberView,
       excludeMine: !isMemberView,
     });
@@ -270,9 +273,10 @@ export function ExpenseManagementContent({
     }
 
     return result;
-  }, [activeFilter, isMemberView, t]);
+  }, [activeFilter, isMemberView, period, t]);
   const loadExpenseSummary = useCallback(async () => {
     const result = await expenseService.loadExpenses(0, 1, 'all', {
+      ...period,
       mine: isMemberView,
       excludeMine: !isMemberView,
     });
@@ -281,7 +285,9 @@ export function ExpenseManagementContent({
     }
 
     return result.summary;
-  }, [isMemberView, t]);
+  }, [isMemberView, period, t]);
+  const currentExpensePageLoader = useRef(loadExpensePage);
+  currentExpensePageLoader.current = loadExpensePage;
 
   useEffect(() => {
     let active = true;
@@ -350,6 +356,7 @@ export function ExpenseManagementContent({
         loadExpensePage(0),
         loadExpenseSummary(),
       ]);
+      if (currentExpensePageLoader.current !== loadExpensePage) return;
       setExpenses(result.items);
       setSummary(nextSummary);
       setOffset(result.pagination.nextOffset);
@@ -390,6 +397,8 @@ export function ExpenseManagementContent({
 
     let active = true;
     const shouldShowInitialSkeleton = !hasLoadedOnceRef.current;
+    setHasNextPage(false);
+    setOffset(0);
     if (shouldShowInitialSkeleton) {
       setIsLoadingInitial(true);
     }
@@ -556,11 +565,12 @@ export function ExpenseManagementContent({
         ]),
     [isMemberView, summary, t],
   );
-  const appliedFilterCount = activeFilter === 'all' ? 0 : 1;
+  const appliedFilterCount = Number(activeFilter !== 'all') + Number(Boolean(period.month)) + Number(Boolean(period.year)) + Number(period.sort !== 'latest');
   const openFilters = useCallback(() => {
     setDraftFilter(activeFilter);
+    setDraftPeriod(period);
     setFilterVisible(true);
-  }, [activeFilter]);
+  }, [activeFilter, period]);
 
   const quickInsightItems = useMemo(
     () => [
@@ -608,6 +618,7 @@ export function ExpenseManagementContent({
     setIsLoadingMore(true);
     try {
       const result = await loadExpensePage(offset);
+      if (currentExpensePageLoader.current !== loadExpensePage) return;
       setExpenses((current) => [...current, ...result.items]);
       setOffset(result.pagination.nextOffset);
       setHasNextPage(result.pagination.hasNextPage);
@@ -928,7 +939,7 @@ export function ExpenseManagementContent({
 
       <AdminQuickInsightsSection
         title={isMemberView ? t('member.queueTitle') : t('queue.title')}
-        periodLabel={isMemberView ? t('member.queuePeriodLabel') : t('queue.periodLabel')}
+        periodLabel={period.year ? [period.month ? t(`filters.month.${period.month}`) : '', period.year].filter(Boolean).join(' ') : isMemberView ? t('member.queuePeriodLabel') : t('queue.periodLabel')}
         actionLabel={isMemberView ? undefined : t('queue.actionLabel')}
         onActionPress={isMemberView ? undefined : () => router.push('/admin/my-expenses' as never)}
         items={quickInsightItems}
@@ -942,7 +953,7 @@ export function ExpenseManagementContent({
           <TouchableOpacity
             accessibilityRole="button"
             activeOpacity={0.85}
-            onPress={() => setActiveFilter('all')}>
+            onPress={() => { setActiveFilter('all'); setPeriod({ month: '', year: '', sort: 'latest' }); }}>
             <Text style={{ color: colors.primary.DEFAULT, fontFamily: typography.fontFamily.semibold, fontSize: 13 }}>
               {t('actions.clearAll')}
             </Text>
@@ -1336,6 +1347,24 @@ export function ExpenseManagementContent({
               items: expenseFilterItems.map((item) => ({ key: item.key, label: item.label })),
               onSelect: (key) => setDraftFilter(key as ExpenseFilterKey),
             },
+            {
+              title: t('filters.year'), icon: 'calendar-today', activeKey: draftPeriod.year,
+              items: [{ key: '', label: t('filters.allYears') }, ...Array.from({ length: Math.max(0, new Date().getFullYear() - 2026 + 1) }, (_, index) => {
+                const year = String(new Date().getFullYear() - index);
+                return { key: year, label: year };
+              })],
+              onSelect: (year) => setDraftPeriod((value) => ({ ...value, year, month: year ? value.month : '' })),
+            },
+            {
+              title: t('filters.month'), icon: 'date-range', activeKey: draftPeriod.month,
+              items: [{ key: '', label: t('filters.allMonths') }, ...Array.from({ length: 12 }, (_, index) => ({ key: String(index + 1), label: t(`filters.month.${index + 1}`) }))],
+              onSelect: (month) => setDraftPeriod((value) => ({ ...value, month, year: month ? value.year || String(new Date().getFullYear()) : value.year })),
+            },
+            {
+              title: t('filters.sort'), icon: 'sort', activeKey: draftPeriod.sort,
+              items: [{ key: 'latest', label: t('filters.latest') }, { key: 'oldest', label: t('filters.oldest') }],
+              onSelect: (sort) => setDraftPeriod((value) => ({ ...value, sort: sort === 'oldest' ? 'oldest' : 'latest' })),
+            },
           ]}
           onClose={() => {
             setDraftFilter(activeFilter);
@@ -1343,9 +1372,10 @@ export function ExpenseManagementContent({
           }}
           onApply={() => {
             setActiveFilter(draftFilter);
+            setPeriod(draftPeriod);
             setFilterVisible(false);
           }}
-          onReset={() => setDraftFilter('all')}
+          onReset={() => { setDraftFilter('all'); setDraftPeriod({ month: '', year: '', sort: 'latest' }); }}
           applyLabel={t('actions.save')}
           resetLabel={t('actions.clearAll')}
         />

@@ -15,6 +15,7 @@
   "filters.types.donation": "Donations",
   "filters.types.event": "Events",
   "filters.types.matrimony": "Matrimony",
+  "filters.types.membership": "Membership",
   "filters.types.expense": "Expenses",
   "filters.status.all": "All Statuses",
   "filters.status.completed": "Completed",

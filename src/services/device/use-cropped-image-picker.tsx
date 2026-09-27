@@ -1,4 +1,4 @@
-import { pickImageFromMediaLibrary } from '@/src/services/device/media-picker';
+import { pickImageFromCamera, pickImageFromMediaLibrary } from '@/src/services/device/media-picker';
 import type { FileValue } from '@/src/types';
 
 type CropPickerOptions = {
@@ -19,5 +19,13 @@ export function useCroppedImagePicker() {
     });
   }
 
-  return { cropImage, pickImage, cropper: null };
+  async function captureImage(options?: CropPickerOptions) {
+    return pickImageFromCamera({
+      allowsEditing: true,
+      aspect: options?.aspect,
+      fileNamePrefix: options?.fileNamePrefix,
+    });
+  }
+
+  return { cropImage, pickImage, captureImage, cropper: null };
 }

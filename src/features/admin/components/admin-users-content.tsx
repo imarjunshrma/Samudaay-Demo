@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, Image, Modal, Pressable, View } from 'react-native';
+import { Alert, Image, Modal, Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { KeyboardAwareScrollView, KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useBottomSafeSpacing } from '@/src/components/layout/SafeAreaInsets';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
-import { AppHeader, AppSkeletonBlock, InfiniteScrollList, SearchInput, SelectField, Text, TextField, Button, Dialog } from '@/src/components';
+import { AppHeader, AppSkeletonBlock, InfiniteScrollList, SearchInput, SelectField, Text, TextField, Button, Dialog, PhoneInput } from '@/src/components';
 import { SkeletonListItem } from '@/src/components/ui/skeleton';
 import { isSuperAdminSession } from '@/src/core/navigation/admin-shell';
 import { useAppPreferences } from '@/src/core/providers/app-provider';
@@ -12,26 +14,72 @@ import { useSession } from '@/src/core/providers/session-provider';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { useDebounce } from '@/src/hooks';
 import { useTranslations } from '@/src/i18n/use-translations';
+import { pickDocumentWithGuard } from '@/src/services/device/document-picker-consent';
+import { createAndDeliverTextFile } from '@/src/services/files/report-file';
 import { translateLocationText } from '@/src/services/location/location-label-translation';
+import { countryCallingCodeOptions } from '@/src/constants/country-calling-codes';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import type { Permission } from '@/src/types/app';
-import { adminUserService, type AdminNormalUserItem } from '../services/admin-user-service';
+import { adminUserService, type AdminNormalUserItem, type AdminUserImportResult, type AdminUserRegistrationSummary } from '../services/admin-user-service';
+import { formSchemas } from '@/src/components/forms/validation';
 
 type UserFormState = {
   name: string;
   email: string;
   phone: string;
+  countryCode: string;
   city: string;
   state: string;
   pincode: string;
 };
 type UserListItem = AdminNormalUserItem | { id: string; __skeleton: true };
+type UserFormErrors = Partial<Record<keyof UserFormState, string>>;
+
+const USER_IMPORT_SAMPLE_CSV = [
+  'name,phone,countryCode,email,city,state,pincode,bloodGroup',
+  'Demo Invited User 1,9876543210,91,demo.user1@example.com,Vadodara,Gujarat,390001,B+',
+  'Demo Invited User 2,9876543211,91,demo.user2@example.com,Ahmedabad,Gujarat,380001,O+',
+  'Demo Invited User 3,9876543212,91,demo.user3@example.com,Surat,Gujarat,395003,A+',
+].join('\n');
+
+function splitAdminPhoneValue(value?: string, fallbackCountryCode = '91') {
+  const raw = String(value || '').trim();
+  const digits = raw.replace(/[^\d]/g, '');
+  const fallback = fallbackCountryCode.replace(/[^\d]/g, '') || '91';
+
+  if (!digits) {
+    return { countryCode: fallback, phone: '' };
+  }
+
+  if (raw.startsWith('+')) {
+    const matched = [...countryCallingCodeOptions]
+      .sort((left, right) => right.value.length - left.value.length)
+      .find((option) => raw.startsWith(option.value));
+
+    if (matched) {
+      const countryCode = matched.value.replace(/[^\d]/g, '') || fallback;
+      return {
+        countryCode,
+        phone: digits.slice(countryCode.length),
+      };
+    }
+  }
+
+  return { countryCode: fallback, phone: digits };
+}
+
+function buildAdminPhoneInputValue(form: UserFormState) {
+  const countryCode = form.countryCode.replace(/[^\d]/g, '') || '91';
+  const phone = form.phone.replace(/[^\d]/g, '');
+  return phone ? `+${countryCode}${phone}` : '';
+}
 
 function buildUserForm(user?: AdminNormalUserItem | null): UserFormState {
   return {
     name: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
+    countryCode: user?.countryCode || '91',
     city: user?.city || '',
     state: user?.state || '',
     pincode: user?.pincode || '',
@@ -99,10 +147,10 @@ function NormalUserRow({
           {user.name}
         </Text>
         <Text style={{ color: colors.text.muted, fontSize: 12 }}>
-          {user.email || user.phone || t('details.noContactInfo')}
+          {user.phone || user.email || t('details.noContactInfo')}
         </Text>
         <Text style={{ color: colors.primary.DEFAULT, fontSize: 12, fontFamily: typography.fontFamily.semibold }}>
-          {user.role || t('labels.user')}
+          {user.role || t('labels.user')} • {user.joinStatus === 'REGISTERED' ? 'Registered' : 'Invited'}
         </Text>
       </View>
       <View style={{ alignItems: 'flex-end', gap: spacing[2] }}>
@@ -114,7 +162,7 @@ function NormalUserRow({
             backgroundColor: colors.primary.muted,
           }}>
           <Text style={{ color: colors.primary.DEFAULT, fontSize: 12, fontFamily: typography.fontFamily.bold }}>
-            {t('labels.normal')}
+            {user.joinStatus === 'REGISTERED' ? 'Registered' : 'Invited'}
           </Text>
         </View>
         <MaterialIcons name="chevron-right" size={22} color={colors.text.muted} />
@@ -160,7 +208,9 @@ function AdminUsersHeaderSkeleton() {
 export function AdminUsersContent() {
   const t = useTranslations('admin.users');
   const { session } = useSession();
+  const fabBottom = useBottomSafeSpacing(88);
   const [search, setSearch] = useState('');
+  const [joinStatusFilter, setJoinStatusFilter] = useState<'all' | 'invited' | 'registered'>('all');
   const debouncedSearch = useDebounce(search, 300);
   const [items, setItems] = useState<AdminNormalUserItem[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
@@ -170,11 +220,20 @@ export function AdminUsersContent() {
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<AdminNormalUserItem | null>(null);
   const [form, setForm] = useState<UserFormState>(buildUserForm(null));
+  const [formErrors, setFormErrors] = useState<UserFormErrors>({});
   const [isDetailVisible, setIsDetailVisible] = useState(false);
   const [isLoadingDetail, setIsLoadingDetail] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [isCreatingUser, setIsCreatingUser] = useState(false);
+  const [isImporting, setIsImporting] = useState(false);
+  const [isDownloadingSample, setIsDownloadingSample] = useState(false);
+  const [isImportModalVisible, setIsImportModalVisible] = useState(false);
+  const [selectedImportFile, setSelectedImportFile] = useState<{ uri: string; name?: string | null; mimeType?: string | null } | null>(null);
+  const [importError, setImportError] = useState<string | null>(null);
+  const [registrationSummary, setRegistrationSummary] = useState<AdminUserRegistrationSummary | null>(null);
+  const [importResult, setImportResult] = useState<AdminUserImportResult | null>(null);
   const [statusDialog, setStatusDialog] = useState<{
     visible: boolean;
     nextStatus: 'ACTIVE' | 'BLOCKED' | null;
@@ -217,11 +276,78 @@ export function AdminUsersContent() {
     stateName: form.state || undefined,
   });
 
+  const updateFormField = useCallback(<TKey extends keyof UserFormState>(field: TKey, value: UserFormState[TKey]) => {
+    setForm((current) => ({ ...current, [field]: value }));
+    setFormErrors((current) => {
+      if (!current[field]) {
+        return current;
+      }
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  }, []);
+
+  const updatePhoneField = useCallback((value: string) => {
+    const parsed = splitAdminPhoneValue(value, form.countryCode);
+    setForm((current) => ({
+      ...current,
+      phone: parsed.phone,
+      countryCode: parsed.countryCode,
+    }));
+    setFormErrors((current) => {
+      if (!current.phone && !current.countryCode) {
+        return current;
+      }
+      const next = { ...current };
+      delete next.phone;
+      delete next.countryCode;
+      return next;
+    });
+  }, [form.countryCode]);
+
+  const validateUserForm = useCallback(async () => {
+    const countryCode = form.countryCode.replace(/[^\d]/g, '');
+    if (!countryCode) {
+      setFormErrors((current) => ({ ...current, countryCode: 'Country code is required.', phone: 'Country code is required.' }));
+      return false;
+    }
+
+    try {
+      await formSchemas.directoryMember.validate(
+        {
+          fullName: form.name.trim(),
+          phone: form.phone.trim(),
+          email: form.email.trim(),
+          city: form.city.trim(),
+          state: form.state.trim(),
+          pincode: form.pincode.trim() || null,
+        },
+        { abortEarly: false },
+      );
+      setFormErrors({});
+      return true;
+    } catch (error) {
+      const nextErrors: UserFormErrors = {};
+      const validationError = error as { inner?: { path?: string; message?: string }[]; path?: string; message?: string };
+      const entries = validationError.inner?.length ? validationError.inner : [validationError];
+      entries.forEach((entry) => {
+        const fieldName = entry.path === 'fullName' ? 'name' : entry.path;
+        if (fieldName && entry.message && ['name', 'phone', 'countryCode', 'email', 'city', 'state', 'pincode'].includes(fieldName)) {
+          nextErrors[fieldName as keyof UserFormState] = entry.message;
+        }
+      });
+      setFormErrors(nextErrors);
+      return false;
+    }
+  }, [form]);
+
   const loadPage = useCallback(async (cursor?: string | null) => {
     const result = await adminUserService.loadNormalUsers({
       search: debouncedSearch.trim() || undefined,
       cursor: cursor || undefined,
       limit: 20,
+      joinStatus: joinStatusFilter,
     });
 
     const filtered = result.items.filter((user) => {
@@ -232,7 +358,16 @@ export function AdminUsersContent() {
       items: filtered,
       nextCursor: result.nextCursor,
     };
-  }, [debouncedSearch]);
+  }, [debouncedSearch, joinStatusFilter]);
+
+  const loadRegistrationSummary = useCallback(async () => {
+    try {
+      const summary = await adminUserService.loadUserRegistrationSummary();
+      setRegistrationSummary(summary);
+    } catch {
+      setRegistrationSummary(null);
+    }
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -268,10 +403,12 @@ export function AdminUsersContent() {
         setIsRefreshingSearch(false);
       });
 
+    void loadRegistrationSummary();
+
     return () => {
       active = false;
     };
-  }, [loadPage, t]);
+  }, [loadPage, loadRegistrationSummary, t]);
 
   const hasNextPage = Boolean(nextCursor);
 
@@ -312,7 +449,8 @@ export function AdminUsersContent() {
     const result = await loadPage();
     setItems(result.items);
     setNextCursor(result.nextCursor);
-  }, [loadPage]);
+    await loadRegistrationSummary();
+  }, [loadPage, loadRegistrationSummary]);
 
   const showInitialSkeleton = isLoadingInitial && !items.length;
   const listData = useMemo<UserListItem[]>(
@@ -328,8 +466,10 @@ export function AdminUsersContent() {
       return;
     }
 
+    setIsCreatingUser(false);
     setSelectedUser(user);
     setForm(buildUserForm(user));
+    setFormErrors({});
     setIsDetailVisible(true);
     setIsLoadingDetail(true);
     try {
@@ -343,30 +483,169 @@ export function AdminUsersContent() {
     }
   }, [canViewUserDetails, t]);
 
-  const handleSaveUser = useCallback(async () => {
-    if (!selectedUser) {
-      return;
-    }
-
+  const handleOpenCreateUser = useCallback(() => {
     if (!canEditUser) {
       Alert.alert(t('alerts.permissionRequiredTitle'), t('alerts.editPermissionDescription'));
       return;
     }
 
-    const name = form.name.trim();
-    const phone = form.phone.trim();
-    const email = form.email.trim();
+    setSelectedUser(null);
+    setForm(buildUserForm(null));
+    setFormErrors({});
+    setIsCreatingUser(true);
+    setIsDetailVisible(true);
+    setIsLoadingDetail(false);
+  }, [canEditUser, t]);
 
-    if (!name || !phone) {
-      Alert.alert(t('alerts.missingDetailsTitle'), t('alerts.missingDetailsDescription'));
+  const resetImportModalState = useCallback(() => {
+    setSelectedImportFile(null);
+    setImportError(null);
+    setImportResult(null);
+  }, []);
+
+  const closeImportModal = useCallback(() => {
+    setIsImportModalVisible(false);
+    resetImportModalState();
+  }, [resetImportModalState]);
+
+  const closeDetailModal = useCallback(() => {
+    setIsDetailVisible(false);
+    setIsCreatingUser(false);
+    setSelectedUser(null);
+    setForm(buildUserForm(null));
+    setFormErrors({});
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => () => {
+      setSearch('');
+      setJoinStatusFilter('all');
+      closeDetailModal();
+      closeImportModal();
+    }, [closeDetailModal, closeImportModal]),
+  );
+
+  const handleChooseImportFile = useCallback(async () => {
+    if (!canEditUser) {
+      Alert.alert(t('alerts.permissionRequiredTitle'), t('alerts.editPermissionDescription'));
       return;
     }
 
+    try {
+      const result = await pickDocumentWithGuard({
+        type: [
+          'text/csv',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ],
+        copyToCacheDirectory: true,
+        multiple: false,
+      });
+
+      if (result.canceled || !result.assets?.[0]) {
+        return;
+      }
+
+      const asset = result.assets[0];
+      setSelectedImportFile({
+        uri: asset.uri,
+        name: asset.name,
+        mimeType: asset.mimeType,
+      });
+      setImportResult(null);
+      setImportError(null);
+    } catch (error) {
+      setImportError(error instanceof Error ? error.message : 'Unable to select import file.');
+    }
+  }, [canEditUser, t]);
+
+  const handleImportUsers = useCallback(async () => {
+    if (!canEditUser) {
+      Alert.alert(t('alerts.permissionRequiredTitle'), t('alerts.editPermissionDescription'));
+      return;
+    }
+
+    if (!selectedImportFile) {
+      setImportError('Select a CSV or Excel file before importing.');
+      return;
+    }
+
+    try {
+      setImportError(null);
+      setIsImporting(true);
+      const imported = await adminUserService.importUsers(selectedImportFile);
+      setImportResult(imported);
+      await refreshFirstPage();
+      Alert.alert(
+        'Import completed',
+        `Created ${imported.summary.created}, skipped ${imported.summary.skipped}, failed ${imported.summary.failed}.`,
+      );
+    } catch (error) {
+      setImportResult(null);
+      setImportError(error instanceof Error ? error.message : 'Unable to import users from file.');
+    } finally {
+      setIsImporting(false);
+    }
+  }, [canEditUser, refreshFirstPage, selectedImportFile, t]);
+
+  const handleDownloadSampleSheet = useCallback(async () => {
+    try {
+      setIsDownloadingSample(true);
+      await createAndDeliverTextFile({
+        content: USER_IMPORT_SAMPLE_CSV,
+        fileName: 'sample-user-import.csv',
+        mimeType: 'text/csv',
+      });
+    } catch (error) {
+      Alert.alert('Download failed', error instanceof Error ? error.message : 'Unable to download sample sheet.');
+    } finally {
+      setIsDownloadingSample(false);
+    }
+  }, []);
+
+  const handleSaveUser = useCallback(async () => {
+    if (!canEditUser) {
+      Alert.alert(t('alerts.permissionRequiredTitle'), t('alerts.editPermissionDescription'));
+      return;
+    }
+
+    const isValid = await validateUserForm();
+    if (!isValid) {
+      return;
+    }
+
+    const name = form.name.trim();
+    const phone = form.phone.trim();
+    const countryCode = form.countryCode.replace(/[^\d]/g, '') || '91';
+    const email = form.email.trim();
+
     setIsSaving(true);
     try {
+      if (isCreatingUser) {
+        const created = await adminUserService.createUser({
+          name,
+          phone,
+          countryCode,
+          email: email || null,
+          city: form.city.trim() || null,
+          state: form.state.trim() || null,
+          pincode: form.pincode.trim() || null,
+        });
+        closeDetailModal();
+        setItems((current) => [{ ...created, name, phone, countryCode, email: email || null, joinStatus: 'INVITED', registered: false }, ...current]);
+        await refreshFirstPage();
+        Alert.alert('User invited', `${name} has been added as an invited user.`);
+        return;
+      }
+
+      if (!selectedUser) {
+        return;
+      }
+
       const updated = await adminUserService.updateUser(selectedUser.id, {
         name,
         phone,
+        countryCode,
         email: email || null,
         city: form.city.trim() || null,
         state: form.state.trim() || null,
@@ -377,6 +656,7 @@ export function AdminUsersContent() {
         ...updated,
         name,
         phone,
+        countryCode,
         email: email || null,
         city: form.city.trim() || null,
         state: form.state.trim() || null,
@@ -390,7 +670,7 @@ export function AdminUsersContent() {
     } finally {
       setIsSaving(false);
     }
-  }, [canEditUser, form, selectedUser]);
+  }, [canEditUser, closeDetailModal, form, isCreatingUser, refreshFirstPage, selectedUser, t, validateUserForm]);
 
   const handleDeleteUser = useCallback(() => {
     if (!selectedUser) {
@@ -496,10 +776,66 @@ export function AdminUsersContent() {
           </Text>
         </View>
 
+        <View
+          style={{
+            backgroundColor: colors.background.surface,
+            borderRadius: radius.xl,
+            borderWidth: 1,
+            borderColor: colors.border.muted,
+            padding: spacing[4],
+            gap: spacing[3],
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: spacing[3], alignItems: 'flex-start' }}>
+            <View style={{ flex: 1, gap: spacing[1] }}>
+              <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 15 }}>
+                User invitations
+              </Text>
+              <Text style={{ color: colors.text.muted, fontSize: 12, lineHeight: 18 }}>
+                Upload normal users or add one manually. They remain invited until registration.
+              </Text>
+            </View>
+          </View>
+
+          <View style={{ flexDirection: 'row', gap: spacing[2], flexWrap: 'wrap' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1], borderRadius: radius.full, backgroundColor: colors.status.warningLight, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
+              <MaterialIcons name="schedule" size={14} color={colors.status.warning} />
+              <Text style={{ color: colors.status.warning, fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
+                Invited {registrationSummary?.invited ?? 0}
+              </Text>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1], borderRadius: radius.full, backgroundColor: colors.status.successLight, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
+              <MaterialIcons name="verified-user" size={14} color={colors.status.success} />
+              <Text style={{ color: colors.status.success, fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
+                Registered {registrationSummary?.registered ?? 0}
+              </Text>
+            </View>
+          </View>
+
+          {importResult ? (
+            <Text style={{ color: colors.text.muted, fontSize: 12, lineHeight: 18 }}>
+              Last import: {importResult.summary.created} created, {importResult.summary.skipped} skipped, {importResult.summary.failed} failed.
+            </Text>
+          ) : null}
+
+        </View>
+
         <SearchInput
           value={search}
           onChangeText={setSearch}
           placeholder={t('search.placeholder')}
+        />
+
+        <SelectField
+          variant="dropdown"
+          label="Registration status"
+          labelVariant="default"
+          value={joinStatusFilter}
+          onSelect={(value) => setJoinStatusFilter(value as 'all' | 'invited' | 'registered')}
+          options={[
+            { label: 'All users', value: 'all' },
+            { label: 'Invited', value: 'invited' },
+            { label: 'Registered', value: 'registered' },
+          ]}
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -514,7 +850,17 @@ export function AdminUsersContent() {
         </View>
       </View>
     )
-  ), [error, items, search, showInitialSkeleton, t]);
+  ), [
+    error,
+    importResult,
+    items,
+    joinStatusFilter,
+    registrationSummary?.invited,
+    registrationSummary?.registered,
+    search,
+    showInitialSkeleton,
+    t,
+  ]);
 
   const selectedUserIsBlocked = String(selectedUser?.status || '').toUpperCase() === 'BLOCKED';
 
@@ -549,9 +895,39 @@ export function AdminUsersContent() {
           emptyDescription={t('empty.description')}
         />
 
-        <Modal visible={isDetailVisible} transparent animationType="slide" onRequestClose={() => setIsDetailVisible(false)}>
+        <View style={{ position: 'absolute', right: spacing[4], bottom: fabBottom, zIndex: 30, gap: spacing[3] }}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Upload users"
+            activeOpacity={0.85}
+            disabled={isImporting}
+            onPress={() => {
+              resetImportModalState();
+              setIsImportModalVisible(true);
+            }}
+            style={{
+              width: 56,
+              height: 56,
+              borderRadius: 999,
+              backgroundColor: colors.background.surface,
+              borderWidth: 1,
+              borderColor: colors.primary.border,
+              alignItems: 'center',
+              justifyContent: 'center',
+              opacity: isImporting ? 0.55 : 1,
+            }}>
+            <MaterialIcons name="upload-file" size={24} color={colors.primary.DEFAULT} />
+          </TouchableOpacity>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Add user" activeOpacity={0.85} onPress={handleOpenCreateUser} style={{ width: 56, height: 56, borderRadius: 999, backgroundColor: colors.primary.DEFAULT, alignItems: 'center', justifyContent: 'center' }}>
+            <Text style={{ color: colors.text.inverse, fontSize: 28, lineHeight: 28 }}>
+              +
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Modal visible={isDetailVisible} transparent animationType="slide" onRequestClose={closeDetailModal}>
           <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(15,23,42,0.42)' }}>
-            <Pressable style={{ flex: 1 }} onPress={() => setIsDetailVisible(false)} />
+            <Pressable style={{ flex: 1 }} onPress={closeDetailModal} />
             <View
               style={{
                 maxHeight: '88%',
@@ -564,13 +940,13 @@ export function AdminUsersContent() {
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[4] }}>
                   <View style={{ flex: 1 }}>
                     <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 20 }}>
-                      {t('details.title')}
+                      {isCreatingUser ? 'Add user' : t('details.title')}
                     </Text>
                     <Text style={{ color: colors.text.muted, fontSize: 12, marginTop: 2 }}>
-                      {selectedUser?.memberId || selectedUser?.id || ''}
+                      {isCreatingUser ? 'Invited user' : selectedUser?.memberId || selectedUser?.id || ''}
                     </Text>
                   </View>
-                  <Pressable accessibilityRole="button" onPress={() => setIsDetailVisible(false)} style={{ width: 40, height: 40, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background.surface }}>
+                  <Pressable accessibilityRole="button" onPress={closeDetailModal} style={{ width: 40, height: 40, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background.surface }}>
                     <MaterialIcons name="close" size={22} color={colors.text.primary} />
                   </Pressable>
                 </View>
@@ -580,6 +956,7 @@ export function AdminUsersContent() {
                   showsVerticalScrollIndicator={false}
                   keyboardShouldPersistTaps="handled"
                   contentContainerStyle={{ gap: spacing[4], paddingBottom: spacing[4] }}>
+                  {!isCreatingUser ? (
                   <View style={{ borderRadius: 20, borderWidth: 1, borderColor: colors.border.muted, backgroundColor: colors.background.surface, padding: spacing[4], gap: spacing[3] }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3] }}>
                       <View style={{ width: 52, height: 52, borderRadius: radius.full, backgroundColor: colors.primary.subtle, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
@@ -634,33 +1011,32 @@ export function AdminUsersContent() {
                       </View>
                     </View>
                   </View>
+                  ) : null}
 
                   <View style={{ flexDirection: 'row', gap: spacing[3] }}>
                     <View style={{ flex: 1, gap: spacing[3] }}>
                       <TextField
                         label={t('form.name')}
                         value={form.name}
-                        onChangeText={(name) => setForm((current) => ({ ...current, name }))}
+                        onChangeText={(name) => updateFormField('name', name)}
+                        error={formErrors.name}
                         disabled={!canEditUser}
+                        required
                         variant="registration"
                         labelVariant="default"
                       />
-                      <TextField
+                      <PhoneInput
                         label={t('form.phone')}
-                        value={form.phone}
-                        onChangeText={(phone) => setForm((current) => ({ ...current, phone }))}
-                        disabled
-                        keyboardType="phone-pad"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        helperText={t('form.phoneHelper')}
-                        variant="registration"
-                        labelVariant="default"
+                        value={buildAdminPhoneInputValue(form)}
+                        onChangeText={updatePhoneField}
+                        error={formErrors.phone}
+                        disabled={!isCreatingUser}
                       />
                       <TextField
                         label={t('form.email')}
                         value={form.email}
-                        onChangeText={(email) => setForm((current) => ({ ...current, email }))}
+                        onChangeText={(email) => updateFormField('email', email)}
+                        error={formErrors.email}
                         disabled={!canEditUser}
                         keyboardType="email-address"
                         autoCapitalize="none"
@@ -676,10 +1052,12 @@ export function AdminUsersContent() {
                             value={form.state}
                             onSelect={(state) => {
                               const nextState = String(state || '');
-                              setForm((current) => ({ ...current, state: nextState, city: '' }));
+                              updateFormField('state', nextState);
+                              updateFormField('city', '');
                               selectState(nextState);
                             }}
                             options={stateOptions}
+                            error={formErrors.state}
                             disabled={!canEditUser}
                             placeholder={t('form.selectState')}
                             variant="registration"
@@ -691,8 +1069,9 @@ export function AdminUsersContent() {
                           <SelectField
                             label={t('form.city')}
                             value={form.city}
-                            onSelect={(city) => setForm((current) => ({ ...current, city: String(city || '') }))}
+                            onSelect={(city) => updateFormField('city', String(city || ''))}
                             options={cityOptions}
+                            error={formErrors.city}
                             disabled={!canEditUser || !form.state}
                             placeholder={form.state ? t('form.selectCity') : t('form.selectStateFirst')}
                             variant="registration"
@@ -704,12 +1083,8 @@ export function AdminUsersContent() {
                       <TextField
                         label={t('form.pincode')}
                         value={form.pincode}
-                        onChangeText={(pincode) =>
-                          setForm((current) => ({
-                            ...current,
-                            pincode: pincode.replace(/[^\d]/g, '').slice(0, 6),
-                          }))
-                        }
+                        onChangeText={(pincode) => updateFormField('pincode', pincode.replace(/[^\d]/g, '').slice(0, 6))}
+                        error={formErrors.pincode}
                         disabled={!canEditUser}
                         keyboardType="number-pad"
                         variant="registration"
@@ -723,7 +1098,7 @@ export function AdminUsersContent() {
                   <KeyboardStickyView>
                     <View style={{ backgroundColor: colors.background.DEFAULT, paddingTop: spacing[2], paddingBottom: spacing[6] }}>
                       <View style={{ flexDirection: 'row', gap: spacing[3] }}>
-                        {canBlockUser ? (
+                        {canBlockUser && !isCreatingUser ? (
                           <View style={{ flex: 1 }}>
                             <Button
                               variant="outline"
@@ -735,7 +1110,7 @@ export function AdminUsersContent() {
                             </Button>
                           </View>
                         ) : null}
-                        {canDeleteUser ? (
+                        {canDeleteUser && !isCreatingUser ? (
                           <View style={{ flex: 1 }}>
                             <Button variant="outline" fullWidth disabled={isDeleting || isSaving || isUpdatingStatus} loading={isDeleting} onPress={handleDeleteUser}>
                               {t('actions.delete')}
@@ -745,7 +1120,7 @@ export function AdminUsersContent() {
                         {canEditUser ? (
                           <View style={{ flex: canDeleteUser || canBlockUser ? 2 : 1 }}>
                             <Button fullWidth disabled={isSaving || isDeleting || isUpdatingStatus || isLoadingDetail} loading={isSaving} onPress={() => void handleSaveUser()}>
-                              {t('actions.saveChanges')}
+                              {isCreatingUser ? 'Create invited user' : t('actions.saveChanges')}
                             </Button>
                           </View>
                         ) : null}
@@ -755,6 +1130,164 @@ export function AdminUsersContent() {
                 ) : (
                   <View style={{ height: spacing[6] }} />
                 )}
+            </View>
+          </View>
+        </Modal>
+        <Modal visible={isImportModalVisible} transparent animationType="slide" onRequestClose={closeImportModal}>
+          <View style={{ flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(15,23,42,0.42)' }}>
+            <Pressable style={{ flex: 1 }} onPress={closeImportModal} />
+            <View
+              style={{
+                maxHeight: '84%',
+                borderTopLeftRadius: 28,
+                borderTopRightRadius: 28,
+                backgroundColor: colors.background.DEFAULT,
+                paddingHorizontal: spacing[4],
+                paddingTop: spacing[4],
+                paddingBottom: spacing[6],
+                gap: spacing[4],
+              }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing[3] }}>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 20 }}>
+                    Import users
+                  </Text>
+                  <Text style={{ color: colors.text.muted, fontSize: 12, marginTop: 2, lineHeight: 18 }}>
+                    Download the sample, fill user rows, then upload CSV or Excel. Existing users are skipped.
+                  </Text>
+                </View>
+                <Pressable accessibilityRole="button" onPress={closeImportModal} style={{ width: 40, height: 40, borderRadius: 999, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background.surface }}>
+                  <MaterialIcons name="close" size={22} color={colors.text.primary} />
+                </Pressable>
+              </View>
+
+              <View style={{ flexDirection: 'row', gap: spacing[3] }}>
+                <View style={{ flex: 1 }}>
+                  <Button variant="outline" fullWidth disabled={isDownloadingSample || isImporting} loading={isDownloadingSample} onPress={handleDownloadSampleSheet}>
+                    Sample
+                  </Button>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Button variant="outline" fullWidth disabled={isImporting || isDownloadingSample} onPress={handleChooseImportFile}>
+                    Choose file
+                  </Button>
+                </View>
+              </View>
+
+              <View style={{ flexDirection: 'row', gap: spacing[3], alignItems: 'center' }}>
+                <View style={{ flex: 1, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border.muted, backgroundColor: colors.background.surface, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
+                  <Text style={{ color: selectedImportFile ? colors.text.primary : colors.text.muted, fontSize: 12 }} numberOfLines={2}>
+                    {selectedImportFile?.name || 'No file selected'}
+                  </Text>
+                </View>
+                <View style={{ width: 128 }}>
+                  <Button fullWidth disabled={isImporting || isDownloadingSample || !selectedImportFile} loading={isImporting} onPress={handleImportUsers}>
+                    Import
+                  </Button>
+                </View>
+              </View>
+
+              {importResult ? (
+                <View style={{ borderRadius: radius.lg, backgroundColor: colors.status.successLight, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
+                  <Text style={{ color: colors.status.success, fontFamily: typography.fontFamily.bold, fontSize: 13 }}>
+                    File imported successfully. {importResult.summary.created} invited, {importResult.summary.skipped} skipped, {importResult.summary.failed} failed.
+                  </Text>
+                </View>
+              ) : null}
+
+              <ScrollView style={{ flex: 1 }} contentContainerStyle={{ gap: spacing[4], paddingBottom: spacing[2] }} showsVerticalScrollIndicator>
+                <View style={{ borderRadius: radius.xl, borderWidth: 1, borderColor: colors.border.muted, backgroundColor: colors.background.surface, padding: spacing[4], gap: spacing[2] }}>
+                  <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 15 }}>
+                    Required columns
+                  </Text>
+                  <Text style={{ color: colors.text.muted, fontSize: 12, lineHeight: 18 }}>
+                    name, phone, countryCode. Optional: email, city, state, pincode, bloodGroup.
+                  </Text>
+                </View>
+
+                {importResult ? (
+                  <View style={{ gap: spacing[3] }}>
+                    <View style={{ borderRadius: radius.xl, borderWidth: 1, borderColor: importResult.summary.failed ? colors.status.warningLight : colors.status.successLight, backgroundColor: importResult.summary.failed ? colors.status.warningLight : colors.status.successLight, padding: spacing[4], gap: spacing[2] }}>
+                      <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 16 }}>
+                        Import completed
+                      </Text>
+                      <Text style={{ color: colors.text.secondary, fontSize: 12, lineHeight: 18 }}>
+                        {importResult.summary.created} invited, {importResult.summary.skipped} skipped, {importResult.summary.failed} failed. Review row details below.
+                      </Text>
+                      <Button
+                        fullWidth
+                        onPress={() => {
+                          closeImportModal();
+                        }}>
+                        Done
+                      </Button>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', gap: spacing[2], flexWrap: 'wrap' }}>
+                      <View style={{ borderRadius: radius.full, backgroundColor: colors.status.successLight, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
+                        <Text style={{ color: colors.status.success, fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
+                          Created {importResult.summary.created}
+                        </Text>
+                      </View>
+                      <View style={{ borderRadius: radius.full, backgroundColor: colors.status.warningLight, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
+                        <Text style={{ color: colors.status.warning, fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
+                          Skipped {importResult.summary.skipped}
+                        </Text>
+                      </View>
+                      <View style={{ borderRadius: radius.full, backgroundColor: colors.status.errorLight, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
+                        <Text style={{ color: colors.status.error, fontFamily: typography.fontFamily.bold, fontSize: 12 }}>
+                          Failed {importResult.summary.failed}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={{ gap: spacing[2] }}>
+                      {importResult.rows.slice(0, 50).map((row) => {
+                        const status = String(row.status || '').toUpperCase();
+                        const tone = status === 'CREATED'
+                          ? { bg: colors.status.successLight, text: colors.status.success }
+                          : status === 'FAILED'
+                            ? { bg: colors.status.errorLight, text: colors.status.error }
+                            : { bg: colors.status.warningLight, text: colors.status.warning };
+
+                        return (
+                          <View key={`${row.rowNumber}-${row.status}-${row.phone || row.name || row.reason}`} style={{ borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border.muted, backgroundColor: colors.background.surface, padding: spacing[3], gap: spacing[1] }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: spacing[2] }}>
+                              <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 13, flex: 1 }}>
+                                Row {row.rowNumber}{row.name ? ` • ${row.name}` : ''}
+                              </Text>
+                              <View style={{ borderRadius: radius.full, backgroundColor: tone.bg, paddingHorizontal: spacing[2], paddingVertical: 2 }}>
+                                <Text style={{ color: tone.text, fontFamily: typography.fontFamily.bold, fontSize: 11 }}>
+                                  {status}
+                                </Text>
+                              </View>
+                            </View>
+                            <Text style={{ color: colors.text.muted, fontSize: 12, lineHeight: 18 }}>
+                              {row.reason}{row.phone ? ` • ${row.countryCode ? `+${row.countryCode} ` : ''}${row.phone}` : ''}
+                            </Text>
+                          </View>
+                        );
+                      })}
+                      {importResult.rows.length > 50 ? (
+                        <Text style={{ color: colors.text.muted, textAlign: 'center', fontSize: 12 }}>
+                          Showing first 50 rows.
+                        </Text>
+                      ) : null}
+                    </View>
+                  </View>
+                ) : (
+                  <View style={{ borderRadius: radius.xl, backgroundColor: importError ? colors.status.errorLight : colors.primary.subtle, padding: spacing[4] }}>
+                    {importError ? (
+                      <Text style={{ color: colors.status.error, fontFamily: typography.fontFamily.bold, fontSize: 14, marginBottom: spacing[1] }}>
+                        Import issue
+                      </Text>
+                    ) : null}
+                    <Text style={{ color: colors.text.secondary, fontSize: 12, lineHeight: 18 }}>
+                      {importError || 'After upload, row-level validation appears here. Duplicate phone/email users will be skipped.'}
+                    </Text>
+                  </View>
+                )}
+              </ScrollView>
             </View>
           </View>
         </Modal>

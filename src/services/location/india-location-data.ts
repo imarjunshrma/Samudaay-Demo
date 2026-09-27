@@ -60,13 +60,12 @@ export const INDIA_STATES: IndiaState[] = [
   {
     name: 'Gujarat',
     cities: [
-      'Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar',
-      'Junagadh', 'Gandhinagar', 'Gandhidham', 'Anand', 'Navsari', 'Morbi',
-      'Nadiad', 'Surendranagar', 'Bharuch', 'Mehsana', 'Bhuj', 'Porbandar',
-      'Palanpur', 'Valsad', 'Amreli', 'Godhra', 'Patan', 'Dahod',
-      'Botad', 'Veraval', 'Gondal', 'Jetpur', 'Dwarka', 'Ankleshwar',
-      'Vyara', 'Khambhat', 'Deesa', 'Modasa', 'Unjha', 'Wankaner',
-      'Mahuva', 'Kutch', 'Himmatnagar', 'Kadi', 'ChhotaUdaipur',
+      'Vadodara', 'Ahmedabad', 'Amreli', 'Anand', 'Aravalli', 'Banas Kantha',
+      'Bharuch', 'Bhavnagar', 'Botad', 'Chhota Udaipur', 'Dahod', 'Dangs',
+      'Devbhumi Dwarka', 'Gandhinagar', 'Gir Somnath', 'Jamnagar', 'Junagadh',
+      'Kheda', 'Kutch', 'Mahisagar', 'Mehsana', 'Morbi', 'Narmada', 'Navsari',
+      'Panchmahal', 'Patan', 'Porbandar', 'Rajkot', 'Sabar Kantha', 'Surat',
+      'Surendranagar', 'Tapi', 'Valsad',
     ],
   },
   {

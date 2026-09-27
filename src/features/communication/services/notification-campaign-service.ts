@@ -78,7 +78,7 @@ function formatAudienceSummary(audienceJson: unknown) {
 
   if (Array.isArray(audience.audienceSegments) && audience.audienceSegments.length > 0) {
     const segmentLabels: Record<string, string> = {
-      paid_donors: 'Paid donation people',
+      paid_donors: 'Paid contributors',
       matrimony_profiles: 'Matrimony profiles',
       family_profiles: 'People with family',
     };

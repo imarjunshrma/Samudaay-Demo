@@ -33,11 +33,20 @@ export type MarksheetRecordItem = {
   department: string;
   standardSemester: string;
   academicYear: string;
+  totalMarks?: number | null;
+  gainedMarks?: number | null;
+  percentage?: number | null;
   fileUrl: string;
   fileName: string | null;
   mimeType: string | null;
   fileSizeBytes: number | null;
   createdAt: string;
+};
+
+export type MarksheetMarksPayload = {
+  totalMarks?: number | string | null;
+  gainedMarks?: number | string | null;
+  percentage?: number | string | null;
 };
 
 export type MarksheetUploadPayload = {
@@ -60,6 +69,9 @@ export type MarksheetReportItem = {
   parentName: string;
   standardSemester: string;
   department: string;
+  totalMarks?: number | null;
+  gainedMarks?: number | null;
+  percentage?: number | null;
   academicYear: string;
   uploadedMarksheet: boolean;
   fileUrl: string;
@@ -71,7 +83,9 @@ export type MarksheetReportItem = {
 
 export type MarksheetReportResponse = {
   academicYears: string[];
+  availableDepartments: string[];
   items: MarksheetReportItem[];
+  pagination: ChildrenPageResponse['pagination'];
 };
 
 function resolveBackendMediaUrl(fileUrl?: string | null) {
@@ -253,35 +267,82 @@ export const childrenEducationService = {
     };
   },
 
-  async loadMarksheetReport(academicYear?: string | null): Promise<MarksheetReportResponse> {
+  async loadMarksheetReport(params?: {
+    academicYear?: string | null;
+    page?: number;
+    limit?: number;
+    search?: string;
+    department?: string;
+    uploadStatus?: string;
+  } | string | null): Promise<MarksheetReportResponse> {
     if (!isBackendApiConfigured()) {
-      return { academicYears: [], items: [] };
+      return { academicYears: [], availableDepartments: [], items: [], pagination: null };
     }
 
     const backendSession = await getBackendSessionContext();
     if (!backendSession) {
-      return { academicYears: [], items: [] };
+      return { academicYears: [], availableDepartments: [], items: [], pagination: null };
     }
 
     try {
-      const response = await apiClient<{ data: MarksheetReportResponse }>(
+      const normalizedParams = typeof params === 'string' ? { academicYear: params } : params;
+      const response = await apiClient<{
+        data: Omit<MarksheetReportResponse, 'pagination'>;
+        pagination?: MarksheetReportResponse['pagination'];
+      }>(
         apiEndpoints.communityMarksheetReport(
           backendSession.tenantId,
-          academicYear && academicYear !== '__all__' ? academicYear : undefined,
+          {
+            academicYear: normalizedParams?.academicYear && normalizedParams.academicYear !== '__all__'
+              ? normalizedParams.academicYear
+              : undefined,
+            page: normalizedParams?.page,
+            limit: normalizedParams?.limit,
+            search: normalizedParams?.search,
+            department: normalizedParams?.department === '__all__' ? undefined : normalizedParams?.department,
+            uploadStatus: normalizedParams?.uploadStatus === '__all__' ? undefined : normalizedParams?.uploadStatus,
+          },
         ),
         { token: backendSession.token },
       );
 
       return {
         academicYears: response.data?.academicYears ?? [],
+        availableDepartments: response.data?.availableDepartments ?? [],
         items: (response.data?.items ?? []).map((item) => ({
           ...item,
           fileUrl: resolveBackendMediaUrl(item.fileUrl),
         })),
+        pagination: response.pagination ?? null,
       };
     } catch {
-      return { academicYears: [], items: [] };
+      return { academicYears: [], availableDepartments: [], items: [], pagination: null };
     }
+  },
+
+  async updateMarksheetMarks(marksheetId: string, payload: MarksheetMarksPayload): Promise<MarksheetRecordItem> {
+    if (!isBackendApiConfigured()) {
+      throw new Error('Backend API is not configured.');
+    }
+
+    const backendSession = await getBackendSessionContext();
+    if (!backendSession) {
+      throw new Error('Backend session not found.');
+    }
+
+    const response = await apiClient<{ data: MarksheetRecordItem }>(
+      apiEndpoints.communityMarksheetRecordMarks(backendSession.tenantId, marksheetId),
+      {
+        method: 'PATCH',
+        body: JSON.stringify(payload),
+        token: backendSession.token,
+      },
+    );
+
+    return {
+      ...response.data,
+      fileUrl: resolveBackendMediaUrl(response.data.fileUrl),
+    };
   },
 
   async downloadMarksheetReportPdf(academicYear?: string | null) {

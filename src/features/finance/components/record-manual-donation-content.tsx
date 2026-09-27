@@ -22,7 +22,7 @@ import { useTranslations } from '@/src/i18n/use-translations';
 import { useAppForm } from '@/src/hooks/useForm';
 import { translateLocationText } from '@/src/services/location/location-label-translation';
 import { colors, radius, spacing, typography } from '@/src/theme';
-import { donationService, type DonationStatus } from '@/src/features/finance/services/donation-service';
+import { donationService, type DonationRecordItem, type DonationStatus } from '@/src/features/finance/services/donation-service';
 import type { FileValue } from '@/src/types';
 import {
   FormikPaymentModeSelector,
@@ -39,9 +39,25 @@ type ManualDonationFormValues = {
   status: DonationStatus;
   panNumber: string;
   referenceNumber: string;
+  donationPurpose: string;
+  receivedBy: string;
+  addressLine1: string;
+  addressLine2: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: string;
+  phoneNumber: string;
+  totalFamilyMembers: string;
   message: string;
   proof: FileValue | null;
 };
+
+const donationPurposeOptions = [
+  { value: 'Marriage', label: 'Marriage' },
+  { value: 'Education', label: 'Education' },
+  { value: 'Other', label: 'Other' },
+];
 
 function buildInitialValues(): ManualDonationFormValues {
   return {
@@ -53,6 +69,16 @@ function buildInitialValues(): ManualDonationFormValues {
     status: 'PAID',
     panNumber: '',
     referenceNumber: '',
+    donationPurpose: '',
+    receivedBy: '',
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    country: '',
+    pincode: '',
+    phoneNumber: '',
+    totalFamilyMembers: '',
     message: '',
     proof: null,
   };
@@ -72,6 +98,16 @@ function buildInitialValuesFromDonation(
     status: record.status,
     panNumber: record.panNumber || '',
     referenceNumber: record.referenceNumber || '',
+    donationPurpose: record.donationPurpose || '',
+    receivedBy: record.receivedBy || '',
+    addressLine1: record.addressLine1 || '',
+    addressLine2: record.addressLine2 || '',
+    city: record.city || '',
+    state: record.state || '',
+    country: record.country || '',
+    pincode: record.pincode || '',
+    phoneNumber: record.phoneNumber || record.user?.phone || '',
+    totalFamilyMembers: record.totalFamilyMembers || '',
     message: record.message || '',
     proof: null,
   };
@@ -103,7 +139,17 @@ export function RecordManualDonationContent({
   const [selectedMember, setSelectedMember] = useState<DirectoryMemberItem | null>(null);
   const [isLoadingDonation, setIsLoadingDonation] = useState(false);
   const [existingProofLabel, setExistingProofLabel] = useState<string | null>(null);
+  const [loadedDonationRecord, setLoadedDonationRecord] = useState<DonationRecordItem | null>(null);
+  const [minimumDonationAmount, setMinimumDonationAmount] = useState(1);
   const isEditMode = editMode && Boolean(donationId);
+  const isOnlineDonation = Boolean(
+    loadedDonationRecord?.paymentProvider ||
+    loadedDonationRecord?.paymentOrderId,
+  );
+  const isOnlineBehalfDonation = Boolean(
+    isOnlineDonation &&
+    (loadedDonationRecord?.receivedBy || loadedDonationRecord?.relation),
+  );
 
   const initialValues = useMemo(() => buildInitialValues(), []);
 
@@ -112,24 +158,43 @@ export function RecordManualDonationContent({
     validationSchema: formSchemas.manualDonationRecord,
     onSubmit: async (values, helpers) => {
       helpers.setStatus(undefined);
+      const amountValue = Number(values.amount);
+      if (!isOnlineDonation && Number.isFinite(amountValue) && amountValue < minimumDonationAmount) {
+        helpers.setFieldError('amount', `Minimum contribution amount is ₹${minimumDonationAmount.toLocaleString('en-IN')}.`);
+        helpers.setSubmitting(false);
+        return;
+      }
 
       try {
         const normalizedRegisteredMember = selectedMember
           ? formatSelectedMemberLabel(selectedMember)
           : values.registeredMemberSearch.trim() || null;
+        const preservedRecord = selectedMember ? null : loadedDonationRecord;
+        const lockedOnlineSelfRecord = isOnlineDonation && !isOnlineBehalfDonation ? loadedDonationRecord : null;
         const payload = {
-          donorName: values.manualDonorName.trim() || selectedMember?.title || values.registeredMemberSearch.trim(),
-          amount: values.amount.trim(),
-          paymentMode: values.paymentMode,
-          status: values.status,
-          donationDate: values.donationDate.toISOString(),
-          referenceNumber: values.referenceNumber.trim() || null,
-          panNumber: values.panNumber.trim().toUpperCase() || null,
+          donorName: lockedOnlineSelfRecord?.donorName || values.manualDonorName.trim() || selectedMember?.title || values.registeredMemberSearch.trim(),
+          amount: isOnlineDonation ? loadedDonationRecord?.amount || values.amount.trim() : values.amount.trim(),
+          paymentMode: isOnlineDonation ? loadedDonationRecord?.paymentMode || values.paymentMode : values.paymentMode,
+          status: isOnlineDonation ? loadedDonationRecord?.status || values.status : values.status,
+          donationDate: isOnlineDonation ? loadedDonationRecord?.createdAt || values.donationDate.toISOString() : values.donationDate.toISOString(),
+          referenceNumber: isOnlineDonation ? loadedDonationRecord?.referenceNumber || null : values.referenceNumber.trim() || null,
+          panNumber: lockedOnlineSelfRecord?.panNumber || values.panNumber.trim().toUpperCase() || null,
           message: values.message.trim() || null,
-          proofFile: values.proof,
-          proofLabel: existingProofLabel,
-          registeredMemberSearch: normalizedRegisteredMember,
-          onBehalfUserId: selectedMember?.id ?? null,
+          donationPurpose: isOnlineDonation ? values.donationPurpose.trim() || null : preservedRecord?.donationPurpose ?? null,
+          receivedBy: lockedOnlineSelfRecord ? lockedOnlineSelfRecord.receivedBy : isOnlineDonation ? values.receivedBy.trim() || null : preservedRecord?.receivedBy ?? null,
+          addressLine1: lockedOnlineSelfRecord?.addressLine1 || (isOnlineDonation ? values.addressLine1.trim() || null : preservedRecord?.addressLine1 ?? null),
+          addressLine2: lockedOnlineSelfRecord?.addressLine2 || (isOnlineDonation ? values.addressLine2.trim() || null : preservedRecord?.addressLine2 ?? null),
+          city: lockedOnlineSelfRecord?.city || (isOnlineDonation ? values.city.trim() || null : preservedRecord?.city ?? null),
+          state: lockedOnlineSelfRecord?.state || (isOnlineDonation ? values.state.trim() || null : preservedRecord?.state ?? null),
+          country: lockedOnlineSelfRecord?.country || (isOnlineDonation ? values.country.trim() || null : preservedRecord?.country ?? null),
+          pincode: lockedOnlineSelfRecord?.pincode || (isOnlineDonation ? values.pincode.trim() || null : preservedRecord?.pincode ?? null),
+          phoneNumber: lockedOnlineSelfRecord?.phoneNumber || (isOnlineDonation ? values.phoneNumber.trim() || null : preservedRecord?.phoneNumber ?? null),
+          totalFamilyMembers: lockedOnlineSelfRecord?.totalFamilyMembers || (isOnlineDonation ? values.totalFamilyMembers.trim() || null : preservedRecord?.totalFamilyMembers ?? null),
+          proofFile: isOnlineDonation ? null : values.proof,
+          proofLabel: isOnlineDonation ? loadedDonationRecord?.proofLabel ?? null : existingProofLabel,
+          proofUrl: isOnlineDonation ? loadedDonationRecord?.proofUrl ?? null : preservedRecord?.proofUrl ?? null,
+          registeredMemberSearch: isOnlineDonation ? loadedDonationRecord?.memberSearch ?? null : normalizedRegisteredMember,
+          onBehalfUserId: isOnlineDonation ? null : selectedMember?.id ?? null,
         };
 
         if (isEditMode && donationId) {
@@ -155,6 +220,25 @@ export function RecordManualDonationContent({
     formikRef.current = formik;
   }, [formik]);
 
+  useEffect(() => {
+    let active = true;
+    donationService.loadDonationSettings()
+      .then((settings) => {
+        if (active) {
+          setMinimumDonationAmount(settings.minimumDonationAmount);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setMinimumDonationAmount(1);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const resetManualDonationState = useCallback(() => {
     if (isEditMode) {
       return;
@@ -166,6 +250,7 @@ export function RecordManualDonationContent({
     setMemberSearchError(null);
     setIsSearchingMembers(false);
     setExistingProofLabel(null);
+    setLoadedDonationRecord(null);
   }, [isEditMode]);
 
   useFocusEffect(
@@ -174,48 +259,51 @@ export function RecordManualDonationContent({
     }, [resetManualDonationState]),
   );
 
-  useEffect(() => {
-    if (!isEditMode || !donationId) {
-      return;
-    }
+  useFocusEffect(
+    useCallback(() => {
+      if (!isEditMode || !donationId) {
+        return undefined;
+      }
 
-    let active = true;
-    setIsLoadingDonation(true);
-    donationService.loadDonationRecordById(donationId, false)
-      .then((record) => {
-        if (!active) {
-          return;
-        }
-        if (!record) {
+      let active = true;
+      setIsLoadingDonation(true);
+      donationService.loadDonationRecordById(donationId, false)
+        .then((record) => {
+          if (!active) {
+            return;
+          }
+          if (!record) {
+            formikRef.current.setStatus({
+              error: t('manual.errors.save'),
+            });
+            return;
+          }
+          formikRef.current.resetForm({ values: buildInitialValuesFromDonation(record) });
+          setExistingProofLabel(record.proofLabel || null);
+          setLoadedDonationRecord(record);
+          setSelectedMember(null);
+          setMemberResults([]);
+          setMemberSearchError(null);
+        })
+        .catch((error) => {
+          if (!active) {
+            return;
+          }
           formikRef.current.setStatus({
-            error: t('manual.errors.save'),
+            error: error instanceof Error ? error.message : t('manual.errors.save'),
           });
-          return;
-        }
-        formikRef.current.resetForm({ values: buildInitialValuesFromDonation(record) });
-        setExistingProofLabel(record.proofLabel || null);
-        setSelectedMember(null);
-        setMemberResults([]);
-        setMemberSearchError(null);
-      })
-      .catch((error) => {
-        if (!active) {
-          return;
-        }
-        formikRef.current.setStatus({
-          error: error instanceof Error ? error.message : t('manual.errors.save'),
+        })
+        .finally(() => {
+          if (active) {
+            setIsLoadingDonation(false);
+          }
         });
-      })
-      .finally(() => {
-        if (active) {
-          setIsLoadingDonation(false);
-        }
-      });
 
-    return () => {
-      active = false;
-    };
-  }, [donationId, isEditMode, t]);
+      return () => {
+        active = false;
+      };
+    }, [donationId, isEditMode, t]),
+  );
 
   useEffect(() => {
     const query = formik.values.registeredMemberSearch.trim();
@@ -299,16 +387,37 @@ export function RecordManualDonationContent({
               loading={formik.isSubmitting}
               disabled={isLoadingDonation}
               onPress={() => void formik.handleSubmit()}>
-              {isEditMode ? submitLabel || 'Update Donation' : t('manual.actions.save')}
+              {isEditMode ? submitLabel || 'Update Contribution' : t('manual.actions.save')}
             </Button>
           </View>
         </View>
       }>
       <FormikProvider value={formik}>
         <View style={{ padding: spacing[5], paddingBottom: spacing[5], gap: spacing[5], backgroundColor: '#f8fafc' }}>
-              <ManualDonationSectionCard
-                title={t('manual.sections.donor')}
-                icon="person-outline">
+              {isOnlineDonation ? (
+                <ManualDonationSectionCard
+                  title={t('manual.sections.donor')}
+                  icon="person-outline">
+                  <TextField
+                    name="manualDonorName"
+                    label={t('manual.fields.manualDonorName')}
+                    labelVariant="default"
+                    variant="default"
+                    placeholder={t('manual.placeholders.manualDonorName')}
+                    disabled={!isOnlineBehalfDonation}
+                    inputStyle={{
+                      borderRadius: radius.lg,
+                      borderColor: '#e2e8f0',
+                      backgroundColor: '#ffffff',
+                      paddingHorizontal: spacing[3],
+                      paddingVertical: spacing[3],
+                    }}
+                  />
+                </ManualDonationSectionCard>
+              ) : (
+                <ManualDonationSectionCard
+                  title={t('manual.sections.donor')}
+                  icon="person-outline">
                 <TextField
                   label={t('manual.fields.searchMember')}
                   labelVariant="default"
@@ -445,17 +554,19 @@ export function RecordManualDonationContent({
                   }}
                 />
               </ManualDonationSectionCard>
+              )}
 
               <ManualDonationSectionCard
                 title={t('manual.sections.transaction')}
                 icon="payments">
                 <TextField
                   name="amount"
-                  label={t('manual.fields.amount')}
+                  label={isOnlineDonation ? t('manual.fields.amount') : `${t('manual.fields.amount')} (min ₹${minimumDonationAmount.toLocaleString('en-IN')})`}
                   labelVariant="default"
                   variant="default"
                   placeholder={t('manual.placeholders.amount')}
                   keyboardType="numeric"
+                  disabled={isOnlineDonation}
                   inputStyle={{
                     borderRadius: radius.lg,
                     borderColor: '#e2e8f0',
@@ -464,76 +575,212 @@ export function RecordManualDonationContent({
                     paddingVertical: spacing[3],
                   }}
                 />
-                <DateField
-                  name="donationDate"
-                  label={t('manual.fields.donationDate')}
-                  labelVariant="default"
-                  variant="default"
-                  placeholder={t('manual.placeholders.donationDate')}
-                />
-                <View style={{ gap: spacing[3] }}>
-                  <FormikPaymentModeSelector name="paymentMode" />
-                </View>
-                <SelectField
-                  name="status"
-                  label={t('manual.fields.status')}
-                  labelVariant="default"
-                  variant="registration"
-                  options={[
-                    { value: 'PAID', label: t('manual.status.paid') },
-                    { value: 'PENDING', label: t('manual.status.pending') },
-                    { value: 'CANCELLED', label: t('manual.status.cancelled') },
-                  ]}
-                />
-                <TextField
-                  label={t('field.panNumber')}
-                  labelVariant="default"
-                  variant="default"
-                  placeholder={t('field.panNumber.placeholder')}
-                  value={formik.values.panNumber}
-                  onChangeText={(value) => {
-                    formik.setFieldValue('panNumber', value.toUpperCase());
-                  }}
-                  error={formik.touched.panNumber ? formik.errors.panNumber : undefined}
-                  autoCapitalize="characters"
-                  maxLength={10}
-                  inputStyle={{
-                    borderRadius: radius.lg,
-                    borderColor: '#e2e8f0',
-                    backgroundColor: '#ffffff',
-                    paddingHorizontal: spacing[3],
-                    paddingVertical: spacing[3],
-                  }}
-                />
-                <TextField
-                  name="referenceNumber"
-                  label={t('manual.fields.referenceNumber')}
-                  labelVariant="default"
-                  variant="default"
-                  placeholder={t('manual.placeholders.referenceNumber')}
-                  inputStyle={{
-                    borderRadius: radius.lg,
-                    borderColor: '#e2e8f0',
-                    backgroundColor: '#ffffff',
-                    paddingHorizontal: spacing[3],
-                    paddingVertical: spacing[3],
-                  }}
-                />
+                {isOnlineDonation ? (
+                  <>
+                    <TextField
+                      label="Payment provider"
+                      labelVariant="default"
+                      variant="default"
+                      value={loadedDonationRecord?.paymentProvider || ''}
+                      disabled
+                    />
+                    <TextField
+                      label="Order ID"
+                      labelVariant="default"
+                      variant="default"
+                      value={loadedDonationRecord?.paymentOrderId || ''}
+                      disabled
+                    />
+                    <TextField
+                      label="Transaction ID"
+                      labelVariant="default"
+                      variant="default"
+                      value={loadedDonationRecord?.paymentReferenceId || loadedDonationRecord?.referenceNumber || ''}
+                      disabled
+                    />
+                  </>
+                ) : (
+                  <>
+                    <DateField
+                      name="donationDate"
+                      label={t('manual.fields.donationDate')}
+                      labelVariant="default"
+                      variant="default"
+                      placeholder={t('manual.placeholders.donationDate')}
+                    />
+                    <View style={{ gap: spacing[3] }}>
+                      <FormikPaymentModeSelector name="paymentMode" />
+                    </View>
+                    <SelectField
+                      name="status"
+                      label={t('manual.fields.status')}
+                      labelVariant="default"
+                      variant="registration"
+                      options={[
+                        { value: 'PAID', label: t('manual.status.paid') },
+                        { value: 'PENDING', label: t('manual.status.pending') },
+                        { value: 'CANCELLED', label: t('manual.status.cancelled') },
+                      ]}
+                    />
+                    <TextField
+                      label={t('field.panNumber')}
+                      labelVariant="default"
+                      variant="default"
+                      placeholder={t('field.panNumber.placeholder')}
+                      value={formik.values.panNumber}
+                      onChangeText={(value) => {
+                        formik.setFieldValue('panNumber', value.toUpperCase());
+                      }}
+                      error={formik.touched.panNumber ? formik.errors.panNumber : undefined}
+                      autoCapitalize="characters"
+                      maxLength={10}
+                      inputStyle={{
+                        borderRadius: radius.lg,
+                        borderColor: '#e2e8f0',
+                        backgroundColor: '#ffffff',
+                        paddingHorizontal: spacing[3],
+                        paddingVertical: spacing[3],
+                      }}
+                    />
+                    <TextField
+                      name="referenceNumber"
+                      label={t('manual.fields.referenceNumber')}
+                      labelVariant="default"
+                      variant="default"
+                      placeholder={t('manual.placeholders.referenceNumber')}
+                      inputStyle={{
+                        borderRadius: radius.lg,
+                        borderColor: '#e2e8f0',
+                        backgroundColor: '#ffffff',
+                        paddingHorizontal: spacing[3],
+                        paddingVertical: spacing[3],
+                      }}
+                    />
+                  </>
+                )}
               </ManualDonationSectionCard>
 
-              <ManualDonationSectionCard
-                title={t('manual.sections.proof')}
-                icon="cloud-upload">
-                <FileUpload
-                  name="proof"
-                  label=""
-                  variant="manualDonation"
-                  helperText={t('manual.helper.fileTypes')}
-                  emptyTitle={t('manual.upload.title')}
-                  emptyDescription={t('manual.upload.description')}
-                  existingPreviewName={existingProofLabel || undefined}
-                />
-              </ManualDonationSectionCard>
+              {isOnlineDonation ? (
+                <ManualDonationSectionCard
+                  title="Contribution details"
+                  icon="receipt-long">
+                  <SelectField
+                    name="donationPurpose"
+                    label="Contribution purpose"
+                    labelVariant="default"
+                    variant="registration"
+                    placeholder="Select contribution purpose"
+                    options={donationPurposeOptions}
+                  />
+                  {isOnlineBehalfDonation ? (
+                    <>
+                      <TextField
+                        name="receivedBy"
+                        label="Received by"
+                        labelVariant="default"
+                        variant="default"
+                        placeholder="Enter receiver name"
+                      />
+                      <TextField
+                        name="phoneNumber"
+                        label="Phone number"
+                        labelVariant="default"
+                        variant="default"
+                        placeholder="Enter phone number"
+                        keyboardType="phone-pad"
+                      />
+                      <TextField
+                        name="totalFamilyMembers"
+                        label="Total family members"
+                        labelVariant="default"
+                        variant="default"
+                        placeholder="Enter total family members"
+                        keyboardType="numeric"
+                      />
+                    </>
+                  ) : null}
+                </ManualDonationSectionCard>
+              ) : null}
+
+              {isOnlineDonation && isOnlineBehalfDonation ? (
+                <ManualDonationSectionCard
+                  title="Address details"
+                  icon="home">
+                  <TextField
+                    name="addressLine1"
+                    label="Address line 1"
+                    labelVariant="default"
+                    variant="default"
+                    placeholder="Enter address line 1"
+                  />
+                  <TextField
+                    name="addressLine2"
+                    label="Address line 2"
+                    labelVariant="default"
+                    variant="default"
+                    placeholder="Enter address line 2"
+                  />
+                  <TextField
+                    name="city"
+                    label="City"
+                    labelVariant="default"
+                    variant="default"
+                    placeholder="Enter city"
+                  />
+                  <TextField
+                    name="state"
+                    label="State"
+                    labelVariant="default"
+                    variant="default"
+                    placeholder="Enter state"
+                  />
+                  <TextField
+                    name="country"
+                    label="Country"
+                    labelVariant="default"
+                    variant="default"
+                    placeholder="Enter country"
+                  />
+                  <TextField
+                    label={t('field.panNumber')}
+                    labelVariant="default"
+                    variant="default"
+                    placeholder={t('field.panNumber.placeholder')}
+                    value={formik.values.panNumber}
+                    onChangeText={(value) => {
+                      formik.setFieldValue('panNumber', value.toUpperCase());
+                    }}
+                    error={formik.touched.panNumber ? formik.errors.panNumber : undefined}
+                    autoCapitalize="characters"
+                    maxLength={10}
+                  />
+                  <TextField
+                    name="pincode"
+                    label="Pincode"
+                    labelVariant="default"
+                    variant="default"
+                    placeholder="Enter pincode"
+                    keyboardType="numeric"
+                  />
+                </ManualDonationSectionCard>
+              ) : null}
+
+              {!isOnlineDonation ? (
+                <ManualDonationSectionCard
+                  title={t('manual.sections.proof')}
+                  icon="cloud-upload">
+                  <FileUpload
+                    name="proof"
+                    label=""
+                    variant="manualDonation"
+                    helperText={t('manual.helper.fileTypes')}
+                    emptyTitle={t('manual.upload.title')}
+                    emptyDescription={t('manual.upload.description')}
+                    existingPreviewUri={loadedDonationRecord?.proofUrl}
+                    existingPreviewName={existingProofLabel || undefined}
+                  />
+                </ManualDonationSectionCard>
+              ) : null}
 
               <ManualDonationSectionCard
                 title={t('manual.sections.note')}

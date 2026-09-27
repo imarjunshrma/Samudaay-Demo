@@ -23,6 +23,7 @@ import { useSafeNavigation } from '@/src/core/navigation/safe-navigation';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { translateLocationText } from '@/src/services/location/location-label-translation';
+import { isVadodaraCity, resolveVadodaraArea, vadodaraAreaOptions } from '@/src/services/location/vadodara-area-options';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import type { FileValue, SelectOption } from '@/src/types';
 
@@ -94,7 +95,7 @@ function getProfileDetailRows(profile: MatrimonyProfileRecord) {
     { label: 'Height', value: profile.height || 'Not provided' },
     { label: 'Education', value: profile.education || 'Not provided' },
     { label: 'Occupation', value: profile.occupation || 'Not provided' },
-    { label: 'Location', value: [profile.city, profile.state, profile.country].filter(Boolean).join(', ') || 'Not provided' },
+    { label: 'Location', value: [profile.area, profile.city, profile.state, profile.country].filter(Boolean).join(', ') || 'Not provided' },
   ];
 }
 
@@ -107,6 +108,10 @@ function shouldShowProfileDetails(profile: MatrimonyProfileRecord | null, editMo
 
 function shouldOpenEditor(profile: MatrimonyProfileRecord | null) {
   return !profile || profile.status === 'DRAFT';
+}
+
+function shouldAskChildrenCount(value?: string | null) {
+  return ['divorced', 'widowed', 'widow', 'widower'].includes(String(value || '').trim().toLowerCase());
 }
 
 const DOB_MIN_DATE = new Date(1900, 0, 1);
@@ -176,6 +181,9 @@ export function CreateMatrimonyProfileContent({
   const [height, setHeight] = useState<string | undefined>(() => cachedProfile?.height || undefined);
   const [gender, setGender] = useState<string | undefined>(() => cachedProfile?.gender || undefined);
   const [maritalStatus, setMaritalStatus] = useState<string | undefined>(() => cachedProfile?.maritalStatus || undefined);
+  const [childrenCount, setChildrenCount] = useState(() => (
+    cachedProfile?.childrenCount !== null && cachedProfile?.childrenCount !== undefined ? String(cachedProfile.childrenCount) : ''
+  ));
   const [education, setEducation] = useState<string | undefined>(() => cachedProfile?.education || undefined);
   const [occupation, setOccupation] = useState(() => cachedProfile?.occupation || '');
   const [income, setIncome] = useState(() => cachedProfile?.income || '');
@@ -184,6 +192,7 @@ export function CreateMatrimonyProfileContent({
   const [familyBackground, setFamilyBackground] = useState(() => cachedProfile?.familyBackground || '');
   const [caste, setCaste] = useState(() => cachedProfile?.caste || '');
   const [community, setCommunity] = useState(() => cachedProfile?.community || '');
+  const [area, setArea] = useState(() => isVadodaraCity(cachedProfile?.city) ? resolveVadodaraArea(cachedProfile?.city || '', cachedProfile?.area) : cachedProfile?.area || '');
   const [city, setCity] = useState(() => cachedProfile?.city || '');
   const [stateName, setStateName] = useState(() => cachedProfile?.state || '');
   const [country, setCountry] = useState(() => cachedProfile?.country || 'India');
@@ -203,6 +212,7 @@ export function CreateMatrimonyProfileContent({
     countryName: country || 'India',
     stateName: stateName || '',
   });
+  const showChildrenCount = shouldAskChildrenCount(maritalStatus);
 
   const heightOptions: SelectOption[] = useMemo(
     () => [
@@ -240,6 +250,15 @@ export function CreateMatrimonyProfileContent({
       { value: 'Divorced', label: t('options.maritalStatus.divorced') },
       { value: 'Widowed', label: t('options.maritalStatus.widowed') },
       { value: 'Separated', label: t('options.maritalStatus.separated') },
+    ],
+    [t],
+  );
+  const professionOptions: SelectOption[] = useMemo(
+    () => [
+      { value: 'Government Service', label: t('options.profession.governmentService') },
+      { value: 'Private Service', label: t('options.profession.privateService') },
+      { value: 'Business', label: t('options.profession.business') },
+      { value: 'Study', label: t('options.profession.study') },
     ],
     [t],
   );
@@ -307,6 +326,7 @@ export function CreateMatrimonyProfileContent({
             setHeight(result.height || undefined);
             setGender(result.gender || undefined);
             setMaritalStatus(result.maritalStatus || undefined);
+            setChildrenCount(result.childrenCount !== null && result.childrenCount !== undefined ? String(result.childrenCount) : '');
             setEducation(result.education || undefined);
             setOccupation(result.occupation || '');
             setIncome(result.income || '');
@@ -315,6 +335,7 @@ export function CreateMatrimonyProfileContent({
             setFamilyBackground(result.familyBackground || '');
             setCaste(result.caste || '');
             setCommunity(result.community || '');
+            setArea(isVadodaraCity(result.city) ? resolveVadodaraArea(result.city || '', result.area) : result.area || '');
             setCity(result.city || '');
             setStateName(result.state || '');
             setCountry('India');
@@ -337,6 +358,12 @@ export function CreateMatrimonyProfileContent({
       };
     }, []),
   );
+
+  useEffect(() => {
+    if (!showChildrenCount && childrenCount) {
+      setChildrenCount('');
+    }
+  }, [childrenCount, showChildrenCount]);
 
   function openCreateSubscriptionRequiredDialog() {
     const isViewerOnly = access?.subscription?.type === 'VIEWER_ONLY';
@@ -419,6 +446,7 @@ export function CreateMatrimonyProfileContent({
         height: height || undefined,
         gender: gender || undefined,
         maritalStatus: maritalStatus || undefined,
+        childrenCount: showChildrenCount && childrenCount.trim() ? Number(childrenCount) : undefined,
         education: education || undefined,
         occupation: occupation.trim() || undefined,
         income: income.trim() || undefined,
@@ -427,6 +455,7 @@ export function CreateMatrimonyProfileContent({
         familyBackground: familyBackground.trim() || undefined,
         caste: caste.trim() || undefined,
         community: community.trim() || undefined,
+        area: isVadodaraCity(city) ? area.trim() || resolveVadodaraArea(city) : undefined,
         city: city.trim() || undefined,
         state: stateName.trim() || undefined,
         country: country.trim() || undefined,
@@ -448,6 +477,7 @@ export function CreateMatrimonyProfileContent({
       setHeight(result.height || undefined);
       setGender(result.gender || undefined);
       setMaritalStatus(result.maritalStatus || undefined);
+      setChildrenCount(result.childrenCount !== null && result.childrenCount !== undefined ? String(result.childrenCount) : '');
       setEducation(result.education || undefined);
       setOccupation(result.occupation || '');
       setIncome(result.income || '');
@@ -456,6 +486,7 @@ export function CreateMatrimonyProfileContent({
       setFamilyBackground(result.familyBackground || '');
       setCaste(result.caste || '');
       setCommunity(result.community || '');
+      setArea(isVadodaraCity(result.city) ? resolveVadodaraArea(result.city || '', result.area) : result.area || '');
       setCity(result.city || '');
       setStateName(result.state || '');
       setCountry('India');
@@ -774,6 +805,17 @@ export function CreateMatrimonyProfileContent({
                     />
                   </View>
                 </View>
+                {showChildrenCount ? (
+                  <TextField
+                    label={t('field.childrenCount')}
+                    labelVariant="default"
+                    variant="registration"
+                    value={childrenCount}
+                    onChangeText={(value) => setChildrenCount(value.replace(/[^\d]/g, ''))}
+                    placeholder={t('placeholders.childrenCount')}
+                    keyboardType="number-pad"
+                  />
+                ) : null}
               </View>
 
               <View style={{ gap: spacing[4] }}>
@@ -786,13 +828,14 @@ export function CreateMatrimonyProfileContent({
                   value={education}
                   onSelect={setEducation}
                 />
-                <TextField
+                <SelectField
                   label={t('field.occupation')}
                   labelVariant="default"
                   variant="registration"
-                  value={occupation}
-                  onChangeText={setOccupation}
                   placeholder={t('placeholders.occupation')}
+                  options={professionOptions}
+                  value={occupation}
+                  onSelect={setOccupation}
                 />
                 <TextField
                   label={t('field.income')}
@@ -868,6 +911,7 @@ export function CreateMatrimonyProfileContent({
                         selectCountry(value);
                         setStateName('');
                         setCity('');
+                        setArea('');
                       }}
                       options={countryOptions}
                       disabled={isLoadingCountries}
@@ -884,6 +928,7 @@ export function CreateMatrimonyProfileContent({
                         setStateName(value);
                         if (value !== stateName) {
                           setCity('');
+                          setArea('');
                         }
                       }}
                       options={country ? stateOptions : []}
@@ -897,10 +942,24 @@ export function CreateMatrimonyProfileContent({
                   variant="registration"
                   placeholder={stateName ? (isLoadingCities ? t('placeholders.loadingCities') : t('placeholders.citySelect')) : t('placeholders.stateFirst')}
                   value={city}
-                  onSelect={setCity}
+                  onSelect={(value) => {
+                    setCity(value);
+                    setArea(resolveVadodaraArea(value, area));
+                  }}
                   options={stateName ? cityOptions : []}
                   disabled={!stateName || isLoadingCities}
                 />
+                {isVadodaraCity(city) ? (
+                  <SelectField
+                    label={t('field.area')}
+                    labelVariant="default"
+                    variant="registration"
+                    placeholder={t('placeholders.areaSelect')}
+                    value={area}
+                    onSelect={setArea}
+                    options={vadodaraAreaOptions}
+                  />
+                ) : null}
               </View>
 
               <View style={{ gap: spacing[4] }}>
@@ -1037,6 +1096,17 @@ export function CreateMatrimonyProfileContent({
                     />
                   </View>
                 </View>
+                {showChildrenCount ? (
+                  <TextField
+                    label={t('field.childrenCount')}
+                    labelVariant="default"
+                    variant="registration"
+                    value={childrenCount}
+                    onChangeText={(value) => setChildrenCount(value.replace(/[^\d]/g, ''))}
+                    placeholder={t('placeholders.childrenCount')}
+                    keyboardType="number-pad"
+                  />
+                ) : null}
               </View>
 
               <View style={{ gap: spacing[4] }}>
@@ -1049,13 +1119,14 @@ export function CreateMatrimonyProfileContent({
                   value={education}
                   onSelect={setEducation}
                 />
-                <TextField
+                <SelectField
                   label={t('field.occupation')}
                   labelVariant="default"
                   variant="registration"
-                  value={occupation}
-                  onChangeText={setOccupation}
                   placeholder={t('placeholders.occupation')}
+                  options={professionOptions}
+                  value={occupation}
+                  onSelect={setOccupation}
                 />
                 <TextField
                   label={t('field.income')}
@@ -1131,6 +1202,7 @@ export function CreateMatrimonyProfileContent({
                         selectCountry(value);
                         setStateName('');
                         setCity('');
+                        setArea('');
                       }}
                       options={countryOptions}
                       disabled={isLoadingCountries}
@@ -1147,6 +1219,7 @@ export function CreateMatrimonyProfileContent({
                         setStateName(value);
                         if (value !== stateName) {
                           setCity('');
+                          setArea('');
                         }
                       }}
                       options={country ? stateOptions : []}
@@ -1160,10 +1233,24 @@ export function CreateMatrimonyProfileContent({
                   variant="registration"
                   placeholder={stateName ? (isLoadingCities ? t('placeholders.loadingCities') : t('placeholders.citySelect')) : t('placeholders.stateFirst')}
                   value={city}
-                  onSelect={setCity}
+                  onSelect={(value) => {
+                    setCity(value);
+                    setArea(resolveVadodaraArea(value, area));
+                  }}
                   options={stateName ? cityOptions : []}
                   disabled={!stateName || isLoadingCities}
                 />
+                {isVadodaraCity(city) ? (
+                  <SelectField
+                    label={t('field.area')}
+                    labelVariant="default"
+                    variant="registration"
+                    placeholder={t('placeholders.areaSelect')}
+                    value={area}
+                    onSelect={setArea}
+                    options={vadodaraAreaOptions}
+                  />
+                ) : null}
               </View>
 
               <View style={{ gap: spacing[4] }}>

@@ -4,7 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useLocalSearchParams } from 'expo-router';
 
 import { MaterialIcons } from '@expo/vector-icons';
-import { AppHeader, Button, Card, Dialog, FormScreenLayout, Text } from '@/src/components';
+import { AppHeader, Button, Card, DateField, Dialog, FormScreenLayout, Text } from '@/src/components';
 import { SkeletonBlock } from '@/src/components/ui/skeleton';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useSession } from '@/src/core/providers/session-provider';
@@ -123,11 +123,35 @@ function resolveUserAssignment(member: DirectoryMemberItem) {
   const normalizedUserType = String(member.userType || 'user').toLowerCase();
   const userType = USER_TYPE_KEYS.has(normalizedUserType as UserType) ? (normalizedUserType as UserType) : 'user';
   const customRoleKeys = roleKeys.filter((roleKey) => !USER_TYPE_KEYS.has(roleKey as UserType));
+  const activeExpiries = (member.roleAssignments ?? [])
+    .filter((assignment) => customRoleKeys.includes(assignment.roleKey))
+    .map((assignment) => (assignment.expiresAt ? new Date(assignment.expiresAt) : null))
+    .filter((expiresAt): expiresAt is Date => expiresAt !== null && Number.isFinite(expiresAt.getTime()) && expiresAt.getTime() > Date.now());
+  const firstExpiry = activeExpiries[0] ?? null;
+  const commonRoleExpiresAt = firstExpiry && activeExpiries.every((expiresAt) => expiresAt.getTime() === firstExpiry.getTime())
+    ? firstExpiry
+    : null;
 
   return {
     userType,
     customRoleKeys,
+    roleExpiresAt: commonRoleExpiresAt,
   };
+}
+
+function getTodayAtSevenPm() {
+  const value = new Date();
+  value.setHours(19, 0, 0, 0);
+  if (value.getTime() <= Date.now()) {
+    value.setDate(value.getDate() + 1);
+  }
+  return value;
+}
+
+function getDaysFromNow(days: number) {
+  const value = new Date();
+  value.setDate(value.getDate() + days);
+  return value;
 }
 
 function PermissionCardSkeleton() {
@@ -197,6 +221,7 @@ export function AdminPermissionsContent() {
   const [selectedMember, setSelectedMember] = useState<DirectoryMemberItem | null>(null);
   const [selectedType, setSelectedType] = useState<UserType>('user');
   const [selectedRoleKeys, setSelectedRoleKeys] = useState<Set<string>>(new Set());
+  const [selectedRoleExpiresAt, setSelectedRoleExpiresAt] = useState<Date | null>(null);
   const [isSearching, setIsSearching] = useState(false);
   const [isLoadingMoreMembers, setIsLoadingMoreMembers] = useState(false);
   const [isLoadingRoles, setIsLoadingRoles] = useState(false);
@@ -249,6 +274,7 @@ export function AdminPermissionsContent() {
     setSelectedMember(null);
     setSelectedType('user');
     setSelectedRoleKeys(new Set());
+    setSelectedRoleExpiresAt(null);
     setMembersPage(1);
     setHasNextMembersPage(false);
     setError(null);
@@ -366,6 +392,7 @@ export function AdminPermissionsContent() {
     setSelectedMember(member);
     setSelectedType(assignment.userType);
     setSelectedRoleKeys(new Set(assignment.customRoleKeys));
+    setSelectedRoleExpiresAt(assignment.roleExpiresAt);
     requestAnimationFrame(() => {
       scrollViewRef.current?.scrollTo?.({ x: 0, y: 0, animated: true });
     });
@@ -410,12 +437,14 @@ export function AdminPermissionsContent() {
       await directoryService.assignMemberRoles(selectedMember.id, {
         userType: selectedType,
         roleKeys: Array.from(selectedRoleKeys),
+        roleExpiresAt: selectedRoleKeys.size > 0 && selectedRoleExpiresAt ? selectedRoleExpiresAt.toISOString() : null,
       });
       const assignedName = selectedMember.title;
       setSearch('');
       setSelectedMember(null);
       setSelectedType('user');
       setSelectedRoleKeys(new Set());
+      setSelectedRoleExpiresAt(null);
       setFeedbackDialog({
         visible: true,
         variant: 'success',
@@ -610,6 +639,38 @@ export function AdminPermissionsContent() {
                         })}
                       </View>
                     )}
+                    <View style={{ borderRadius: 22, borderWidth: 1, borderColor: colors.border.muted, backgroundColor: colors.background.surface, padding: spacing[4], gap: spacing[3] }}>
+                      <View>
+                        <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold }}>
+                          {t('temporary.title')}
+                        </Text>
+                        <Text style={{ color: colors.text.muted, fontSize: 12, marginTop: spacing[1] }}>
+                          {t('temporary.description')}
+                        </Text>
+                      </View>
+                      <DateField
+                        label={t('temporary.until')}
+                        mode="datetime"
+                        value={selectedRoleExpiresAt ?? undefined}
+                        minimumDate={new Date()}
+                        placeholder={t('temporary.permanent')}
+                        onChange={setSelectedRoleExpiresAt}
+                      />
+                      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
+                        <Button variant="outline" size="sm" onPress={() => setSelectedRoleExpiresAt(null)}>
+                          {t('temporary.permanent')}
+                        </Button>
+                        <Button variant="outline" size="sm" onPress={() => setSelectedRoleExpiresAt(getTodayAtSevenPm())}>
+                          {t('temporary.today7pm')}
+                        </Button>
+                        <Button variant="outline" size="sm" onPress={() => setSelectedRoleExpiresAt(getDaysFromNow(3))}>
+                          {t('temporary.threeDays')}
+                        </Button>
+                        <Button variant="outline" size="sm" onPress={() => setSelectedRoleExpiresAt(getDaysFromNow(7))}>
+                          {t('temporary.sevenDays')}
+                        </Button>
+                      </View>
+                    </View>
                   </View>
 
                   <View style={{ borderRadius: 24, backgroundColor: colors.background.surface, borderWidth: 1, borderColor: colors.border.muted, padding: spacing[4], gap: spacing[2] }}>
@@ -629,6 +690,9 @@ export function AdminPermissionsContent() {
                     ) : null}
                     <Text style={{ color: colors.text.muted, fontSize: 12 }}>
                       {t('summary.roles')}: {selectedRoleLabels.length > 0 ? selectedRoleLabels.join(', ') : t('summary.none')}
+                    </Text>
+                    <Text style={{ color: colors.text.muted, fontSize: 12 }}>
+                      {t('summary.validUntil')}: {selectedRoleExpiresAt ? selectedRoleExpiresAt.toLocaleString() : t('temporary.permanent')}
                     </Text>
                   </View>
                 </View>

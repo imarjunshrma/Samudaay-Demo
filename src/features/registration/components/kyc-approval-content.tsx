@@ -123,6 +123,9 @@ export function KycApprovalContent() {
       { label: t('field.address'), value: buildAddress(record, language) || t('fallback.notProvided') },
       { label: t('field.city'), value: translateLocationText(record.city || '', language) || t('fallback.notProvided') },
       { label: t('field.pincode'), value: record.pincode || t('fallback.notProvided') },
+      { label: t('field.aadhaarNumber'), value: record.aadhaarNumber || t('fallback.notProvided') },
+      { label: t('field.panNumber'), value: record.panNumber || t('fallback.notProvided') },
+      { label: t('field.passportNumber'), value: record.passportNumber || t('fallback.notProvided') },
     ];
   }, [language, record, t]);
 

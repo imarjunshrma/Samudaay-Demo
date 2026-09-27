@@ -27,7 +27,9 @@ export interface RegistrationDraft {
   state?: string;
   country?: string;
   pincode?: string;
+  aadhaarNumber?: string;
   panNumber?: string;
+  passportNumber?: string;
   bloodGroup?: string;
   subCommunity?: string;
   fullNameEn: string;

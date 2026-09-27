@@ -16,6 +16,7 @@ export interface UserProfile {
   dob?: string | null;
   addressLine1?: string | null;
   addressLine2?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;

@@ -18,7 +18,7 @@ function formatName(profile: MatrimonyProfileRecord, fallbackName: string) {
 
 function formatAgeLocation(profile: MatrimonyProfileRecord, communityLabel: string, language: 'en' | 'gu') {
   const age = profile.dob ? Math.max(Math.floor((Date.now() - new Date(profile.dob).getTime()) / (365.25 * 24 * 60 * 60 * 1000)), 0) : null;
-  return [age ? `${age} yrs` : null, translateLocationText([profile.city, profile.state].filter(Boolean).join(', '), language) || communityLabel].filter(Boolean).join(' • ');
+  return [age ? `${age} yrs` : null, translateLocationText([profile.area, profile.city, profile.state].filter(Boolean).join(', '), language) || communityLabel].filter(Boolean).join(' • ');
 }
 
 function formatAbsoluteDate(value?: string | null, includeTime = false) {
@@ -39,7 +39,7 @@ function formatAbsoluteDate(value?: string | null, includeTime = false) {
   });
 }
 
-function formatDisplayValue(value: unknown, fallback = 'Not provided') {
+function formatDisplayValue(value: unknown, fallback = 'Not provided'): string {
   if (value === null || value === undefined) return fallback;
   if (typeof value === 'string') {
     const trimmed = value.trim();
@@ -52,8 +52,8 @@ function formatDisplayValue(value: unknown, fallback = 'Not provided') {
     return value ? 'Yes' : 'No';
   }
   if (Array.isArray(value)) {
-    const items = value
-      .map((item) => formatDisplayValue(item, ''))
+    const items: string[] = value
+      .map((item): string => formatDisplayValue(item, ''))
       .filter(Boolean);
     return items.length ? items.join(', ') : fallback;
   }
@@ -130,6 +130,9 @@ function buildDetailSections(record: MatrimonyProfileRecord, t: ReturnType<typeo
         { label: 'Age / Location', value: formatAgeLocation(record, t('details.fallback.community'), language) },
         { label: 'Height', value: record.height },
         { label: 'Marital Status', value: record.maritalStatus },
+        ...(record.childrenCount !== null && record.childrenCount !== undefined
+          ? [{ label: 'Number of Children', value: String(record.childrenCount) }]
+          : []),
         ...(isAdminView ? [{ label: 'Status', value: record.status }] : []),
       ],
     },
@@ -142,6 +145,7 @@ function buildDetailSections(record: MatrimonyProfileRecord, t: ReturnType<typeo
               { label: 'Email Address', value: record.contact?.email },
             ]
           : []),
+        { label: 'Area', value: translateLocationText(record.area || '', language) || record.area },
         { label: 'City', value: translateLocationText(record.city || '', language) || record.city },
         { label: 'State', value: translateLocationText(record.state || '', language) || record.state },
         { label: 'Country', value: record.country },
@@ -505,7 +509,7 @@ export function MatrimonyProfileDetailsContent() {
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
                   <MaterialIcons name="location-on" size={18} color={colors.primary.DEFAULT} />
                   <Text variant="body" style={{ color: colors.text.primary, fontFamily: typography.fontFamily.medium }}>
-                    {translateLocationText(record.city || '', language) || t('details.fallback.community')}
+                    {translateLocationText([record.area, record.city].filter(Boolean).join(', '), language) || t('details.fallback.community')}
                   </Text>
                 </View>
                 {record.aboutMe ? (

@@ -13,6 +13,7 @@ import { formSchemas } from '@/src/components/forms/validation';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { useAppForm } from '@/src/hooks/useForm';
 import { translateLocationText } from '@/src/services/location/location-label-translation';
+import { isVadodaraCity, resolveVadodaraArea, vadodaraAreaOptions } from '@/src/services/location/vadodara-area-options';
 import { getPaginationTotal } from '@/src/utils/pagination';
 
 import {
@@ -20,6 +21,7 @@ import {
   AppHeader,
   AppHeaderSearch,
   Button,
+  Checkbox,
   DateField,
   FilterSheet,
   FilterChips,
@@ -40,7 +42,8 @@ import {
 } from "./admin-blocks";
 import { AdminQuickInsightsSection } from "./admin-quick-insights-section";
 import { AdminEventRow } from "./admin-events-blocks";
-import { eventService, type EventLocationSuggestion } from "@/src/features/events/services/event-service";
+import { eventService, type EventAudience, type EventLocationSuggestion } from "@/src/features/events/services/event-service";
+import { EventAudienceFields } from '@/src/features/events/components/event-audience-fields';
 
 type ManageEventsMode = "list" | "create" | "edit";
 
@@ -96,6 +99,7 @@ function ManagedEventSkeleton() {
 }
 
 type EventFormState = {
+  audience: EventAudience;
   title: string;
   description: string;
   eventType: string;
@@ -119,10 +123,12 @@ type EventFormState = {
   locationUrl: string;
   youtubeUrl: string;
   maxAttendees: string;
+  reminderDays: number[];
   addOns: { id: string; title: string; price: string; limit: string }[];
 };
 
 const EVENT_ADD_ON_LIMIT = 6;
+const EVENT_REMINDER_OPTIONS = [15, 7, 0] as const;
 
 function sanitizeIntegerInput(value: string, maxLength = 6) {
   return value.replace(/[^\d]/g, '').slice(0, maxLength);
@@ -169,6 +175,8 @@ function createInitialEventFormState(): EventFormState {
     locationUrl: "",
     youtubeUrl: "",
     maxAttendees: "",
+    reminderDays: [],
+    audience: { allUsers: true },
     addOns: [createAddOnRow(), createAddOnRow()],
   };
 }
@@ -429,6 +437,7 @@ export function ManageEventsContent({
       try {
         setIsSubmittingEvent(true);
         const payload = {
+          audience: { ...values.audience, cities: [] },
           title,
           description: description || null,
           eventType: values.eventType || null,
@@ -450,6 +459,7 @@ export function ManageEventsContent({
           locationUrl: values.locationUrl?.trim() || null,
           youtubeUrl: values.youtubeUrl?.trim() || null,
           maxAttendees: values.maxAttendees ? Number(values.maxAttendees) : null,
+          reminderDays: values.reminderDays,
           addOns,
         };
 
@@ -706,6 +716,7 @@ export function ManageEventsContent({
       }
 
       setInitialCreateForm({
+        audience: record.audience ?? { allUsers: true },
         title: record.title || "",
         description: record.description || "",
         eventType: record.eventType || "Community",
@@ -717,7 +728,7 @@ export function ManageEventsContent({
         venueName: record.venueName || "",
         address: record.address || "",
         addressLine2: record.addressLine2 || "",
-        area: record.area || "",
+        area: isVadodaraCity(record.city) ? resolveVadodaraArea(record.city || '', record.area) : record.area || "",
         status: (String(record.status || "DRAFT").toUpperCase() as EventFormState["status"]),
         city: record.city || "",
         state: record.state || "",
@@ -729,6 +740,7 @@ export function ManageEventsContent({
         locationUrl: record.locationUrl || "",
         youtubeUrl: record.youtubeUrl || "",
         maxAttendees: record.maxAttendees !== undefined && record.maxAttendees !== null ? String(record.maxAttendees) : "",
+        reminderDays: Array.isArray(record.reminderDays) ? record.reminderDays : [],
         addOns: (record.addOns || []).length
           ? record.addOns!.map((addOn) => ({
               id: addOn.id,
@@ -817,7 +829,7 @@ export function ManageEventsContent({
         caption: t('insights.totalCaption'),
         icon: "event" as const,
         iconColor: colors.primary.DEFAULT,
-        iconBackgroundColor: colors.primary.subtle || 'rgba(24,168,117,0.12)',
+        iconBackgroundColor: colors.primary.subtle || 'rgba(242,120,13,0.12)',
       },
       {
         id: "upcoming",
@@ -945,6 +957,14 @@ export function ManageEventsContent({
   function removeAddOn(index: number) {
     const next = createForm.values.addOns.filter((_, itemIndex) => itemIndex !== index);
     createForm.setFieldValue('addOns', next.length ? next : [createAddOnRow()]);
+  }
+
+  function toggleReminderDay(day: number, checked: boolean) {
+    const current = createForm.values.reminderDays;
+    const next = checked
+      ? Array.from(new Set([...current, day]))
+      : current.filter((item) => item !== day);
+    createForm.setFieldValue('reminderDays', next.sort((a, b) => b - a));
   }
 
   async function handleEventFormSubmit() {
@@ -1186,6 +1206,22 @@ export function ManageEventsContent({
                     />
                   </View>
                 </View>
+                <View style={{ gap: spacing[3] }}>
+                  <Text style={{ color: colors.text.primary, fontFamily: typography.fontFamily.semibold }}>
+                    {t('form.reminders')}
+                  </Text>
+                  <Text variant="caption" color={colors.text.muted}>
+                    {t('form.reminders.helper')}
+                  </Text>
+                  {EVENT_REMINDER_OPTIONS.map((day) => (
+                    <Checkbox
+                      key={day}
+                      label={t(`form.reminders.${day}`)}
+                      checked={createForm.values.reminderDays.includes(day)}
+                      onChange={(checked) => toggleReminderDay(day, checked)}
+                    />
+                  ))}
+                </View>
               </View>
 
               <View style={{ gap: spacing[4] }}>
@@ -1276,13 +1312,30 @@ export function ManageEventsContent({
                 />
                 <View style={{ flexDirection: 'row', gap: spacing[3] }}>
                   <View style={{ flex: 1 }}>
-                    <TextField
-                      name="area"
-                      label={t('form.area')}
-                      placeholder={t('form.area.placeholder')}
-                      variant="registration"
-                      labelVariant="default"
-                    />
+                    {isVadodaraCity(createForm.values.city) ? (
+                      <SelectField
+                        label={t('form.area')}
+                        placeholder={t('form.area.placeholder')}
+                        value={createForm.values.area}
+                        onSelect={(area) => {
+                          createForm.setFieldValue('area', area);
+                          createForm.setFieldTouched('area', true, false);
+                        }}
+                        options={vadodaraAreaOptions}
+                        variant="registration"
+                        labelVariant="default"
+                        error={createForm.touched.area ? createForm.errors.area : undefined}
+                        required
+                      />
+                    ) : (
+                      <TextField
+                        name="area"
+                        label={t('form.area')}
+                        placeholder={t('form.area.placeholder')}
+                        variant="registration"
+                        labelVariant="default"
+                      />
+                    )}
                   </View>
                   <View style={{ flex: 1 }}>
                     <TextField
@@ -1316,6 +1369,7 @@ export function ManageEventsContent({
                       country,
                       state: '',
                       city: '',
+                      area: '',
                     });
                   }}
                   options={countryOptions}
@@ -1338,6 +1392,7 @@ export function ManageEventsContent({
                           ...createForm.values,
                           state,
                           city: createForm.values.state === state ? createForm.values.city : '',
+                          area: createForm.values.state === state ? createForm.values.area : '',
                         });
                       }}
                       options={createForm.values.country ? stateOptions : []}
@@ -1355,6 +1410,7 @@ export function ManageEventsContent({
                       value={createForm.values.city}
                       onSelect={(city) => {
                         createForm.setFieldValue('city', city);
+                        createForm.setFieldValue('area', resolveVadodaraArea(city, createForm.values.area));
                         createForm.setFieldTouched('city', true, false);
                       }}
                       options={createForm.values.state ? cityOptions : []}
@@ -1412,6 +1468,7 @@ export function ManageEventsContent({
               </View>
 
               <View style={{ gap: spacing[4] }}>
+                <EventAudienceFields value={createForm.values.audience} onChange={(value) => { void createForm.setFieldValue('audience', value); }} />
                 <AdminCreateStepHeading step="4" title={t('sections.addOns')} subtitle={t('steps.addons')} />
                 <Text style={{ color: colors.text.secondary }}>
                   {t('form.addOn.helper')}
@@ -1518,6 +1575,10 @@ export function ManageEventsContent({
           renderItem={({ item }) => (
             <AdminEventRow
               {...item}
+              onViewPress={(eventId) => router.push({
+                pathname: '/events/event-details-gallery',
+                params: { eventId, returnTo: '/admin/manage-events' },
+              } as never)}
               onAnalyticsPress={
                 canViewAnalytics && item.isPublished
                   ? (eventId) =>

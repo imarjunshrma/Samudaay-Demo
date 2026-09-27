@@ -15,7 +15,7 @@
   "filter.last6Months": "Last 6 Months",
   "filter.last12Months": "Last 12 Months",
   "filter.rangeLabel": "{count} Months",
-  "section.topPincodes": "Top Donation Pincodes",
+  "section.topPincodes": "Top Contribution Pincodes",
   "section.recent": "Recent Transactions",
   "cta.viewAll": "View All",
   "actions.showLess": "Show Less",
@@ -25,7 +25,7 @@
   "errors.load": "Unable to load analytics.",
   "recent.one.title": "Rajesh Kumar",
   "recent.one.subtitle": "Matrimony Subscription • 10:45 AM",
-  "recent.two.title": "Anonymous Donor",
+  "recent.two.title": "Anonymous Contributor",
   "recent.two.subtitle": "Education Fund • 09:20 AM",
   "recent.three.title": "Sunita Verma",
   "recent.three.subtitle": "Matrimony Subscription • Yesterday"

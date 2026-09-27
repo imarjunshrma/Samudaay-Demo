@@ -13,6 +13,9 @@ function getDocumentIcon(title: string) {
   if (normalized.includes('aadhaar')) {
     return 'badge';
   }
+  if (normalized.includes('passport')) {
+    return 'badge';
+  }
   if (normalized.includes('dakhlo')) {
     return 'description';
   }
@@ -31,6 +34,9 @@ function getDocumentTitle(title: string, t: (key: string) => string) {
 
   if (normalized.includes('aadhaar')) {
     return t('documents.types.aadhaar');
+  }
+  if (normalized.includes('passport')) {
+    return t('documents.types.passport');
   }
   if (normalized.includes('jati') || normalized.includes('dakhlo') || normalized.includes('caste')) {
     return t('documents.types.casteCertificate');

@@ -47,7 +47,7 @@ export const birthdayFeedService = {
       if (backendSession) {
         try {
           const response = await apiClient<{ data: { id: string; name: string; city?: string | null; age?: number; dob?: string | null; birthday?: string | null; daysUntil?: number | null; today?: boolean; image?: string | null }[] }>(
-            apiEndpoints.communityBirthdays(backendSession.tenantId),
+            apiEndpoints.communityBirthdays(backendSession.tenantId, { windowDays: 7 }),
             { token: backendSession.token },
           );
 

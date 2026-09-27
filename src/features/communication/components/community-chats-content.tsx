@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
-import { Modal, Pressable, ScrollView, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Modal, Pressable, ScrollView, Switch, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -26,6 +26,8 @@ type CommunityChatsContentProps = {
 };
 
 export function CommunityChatsContent({ mode = 'member' }: CommunityChatsContentProps) {
+  const { unread } = useLocalSearchParams<{ unread?: string }>();
+  const [unreadOnly, setUnreadOnly] = useState(unread === 'true');
   const router = useRouter();
   const { safePush } = useSafeNavigation();
   const navigateBack = useBackNavigation();
@@ -81,6 +83,7 @@ export function CommunityChatsContent({ mode = 'member' }: CommunityChatsContent
         page,
         limit: 20,
         search,
+        unreadOnly,
       });
       setGroups((current) => {
         if (!append) {
@@ -100,7 +103,7 @@ export function CommunityChatsContent({ mode = 'member' }: CommunityChatsContent
       setIsLoadingMoreChats(false);
       setIsRefreshingChats(false);
     }
-  }, [search]);
+  }, [search, unreadOnly]);
 
   useEffect(() => {
     void loadChatPage({ page: 1 });
@@ -403,6 +406,10 @@ export function CommunityChatsContent({ mode = 'member' }: CommunityChatsContent
         />
         <View style={{ paddingHorizontal: spacing[4], paddingTop: spacing[3], gap: spacing[3], paddingBottom: spacing[3] }}>
           <SearchInput value={search} onChangeText={setSearch} placeholder={t('search.placeholder')} />
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Text>{t('filters.unreadOnly')}</Text>
+            <Switch value={unreadOnly} onValueChange={setUnreadOnly} accessibilityLabel={t('filters.unreadOnly')} />
+          </View>
           <Tabs
             variant="underline"
             scrollable

@@ -23,6 +23,7 @@ type BackendProfileResponse = {
   dob?: string | null;
   addressLine1?: string | null;
   addressLine2?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -74,6 +75,7 @@ async function buildProfileWithSecondaryLanguage(source: {
   dob?: string | null;
   addressLine1?: string | null;
   addressLine2?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -114,6 +116,7 @@ async function buildProfileWithSecondaryLanguage(source: {
     dob: source.dob ?? null,
     addressLine1: source.addressLine1 ?? null,
     addressLine2: source.addressLine2 ?? null,
+    area: source.area ?? null,
     city: source.city ?? null,
     state: source.state ?? null,
     country: source.country ?? null,
@@ -130,6 +133,7 @@ async function buildProfileWithSecondaryLanguage(source: {
 function composeAddress(profile: {
   addressLine1?: string | null;
   addressLine2?: string | null;
+  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -138,6 +142,7 @@ function composeAddress(profile: {
   return [
     profile.addressLine1,
     profile.addressLine2,
+    profile.area,
     profile.city,
     profile.state,
     profile.country,
@@ -318,6 +323,7 @@ async function mapBackendProfile(
     dob: data.dob ?? null,
     addressLine1: data.addressLine1 ?? null,
     addressLine2: data.addressLine2 ?? null,
+    area: data.area ?? null,
     city: data.city ?? null,
     state: data.state ?? null,
     country: data.country ?? null,
@@ -416,6 +422,7 @@ export const profileService = {
       formData.append('dob', nextProfileToPersist.dob ?? '');
       formData.append('addressLine1', nextProfileToPersist.addressLine1 ?? '');
       formData.append('addressLine2', nextProfileToPersist.addressLine2 ?? '');
+      formData.append('area', nextProfileToPersist.area ?? '');
       formData.append('city', nextProfileToPersist.city ?? '');
       formData.append('state', nextProfileToPersist.state ?? '');
       formData.append('country', nextProfileToPersist.country ?? '');
@@ -456,6 +463,7 @@ export const profileService = {
           dob: nextProfileToPersist.dob,
           addressLine1: nextProfileToPersist.addressLine1,
           addressLine2: nextProfileToPersist.addressLine2,
+          area: nextProfileToPersist.area,
           city: nextProfileToPersist.city,
           state: nextProfileToPersist.state,
           country: nextProfileToPersist.country,

@@ -20,6 +20,7 @@ import { DonationListItem, OfflineDonationCard } from '../components/donation-ma
 import { useDonationRecords } from '@/src/features/finance/hooks';
 import { donationService } from '@/src/features/finance/services/donation-service';
 import { isPdfDownloadCancelledError } from '@/src/services/files/pdf-file';
+import { isVadodaraCity, resolveVadodaraArea, vadodaraAreaOptions } from '@/src/services/location/vadodara-area-options';
 import { colors, radius, shadows, spacing, typography } from '@/src/theme';
 import type { MetricItem } from '@/src/types/app';
 
@@ -30,6 +31,7 @@ type DonationFormErrors = Partial<Record<DonationFieldKey, string>>;
 type BehalfDonationFields = {
   addressLine1: string;
   addressLine2: string;
+  area: string;
   city: string;
   state: string;
   country: string;
@@ -42,6 +44,7 @@ type BehalfDonationFields = {
 const EMPTY_BEHALF_FIELDS: BehalfDonationFields = {
   addressLine1: '',
   addressLine2: '',
+  area: '',
   city: '',
   state: '',
   country: 'India',
@@ -135,7 +138,7 @@ function formatIndianCurrencyWords(value: number) {
     return '';
   }
 
-  const segments: Array<[number, string]> = [
+  const segments: [number, string][] = [
     [10000000, 'crore'],
     [100000, 'lakh'],
     [1000, 'thousand'],
@@ -241,7 +244,9 @@ export function DonationManagementScreen({
   const [message, setMessage] = useState('');
   const [fieldErrors, setFieldErrors] = useState<DonationFormErrors>({});
   const [isPaying, setIsPaying] = useState(false);
+  const [viewingReceiptId, setViewingReceiptId] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<MetricItem[]>([]);
+  const [minimumDonationAmount, setMinimumDonationAmount] = useState(1);
   const [feedbackDialog, setFeedbackDialog] = useState<{
     visible: boolean;
     variant: 'info' | 'success' | 'warning' | 'error';
@@ -271,7 +276,7 @@ export function DonationManagementScreen({
     stateName: behalfFields.state || '',
   });
   const impactValue = useMemo(() => metrics[0]?.value || '₹0', [metrics]);
-  const impactLabel = useMemo(() => metrics[0]?.label || t('fallback.totalContributions'), [metrics, t]);
+  const impactLabel = useMemo(() => metrics[0]?.label || t('fallback.totalDonations'), [metrics, t]);
   const customAmountHelperText = useMemo(() => {
     const amountValue = typeof amount === 'number' ? amount : Number(amount || 0);
     if (!Number.isFinite(amountValue) || amountValue <= 0) {
@@ -300,6 +305,17 @@ export function DonationManagementScreen({
     });
   }
 
+  function resetDonationForm() {
+    setDonorType('self');
+    setAmount('');
+    setDonorName(selfDonorName);
+    setRelation('');
+    setPurpose('');
+    setBehalfFields(EMPTY_BEHALF_FIELDS);
+    setMessage('');
+    setFieldErrors({});
+  }
+
   function clearFieldError(field: DonationFieldKey) {
     setFieldErrors((current) => {
       if (!current[field]) {
@@ -322,7 +338,6 @@ export function DonationManagementScreen({
 
   const requiredBehalfFields: [keyof BehalfDonationFields, string][] = [
     ['addressLine1', t('field.addressLine1')],
-    ['addressLine2', t('field.addressLine2')],
     ['city', t('field.city')],
     ['state', t('field.state')],
     ['country', t('field.country')],
@@ -337,6 +352,8 @@ export function DonationManagementScreen({
 
     if (!Number.isFinite(amountValue) || amountValue <= 0) {
       errors.amount = t('checkout.errors.invalidAmountMessage');
+    } else if (amountValue < minimumDonationAmount) {
+      errors.amount = `Minimum contribution amount is ₹${minimumDonationAmount.toLocaleString('en-IN')}.`;
     }
 
     if (!purpose.trim()) {
@@ -353,6 +370,9 @@ export function DonationManagementScreen({
           errors[field] = t('checkout.errors.missingRequiredMessage').replace('{{field}}', label);
         }
       });
+      if (isVadodaraCity(behalfFields.city) && !behalfFields.area.trim()) {
+        errors.area = t('checkout.errors.missingRequiredMessage').replace('{{field}}', 'Area');
+      }
       if (!hasLocalPhoneNumber(behalfFields.phoneNumber)) {
         errors.phoneNumber = t('checkout.errors.missingRequiredMessage').replace('{{field}}', t('field.phoneNumber'));
       }
@@ -371,6 +391,8 @@ export function DonationManagementScreen({
 
     const amountValue = typeof amount === 'number' ? amount : Number(amount || 0);
     const resolvedPurpose = purpose.trim();
+    const resolvedRelation = donorType === 'behalf' ? relation.trim() : '';
+    const resolvedDonationMessage = message.trim() || null;
     const resolvedDonorName =
       donorType === 'self'
         ? (session?.user.fullName || donorName.trim() || t('checkout.defaults.selfDonor'))
@@ -390,9 +412,10 @@ export function DonationManagementScreen({
         donorType,
         donorName: resolvedDonorName,
         purpose: resolvedPurpose,
-        relation: donorType === 'behalf' ? relation.trim() : '',
+        relation: resolvedRelation,
         addressLine1: donorType === 'behalf' ? behalfFields.addressLine1.trim() : null,
         addressLine2: donorType === 'behalf' ? behalfFields.addressLine2.trim() : null,
+        area: donorType === 'behalf' && isVadodaraCity(behalfFields.city) ? behalfFields.area.trim() : null,
         city: donorType === 'behalf' ? behalfFields.city.trim() : null,
         state: donorType === 'behalf' ? behalfFields.state.trim() : null,
         country: donorType === 'behalf' ? behalfFields.country.trim() : null,
@@ -403,13 +426,28 @@ export function DonationManagementScreen({
             : null,
         phoneNumber: donorType === 'behalf' ? behalfFields.phoneNumber.trim() : null,
         totalFamilyMembers: donorType === 'behalf' ? behalfFields.totalFamilyMembers.trim() : null,
-        message: message.trim() || null,
+        message: resolvedDonationMessage,
       });
-      const payment = await donationService.openRazorpayCheckout(order);
       const donation = await donationService.verifyDonationPayment({
         donorName: resolvedDonorName,
-        message: message.trim() || null,
-        razorpay: payment,
+        donorType,
+        purpose: resolvedPurpose,
+        relation: resolvedRelation,
+        addressLine1: donorType === 'behalf' ? behalfFields.addressLine1.trim() : null,
+        addressLine2: donorType === 'behalf' ? behalfFields.addressLine2.trim() : null,
+        area: donorType === 'behalf' && isVadodaraCity(behalfFields.city) ? behalfFields.area.trim() : null,
+        city: donorType === 'behalf' ? behalfFields.city.trim() : null,
+        state: donorType === 'behalf' ? behalfFields.state.trim() : null,
+        country: donorType === 'behalf' ? behalfFields.country.trim() : null,
+        pincode: donorType === 'behalf' ? behalfFields.pincode.trim() : null,
+        panNumber:
+          donorType === 'behalf'
+            ? behalfFields.panNumber.trim().toUpperCase() || null
+            : null,
+        phoneNumber: donorType === 'behalf' ? behalfFields.phoneNumber.trim() : null,
+        totalFamilyMembers: donorType === 'behalf' ? behalfFields.totalFamilyMembers.trim() : null,
+        message: resolvedDonationMessage,
+        razorpay: await donationService.openRazorpayCheckout(order),
       });
 
       setSuccessDialog({
@@ -417,6 +455,7 @@ export function DonationManagementScreen({
         title: t('checkout.success.title'),
         description: t('checkout.success.message').replace('{{receiptNo}}', donation.receiptNo || donation.id),
       });
+      resetDonationForm();
     } catch (error) {
       showFeedbackDialog(
         'error',
@@ -430,8 +469,7 @@ export function DonationManagementScreen({
 
   function handleSuccessDialogConfirm() {
     setSuccessDialog((current) => ({ ...current, visible: false }));
-    void reload();
-    router.push((isAdminMode ? '/admin/manage-donations' : memberTransactionsRoute) as never);
+    router.replace((isAdminMode ? '/admin/manage-donations' : memberTransactionsRoute) as never);
   }
 
   async function handleDownloadGeneratedReceipt(item: Parameters<typeof donationService.generateReceiptAndShare>[0]) {
@@ -456,6 +494,30 @@ export function DonationManagementScreen({
     }
   }
 
+  async function handleViewGeneratedReceipt(item: Parameters<typeof donationService.generateReceiptAndShare>[0]) {
+    setViewingReceiptId(item.id);
+    try {
+      const receipt = await donationService.generateReceiptAndOpen(item);
+      if (receipt.fileUri) {
+        router.push({
+          pathname: '/pdf-viewer',
+          params: {
+            title: receipt.title,
+            fileUri: receipt.fileUri,
+          },
+        });
+      }
+    } catch (error) {
+      showFeedbackDialog(
+        'error',
+        'Unable to open receipt',
+        error instanceof Error ? error.message : 'Please try again.',
+      );
+    } finally {
+      setViewingReceiptId(null);
+    }
+  }
+
   useEffect(() => {
     let active = true;
     donationService.loadDonationMetricsForScope(!isAdminMode).then((nextMetrics) => {
@@ -463,6 +525,17 @@ export function DonationManagementScreen({
         setMetrics(nextMetrics);
       }
     });
+    donationService.loadDonationSettings()
+      .then((settings) => {
+        if (active) {
+          setMinimumDonationAmount(settings.minimumDonationAmount);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setMinimumDonationAmount(1);
+        }
+      });
     return () => {
       active = false;
     };
@@ -657,7 +730,6 @@ export function DonationManagementScreen({
                         value={behalfFields.addressLine2}
                         onChangeText={updateBehalfField('addressLine2')}
                         error={fieldErrors.addressLine2}
-                        required
                       />
                       <SelectField
                         label={t('field.country')}
@@ -675,6 +747,7 @@ export function DonationManagementScreen({
                             country: value,
                             state: '',
                             city: '',
+                            area: '',
                             phoneNumber: dialCode ? replacePhoneDialCode(current.phoneNumber, dialCode) : current.phoneNumber,
                           }));
                         }}
@@ -693,7 +766,7 @@ export function DonationManagementScreen({
                             error={fieldErrors.state}
                             onSelect={(value) => {
                               clearFieldError('state');
-                              setBehalfFields((current) => ({ ...current, state: value, city: '' }));
+                              setBehalfFields((current) => ({ ...current, state: value, city: '', area: '' }));
                             }}
                             required
                           />
@@ -710,12 +783,32 @@ export function DonationManagementScreen({
                             error={fieldErrors.city}
                             onSelect={(value) => {
                               clearFieldError('city');
-                              setBehalfFields((current) => ({ ...current, city: value }));
+                              setBehalfFields((current) => ({
+                                ...current,
+                                city: value,
+                                area: resolveVadodaraArea(value, current.area),
+                              }));
                             }}
                             required
                           />
                         </View>
                       </View>
+                      {isVadodaraCity(behalfFields.city) ? (
+                        <SelectField
+                          label="Area"
+                          labelVariant="default"
+                          variant="registration"
+                          placeholder="Select area"
+                          value={behalfFields.area}
+                          options={vadodaraAreaOptions}
+                          error={fieldErrors.area}
+                          onSelect={(value) => {
+                            clearFieldError('area');
+                            setBehalfFields((current) => ({ ...current, area: value }));
+                          }}
+                          required
+                        />
+                      ) : null}
                       <View style={{ flexDirection: 'row', gap: spacing[3] }}>
                         <View style={{ flex: 1 }}>
                           <TextField
@@ -786,7 +879,7 @@ export function DonationManagementScreen({
                       clearFieldError('amount');
                       setAmount(value);
                     }}
-                    customAmountLabel={t('amount.custom')}
+                    customAmountLabel={`${t('amount.custom')} (min ₹${minimumDonationAmount.toLocaleString('en-IN')})`}
                     customHelperText={customAmountHelperText}
                     chipRadius={radius.md}
                     inputRadius={radius.md}
@@ -861,6 +954,10 @@ export function DonationManagementScreen({
                     key={item.id}
                     amount={`₹${Number(item.amount || 0).toLocaleString('en-IN')}`}
                     meta={`${formatDonationDateTime(item.createdAt)} • ${formatVisibleDonationType(item.donationType, t('section.donationType'))}`}
+                    viewing={viewingReceiptId === item.id}
+                    onViewPress={() => {
+                      void handleViewGeneratedReceipt(item);
+                    }}
                     onDownloadPress={() => {
                       void handleDownloadGeneratedReceipt(item);
                     }}

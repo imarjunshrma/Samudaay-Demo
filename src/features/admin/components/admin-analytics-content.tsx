@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import { Platform, ScrollView, TouchableOpacity, View } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
 import { AppHeader, DetailPageSkeleton, ListRowSkeleton, Text } from '@/src/components';
@@ -122,13 +122,14 @@ export function AdminAnalyticsContent() {
                 <View style={{ height: 1, flex: 1, marginLeft: spacing[4], backgroundColor: colors.border.muted }} />
               </View>
               {[
-                { title: 'Donation Analytics', subtitle: 'Welfare fund trends and donor growth', icon: 'volunteer-activism', href: '/admin/donation-analytics' },
+                { title: 'Contribution Analytics', subtitle: 'Welfare fund trends and contributor growth', icon: 'volunteer-activism', href: '/admin/donation-analytics' },
+                { title: 'Registration Analytics', subtitle: 'KYC skip and yearly app payment settings', icon: 'app-registration', href: '/admin/registration-analytics' },
                 { title: 'Publication Analytics', subtitle: 'Archive performance and generation activity', icon: 'newspaper', href: '/admin/publication-analytics' },
                 { title: 'Advertisement Analytics', subtitle: 'Promotion visibility and reach', icon: 'campaign', href: '/admin/advertisement-analytics' },
                 { title: 'Notification Analytics', subtitle: 'Broadcast delivery and engagement', icon: 'notifications', href: '/admin/notification-analytics' },
                 { title: 'Role Analytics', subtitle: 'Access distribution and assignments', icon: 'person-pin', href: '/admin/role-analytics' },
                 { title: 'Chat Analytics', subtitle: 'Community conversations and activity', icon: 'forum', href: '/admin/chat-analytics' },
-              ].filter((item) => !(Platform.OS === 'ios' && item.href === '/admin/donation-analytics')).map((item) => (
+              ].map((item) => (
                 <TouchableOpacity
                   key={item.title}
                   accessibilityRole="button"

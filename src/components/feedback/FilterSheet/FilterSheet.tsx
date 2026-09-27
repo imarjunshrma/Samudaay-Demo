@@ -20,6 +20,7 @@ export type FilterSheetSection = {
   onSelect: (key: string) => void;
   selectionMode?: 'single' | 'multiple';
   icon?: React.ComponentProps<typeof MaterialIcons>['name'];
+  renderContent?: () => React.ReactNode;
 };
 
 export interface FilterSheetProps {
@@ -185,12 +186,15 @@ export function FilterSheet({
             <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1, minHeight: 0 }} contentContainerStyle={{ gap: spacing[3], padding: spacing[4], flexGrow: 1 }}>
               <View style={{ gap: spacing[2], padding: spacing[3], borderRadius: radius.xl, backgroundColor: colors.background.DEFAULT, borderWidth: 1, borderColor: colors.primary.borderLight }}>
                 {activeSection ? (
-                  <FilterChips
-                    items={activeSection.items}
-                    activeKey={activeSection.activeKey}
-                    activeKeys={activeSection.selectionMode === 'multiple' ? activeSection.activeKeys : undefined}
-                    onPress={activeSection.onSelect}
-                  />
+                  <>
+                    <FilterChips
+                      items={activeSection.items}
+                      activeKey={activeSection.activeKey}
+                      activeKeys={activeSection.selectionMode === 'multiple' ? activeSection.activeKeys : undefined}
+                      onPress={activeSection.onSelect}
+                    />
+                    {activeSection.renderContent ? activeSection.renderContent() : null}
+                  </>
                 ) : null}
               </View>
             </ScrollView>

@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Platform, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 import { AppSafeAreaView, Text } from '@/src/components';
 import { isPlainUserSession } from '@/src/core/navigation/default-route';
@@ -27,7 +27,7 @@ export function UnifiedCommunityDashboardContent() {
   const localizedMemberName = useLocalizedProfileText(summary.identityCard.memberName || 'Community');
   const managementCards = (
     [
-    ['volunteer-activism', 'Donation', summary.summary?.donationCount ? `${summary.summary.donationCount} records` : 'Community welfare fund', '/member/donations'],
+    ['volunteer-activism', 'Contribution', summary.summary?.donationCount ? `${summary.summary.donationCount} records` : 'Community welfare fund', '/member/donations'],
     ['calendar-today', 'Event Management', summary.summary?.eventsJoined ? `${summary.summary.eventsJoined} joined` : 'Workshops & Exhibitions', '/events/my-events-list'],
     ['favorite', 'Matrimony', summary.summary?.activeMatrimonyProfiles ? `${summary.summary.activeMatrimonyProfiles} active profiles` : 'Community matchmaking', '/member/matrimony'],
     ['receipt-long', 'Family', summary.summary?.familyCount ? `${summary.summary.familyCount} linked` : 'Family records', '/member/family'],
@@ -36,13 +36,7 @@ export function UnifiedCommunityDashboardContent() {
     ['notifications', 'Notifications', summary.summary?.unreadNotices ? `${summary.summary.unreadNotices} unread` : 'Broadcast alerts', '/member/notifications'],
     ['trending-up', 'Overview', 'Performance insights', '/finance/finance-analytics'],
     ] as const
-  ).filter(([, title]) => {
-    if (Platform.OS === 'ios' && title === 'Donation') {
-      return false;
-    }
-
-    return !(isNormalUser && title === 'Publication');
-  });
+  ).filter(([, title]) => !(isNormalUser && title === 'Publication'));
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>

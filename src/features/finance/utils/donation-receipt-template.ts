@@ -126,7 +126,9 @@ export function generateDonationReceiptHtml(
   const amountFormatted = amount.toLocaleString('en-IN');
   const amountWords = numberToWords(amount);
   const addressLine = record.addressLine1 || '';
-  const addressExtraLine = [record.state, record.country].filter(Boolean).join(', ');
+  const addressExtraLine = record.addressLine2 || '';
+  const isVadodaraDonation = String(record.city || '').trim().toLowerCase() === 'vadodara';
+  const areaLine = isVadodaraDonation ? record.area || '' : '';
   const detailText = [record.message, record.referenceNumber ? `Ref: ${record.referenceNumber}` : null]
     .filter(Boolean)
     .join(' | ');
@@ -414,8 +416,8 @@ export function generateDonationReceiptHtml(
             </div>
             <div class="header-center">
                 <div class="trust-name">મોચી એકતા ચેરીટેબલ ટ્રસ્ટ, વડોદરા</div>
-                <div class="address-line">કાર્યાલય : C 1/1/21, સુમંત ફ્લેટ્સ, ગાય સર્કલ પાસે, દુર્ગા સ્વીટ અને ફ઼ર&zwnj;સ&zwnj;ાણની બ&zwnj;ાજુ&zwnj;મ&zwnj;ાં, અ&zwnj;ક&zwnj;ોટ&zwnj;ા, વ&zwnj;ડ&zwnj;ોદ&zwnj;રા</div>
-                <div class="reg-line">રજી. નં. : એ /3339 &nbsp;&nbsp;|&nbsp;&nbsp; ફ&zwnj;ો&zwnj;ન : 98243 95362</div>
+                <div class="address-line">કાર્યાલય : C 1/1/21, સુમંત ફ્લેટ્સ, ગાય સર્કલ પાસે, દુર્ગા સ્વીટ અને ફર&zwnj;સ&zwnj;ાણની બ&zwnj;ાજુ&zwnj;મ&zwnj;ાં, અ&zwnj;ક&zwnj;ોટ&zwnj;ા, વ&zwnj;ડ&zwnj;ોદ&zwnj;રા</div>
+                <div class="reg-line">રજી. નં. : એ /3339 &nbsp;&nbsp;|&nbsp;&nbsp; ફોન : 98243 95362</div>
             </div>
             <!-- No QR in header per original -->
         </div>
@@ -459,13 +461,22 @@ export function generateDonationReceiptHtml(
             <!-- Row: Area | City | Pin Code -->
             <div class="frow">
                 <div class="flabel">વિસ્તાર <span class="eng">Area</span></div>
-                <div class="fline" style="max-width:200px;">${fval(record.addressLine2)}</div>
+                <div class="fline" style="max-width:200px;">${fval(areaLine)}</div>
                 <div class="fgap"></div>
                 <div class="flabel">શ&zwnj;હ&zwnj;ે&zwnj;ર <span class="eng">City</span></div>
                 <div class="fline" style="max-width:200px;">${fval(record.city)}</div>
                 <div class="fgap"></div>
                 <div class="flabel">પીન કોડ <span class="eng">Pin Code</span></div>
                 <div class="fline" style="max-width:120px;">${fval(record.pincode)}</div>
+            </div>
+
+            <!-- Row: State | Country -->
+            <div class="frow">
+                <div class="flabel">ર&zwnj;ાજ&zwnj;્ય <span class="eng">State</span></div>
+                <div class="fline" style="max-width:260px;">${fval(record.state)}</div>
+                <div class="fgap"></div>
+                <div class="flabel">દ&zwnj;ેશ <span class="eng">Country</span></div>
+                <div class="fline" style="max-width:260px;">${fval(record.country)}</div>
             </div>
 
             <!-- Row: PAN Card (optional) | Phone | Deposit Date -->
@@ -482,18 +493,16 @@ export function generateDonationReceiptHtml(
                 <div class="fline" style="max-width:130px;">${fval(formatDateValue(record.createdAt))}</div>
             </div>
 
-            <!-- Row: Amount | Payment Mode -->
+            <!-- Row: Amount | Payment Mode | Status -->
             <div class="frow">
                 <div class="flabel">ર&zwnj;ક&zwnj;મ <span class="eng">Amount</span></div>
-                <div class="fline" style="max-width:210px;">${fval(`₹${amountFormatted}`)}</div>
+                <div class="fline" style="max-width:170px;">${fval(`₹${amountFormatted}`)}</div>
                 <div class="fgap"></div>
                 <div class="flabel">રકમ જમા કર્યાની રીત <span class="eng">Payment Mode</span></div>
-                <div class="fline">${fval(paymentModeDisplay(record.paymentMode))}</div>
-            </div>
-
-            <div class="frow">
+                <div class="fline" style="max-width:190px;">${fval(paymentModeDisplay(record.paymentMode))}</div>
+                <div class="fgap"></div>
                 <div class="flabel">સ્થિતિ <span class="eng">Status</span></div>
-                <div class="fline" style="max-width:210px;">${fval(donationStatusDisplay(record.status))}</div>
+                <div class="fline" style="max-width:150px;">${fval(donationStatusDisplay(record.status))}</div>
             </div>
 
             <!-- Row: In Words (full width) -->
@@ -528,7 +537,7 @@ export function generateDonationReceiptHtml(
         <!-- FOOTER: Bank details (left) + QR code (right) -->
         <div class="footer">
             <div class="bank-details">
-                <strong>Name :</strong> SAMUDAAAY<br>
+                <strong>Name :</strong> MOCHI EKTA CHARITABLE TRUST<br>
                 <strong>Bank :</strong> ICICI BANK LTD. &nbsp;|&nbsp; <strong>Branch :</strong> WAGHODIA ROAD<br>
                 <strong>A/c No. :</strong> 437701000533 &nbsp;|&nbsp; <strong>IFSC No. :</strong> ICIC0004377<br>
                 <strong>80 G Registration No. :</strong> AAGTM2486CE2021001 &nbsp;|&nbsp; <strong>PAN Card No. :</strong> AAGTM2486C

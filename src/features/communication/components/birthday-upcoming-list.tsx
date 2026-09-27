@@ -4,7 +4,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { EmptyState, SkeletonList, Text } from '@/src/components';
 import { colors, spacing, typography } from '@/src/theme';
-import { type BirthdayFeedItem, useBirthdayFeed } from '../hooks/use-communication-feeds';
+import { type BirthdayFeedItem } from '../hooks/use-communication-feeds';
 
 export function BirthdayUpcomingList({
   items,
@@ -13,8 +13,7 @@ export function BirthdayUpcomingList({
   items?: BirthdayFeedItem[];
   loading?: boolean;
 }) {
-  const fallbackFeed = useBirthdayFeed();
-  const resolvedItems = items ?? fallbackFeed.upcomingItems;
+  const resolvedItems = items ?? [];
   const [alertedIds, setAlertedIds] = useState<Set<string>>(() => new Set());
 
   function toggleAlert(id: string) {
@@ -63,7 +62,7 @@ export function BirthdayUpcomingList({
               <Image
                 source={{ uri: item.image }}
                 resizeMode="cover"
-                style={{ width: 48, height: 48, borderRadius: 999, opacity: 0.8, borderWidth: 2, borderColor: 'rgba(24,168,117,0.2)' }}
+                style={{ width: 48, height: 48, borderRadius: 999, opacity: 0.8, borderWidth: 2, borderColor: 'rgba(242,120,13,0.2)' }}
               />
               <View style={{ flex: 1 }}>
                 <Text variant="body" style={{ fontFamily: typography.fontFamily.semibold, fontSize: 14 }}>

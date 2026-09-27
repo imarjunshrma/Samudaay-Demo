@@ -79,6 +79,13 @@ export function getDefaultRouteForSession(session: UserSession, appViewMode: App
 
   if (
     session.user.communityMembershipStatus &&
+    session.user.communityMembershipStatus === 'APP_PAYMENT_REQUIRED'
+  ) {
+    return '/app-membership-renewal';
+  }
+
+  if (
+    session.user.communityMembershipStatus &&
     session.user.communityMembershipStatus !== 'ACTIVE'
   ) {
     return '/pending-approval';
