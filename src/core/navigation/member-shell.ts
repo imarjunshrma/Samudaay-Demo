@@ -1,5 +1,6 @@
 import type { AppBottomBarItem } from '@/src/components/layout/AppBottomBar/AppBottomBar';
 import type { AppSidebarItem } from '@/src/components/layout/AppSidebar/AppSidebar';
+import { Platform } from 'react-native';
 
 export const memberPrimaryRoutes = {
   home: '/member',
@@ -84,6 +85,10 @@ export function getMemberSidebarItems(
     }
 
     if (options?.hideRestrictedModules && item.key === 'publications') {
+      return false;
+    }
+
+    if (Platform.OS === 'ios' && item.key === 'donations') {
       return false;
     }
 

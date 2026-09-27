@@ -1,7 +1,7 @@
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 
 import { AppSafeAreaView, Card, CardGridSkeleton, DetailPageSkeleton, Text } from '@/src/components';
 import { useLocalizedBrandText } from '@/src/core/config/brand';
@@ -83,7 +83,13 @@ export function AdminDashboardContent() {
     { key: 'roles', title: t('cards.permissions'), subtitle: t('cards.permissions.subtitle'), icon: 'lock-open' as const, onPress: () => router.push('/admin/permissions' as never) },
     { key: 'chats', title: t('cards.chats'), subtitle: t('cards.chats.subtitle'), icon: 'forum' as const, onPress: () => router.push('/admin/community-chats' as never) },
     { key: 'analytics', title: t('cards.analytics'), subtitle: t('cards.analytics.subtitle'), icon: 'trending-up' as const, onPress: () => router.push('/admin/analytics' as never) },
-  ].filter((item) => canAccessAdminNavKey(item.key, session));
+  ].filter((item) => {
+    if (Platform.OS === 'ios' && item.key === 'donations') {
+      return false;
+    }
+
+    return canAccessAdminNavKey(item.key, session);
+  });
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>

@@ -68,6 +68,9 @@ const config: ExpoConfig = {
   runtimeVersion: {
     policy: "appVersion",
   },
+  updates: {
+    url: "https://u.expo.dev/c22783bc-10f1-4150-8d8c-27a80aabc5a6",
+  },
   ios: {
     supportsTablet: true,
     bundleIdentifier: process.env.APP_IOS_BUNDLE_ID ?? DEFAULT_IOS_BUNDLE_ID,
@@ -94,6 +97,8 @@ const config: ExpoConfig = {
         "Allow access to your photos so you can upload profile images, chat images, event photos, and selected documents.",
       NSPhotoLibraryAddUsageDescription:
         "Allow saving exported files and images to your library when you choose to share or store them.",
+      NSLocationWhenInUseUsageDescription:
+        "Allow access to your location to show maps, tag community records, and support location-based event and member features.",
       UIBackgroundModes: ["remote-notification"],
     },
     ...(googleServicesInfoPlist

@@ -3,6 +3,7 @@ import { apiEndpoints } from '@/src/services/api/endpoints';
 import { getBackendSessionContext, isBackendApiConfigured } from '@/src/features/auth/services/backend-session';
 import { isPlainUserSession } from '@/src/core/navigation/default-route';
 import type { ListItem, MetricItem } from '@/src/types/app';
+import { Platform } from 'react-native';
 
 export interface DashboardCardItem extends ListItem {
   icon: string;
@@ -95,6 +96,10 @@ function filterDashboardCards(
 ) {
   return cards.filter((card) => {
     if (options.hideFinance && (['Expenses', 'Finance'].includes(card.title) || card.route?.startsWith('/finance'))) {
+      return false;
+    }
+
+    if (Platform.OS === 'ios' && (card.title === 'Donations' || card.route === '/member/donations')) {
       return false;
     }
 

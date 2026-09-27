@@ -1,5 +1,5 @@
 import { useRouter } from 'expo-router';
-import { ScrollView, View } from 'react-native';
+import { Platform, ScrollView, View } from 'react-native';
 
 import { AppSafeAreaView, Text } from '@/src/components';
 import { isPlainUserSession } from '@/src/core/navigation/default-route';
@@ -36,7 +36,13 @@ export function UnifiedCommunityDashboardContent() {
     ['notifications', 'Notifications', summary.summary?.unreadNotices ? `${summary.summary.unreadNotices} unread` : 'Broadcast alerts', '/member/notifications'],
     ['trending-up', 'Overview', 'Performance insights', '/finance/finance-analytics'],
     ] as const
-  ).filter(([, title]) => !(isNormalUser && title === 'Publication'));
+  ).filter(([, title]) => {
+    if (Platform.OS === 'ios' && title === 'Donation') {
+      return false;
+    }
+
+    return !(isNormalUser && title === 'Publication');
+  });
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
