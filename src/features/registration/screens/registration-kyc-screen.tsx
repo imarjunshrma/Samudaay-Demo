@@ -5,6 +5,7 @@ import { Alert, View } from 'react-native';
 
 import { AppHeader, Button, DateField, FormScreenLayout, IconButton, OTPInput, PhoneInput, ProgressStepper, SelectField, Text, TextField } from '@/src/components';
 import { bloodGroupOptions } from '@/src/constants/blood-groups';
+import { countryCallingCodeOptions } from '@/src/constants/country-calling-codes';
 import { KycDocumentUploadSection } from '@/src/features/registration/components/kyc-document-upload-section';
 import { formSchemas } from '@/src/components/forms/validation';
 import { useLocalizedBrandText } from '@/src/core/config/brand';
@@ -34,6 +35,38 @@ type CommunityOption = {
 };
 
 type ImageSourceChoice = 'camera' | 'gallery';
+
+function isIndiaCountry(country?: string | null) {
+  return String(country || '').trim().toLowerCase() === 'india';
+}
+
+function resolveCountryFromPhone({
+  countryCode,
+  mobileNumber,
+}: {
+  countryCode?: string | null;
+  mobileNumber?: string | null;
+}) {
+  const normalizedCountryCode = String(countryCode || '').replace(/[^\d]/g, '');
+  if (normalizedCountryCode) {
+    const byCountryCode = countryCallingCodeOptions.find((option) => option.dialCode.replace(/[^\d]/g, '') === normalizedCountryCode);
+    if (byCountryCode?.countryName) {
+      return byCountryCode.countryName;
+    }
+  }
+
+  const phone = String(mobileNumber || '').trim();
+  if (phone.startsWith('+')) {
+    const byPhonePrefix = [...countryCallingCodeOptions]
+      .sort((left, right) => right.value.length - left.value.length)
+      .find((option) => phone.startsWith(option.value));
+    if (byPhonePrefix?.countryName) {
+      return byPhonePrefix.countryName;
+    }
+  }
+
+  return 'India';
+}
 
 function chooseImageSource() {
   return new Promise<ImageSourceChoice | null>((resolve) => {
@@ -96,8 +129,26 @@ export function RegistrationKycScreen() {
     isLoadingCities,
     selectCountry,
     selectState,
-  } = useCountryStateCityOptions();
+  } = useCountryStateCityOptions({
+    countryName: registrationCountry,
+  });
   const hadSessionRef = useRef(Boolean(session));
+  const prefilledCountryRef = useRef<string | null>(null);
+  const inferredRegistrationCountry = useMemo(
+    () => resolveCountryFromPhone({
+      countryCode: session?.user.countryCode,
+      mobileNumber: session?.user.mobileNumber,
+    }),
+    [session?.user.countryCode, session?.user.mobileNumber],
+  );
+
+  useEffect(() => {
+    if (step === 2 && prefilledCountryRef.current !== inferredRegistrationCountry) {
+      prefilledCountryRef.current = inferredRegistrationCountry;
+      setRegistrationCountry(inferredRegistrationCountry);
+      selectCountry(inferredRegistrationCountry);
+    }
+  }, [inferredRegistrationCountry, selectCountry, step]);
 
   useEffect(() => {
     const hadSession = hadSessionRef.current;
@@ -355,7 +406,7 @@ export function RegistrationKycScreen() {
                 addressLine2: '',
                 city: '',
                 state: '',
-                country: 'India',
+                country: inferredRegistrationCountry,
                 pincode: '',
                 aadhaarNumber: '',
                 panNumber: '',
@@ -564,6 +615,7 @@ export function RegistrationKycScreen() {
                       setFieldValue('city', '');
                       setFieldValue('aadhaarNumber', '');
                       setFieldValue('passportNumber', '');
+                      setRegistrationCountry(value);
                       selectCountry(value);
                     }}
                     options={countryOptions}
@@ -610,16 +662,22 @@ export function RegistrationKycScreen() {
                   <TextField
                     label={t('field.pincode')}
                     value={values.pincode}
-                    onChangeText={(value) => setFieldValue('pincode', value.replace(/[^\d]/g, '').slice(0, 6))}
+                    onChangeText={(value) => {
+                      const nextValue = isIndiaCountry(values.country)
+                        ? value.replace(/[^\d]/g, '').slice(0, 6)
+                        : value.toUpperCase().replace(/[^A-Z0-9 -]/g, '').slice(0, 12);
+                      setFieldValue('pincode', nextValue);
+                    }}
                     placeholder={t('field.pincode')}
-                    keyboardType="number-pad"
-                    maxLength={6}
+                    keyboardType={isIndiaCountry(values.country) ? 'number-pad' : 'default'}
+                    autoCapitalize="characters"
+                    maxLength={isIndiaCountry(values.country) ? 6 : 12}
                     error={touched.pincode ? errors.pincode : undefined}
                     variant="registration"
                     labelVariant="default"
                     required
                   />
-                  {String(values.country || '').trim().toLowerCase() === 'india' ? (
+                  {isIndiaCountry(values.country) ? (
                     <TextField
                       label={t('field.aadhaarNumber')}
                       value={values.aadhaarNumber}
@@ -646,16 +704,18 @@ export function RegistrationKycScreen() {
                       required
                     />
                   )}
-                  <TextField
-                    label={t('field.panNumber')}
-                    value={values.panNumber}
-                    onChangeText={(value) => setFieldValue('panNumber', value.toUpperCase())}
-                    placeholder={t('field.panNumber.placeholder')}
-                    autoCapitalize="characters"
-                    error={touched.panNumber ? errors.panNumber : undefined}
-                    variant="registration"
-                    labelVariant="default"
-                  />
+                  {isIndiaCountry(values.country) ? (
+                    <TextField
+                      label={t('field.panNumber')}
+                      value={values.panNumber}
+                      onChangeText={(value) => setFieldValue('panNumber', value.toUpperCase())}
+                      placeholder={t('field.panNumber.placeholder')}
+                      autoCapitalize="characters"
+                      error={touched.panNumber ? errors.panNumber : undefined}
+                      variant="registration"
+                      labelVariant="default"
+                    />
+                  ) : null}
                   <Button
                     variant="primary"
                     size="lg"
@@ -676,9 +736,12 @@ export function RegistrationKycScreen() {
                       setFieldTouched('state', true);
                       setFieldTouched('country', true);
                       setFieldTouched('pincode', true);
-                      setFieldTouched('aadhaarNumber', true);
-                      setFieldTouched('panNumber', true);
-                      setFieldTouched('passportNumber', true);
+                      if (isIndiaCountry(values.country)) {
+                        setFieldTouched('aadhaarNumber', true);
+                        setFieldTouched('panNumber', true);
+                      } else {
+                        setFieldTouched('passportNumber', true);
+                      }
                       setFieldTouched('bloodGroup', true);
                       void submitForm();
                     }}>
@@ -692,6 +755,7 @@ export function RegistrationKycScreen() {
           {step === 3 ? (
             <Formik
               initialValues={{
+                country: registrationCountry || 'India',
                 aadhaarDocument: null as FileValue | null,
                 passportDocument: null as FileValue | null,
                 jatiNoDakhloDocument: null as FileValue | null,

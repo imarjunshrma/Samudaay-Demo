@@ -87,7 +87,7 @@ const filterItems = [
 
 const tabsItems = [
   { key: 'all', label: 'All Activities' },
-  { key: 'donations', label: 'Donations' },
+  { key: 'donations', label: 'Contributions' },
   { key: 'events', label: 'Events' },
   { key: 'subscriptions', label: 'Subscriptions' },
 ];
@@ -114,7 +114,7 @@ const sidebarItems = [
   { key: 'profile', icon: 'person', label: 'My Profile' },
   { key: 'family', icon: 'group', label: 'Family' },
   { key: 'events', icon: 'event', label: 'Events' },
-  { key: 'donations', icon: 'volunteer-activism', label: 'Donations' },
+  { key: 'donations', icon: 'volunteer-activism', label: 'Contributions' },
   { key: 'news', icon: 'newspaper', label: 'News' },
   { key: 'matrimony', icon: 'favorite', label: 'Matrimony' },
   { key: 'transactions', icon: 'payments', label: 'My Transactions' },
@@ -128,7 +128,7 @@ const updatedSidebarItems = [
   { key: 'profile', icon: 'person', label: 'My Profile' },
   { key: 'directory', icon: 'person-search', label: 'Member Directory' },
   { key: 'trustees', icon: 'supervisor-account', label: 'Trustees' },
-  { key: 'donations', icon: 'volunteer-activism', label: 'Donations' },
+  { key: 'donations', icon: 'volunteer-activism', label: 'Contributions' },
   { key: 'news', icon: 'newspaper', label: 'News' },
   { key: 'matrimony', icon: 'favorite', label: 'Matrimony' },
   { key: 'transactions', icon: 'payments', label: 'My Transactions' },
@@ -268,7 +268,7 @@ export function DesignSystemShowcaseScreen() {
             <View style={{ gap: spacing[3] }}>
               <Text variant="h5">Analytics Cards</Text>
               <AnalyticsStatCard title="Active Users" value="18,420" variant="accent" />
-              <AnalyticsStatCard title="Monthly Donations" value="₹12.6L" variant="success" />
+              <AnalyticsStatCard title="Monthly Contributions" value="₹12.6L" variant="success" />
               <AnalyticsStatCard title="Event Registrations" value="4,821" variant="purple" />
               <AnalyticsChartCard
                 title="Traffic Trend"
@@ -736,7 +736,7 @@ export function DesignSystemShowcaseScreen() {
         <SectionCard title="Feedback States">
           <View style={{ gap: spacing[4] }}>
             <EmptyState
-              title="No donations yet"
+              title="No contributions yet"
               description="Use the shared empty state for fresh sections and blank dashboards."
               action={{ label: 'Trigger Toast', onPress: () => show('success', 'Action complete', 'Empty state action executed.') }}
             />

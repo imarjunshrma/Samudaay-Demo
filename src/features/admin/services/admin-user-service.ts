@@ -56,9 +56,6 @@ export type AdminUserRegistrationSummary = {
   invited: number;
   registered: number;
   total: number;
-  paid?: number;
-  unpaid?: number;
-  locked?: number;
 };
 
 export type AdminAppSettings = {

@@ -39,7 +39,7 @@ function formatAbsoluteDate(value?: string | null, includeTime = false) {
   });
 }
 
-function formatDisplayValue(value: unknown, fallback = 'Not provided'): string {
+function formatDisplayValue(value: unknown, fallback = 'Not provided') {
   if (value === null || value === undefined) return fallback;
   if (typeof value === 'string') {
     const trimmed = value.trim();
@@ -52,8 +52,8 @@ function formatDisplayValue(value: unknown, fallback = 'Not provided'): string {
     return value ? 'Yes' : 'No';
   }
   if (Array.isArray(value)) {
-    const items: string[] = value
-      .map((item): string => formatDisplayValue(item, ''))
+    const items = value
+      .map((item) => formatDisplayValue(item, ''))
       .filter(Boolean);
     return items.length ? items.join(', ') : fallback;
   }

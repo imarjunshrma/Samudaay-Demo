@@ -276,7 +276,7 @@ export function DonationManagementScreen({
     stateName: behalfFields.state || '',
   });
   const impactValue = useMemo(() => metrics[0]?.value || '₹0', [metrics]);
-  const impactLabel = useMemo(() => metrics[0]?.label || t('fallback.totalDonations'), [metrics, t]);
+  const impactLabel = useMemo(() => metrics[0]?.label || t('fallback.totalContributions'), [metrics, t]);
   const customAmountHelperText = useMemo(() => {
     const amountValue = typeof amount === 'number' ? amount : Number(amount || 0);
     if (!Number.isFinite(amountValue) || amountValue <= 0) {

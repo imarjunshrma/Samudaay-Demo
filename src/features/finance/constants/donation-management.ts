@@ -7,6 +7,6 @@ export const donationHistoryItems = [
 export const donationBottomNav = [
   { key: 'home', label: 'Home', icon: 'home', active: false },
   { key: 'family', label: 'Family', icon: 'groups', active: false },
-  { key: 'donations', label: 'Donations', icon: 'volunteer-activism', active: true },
+  { key: 'donations', label: 'Contributions', icon: 'volunteer-activism', active: true },
   { key: 'profile', label: 'Profile', icon: 'person', active: false },
 ] as const;

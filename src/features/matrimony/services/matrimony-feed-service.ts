@@ -170,7 +170,6 @@ export type MatrimonyProfileRecord = {
   firstName: string;
   lastName: string;
   dob?: string | null;
-  age?: number | null;
   height?: string | null;
   gender?: string | null;
   maritalStatus?: string | null;
@@ -695,7 +694,6 @@ function mapProfileRecord(profile: {
   firstName: string;
   lastName?: string | null;
   dob?: string | null;
-  age?: number | null;
   height?: string | null;
   education?: string | null;
   occupation?: string | null;
@@ -708,7 +706,6 @@ function mapProfileRecord(profile: {
   familyBackground?: string | null;
   caste?: string | null;
   community?: string | null;
-  area?: string | null;
   city?: string | null;
   state?: string | null;
   country?: string | null;
@@ -729,7 +726,6 @@ function mapProfileRecord(profile: {
     phone?: string | null;
     email?: string | null;
   } | null;
-  connection?: MatrimonyDiscoveryItem['connection'];
   createdAt?: string | null;
   updatedAt?: string | null;
 }): MatrimonyProfileRecord {
@@ -739,7 +735,6 @@ function mapProfileRecord(profile: {
     firstName: normalizeProfileText(profile.firstName),
     lastName: normalizeProfileText(profile.lastName),
     dob: profile.dob || null,
-    age: typeof profile.age === 'number' ? profile.age : null,
     height: profile.height || null,
     gender: normalizeProfileText(profile.gender) || null,
     maritalStatus: normalizeProfileText(profile.maritalStatus) || null,

@@ -10,7 +10,7 @@ export function AdminRoleQuickReference() {
   const rows = [
     ['Manage Members', 'User and member administration', 'group', true],
     ['Create Events', 'Event creation and publishing', 'campaign', true],
-    ['Approve Donations', 'Contribution review and approval', 'payments', false],
+    ['Approve Contributions', 'Contribution review and approval', 'payments', false],
     ['Content Moderation', 'Content and community control', 'gavel', false],
   ] as const;
 

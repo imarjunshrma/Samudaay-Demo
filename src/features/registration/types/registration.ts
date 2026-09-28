@@ -43,6 +43,7 @@ export interface KycQueueItem {
   memberName: string;
   memberId?: string;
   phone?: string;
+  countryCode?: string;
   photoUrl?: string;
   city: string;
   documents: string[];

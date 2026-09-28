@@ -13,7 +13,7 @@ import { registrationService } from '@/src/features/registration/services/regist
 import type { KycDocument } from '@/src/features/registration/types/registration';
 import { pickImageFromMediaLibrary } from '@/src/services/device/media-picker';
 import { ApprovedDocumentCard, ActionDocumentCard, DocumentManagementPageSkeleton } from '../components';
-import { DOCUMENT_SLOTS, getDocumentStatusMeta, getDocumentSummary, inferDocumentType } from '../utils';
+import { getDocumentSlotsForCountry, getDocumentStatusMeta, getDocumentSummary, inferDocumentType } from '../utils';
 import type { DocumentSlot } from '../utils';
 
 function getDocumentUri(document?: KycDocument) {
@@ -106,6 +106,7 @@ export function DocumentManagementScreen() {
   const navigateBack = useBackNavigation();
   const t = useTranslations('profile.document-management');
   const [documents, setDocuments] = useState<KycDocument[]>([]);
+  const [country, setCountry] = useState<string | null>(null);
   const [registrationId, setRegistrationId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [previewDocument, setPreviewDocument] = useState<KycDocument | null>(null);
@@ -115,6 +116,7 @@ export function DocumentManagementScreen() {
     try {
       const draft = await registrationService.loadDraft();
       setRegistrationId(draft.registrationId ?? null);
+      setCountry(draft.country ?? 'India');
       setDocuments(draft.documents ?? []);
     } finally {
       setIsLoading(false);
@@ -133,7 +135,8 @@ export function DocumentManagementScreen() {
     return result;
   }, [documents]);
 
-  const summary = useMemo(() => getDocumentSummary(documentsByType), [documentsByType]);
+  const documentSlots = useMemo(() => getDocumentSlotsForCountry(country), [country]);
+  const summary = useMemo(() => getDocumentSummary(documentsByType, documentSlots), [documentSlots, documentsByType]);
 
   async function pickAndUpload(slot: DocumentSlot) {
     if (!registrationId) {
@@ -240,7 +243,7 @@ export function DocumentManagementScreen() {
                 </View>
               </View>
 
-              {DOCUMENT_SLOTS.map((slot) => (
+              {documentSlots.map((slot) => (
                 <View key={slot.type} style={styles.itemSpacing}>
                   {renderDocumentCard(slot, documentsByType.get(slot.type), async () => {
                     await pickAndUpload(slot);

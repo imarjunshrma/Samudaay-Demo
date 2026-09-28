@@ -29,7 +29,7 @@ const manualSections: ManualSection[] = [
     icon: 'dashboard',
     summary: 'The dashboard is the main entry point for quick actions, updates, and community shortcuts.',
     steps: [
-      'Use the action grid to open member directory, events, donations, publications, and matrimony.',
+      'Use the action grid to open member directory, events, contributions, publications, and matrimony.',
       'Check notices, birthday reminders, and community updates from the dashboard sections.',
       'Use the menu or bottom tabs to move between major areas of the app.',
     ],
@@ -68,11 +68,11 @@ const manualSections: ManualSection[] = [
     ],
   },
   {
-    title: 'Donations and Transactions',
+    title: 'Contributions and Transactions',
     icon: 'volunteer-activism',
-    summary: 'Make donations, view receipts, and track your paid activity.',
+    summary: 'Make contributions, view receipts, and track your paid activity.',
     steps: [
-      'Open Donations and enter amount, purpose, and contributor details.',
+      'Open Contributions and enter amount, purpose, and contributor details.',
       'Contribute as yourself or on behalf of another person where supported.',
       'Complete online payment and wait for the success receipt confirmation.',
       'Open Transactions to view contribution receipts, event payments, and subscription activity.',
@@ -203,7 +203,7 @@ export function UserManualContent() {
             How to use the app
           </Text>
           <Text variant="body" color={colors.text.secondary} style={{ lineHeight: 22 }}>
-            A quick guide for registration, profile, events, donations, publications, matrimony, notifications, and everyday member actions.
+            A quick guide for registration, profile, events, contributions, publications, matrimony, notifications, and everyday member actions.
           </Text>
         </View>
 

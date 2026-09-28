@@ -57,7 +57,7 @@
   "actions.completeRegistration": "નોંધણી પૂર્ણ કરો",
   "section.documents.title": "દસ્તાવેજ અપલોડ",
   "section.documents.description": "કૃપા કરીને ચકાસણી માટે આધાર અથવા પાસપોર્ટ અને એક સહાયક દસ્તાવેજ અપલોડ કરો.",
-  "document.aadhaar.title": "આધાર કાર્ડ/ PAN કાર્ડ",
+  "document.aadhaar.title": "આધાર કાર્ડ",
   "document.aadhaar.subtitle": "PDF/JPG અપલોડ કરો",
   "document.passport.title": "પાસપોર્ટ",
   "document.passport.subtitle": "પાસપોર્ટ ઇમેજ અપલોડ કરો",

@@ -382,7 +382,6 @@ type BackendCommunitySessionResponse = {
     status: SessionUser['communityMembershipStatus'];
     kycStatus: SessionUser['kycStatus'];
     onboardingCompleted: boolean;
-    appMembership?: SessionUser['appMembership'] | null;
     subCommunity?: string | null;
   };
 };

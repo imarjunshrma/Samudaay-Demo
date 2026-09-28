@@ -69,7 +69,7 @@ export function MyProfileContent() {
       return;
     }
 
-    const supportEmail = 'connect@samudaay.co.in';
+    const supportEmail = 'connect@mectv.org';
     const subject = encodeURIComponent('Delete Account Request');
     const body = encodeURIComponent(
       [

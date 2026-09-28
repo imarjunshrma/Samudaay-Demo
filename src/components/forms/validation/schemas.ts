@@ -72,6 +72,7 @@ export const fieldSchemas = {
   expenseTitle: Yup.string().min(2, 'Expense title must be at least 2 characters').max(80, 'Expense title must be less than 80 characters').required('Expense title is required'),
   requiredSelect: Yup.string().required('Please select an option'),
   pincode: Yup.string().max(6, 'Enter valid 6-digit pincode').matches(/^\d{6}$/, 'Enter valid 6-digit pincode').required('Pincode is required'),
+  postalCode: Yup.string().trim().min(3, 'Enter valid postal code').max(12, 'Enter valid postal code').matches(/^[A-Z0-9 -]+$/i, 'Enter valid postal code').required('Postal code is required'),
   date: Yup.date().required('Date is required'),
   dateOptional: Yup.date().nullable(),
   consent: Yup.boolean().oneOf([true], 'You must accept the terms'),
@@ -108,7 +109,10 @@ export const formSchemas = {
     city: Yup.string().required('City is required'),
     state: Yup.string().required('State is required'),
     country: Yup.string().required('Country is required'),
-    pincode: fieldSchemas.pincode,
+    pincode: fieldSchemas.pincode.when('country', {
+      is: (country: string) => String(country || '').trim().toLowerCase() === 'india',
+      otherwise: () => fieldSchemas.postalCode,
+    }),
     aadhaarNumber: fieldSchemas.aadhaarOptional.when('country', {
       is: (country: string) => String(country || '').trim().toLowerCase() === 'india',
       then: () => fieldSchemas.aadhaar,
@@ -121,6 +125,7 @@ export const formSchemas = {
     bloodGroup: bloodGroupSchema,
   }),
   registrationKyc: Yup.object({
+    country: Yup.string().optional(),
     aadhaarDocument: fieldSchemas.fileOptional,
     passportDocument: fieldSchemas.fileOptional,
     jatiNoDakhloDocument: fieldSchemas.fileOptional,
@@ -128,13 +133,19 @@ export const formSchemas = {
     profilePhoto: fieldSchemas.file.required('Profile photo is required'),
     consent: fieldSchemas.consent,
   }).test('identity-document-required', 'Upload Aadhaar or Passport', function (value) {
-    if (value?.aadhaarDocument || value?.passportDocument) {
+    const isIndia = String(value?.country || '').trim().toLowerCase() === 'india';
+
+    if (isIndia && value?.aadhaarDocument) {
+      return true;
+    }
+
+    if (!isIndia && (value?.aadhaarDocument || value?.passportDocument)) {
       return true;
     }
 
     return this.createError({
-      path: 'aadhaarDocument',
-      message: 'Upload Aadhaar or Passport',
+      path: isIndia ? 'aadhaarDocument' : 'passportDocument',
+      message: isIndia ? 'Upload Aadhaar Card' : 'Upload Aadhaar or Passport',
     });
   }).test('supporting-document-required', 'Upload Caste Certificate or School Certificate', function (value) {
     if (value?.jatiNoDakhloDocument || value?.schoolCertificateDocument) {

@@ -501,7 +501,7 @@ export function ProfitLossScreenContent({
                   key={item.label}
                   label={item.label}
                   amount={formatAnalyticsCurrency(item.value)}
-                  icon={item.label === 'Donations' || item.label === 'Donations' ? 'volunteer-activism' : item.label === 'Events' ? 'event-available' : item.label === 'Matrimony' ? 'favorite' : 'ad-units'}
+                  icon={item.label === 'Donations' || item.label === 'Contributions' ? 'volunteer-activism' : item.label === 'Events' ? 'event-available' : item.label === 'Matrimony' ? 'favorite' : 'ad-units'}
                 />
               ))}
             </View>

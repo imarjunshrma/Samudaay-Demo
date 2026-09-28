@@ -265,7 +265,7 @@ async function buildDonationAnalytics(): Promise<AnalyticsModuleData> {
       accentColor: item.status === 'PAID' ? colors.status.success : item.status === 'PENDING' ? colors.status.warning : colors.status.error,
     })),
     insights: [
-      pendingItems.length > paidItems.length ? 'Pending contribution records are higher than completed receipts.' : 'Settled donations are ahead of pending receipts.',
+      pendingItems.length > paidItems.length ? 'Pending contribution records are higher than completed receipts.' : 'Settled contributions are ahead of pending receipts.',
       recurringDonors.size ? `${formatCompactNumber(recurringDonors.size)} contributors have contributed at least once in current data.` : 'No recurring contributor trend is available yet.',
     ],
   };

@@ -21,7 +21,9 @@ export interface UserProfile {
   state?: string | null;
   country?: string | null;
   pincode?: string | null;
+  aadhaarNumber?: string | null;
   panNumber?: string | null;
+  passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
   status?: string | null;

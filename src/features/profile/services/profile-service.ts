@@ -28,7 +28,9 @@ type BackendProfileResponse = {
   state?: string | null;
   country?: string | null;
   pincode?: string | null;
+  aadhaarNumber?: string | null;
   panNumber?: string | null;
+  passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
   profileUpdateRequest?: UserProfile['profileUpdateRequest'];
@@ -80,7 +82,9 @@ async function buildProfileWithSecondaryLanguage(source: {
   state?: string | null;
   country?: string | null;
   pincode?: string | null;
+  aadhaarNumber?: string | null;
   panNumber?: string | null;
+  passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
   status: string | null;
@@ -121,7 +125,9 @@ async function buildProfileWithSecondaryLanguage(source: {
     state: source.state ?? null,
     country: source.country ?? null,
     pincode: source.pincode ?? null,
+    aadhaarNumber: source.aadhaarNumber ?? null,
     panNumber: source.panNumber ?? null,
+    passportNumber: source.passportNumber ?? null,
     bloodGroup: source.bloodGroup ?? null,
     subCommunity: source.subCommunity ?? null,
     status: source.status,
@@ -328,7 +334,9 @@ async function mapBackendProfile(
     state: data.state ?? null,
     country: data.country ?? null,
     pincode: data.pincode ?? null,
+    aadhaarNumber: data.aadhaarNumber ?? null,
     panNumber: data.panNumber ?? null,
+    passportNumber: data.passportNumber ?? null,
     bloodGroup: data.bloodGroup ?? null,
     subCommunity: data.subCommunity ?? null,
     status: data.status ?? fallback.status ?? null,
@@ -427,7 +435,9 @@ export const profileService = {
       formData.append('state', nextProfileToPersist.state ?? '');
       formData.append('country', nextProfileToPersist.country ?? '');
       formData.append('pincode', nextProfileToPersist.pincode ?? '');
+      formData.append('aadhaarNumber', nextProfileToPersist.aadhaarNumber ?? '');
       formData.append('panNumber', nextProfileToPersist.panNumber ?? '');
+      formData.append('passportNumber', nextProfileToPersist.passportNumber ?? '');
       formData.append('bloodGroup', nextProfileToPersist.bloodGroup ?? '');
       formData.append('subCommunity', nextProfileToPersist.subCommunity ?? '');
       formData.append('file', {
@@ -468,7 +478,9 @@ export const profileService = {
           state: nextProfileToPersist.state,
           country: nextProfileToPersist.country,
           pincode: nextProfileToPersist.pincode,
+          aadhaarNumber: nextProfileToPersist.aadhaarNumber,
           panNumber: nextProfileToPersist.panNumber,
+          passportNumber: nextProfileToPersist.passportNumber,
           bloodGroup: nextProfileToPersist.bloodGroup,
           subCommunity: nextProfileToPersist.subCommunity,
         }),

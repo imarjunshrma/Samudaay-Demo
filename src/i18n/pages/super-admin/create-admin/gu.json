@@ -9,7 +9,7 @@
   "roles.superAdmin.description": "બધા મોડ્યુલ અને સિસ્ટમ સેટિંગ્સ પર સંપૂર્ણ ઍક્સેસ",
   "roles.eventAdmin.title": "ઇવેન્ટ એડમિન",
   "roles.eventAdmin.description": "સમુદાય મીટઅપ્સ, વર્કશોપ્સ અને પ્રદર્શનોનું સંચાલન",
-  "roles.donationAdmin.title": "દાન એડમિન",
+  "roles.donationAdmin.title": "યોગદાન એડમિન",
   "roles.donationAdmin.description": "ક્રાઉડફંડિંગ અને ચેરિટી વિતરણ રેકોર્ડ્સનું સંચાલન",
   "roles.matrimonyAdmin.title": "વિવાહ એડમિન",
   "roles.matrimonyAdmin.description": "પ્રોફાઇલ્સની સમીક્ષા અને મેળાપમાં મદદ",
@@ -20,7 +20,7 @@
   "permissions.contentModeration.title": "કન્ટેન્ટ મોડરેશન",
   "permissions.contentModeration.description": "પોસ્ટ અને ટિપ્પણીઓ કાઢી શકે",
   "permissions.financialReporting.title": "વિત્તીય રિપોર્ટિંગ",
-  "permissions.financialReporting.description": "દાન રિપોર્ટ્સ જોઈ અને નિકાસ કરી શકે",
+  "permissions.financialReporting.description": "યોગદાન રિપોર્ટ્સ જોઈ અને નિકાસ કરી શકે",
   "actions.cancel": "રદ કરો",
   "actions.create": "ઍક્સેસ આપો"
 }

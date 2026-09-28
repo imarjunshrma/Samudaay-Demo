@@ -9,7 +9,37 @@ export type DocumentSlot = {
 
 export const REQUIRED_KYC_DOCUMENT_COUNT = 2;
 
+const SUPPORTING_DOCUMENT_SLOTS: DocumentSlot[] = [
+  { type: 'JATI_NO_DAKHLO', title: 'Caste Certificate', icon: 'description' },
+  { type: 'SCHOOL_CERTIFICATE', title: 'School Certificate', icon: 'school' },
+];
+
 export const DOCUMENT_SLOTS: DocumentSlot[] = [
+  { type: 'AADHAAR_CARD', title: 'Aadhaar Card', icon: 'badge' },
+  ...SUPPORTING_DOCUMENT_SLOTS,
+];
+
+export function getDocumentSlotsForCountry(country?: string | null): DocumentSlot[] {
+  const normalizedCountry = String(country || '').trim().toLowerCase();
+  const isIndia = !normalizedCountry || normalizedCountry === 'india';
+  return [
+    isIndia
+      ? { type: 'AADHAAR_CARD', title: 'Aadhaar Card', icon: 'badge' }
+      : { type: 'PASSPORT', title: 'Passport', icon: 'badge' },
+    ...SUPPORTING_DOCUMENT_SLOTS,
+  ];
+}
+
+export function getRequiredIdentityDocumentType(country?: string | null) {
+  const normalizedCountry = String(country || '').trim().toLowerCase();
+  return !normalizedCountry || normalizedCountry === 'india' ? 'AADHAAR_CARD' : 'PASSPORT';
+}
+
+export function getRequiredKycDocumentCount() {
+  return REQUIRED_KYC_DOCUMENT_COUNT;
+}
+
+export const LEGACY_DOCUMENT_SLOTS: DocumentSlot[] = [
   { type: 'AADHAAR_CARD', title: 'Aadhaar Card', icon: 'badge' },
   { type: 'JATI_NO_DAKHLO', title: 'Caste Certificate', icon: 'description' },
   { type: 'SCHOOL_CERTIFICATE', title: 'School Certificate', icon: 'school' },
@@ -28,6 +58,9 @@ export function inferDocumentType(document: KycDocument) {
   const normalizedName = normalizeDocumentType(document.name);
   if (normalizedName.includes('AADHAAR')) {
     return 'AADHAAR_CARD';
+  }
+  if (normalizedName.includes('PASSPORT')) {
+    return 'PASSPORT';
   }
   if (normalizedName.includes('JATI') || normalizedName.includes('DAKHLO')) {
     return 'JATI_NO_DAKHLO';
@@ -90,7 +123,7 @@ export function getDocumentStatusMeta(document?: KycDocument) {
   };
 }
 
-export function getDocumentSummary(documentsByType: Map<string, KycDocument>) {
+export function getDocumentSummary(documentsByType: Map<string, KycDocument>, slots: DocumentSlot[] = DOCUMENT_SLOTS) {
   const summary = {
     verified: 0,
     rejected: 0,
@@ -98,11 +131,11 @@ export function getDocumentSummary(documentsByType: Map<string, KycDocument>) {
     missing: 0,
     submitted: 0,
     required: REQUIRED_KYC_DOCUMENT_COUNT,
-    total: DOCUMENT_SLOTS.length,
+    total: slots.length,
     needsAction: false,
   };
 
-  for (const slot of DOCUMENT_SLOTS) {
+  for (const slot of slots) {
     const document = documentsByType.get(slot.type);
     if (!document) {
       summary.missing += 1;

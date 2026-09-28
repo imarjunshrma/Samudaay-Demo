@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Animated, Easing, Linking, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Alert, Animated, Easing, Linking, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { createElement, useEffect, useRef, useState } from 'react';
 import type { ElementType } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -55,7 +55,7 @@ export function LocationMapPreview({
       };
       NativeMapView = mapsModule.default;
       NativeMarker = mapsModule.Marker;
-      nativeGoogleProvider = mapsModule.PROVIDER_GOOGLE;
+      nativeGoogleProvider = Platform.OS === 'android' ? mapsModule.PROVIDER_GOOGLE : undefined;
     } catch (error) {
       NativeMapView = null;
       NativeMarker = null;

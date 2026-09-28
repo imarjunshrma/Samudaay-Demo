@@ -229,7 +229,6 @@ export const analyticsService = {
           donation: Number(responseSummary?.typeCounts?.donation || 0),
           event: Number(responseSummary?.typeCounts?.event || 0),
           matrimony: Number(responseSummary?.typeCounts?.matrimony || 0),
-          membership: Number(responseSummary?.typeCounts?.membership || 0),
           expense: Number(responseSummary?.typeCounts?.expense || 0),
         },
         statusCounts: {

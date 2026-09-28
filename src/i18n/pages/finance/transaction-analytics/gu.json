@@ -1,6 +1,6 @@
 {
   "title": "વ્યવહાર વિશ્લેષણ",
-  "metric.totalDonations": "કુલ દાન",
+  "metric.totalDonations": "કુલ યોગદાન",
   "metric.matrimonyRevenue": "વિવાહ આવક",
   "metric.totalIncome": "કુલ આવક",
   "metric.totalExpense": "કુલ ખર્ચ",
@@ -15,7 +15,7 @@
   "filter.last6Months": "છેલ્લા 6 મહિના",
   "filter.last12Months": "છેલ્લા 12 મહિના",
   "filter.rangeLabel": "{count} મહિના",
-  "section.topPincodes": "મુખ્ય દાન પિનકોડ્સ",
+  "section.topPincodes": "મુખ્ય યોગદાન પિનકોડ્સ",
   "section.recent": "તાજેતરના વ્યવહારો",
   "cta.viewAll": "બધું જુઓ",
   "actions.showLess": "ઓછું બતાવો",

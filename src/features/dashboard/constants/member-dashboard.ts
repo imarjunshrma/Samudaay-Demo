@@ -11,7 +11,7 @@ export const dashboardItems = [
   { icon: 'person', title: 'My Profile', subtitle: 'Manage details' },
   { icon: 'family-restroom', title: 'Family', subtitle: '4 Registered' },
   { icon: 'calendar-month', title: 'Events', subtitle: 'Next: Annual Meet' },
-  { icon: 'volunteer-activism', title: 'Donations', subtitle: 'History & Support' },
+  { icon: 'volunteer-activism', title: 'Contributions', subtitle: 'History & Support' },
   { icon: 'newspaper', title: 'Publication', subtitle: "The Cobbler's Journal" },
   { icon: 'favorite', title: 'Matrimony', subtitle: 'Find matches' },
 ] as const;

@@ -47,7 +47,7 @@ function resolveDashboardCardRoute(card: Pick<DashboardCardItem, 'icon' | 'title
         case 'Birthdays':
           return '/member/birthday-reminders';
         case 'Donations':
-        case 'Donations':
+        case 'Contributions':
           return '/member/donations';
         case 'News':
           return '/publications/archive';
@@ -80,7 +80,7 @@ function resolveDashboardCardSubtitle(card: DashboardCardItem, summary?: MemberD
     case 'Events':
       return (summary?.eventsJoined ?? 0) > 0 ? `${summary?.eventsJoined} joined` : card.subtitle;
     case 'Donations':
-    case 'Donations':
+    case 'Contributions':
       return `${summary?.donationCount ?? 0} records`;
     case 'Birthdays':
       return (summary?.birthdayTodayCount ?? 0) > 0 ? `${summary?.birthdayTodayCount} today` : 'Upcoming wishes';
@@ -186,7 +186,7 @@ export const emptyDashboardSummary: MemberDashboardSummary = {
     { title: 'My Profile', subtitle: 'Manage details', status: 'Active', icon: 'person', route: '/member/profile' },
     { title: 'Family', subtitle: '0 registered', status: 'Active', icon: 'family-restroom', route: '/profile/family-management' },
     { title: 'Events', subtitle: 'Browse upcoming events', status: 'Active', icon: 'calendar-month', route: '/events/my-events-list' },
-    { title: 'Donations', subtitle: 'History & Support', status: 'Active', icon: 'volunteer-activism', route: '/member/donations' },
+    { title: 'Contributions', subtitle: 'History & Support', status: 'Active', icon: 'volunteer-activism', route: '/member/donations' },
     { title: 'Expenses', subtitle: 'View community expenses', status: 'Active', icon: 'receipt-long', route: '/finance/expenses' },
     { title: 'Birthdays', subtitle: 'Upcoming wishes', status: 'Active', icon: 'cake', route: '/member/birthday-reminders' },
     { title: 'Matrimony', subtitle: 'Find matches', status: 'Active', icon: 'favorite', route: '/member/matrimony' },

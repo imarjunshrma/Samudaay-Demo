@@ -126,7 +126,7 @@ function resolveUserAssignment(member: DirectoryMemberItem) {
   const activeExpiries = (member.roleAssignments ?? [])
     .filter((assignment) => customRoleKeys.includes(assignment.roleKey))
     .map((assignment) => (assignment.expiresAt ? new Date(assignment.expiresAt) : null))
-    .filter((expiresAt): expiresAt is Date => expiresAt !== null && Number.isFinite(expiresAt.getTime()) && expiresAt.getTime() > Date.now());
+    .filter((expiresAt): expiresAt is Date => Boolean(expiresAt) && Number.isFinite(expiresAt.getTime()) && expiresAt.getTime() > Date.now());
   const firstExpiry = activeExpiries[0] ?? null;
   const commonRoleExpiresAt = firstExpiry && activeExpiries.every((expiresAt) => expiresAt.getTime() === firstExpiry.getTime())
     ? firstExpiry

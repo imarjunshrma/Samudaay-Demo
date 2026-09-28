@@ -1,5 +1,8 @@
 export {
   DOCUMENT_SLOTS,
+  getDocumentSlotsForCountry,
+  getRequiredIdentityDocumentType,
+  getRequiredKycDocumentCount,
   getDocumentStatusMeta,
   getDocumentSummary,
   inferDocumentType,

@@ -2,7 +2,7 @@ export const memberDashboardCards = [
   { title: 'My Profile', subtitle: 'Manage details', icon: 'person' },
   { title: 'Family', subtitle: '4 Registered', icon: 'family-restroom' },
   { title: 'Events', subtitle: 'Next: Annual Meet', icon: 'calendar-month' },
-  { title: 'Donations', subtitle: 'History & Support', icon: 'volunteer-activism' },
+  { title: 'Contributions', subtitle: 'History & Support', icon: 'volunteer-activism' },
   { title: 'Publication', subtitle: "The Cobbler's Journal", icon: 'newspaper' },
   { title: 'Matrimony', subtitle: 'Find matches', icon: 'favorite' },
 ] as const;

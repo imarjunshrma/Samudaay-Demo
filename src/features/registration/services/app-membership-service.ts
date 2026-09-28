@@ -313,8 +313,7 @@ function readRazorpayField(payment: RazorpayPaymentSuccess, snakeKey: keyof Razo
 }
 
 function getRazorpayPaymentErrorMessage(error: RazorpayPaymentError) {
-  const source = error as RazorpayPaymentError & { error?: { description?: string; reason?: string } };
-  const description = source?.description || source?.error?.description || source?.error?.reason;
+  const description = error?.description || error?.error?.description || error?.error?.reason;
   if (description) return description;
   return 'Payment was cancelled or could not be completed.';
 }
@@ -381,11 +380,7 @@ export const appMembershipService = {
       currency: order.currency,
       name: order.name,
       description: order.description,
-      prefill: order.prefill ? {
-        name: order.prefill.name ?? undefined,
-        email: order.prefill.email ?? undefined,
-        contact: order.prefill.contact ?? undefined,
-      } : undefined,
+      prefill: order.prefill,
       theme: { color: colors.primary.DEFAULT },
       modal: { backdropclose: false, confirm_close: true },
     };

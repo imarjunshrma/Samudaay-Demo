@@ -9,6 +9,7 @@
   "sections.profileInformation": "Profile Information",
   "sections.status": "Status",
   "field.fullName": "Full Name",
+  "field.mobile": "Mobile Number",
   "field.gender": "Gender",
   "field.dob": "Date of Birth",
   "field.address": "Registered Address",

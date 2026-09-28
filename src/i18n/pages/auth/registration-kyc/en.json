@@ -57,7 +57,7 @@
   "actions.completeRegistration": "Complete Registration",
   "section.documents.title": "Document Upload",
   "section.documents.description": "Please upload Aadhaar or Passport and one supporting document for verification.",
-  "document.aadhaar.title": "Aadhaar Card/ PAN Card",
+  "document.aadhaar.title": "Aadhaar Card",
   "document.aadhaar.subtitle": "Upload PDF/JPG",
   "document.passport.title": "Passport",
   "document.passport.subtitle": "Upload passport image",

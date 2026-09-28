@@ -113,6 +113,7 @@ export function KycApprovalContent() {
 
     return [
       { label: t('field.fullName'), value: record.memberName },
+      { label: t('field.mobile'), value: record.phone || t('fallback.notProvided') },
       { label: t('field.gender'), value: record.gender ? t(`gender.${String(record.gender).trim().toLowerCase()}`) : t('fallback.notProvided') },
       {
         label: t('field.dob'),

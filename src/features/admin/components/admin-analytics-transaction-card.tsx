@@ -37,7 +37,7 @@ export function AdminAnalyticsTransactionCard({
             </Text>
           </View>
           <Text variant="body" style={{ color: colors.text.secondary, lineHeight: 22 }}>
-            Income, approved expenses, and net movement across donations, events, matrimony, and community expenses.
+            Income, approved expenses, and net movement across contributions, events, matrimony, and community expenses.
           </Text>
         </View>
 

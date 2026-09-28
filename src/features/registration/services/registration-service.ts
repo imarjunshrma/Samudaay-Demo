@@ -64,10 +64,12 @@ type BackendRegistrationSummary = {
   photoUrl?: string | null;
   remarks?: string | null;
   phone?: string | null;
+  countryCode?: string | null;
   user?: {
     id: string;
     name?: string | null;
     phone?: string | null;
+    countryCode?: string | null;
     email?: string | null;
     profilePic?: string | null;
     memberId?: string | null;
@@ -91,6 +93,8 @@ export type KycApprovalRecord = {
   addressLine1?: string;
   addressLine2?: string;
   country?: string;
+  phone?: string;
+  countryCode?: string;
   aadhaarNumber?: string;
   panNumber?: string;
   passportNumber?: string;
@@ -193,6 +197,20 @@ function formatDocumentTitle(type?: string | null, fileName?: string | null) {
     default:
       return 'Document';
   }
+}
+
+function formatPhoneWithCountryCode(phone?: string | null, countryCode?: string | null) {
+  const normalizedPhone = String(phone || '').trim();
+  if (!normalizedPhone) {
+    return undefined;
+  }
+
+  if (normalizedPhone.startsWith('+')) {
+    return normalizedPhone;
+  }
+
+  const normalizedCountryCode = String(countryCode || '').replace(/[^\d]/g, '');
+  return normalizedCountryCode ? `+${normalizedCountryCode} ${normalizedPhone}` : normalizedPhone;
 }
 
 function upsertDraftDocument(
@@ -412,6 +430,8 @@ function mapBackendSummaryToApprovalRecord(record: BackendRegistrationSummary): 
     memberName,
     memberId: record.user?.memberId || undefined,
     photoUrl: resolveBackendMediaUrl(record.photoUrl || record.user?.profilePic),
+    phone: formatPhoneWithCountryCode(record.phone || record.user?.phone, record.countryCode || record.user?.countryCode),
+    countryCode: record.countryCode || record.user?.countryCode || undefined,
     city: record.city || 'Unknown',
     state: record.state || undefined,
     pincode: record.pincode || undefined,
@@ -831,7 +851,8 @@ export const registrationService = {
               id: record.id,
               memberName: [record.firstName, record.middleName, record.lastName].filter(Boolean).join(' ') || record.user?.name || 'Member',
               memberId: record.user?.memberId || undefined,
-              phone: record.phone || record.user?.phone || undefined,
+              phone: formatPhoneWithCountryCode(record.phone || record.user?.phone, record.countryCode || record.user?.countryCode),
+              countryCode: record.countryCode || record.user?.countryCode || undefined,
               photoUrl: resolveBackendMediaUrl(record.photoUrl || record.user?.profilePic),
               city: record.city || 'Unknown',
               documents: mapDocuments(record.kycDocuments).map((document) => document.name),
@@ -855,6 +876,7 @@ export const registrationService = {
           memberName: record.fullNameEn,
           memberId: undefined,
           phone: record.mobileNumber || undefined,
+          countryCode: undefined,
           photoUrl: undefined,
           city: record.city,
           documents: record.documents.map((document) => document.name),
@@ -906,7 +928,8 @@ export const registrationService = {
                 id: record.id,
                 memberName: [record.firstName, record.middleName, record.lastName].filter(Boolean).join(' ') || record.user?.name || 'Member',
                 memberId: record.user?.memberId || undefined,
-                phone: record.phone || record.user?.phone || undefined,
+                phone: formatPhoneWithCountryCode(record.phone || record.user?.phone, record.countryCode || record.user?.countryCode),
+                countryCode: record.countryCode || record.user?.countryCode || undefined,
                 photoUrl: resolveBackendMediaUrl(record.photoUrl || record.user?.profilePic),
                 city: record.city || 'Unknown',
                 documents: mapDocuments(record.kycDocuments).map((document) => document.name),

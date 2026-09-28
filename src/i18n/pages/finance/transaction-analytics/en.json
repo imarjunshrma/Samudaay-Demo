@@ -1,6 +1,6 @@
 {
   "title": "Transaction Analytics",
-  "metric.totalDonations": "Total Donations",
+  "metric.totalDonations": "Total Contributions",
   "metric.matrimonyRevenue": "Matrimony Revenue",
   "metric.totalIncome": "Total Income",
   "metric.totalExpense": "Total Expense",

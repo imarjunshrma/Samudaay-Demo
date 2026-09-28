@@ -7,7 +7,6 @@ import { AppHeader, Button, DateField, Dialog, FileUpload, FormScreenLayout, Sel
 import { fieldSchemas } from '@/src/components/forms/validation';
 import { bloodGroupOptions } from '@/src/constants/blood-groups';
 import type { DialogVariant } from '@/src/components';
-import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useSafeNavigation } from '@/src/core/navigation/safe-navigation';
 import { isAdminLikeSession } from '@/src/core/navigation/default-route';
 import { useSession } from '@/src/core/providers/session-provider';
@@ -35,7 +34,9 @@ type ProfileEditValues = {
   state: string;
   country: string;
   pincode: string;
+  aadhaarNumber: string;
   panNumber: string;
+  passportNumber: string;
   bloodGroup: string;
   profilePhoto: FileValue | null;
 };
@@ -49,6 +50,10 @@ type FeedbackDialogState = {
 };
 
 const DOB_MIN_DATE = new Date(1900, 0, 1);
+
+function isIndiaCountry(country?: string | null) {
+  return String(country || '').trim().toLowerCase() === 'india';
+}
 
 function parseDate(value?: string | null) {
   if (!value) {
@@ -66,7 +71,6 @@ function getToday() {
 }
 
 export function ChangeProfileDetailsContent() {
-  const navigateBack = useBackNavigation();
   const { safeBack } = useSafeNavigation();
   const { session } = useSession();
   const { profile, isSubmitting, saveProfile } = useProfile();
@@ -98,9 +102,11 @@ export function ChangeProfileDetailsContent() {
       area: isVadodaraCity(profile?.city) ? resolveVadodaraArea(profile?.city || '', profile?.area) : profile?.area || '',
       city: profile?.city || '',
       state: profile?.state || '',
-      country: 'India',
+      country: profile?.country || 'India',
       pincode: profile?.pincode || '',
+      aadhaarNumber: profile?.aadhaarNumber || '',
       panNumber: profile?.panNumber || '',
+      passportNumber: profile?.passportNumber || '',
       bloodGroup: profile?.bloodGroup || '',
       profilePhoto: null,
     },
@@ -118,8 +124,19 @@ export function ChangeProfileDetailsContent() {
       city: Yup.string().required(t('edit.validation.cityRequired')),
       state: Yup.string().required(t('edit.validation.stateRequired')),
       country: Yup.string().required(t('edit.validation.countryRequired')),
-      pincode: fieldSchemas.pincode,
+      pincode: fieldSchemas.pincode.when('country', {
+        is: (country: string) => String(country || '').trim().toLowerCase() === 'india',
+        otherwise: () => fieldSchemas.postalCode,
+      }),
+      aadhaarNumber: fieldSchemas.aadhaarOptional.when('country', {
+        is: (country: string) => String(country || '').trim().toLowerCase() === 'india',
+        then: () => fieldSchemas.aadhaar,
+      }),
       panNumber: fieldSchemas.panOptional,
+      passportNumber: fieldSchemas.passportOptional.when('country', {
+        is: (country: string) => String(country || '').trim().toLowerCase() !== 'india',
+        then: () => fieldSchemas.passportOptional.required(t('edit.validation.passportRequired')),
+      }),
       bloodGroup: Yup.string().oneOf(bloodGroupOptions.map((option) => option.value), t('edit.validation.bloodGroupInvalid')).optional(),
       email: fieldSchemas.emailOptional,
     }),
@@ -151,7 +168,9 @@ export function ChangeProfileDetailsContent() {
           state: values.state.trim(),
           country: values.country.trim(),
           pincode: values.pincode.trim(),
+          aadhaarNumber: values.aadhaarNumber.replace(/\D/g, '') || null,
           panNumber: values.panNumber.trim().toUpperCase() || null,
+          passportNumber: values.passportNumber.trim().toUpperCase() || null,
           bloodGroup: values.bloodGroup.trim() || null,
           addressEn: [
             values.addressLine1,
@@ -182,7 +201,9 @@ export function ChangeProfileDetailsContent() {
             state: saved.state || values.state,
             country: saved.country || values.country,
             pincode: saved.pincode || values.pincode,
+            aadhaarNumber: saved.aadhaarNumber ?? '',
             panNumber: saved.panNumber ?? '',
+            passportNumber: saved.passportNumber ?? '',
             bloodGroup: saved.bloodGroup ?? '',
             profilePhoto: null,
           },
@@ -248,7 +269,15 @@ export function ChangeProfileDetailsContent() {
                 loading={isSubmitting || formik.isSubmitting}
                 disabled={isSubmitting || formik.isSubmitting || hasPendingProfileRequest}
                 onPress={() => {
-                  formik.setTouched({ ...formik.touched, country: true, state: true, city: true }, true);
+                  formik.setTouched({
+                    ...formik.touched,
+                    country: true,
+                    state: true,
+                    city: true,
+                    ...(isIndiaCountry(formik.values.country)
+                      ? { aadhaarNumber: true, panNumber: true }
+                      : { passportNumber: true }),
+                  }, true);
                   void formik.submitForm();
                 }}>
                 {hasPendingProfileRequest ? t('edit.actions.requestPending') : isAdmin ? t('edit.actions.saveProfile') : t('edit.actions.sendRequest')}
@@ -372,6 +401,8 @@ export function ChangeProfileDetailsContent() {
                   formik.setFieldValue('state', '');
                   formik.setFieldValue('city', '');
                   formik.setFieldValue('area', '');
+                  formik.setFieldValue('aadhaarNumber', '');
+                  formik.setFieldValue('passportNumber', '');
                 }}
                 options={countryOptions}
                 required
@@ -440,23 +471,47 @@ export function ChangeProfileDetailsContent() {
                 labelVariant="default"
                 variant="registration"
                 placeholder={t('fields.pincode')}
-                keyboardType="number-pad"
-                maxLength={6}
+                keyboardType={isIndiaCountry(formik.values.country) ? 'number-pad' : 'default'}
+                autoCapitalize="characters"
+                maxLength={isIndiaCountry(formik.values.country) ? 6 : 12}
                 required
               />
               <TextField
-                label={t('edit.fields.pan')}
+                label={isIndiaCountry(formik.values.country) ? t('edit.fields.aadhaar') : t('edit.fields.passport')}
                 labelVariant="default"
                 variant="registration"
-                placeholder={t('edit.fields.panPlaceholder')}
-                value={formik.values.panNumber}
+                placeholder={isIndiaCountry(formik.values.country) ? t('edit.fields.aadhaarPlaceholder') : t('edit.fields.passportPlaceholder')}
+                value={isIndiaCountry(formik.values.country) ? formik.values.aadhaarNumber : formik.values.passportNumber}
                 onChangeText={(value) => {
-                  formik.setFieldValue('panNumber', value.toUpperCase());
+                  if (isIndiaCountry(formik.values.country)) {
+                    formik.setFieldValue('aadhaarNumber', value.replace(/\D/g, '').slice(0, 12));
+                  } else {
+                    formik.setFieldValue('passportNumber', value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12));
+                  }
                 }}
-                error={formik.touched.panNumber ? formik.errors.panNumber : undefined}
+                error={isIndiaCountry(formik.values.country)
+                  ? formik.touched.aadhaarNumber ? formik.errors.aadhaarNumber : undefined
+                  : formik.touched.passportNumber ? formik.errors.passportNumber : undefined}
+                keyboardType={isIndiaCountry(formik.values.country) ? 'number-pad' : 'default'}
                 autoCapitalize="characters"
-                maxLength={10}
+                maxLength={12}
+                required
               />
+              {isIndiaCountry(formik.values.country) ? (
+                <TextField
+                  label={t('edit.fields.pan')}
+                  labelVariant="default"
+                  variant="registration"
+                  placeholder={t('edit.fields.panPlaceholder')}
+                  value={formik.values.panNumber}
+                  onChangeText={(value) => {
+                    formik.setFieldValue('panNumber', value.toUpperCase());
+                  }}
+                  error={formik.touched.panNumber ? formik.errors.panNumber : undefined}
+                  autoCapitalize="characters"
+                  maxLength={10}
+                />
+              ) : null}
               <SelectField
                 name="bloodGroup"
                 label={t('edit.fields.bloodGroup')}
