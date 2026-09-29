@@ -37,7 +37,7 @@ function formatUserTypeLabel(value?: string | null) {
     case 'member':
       return 'Member';
     case 'community_member':
-      return 'Community Member';
+      return 'Committee Member';
     case 'user':
     default:
       return 'User';

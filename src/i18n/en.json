@@ -215,6 +215,6 @@
   "authSecurity.flow.createPinDescription": "Set a 4-digit PIN to unlock your community account on future opens.",
   "authSecurity.flow.savePin": "Save PIN",
   "authSecurity.flow.adminDisplayName": "Admin",
-  "authSecurity.flow.memberDisplayName": "Community Member",
+  "authSecurity.flow.memberDisplayName": "Committee Member",
   "profile.security.sheet.close": "Close security PIN"
 }

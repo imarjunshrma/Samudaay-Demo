@@ -9,7 +9,7 @@
   "roles.support.title": "Community Support",
   "roles.support.description": "Can assist members with technical issues and moderate community discussions without financial access.",
   "permissions.memberManagement.title": "Allow Member Management",
-  "permissions.memberManagement.description": "Can approve or ban community members",
+  "permissions.memberManagement.description": "Can approve or ban committee members",
   "permissions.contentModeration.title": "Content Moderation",
   "permissions.contentModeration.description": "Can delete posts and comments",
   "permissions.financialReporting.title": "Financial Reporting",

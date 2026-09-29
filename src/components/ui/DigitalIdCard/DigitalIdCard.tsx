@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Image, Platform, Pressable, View } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as IntentLauncher from 'expo-intent-launcher';
@@ -32,6 +32,8 @@ const CARD_MIME_TYPE = 'image/png';
 const CARD_UTI = 'public.png';
 const PNG_HEADER_BASE64 = 'iVBORw0KGgo';
 const CARD_DIRECTORY_NAME = 'cards';
+const EXPORT_CARD_WIDTH = 640;
+const EXPORT_CARD_HEIGHT = 292;
 
 const ANDROID_ACTION_VIEW = 'android.intent.action.VIEW';
 const ANDROID_CATEGORY_DEFAULT = 'android.intent.category.DEFAULT';
@@ -249,7 +251,7 @@ export function DigitalIdCard({
   photo,
   qrImage,
   variant = 'full',
-  memberLabel = 'Community Member',
+  memberLabel = 'Committee Member',
   idLabel = 'ID',
   validityLabel = 'Valid thru',
 }: DigitalIdCardProps) {
@@ -260,10 +262,17 @@ export function DigitalIdCard({
   const localizedLocation = useAppLanguageText(location);
   const resolvedPhoto = resolveCardPhotoUrl(photo);
   const resolvedQrImage = resolveCardPhotoUrl(qrImage);
+  const [isQrReady, setIsQrReady] = useState(!resolvedQrImage);
+  const [hasQrLoadFailed, setHasQrLoadFailed] = useState(false);
   const isCompact = variant === 'compact';
   const logoSize = isCompact ? 42 : 48;
   const photoSize = isCompact ? 70 : 88;
   const qrSize = isCompact ? 52 : 64;
+
+  useEffect(() => {
+    setHasQrLoadFailed(false);
+    setIsQrReady(!resolvedQrImage);
+  }, [resolvedQrImage]);
 
   async function handleDownloadPress() {
     if (isDownloading) {
@@ -278,6 +287,11 @@ export function DigitalIdCard({
     const cardNode = cardRef.current;
     if (!cardNode) {
       Alert.alert('Download unavailable', 'Card is not ready yet.');
+      return;
+    }
+
+    if (resolvedQrImage && !isQrReady) {
+      Alert.alert('Download unavailable', 'Card QR code is still loading. Please try again in a moment.');
       return;
     }
 
@@ -296,6 +310,8 @@ export function DigitalIdCard({
         format: 'png',
         quality: 1,
         result: 'tmpfile',
+        width: EXPORT_CARD_WIDTH,
+        height: EXPORT_CARD_HEIGHT,
       });
 
       logCardFlow('info', 'Digital card capture completed.', {
@@ -347,14 +363,18 @@ export function DigitalIdCard({
     }
   }
 
-  return (
-    <View style={{ gap: spacing[3] }}>
+  function renderCard({ exportMode = false }: { exportMode?: boolean } = {}) {
+    return (
       <View
-        ref={cardRef}
+        ref={exportMode ? cardRef : undefined}
         collapsable={false}
         style={{
           position: 'relative',
           overflow: 'hidden',
+          width: exportMode ? EXPORT_CARD_WIDTH : '100%',
+          maxWidth: EXPORT_CARD_WIDTH,
+          height: exportMode ? EXPORT_CARD_HEIGHT : undefined,
+          alignSelf: 'center',
           borderRadius: radius.xl,
           paddingHorizontal: isCompact ? spacing[4] : spacing[5],
           paddingTop: isCompact ? spacing[4] : spacing[5],
@@ -380,6 +400,9 @@ export function DigitalIdCard({
             <Text
               variant="caption"
               color={colors.text.inverse}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.76}
               style={{
                 textTransform: 'uppercase',
                 fontFamily: typography.fontFamily.bold,
@@ -397,7 +420,13 @@ export function DigitalIdCard({
                 paddingHorizontal: isCompact ? spacing[3] : spacing[4],
                 paddingVertical: 5,
               }}>
-              <Text variant="caption" color={colors.text.inverse} style={{ fontFamily: typography.fontFamily.semibold, fontSize: isCompact ? 12 : 14 }}>
+              <Text
+                variant="caption"
+                color={colors.text.inverse}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.76}
+                style={{ fontFamily: typography.fontFamily.semibold, fontSize: isCompact ? 12 : 14 }}>
                 {memberLabel}
               </Text>
             </View>
@@ -426,6 +455,10 @@ export function DigitalIdCard({
             <Text
               variant={isCompact ? 'h4' : 'h2'}
               color={colors.text.inverse}
+              numberOfLines={exportMode ? 2 : 1}
+              ellipsizeMode={exportMode ? undefined : 'tail'}
+              adjustsFontSizeToFit={exportMode}
+              minimumFontScale={exportMode ? 0.68 : undefined}
               style={{
                 fontFamily: typography.fontFamily.bold,
                 fontSize: isCompact ? 22 : 30,
@@ -509,8 +542,17 @@ export function DigitalIdCard({
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            {resolvedQrImage ? (
-              <Image source={{ uri: resolvedQrImage }} resizeMode="contain" style={{ width: '100%', height: '100%' }} />
+            {resolvedQrImage && !hasQrLoadFailed ? (
+              <Image
+                source={{ uri: resolvedQrImage }}
+                resizeMode="contain"
+                onLoadEnd={() => setIsQrReady(true)}
+                onError={() => {
+                  setHasQrLoadFailed(true);
+                  setIsQrReady(true);
+                }}
+                style={{ width: '100%', height: '100%' }}
+              />
             ) : (
               <Icon name="qr-code-2" size={isCompact ? 44 : 54} color={colors.text.primary} />
             )}
@@ -520,6 +562,24 @@ export function DigitalIdCard({
         <View style={{ position: 'absolute', right: -40, bottom: -40, opacity: 0.1 }}>
           <Icon name="badge" size={160} color={colors.text.inverse} />
         </View>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ gap: spacing[3] }}>
+      {renderCard()}
+
+      <View
+        pointerEvents="none"
+        style={{
+          position: 'absolute',
+          left: -EXPORT_CARD_WIDTH - 100,
+          top: 0,
+          width: EXPORT_CARD_WIDTH,
+          height: EXPORT_CARD_HEIGHT,
+        }}>
+        {renderCard({ exportMode: true })}
       </View>
 
       <Pressable

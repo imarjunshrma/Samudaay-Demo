@@ -316,6 +316,7 @@ export function MatrimonyAnalyticsContent() {
         return [
           nameEnglish,
           await resolveSecondaryLanguageText(nameEnglish, null),
+          profile.contact?.phone || '',
           profile.memberId || '',
           profile.status || '',
           profile.gender || '',
@@ -349,15 +350,16 @@ export function MatrimonyAnalyticsContent() {
         tables: [
           {
             title: 'All matrimony profiles',
-            columns: ['Name (English)', 'Name (Second Language)', 'Member ID', 'Status', 'Gender', 'DOB', 'Age', 'Marital Status', 'Number of Children', 'Education', 'Occupation', 'City', 'State', 'Community', 'Caste', 'Created At', 'Updated At'],
+            columns: ['Name (English)', 'Name (Second Language)', 'Phone', 'Member ID', 'Status', 'Gender', 'DOB', 'Age', 'Marital Status', 'Number of Children', 'Education', 'Occupation', 'City', 'State', 'Community', 'Caste', 'Created At', 'Updated At'],
             rows: profileReportRows,
           },
           {
             title: 'Recent approvals',
-            columns: ['Name (English)', 'Name (Second Language)', 'Location / Age', 'Status', 'Updated At'],
+            columns: ['Name (English)', 'Name (Second Language)', 'Phone', 'Location / Age', 'Status', 'Updated At'],
             rows: analytics.recentApprovals.map((profile) => [
               profile.nameEnglish || profile.name,
               profile.nameSecondLanguage || profile.name,
+              profile.phone || '',
               profile.locationAge,
               profile.status,
               profile.updatedAt || '',

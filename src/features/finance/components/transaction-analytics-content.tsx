@@ -11,6 +11,7 @@ import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useTranslations } from '@/src/i18n/use-translations';
 
 import { colors, radius, spacing, typography } from '@/src/theme';
+import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 import { analyticsService, formatAnalyticsCurrency, type TenantAnalytics } from '../services';
 import { downloadAnalyticsReport, type AnalyticsExportFormat } from '../services/analytics-report-service';
 import {
@@ -104,6 +105,20 @@ export function TransactionAnalyticsContent() {
     }
 
     try {
+      const transactionRows = await Promise.all(reportTransactions.map(async (item) => {
+        const nameEnglish = item.nameEnglish || item.title;
+        return [
+          item.createdAt || '',
+          nameEnglish,
+          await resolveSecondaryLanguageText(nameEnglish, item.nameSecondLanguage),
+          item.phone || '',
+          item.title,
+          item.type,
+          item.status,
+          formatAnalyticsCurrency(item.amount),
+        ];
+      }));
+
       await downloadAnalyticsReport({
         title: t('title'),
         subtitle: selectedYear,
@@ -132,8 +147,8 @@ export function TransactionAnalyticsContent() {
           },
           {
             title: t('section.recent'),
-            columns: ['Title', 'Type', 'Status', 'Amount'],
-            rows: reportTransactions.map((item) => [item.title, item.type, item.status, formatAnalyticsCurrency(item.amount)]),
+            columns: ['Date', 'Name (English)', 'Name (Second Language)', 'Phone', 'Title', 'Type', 'Status', 'Amount'],
+            rows: transactionRows,
           },
         ],
       });

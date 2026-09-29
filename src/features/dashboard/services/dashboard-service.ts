@@ -196,7 +196,7 @@ export const emptyDashboardSummary: MemberDashboardSummary = {
   updates: [],
   sponsoredCard: null,
   identityCard: {
-    memberName: 'Community Member',
+    memberName: 'Committee Member',
     memberId: 'Pending',
     location: '',
     validity: 'Pending approval',

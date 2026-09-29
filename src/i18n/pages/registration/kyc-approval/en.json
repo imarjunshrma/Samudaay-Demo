@@ -36,7 +36,7 @@
   "meta.justNow": "Just now",
   "meta.recently": "Recently",
   "meta.hoursAgo": "{count}h ago",
-  "meta.submittedBy": "Submitted {time} by community member.",
+  "meta.submittedBy": "Submitted {time} by committee member.",
   "documents.title": "Verification Documents",
   "documents.helper": "Click to enlarge documents",
   "documents.status.uploaded": "Uploaded",

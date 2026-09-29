@@ -1,6 +1,6 @@
 {
   "title": "Member Directory",
-  "title.communityMembers": "Community Member Directory",
+  "title.communityMembers": "Committee Member Directory",
   "search.placeholder": "Search members, city, state, pincode",
   "filters.state": "State",
   "filters.city": "City",
@@ -12,7 +12,7 @@
   "sections.communityMembers": "Members",
   "total.suffix": "Total",
   "empty.title": "No members found",
-  "empty.communityMembersTitle": "No community members found",
+  "empty.communityMembersTitle": "No committee members found",
   "empty.description": "Try changing the search or filter selections.",
   "actions.remove": "Remove",
   "actions.cancel": "Cancel",

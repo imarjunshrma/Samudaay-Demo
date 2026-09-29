@@ -375,7 +375,7 @@ export const adminUserService = {
       return {
         ...item,
         nameEnglish,
-        nameSecondLanguage: await resolveSecondaryLanguageText(nameEnglish, null),
+        nameSecondLanguage: await resolveSecondaryLanguageText(nameEnglish, item.nameSecondLanguage),
       };
     }));
 

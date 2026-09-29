@@ -48,7 +48,7 @@ export const rolePermissions: Record<UserRole, Permission[]> = {
 export const roleLabels: Record<UserRole, string> = {
   admin: 'Admin',
   member: 'Member',
-  community_member: 'Community Member',
+  community_member: 'Committee Member',
   user: 'User',
   trustee: 'Trustee',
 };

@@ -74,7 +74,7 @@
   "empty.today.description": "Today birthday reminders will appear here.",
   "error.title": "Unable to load birthdays",
   "summary.loading": "Checking birthday alerts...",
-  "summary.todayActive": "Don't forget to wish your fellow community members!",
+  "summary.todayActive": "Don't forget to wish your fellow committee members!",
   "summary.noneToday": "No birthday alerts today.",
   "actions.sendCard": "Send Birthday Card",
   "list.turningToday": "Turning {age} today",

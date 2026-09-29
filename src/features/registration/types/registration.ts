@@ -23,6 +23,7 @@ export interface RegistrationDraft {
   dob?: string;
   addressLine1?: string;
   addressLine2?: string;
+  area?: string;
   city?: string;
   state?: string;
   country?: string;

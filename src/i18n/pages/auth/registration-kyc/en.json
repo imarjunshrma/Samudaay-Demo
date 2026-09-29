@@ -73,5 +73,7 @@
   "error.finalizeRegistration": "Unable to complete registration.",
   "error.loadRegistration": "Unable to load registration data.",
   "error.confirmOtp": "Unable to verify OTP.",
-  "error.resendOtp": "Unable to resend OTP."
+  "error.resendOtp": "Unable to resend OTP.",
+  "field.area": "Area",
+  "field.area.select": "Select area"
 }

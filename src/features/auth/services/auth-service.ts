@@ -105,7 +105,7 @@ function buildFallbackUserRecord(
   const role = phoneNumber ? resolveDemoRoleForMobileNumber(phoneNumber) : 'user';
   const onboardingComplete = role === 'admin';
   return {
-    fullName: phoneNumber ? `Member ${phoneNumber.slice(-4)}` : 'Community Member',
+    fullName: phoneNumber ? `Member ${phoneNumber.slice(-4)}` : 'Committee Member',
     mobileNumber: phoneNumber ? normalizeMobileNumber(phoneNumber) : '',
     countryCode: appConfig.defaultCountryCode.replace(/[^\d]/g, '') || '91',
     role,
@@ -292,7 +292,7 @@ async function finalizeFirebaseSessionFromPendingContext(
     const session: UserSession = {
       user: {
         id: payloadData.user.id,
-        fullName: payloadData.user.name || payloadData.user.phone || 'Community Member',
+        fullName: payloadData.user.name || payloadData.user.phone || 'Committee Member',
         mobileNumber: payloadData.user.phone,
         countryCode: payloadData.user.countryCode || undefined,
         email: payloadData.user.email ?? undefined,

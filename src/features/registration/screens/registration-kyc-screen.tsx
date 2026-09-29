@@ -19,6 +19,7 @@ import { useCountryStateCityOptions } from '@/src/features/registration/hooks/us
 import { registrationService } from '@/src/features/registration/services/registration-service';
 import { isPhoneNumberHintAvailable, requestPhoneNumberHint } from '@/src/services/device/phone-number-hint';
 import { useCroppedImagePicker } from '@/src/services/device/use-cropped-image-picker';
+import { isVadodaraCity, resolveVadodaraArea, vadodaraAreaOptions } from '@/src/services/location/vadodara-area-options';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
 import type { FileValue } from '@/src/types';
@@ -404,6 +405,7 @@ export function RegistrationKycScreen() {
                 dob: undefined as Date | undefined,
                 addressLine1: '',
                 addressLine2: '',
+                area: '',
                 city: '',
                 state: '',
                 country: inferredRegistrationCountry,
@@ -433,6 +435,7 @@ export function RegistrationKycScreen() {
                   dob: values.dob ? values.dob.toISOString() : '',
                   addressLine1: values.addressLine1,
                   addressLine2: values.addressLine2 || undefined,
+                  area: isVadodaraCity(values.city) ? values.area : '',
                   city: values.city,
                   state: values.state,
                   country: values.country,
@@ -613,6 +616,7 @@ export function RegistrationKycScreen() {
                       setFieldValue('country', value);
                       setFieldValue('state', '');
                       setFieldValue('city', '');
+                      setFieldValue('area', '');
                       setFieldValue('aadhaarNumber', '');
                       setFieldValue('passportNumber', '');
                       setRegistrationCountry(value);
@@ -633,6 +637,7 @@ export function RegistrationKycScreen() {
                         onSelect={(value) => {
                           setFieldValue('state', value);
                           setFieldValue('city', '');
+                          setFieldValue('area', '');
                           selectState(value);
                         }}
                         options={values.country ? stateOptions : []}
@@ -648,7 +653,11 @@ export function RegistrationKycScreen() {
                       <SelectField
                         label={t('field.city')}
                         value={values.city}
-                        onSelect={(value) => setFieldValue('city', value)}
+                        onSelect={(value) => {
+                          setFieldValue('city', value);
+                          setFieldValue('area', resolveVadodaraArea(value, values.area));
+                          setFieldTouched('area', false, false);
+                        }}
                         options={values.state ? cityOptions : []}
                         error={touched.city ? errors.city : undefined}
                         variant="registration"
@@ -659,6 +668,22 @@ export function RegistrationKycScreen() {
                       />
                     </View>
                   </View>
+                  {isVadodaraCity(values.city) ? (
+                    <SelectField
+                      label={t('field.area')}
+                      value={values.area}
+                      onSelect={(value) => {
+                        setFieldValue('area', value);
+                        setFieldTouched('area', true, false);
+                      }}
+                      options={vadodaraAreaOptions}
+                      error={touched.area ? errors.area : undefined}
+                      variant="registration"
+                      labelVariant="default"
+                      placeholder={t('field.area.select')}
+                      required
+                    />
+                  ) : null}
                   <TextField
                     label={t('field.pincode')}
                     value={values.pincode}

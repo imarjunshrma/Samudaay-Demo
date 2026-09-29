@@ -1,4 +1,5 @@
 import type { DonationRecordItem } from '../services/donation-service';
+import { isVadodaraCity } from '@/src/services/location/vadodara-area-options';
 
 function numberToWords(amount: number): string {
   const n = Math.floor(amount);
@@ -127,7 +128,7 @@ export function generateDonationReceiptHtml(
   const amountWords = numberToWords(amount);
   const addressLine = record.addressLine1 || '';
   const addressExtraLine = record.addressLine2 || '';
-  const isVadodaraDonation = String(record.city || '').trim().toLowerCase() === 'vadodara';
+  const isVadodaraDonation = isVadodaraCity(record.city);
   const areaLine = isVadodaraDonation ? record.area || '' : '';
   const detailText = [record.message, record.referenceNumber ? `Ref: ${record.referenceNumber}` : null]
     .filter(Boolean)

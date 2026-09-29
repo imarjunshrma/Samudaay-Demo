@@ -36,6 +36,9 @@ const emptyFilters: Record<MatrimonyDiscoveryFilterKey, string> = {
   minAge: ALL_FILTERS,
   maxAge: ALL_FILTERS,
   community: ALL_FILTERS,
+  createdRange: ALL_FILTERS,
+  updatedRange: ALL_FILTERS,
+  sort: ALL_FILTERS,
 };
 
 const heightFilterOptions = [
@@ -83,6 +86,22 @@ const familyTypeFilterOptions = [
   { key: 'Nuclear', label: 'Nuclear' },
 ];
 
+const profileDateFilterOptions = [
+  { key: ALL_FILTERS, label: 'Any time' },
+  { key: 'today', label: 'Today' },
+  { key: 'last7Days', label: 'Last 7 days' },
+  { key: 'thisMonth', label: 'This month' },
+  { key: 'last30Days', label: 'Last 30 days' },
+  { key: 'older', label: 'Older than 30 days' },
+];
+
+const sortFilterOptions = [
+  { key: ALL_FILTERS, label: 'Newest profiles' },
+  { key: 'oldest', label: 'Oldest profiles' },
+  { key: 'az', label: 'Name A to Z' },
+  { key: 'za', label: 'Name Z to A' },
+];
+
 const filterLabels: Record<MatrimonyDiscoveryFilterKey, string> = {
   gender: 'Gender',
   country: 'Country',
@@ -97,6 +116,9 @@ const filterLabels: Record<MatrimonyDiscoveryFilterKey, string> = {
   minAge: 'Min age',
   maxAge: 'Max age',
   community: 'Community',
+  createdRange: 'Created',
+  updatedRange: 'Updated',
+  sort: 'Sort',
 };
 
 function normalizeOption(value?: string | null) {
@@ -110,6 +132,15 @@ function uniqueOptions(values: (string | null | undefined)[], allLabel: string) 
 
 function selectOptionsToFilterOptions(options: { label: string; value: string }[], allLabel: string) {
   return [{ key: ALL_FILTERS, label: allLabel }, ...options.map((option) => ({ key: option.value, label: option.label }))];
+}
+
+function resolveFilterValueLabel(key: MatrimonyDiscoveryFilterKey, value: string) {
+  const optionSources: Partial<Record<MatrimonyDiscoveryFilterKey, { key: string; label: string }[]>> = {
+    createdRange: profileDateFilterOptions,
+    updatedRange: profileDateFilterOptions,
+    sort: sortFilterOptions,
+  };
+  return optionSources[key]?.find((option) => option.key === value)?.label || value;
 }
 
 function compactFilters(filters: Record<MatrimonyDiscoveryFilterKey, string>): MatrimonyDiscoveryFilters {
@@ -163,6 +194,27 @@ export function MatrimonyDiscoveryContent({
   const didRunQueryEffectRef = useRef(false);
 
   const filterSections = useMemo<FilterSheetSection[]>(() => [
+    {
+      title: 'Sort',
+      activeKey: filters.sort,
+      icon: 'sort-by-alpha',
+      items: sortFilterOptions,
+      onSelect: (key) => setFilters((current) => ({ ...current, sort: key })),
+    },
+    {
+      title: 'Profile created',
+      activeKey: filters.createdRange,
+      icon: 'event',
+      items: profileDateFilterOptions,
+      onSelect: (key) => setFilters((current) => ({ ...current, createdRange: key })),
+    },
+    {
+      title: 'Profile updated',
+      activeKey: filters.updatedRange,
+      icon: 'update',
+      items: profileDateFilterOptions,
+      onSelect: (key) => setFilters((current) => ({ ...current, updatedRange: key })),
+    },
     {
       title: 'Gender',
       activeKey: filters.gender,
@@ -259,7 +311,7 @@ export function MatrimonyDiscoveryContent({
         .filter(([, value]) => value !== ALL_FILTERS)
         .map(([key, value]) => ({
           key,
-          label: `${filterLabels[key]}: ${value}`,
+          label: `${filterLabels[key]}: ${resolveFilterValueLabel(key, value)}`,
           icon: 'close' as const,
         })),
     [filters],

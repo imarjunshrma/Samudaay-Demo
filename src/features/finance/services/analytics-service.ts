@@ -11,6 +11,9 @@ export type AnalyticsTransactionItem = {
   id: string;
   title: string;
   subtitle: string;
+  nameEnglish?: string | null;
+  nameSecondLanguage?: string | null;
+  phone?: string | null;
   amount: number;
   type: string;
   status: string;

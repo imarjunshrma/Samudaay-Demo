@@ -13,7 +13,7 @@
   "changes.none": "No changes were specified in this request.",
   "status.title": "Status",
   "status.pending": "Pending",
-  "status.submittedBy": "Submitted {time} by community member.",
+  "status.submittedBy": "Submitted {time} by committee member.",
   "rejection.title": "Rejection Note",
   "rejection.description": "Optional. Add a reason for rejection to help the member understand what to fix.",
   "rejection.remarks": "Remarks",

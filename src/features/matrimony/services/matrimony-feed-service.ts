@@ -103,6 +103,7 @@ export type MatrimonyAnalyticsRecord = {
     name: string;
     nameEnglish?: string | null;
     nameSecondLanguage?: string | null;
+    phone?: string | null;
     locationAge: string;
     status: 'APPROVED' | 'ACTIVE' | 'PENDING_APPROVAL' | 'REJECTED' | string;
     image?: string | null;
@@ -824,7 +825,7 @@ export const matrimonyFeedService = {
         return {
           ...profile,
           nameEnglish,
-          nameSecondLanguage: await resolveSecondaryLanguageText(nameEnglish, null),
+          nameSecondLanguage: await resolveSecondaryLanguageText(nameEnglish, profile.nameSecondLanguage),
         };
       })),
     };
@@ -1156,6 +1157,9 @@ export const matrimonyFeedService = {
       minAge?: string;
       maxAge?: string;
       community?: string;
+      createdRange?: string;
+      updatedRange?: string;
+      sort?: string;
     };
   }): Promise<{ items: MatrimonyProfileRecord[]; pagination: MatrimonyDiscoveryPageResponse['pagination'] }> {
     if (!isBackendApiConfigured()) {
@@ -1246,6 +1250,9 @@ export const matrimonyFeedService = {
       minAge?: string;
       maxAge?: string;
       community?: string;
+      createdRange?: string;
+      updatedRange?: string;
+      sort?: string;
     };
   }): Promise<MatrimonyDiscoveryPageResponse> {
     if (!isBackendApiConfigured()) {

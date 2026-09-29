@@ -1,6 +1,6 @@
 {
   "title": "Member Directory",
-  "title.communityMembers": "Community Member Directory",
+  "title.communityMembers": "Committee Member Directory",
   "search.placeholder": "Search by name, city, state or pincode",
   "filters.state": "State",
   "filters.city": "City",
@@ -8,9 +8,9 @@
   "sections.members": "Members",
   "sections.communityMembers": "Members",
   "actions.loadMore": "Load More Members",
-  "avatar.fallback": "Community Member",
+  "avatar.fallback": "Committee Member",
   "total.suffix": "Total",
   "empty.title": "No members found",
-  "empty.communityMembersTitle": "No community members found",
+  "empty.communityMembersTitle": "No committee members found",
   "empty.description": "Try a different search or filter combination."
 }

@@ -73,7 +73,7 @@ function translateCardSubtitle(
 }
 
 function translateIdentityMember(memberName: string, t: TranslateFn) {
-  return memberName === 'Community Member' ? t('identity.member') : memberName;
+  return memberName === 'Committee Member' ? t('identity.member') : memberName;
 }
 
 function translateIdentityValidity(validity: string, t: TranslateFn) {

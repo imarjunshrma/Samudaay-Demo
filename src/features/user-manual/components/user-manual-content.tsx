@@ -49,7 +49,7 @@ const manualSections: ManualSection[] = [
   {
     title: 'Members and Community',
     icon: 'groups',
-    summary: 'Find community members, trustees, and public member information from directory screens.',
+    summary: 'Find committee members, trustees, and public member information from directory screens.',
     steps: [
       'Use Members or Community Directory to search by name, city, family, or available filters.',
       'Open a member card to view permitted details.',

@@ -108,7 +108,7 @@
   "deleteRequest.errorDescription": "Please send your delete account request to connect@mectv.org.",
   "kyc.inactiveTitle": "Inactive until KYC approval",
   "kyc.inactiveDescription": "Your profile will become active once KYC is approved.",
-  "fallback.communityMember": "Community Member",
+  "fallback.communityMember": "Committee Member",
   "meta.version": "Version 2.4.1 (Artisan Cordwain Edition)",
   "meta.crafted": "Crafted with pride in India"
 }

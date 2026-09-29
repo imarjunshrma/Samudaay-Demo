@@ -2,7 +2,7 @@ export type MatrimonyStatus = 'New Request' | 'Approved' | 'Rejected';
 
 export type MatrimonyTabKey = 'new' | 'approved' | 'rejected';
 
-export type MatrimonyPeriodFilterKey = 'all' | 'today' | 'last7Days' | 'thisMonth' | 'older' | 'custom';
+export type MatrimonyPeriodFilterKey = 'all' | 'today' | 'last7Days' | 'thisMonth' | 'last30Days' | 'older' | 'custom';
 
 export type MatrimonyReviewItem = {
   id: string;

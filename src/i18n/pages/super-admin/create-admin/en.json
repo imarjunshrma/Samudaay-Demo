@@ -16,7 +16,7 @@
   "steps.permissions.step": "Step 3: Permissions",
   "steps.permissions.title": "Permissions",
   "permissions.memberManagement.title": "Allow Member Management",
-  "permissions.memberManagement.description": "Can approve or ban community members",
+  "permissions.memberManagement.description": "Can approve or ban committee members",
   "permissions.contentModeration.title": "Content Moderation",
   "permissions.contentModeration.description": "Can delete posts and comments",
   "permissions.financialReporting.title": "Financial Reporting",

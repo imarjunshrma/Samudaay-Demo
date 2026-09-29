@@ -58,7 +58,7 @@ export function MemberDrawerContent(props: DrawerContentComponentProps) {
   const { signOut, isSubmitting } = useAuthActions();
   const { session } = useSession();
   const activeKey = getActiveSidebarKey(pathname);
-  const profileName = useLocalizedProfileText(session?.user.fullName || 'Community Member');
+  const profileName = useLocalizedProfileText(session?.user.fullName || 'Committee Member');
   const profileImage = session?.user.profilePhotoUrl || undefined;
   const hideFinance = isPlainUserSession(session);
   const hideCommunityDirectory = isPlainUserSession(session);

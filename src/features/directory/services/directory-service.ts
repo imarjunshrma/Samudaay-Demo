@@ -145,7 +145,7 @@ function formatDirectoryRoleLabel(userType?: string | null, role?: string | null
 
   if (normalizedUserType === 'admin') return 'Admin';
   if (normalizedUserType === 'trustee') return 'Trustee';
-  if (normalizedUserType === 'community_member') return 'Community Member';
+  if (normalizedUserType === 'community_member') return 'Committee Member';
   if (normalizedUserType === 'member') return 'Member';
   if (normalizedUserType === 'user') return 'User';
   if (normalizedRole) return normalizedRole;

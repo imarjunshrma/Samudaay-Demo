@@ -18,6 +18,7 @@ import {
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { downloadAnalyticsReport, type AnalyticsExportFormat } from '@/src/features/finance/services/analytics-report-service';
 import { donationService, type DonationRecordItem } from '@/src/features/finance/services/donation-service';
+import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 import { notificationCampaignService, type AdminNotificationCampaignItem } from '@/src/features/communication/services/notification-campaign-service';
 import { chatService } from '@/src/features/communication/services/chat-service';
 import { publicationFeedService } from '@/src/features/publications/services/publication-feed-service';
@@ -47,6 +48,10 @@ type AnalyticsRecentItem = {
   subtitle: string;
   detail?: string;
   meta: string[];
+  nameEnglish?: string;
+  nameSecondLanguage?: string;
+  phone?: string;
+  date?: string | null;
   icon: React.ComponentProps<typeof MaterialIcons>['name'];
   accentColor?: string;
 };
@@ -255,14 +260,21 @@ async function buildDonationAnalytics(): Promise<AnalyticsModuleData> {
         helper: 'Receipts excluded from paid collection',
       },
     ],
-    recent: items.slice(0, 5).map((item) => ({
-      id: item.id,
-      title: item.donorName || 'Contribution record',
-      subtitle: formatCurrency(item.amount || 0),
-      detail: item.receiptNo ? `Receipt ${item.receiptNo}` : item.donationPurpose || item.purpose || 'Contribution entry',
-      meta: [humanizeEnum(item.status), humanizeEnum(item.paymentMode), formatRelativeDate(item.createdAt)],
-      icon: 'receipt-long',
-      accentColor: item.status === 'PAID' ? colors.status.success : item.status === 'PENDING' ? colors.status.warning : colors.status.error,
+    recent: await Promise.all(items.slice(0, 5).map(async (item) => {
+      const nameEnglish = item.donorName || item.user?.name || 'Contribution record';
+      return {
+        id: item.id,
+        title: nameEnglish,
+        subtitle: formatCurrency(item.amount || 0),
+        detail: item.receiptNo ? `Receipt ${item.receiptNo}` : item.donationPurpose || item.purpose || 'Contribution entry',
+        meta: [humanizeEnum(item.status), humanizeEnum(item.paymentMode), formatRelativeDate(item.createdAt)],
+        nameEnglish,
+        nameSecondLanguage: await resolveSecondaryLanguageText(nameEnglish, null),
+        phone: item.phoneNumber || item.user?.phone || '',
+        date: item.createdAt,
+        icon: 'receipt-long' as const,
+        accentColor: item.status === 'PAID' ? colors.status.success : item.status === 'PENDING' ? colors.status.warning : colors.status.error,
+      };
     })),
     insights: [
       pendingItems.length > paidItems.length ? 'Pending contribution records are higher than completed receipts.' : 'Settled contributions are ahead of pending receipts.',
@@ -862,6 +874,7 @@ export function AdminModuleAnalyticsContent({ moduleKey }: { moduleKey: AdminAna
     }
 
     try {
+      const isContributionReport = data.title === 'Contribution Analytics';
       await downloadAnalyticsReport({
         title: data.title,
         subtitle: data.subtitle,
@@ -888,8 +901,20 @@ export function AdminModuleAnalyticsContent({ moduleKey }: { moduleKey: AdminAna
           },
           {
             title: 'Recent Activity',
-            columns: ['Title', 'Subtitle', 'Detail', 'Meta'],
-            rows: data.recent.map((item) => [item.title, item.subtitle, item.detail || '', item.meta.join(' | ')]),
+            columns: isContributionReport
+              ? ['Date', 'Name (English)', 'Name (Second Language)', 'Phone', 'Amount', 'Detail', 'Meta']
+              : ['Title', 'Subtitle', 'Detail', 'Meta'],
+            rows: isContributionReport
+              ? data.recent.map((item) => [
+                  item.date || '',
+                  item.nameEnglish || item.title,
+                  item.nameSecondLanguage || item.nameEnglish || item.title,
+                  item.phone || '',
+                  item.subtitle,
+                  item.detail || '',
+                  item.meta.join(' | '),
+                ])
+              : data.recent.map((item) => [item.title, item.subtitle, item.detail || '', item.meta.join(' | ')]),
           },
         ].filter((table) => table.rows.length),
       });

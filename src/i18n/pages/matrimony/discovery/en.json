@@ -1,6 +1,6 @@
 {
   "title": "Matrimony",
-  "fallback.communityMember": "Community Member",
+  "fallback.communityMember": "Committee Member",
   "search.placeholder": "Search by name or ID",
   "filters.age": "Age",
   "filters.education": "Education",

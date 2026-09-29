@@ -73,5 +73,7 @@
   "error.finalizeRegistration": "નોંધણી પૂર્ણ કરી શક્યા નથી.",
   "error.loadRegistration": "નોંધણી ડેટા લોડ કરી શક્યા નથી.",
   "error.confirmOtp": "OTP ચકાસી શક્યા નથી.",
-  "error.resendOtp": "OTP ફરી મોકલી શક્યા નથી."
+  "error.resendOtp": "OTP ફરી મોકલી શક્યા નથી.",
+  "field.area": "વિસ્તાર",
+  "field.area.select": "વિસ્તાર પસંદ કરો"
 }

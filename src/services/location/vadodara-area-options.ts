@@ -14,7 +14,8 @@ export const vadodaraAreaOptions = [
 ];
 
 export function isVadodaraCity(city?: string | null) {
-  return String(city || '').trim().toLowerCase() === VADODARA_CITY_NAME.toLowerCase();
+  const normalized = String(city || '').trim().toLowerCase();
+  return normalized === VADODARA_CITY_NAME.toLowerCase() || normalized.includes('vadodara') || normalized.includes('vadora') || normalized.includes('વડોદરા');
 }
 
 export function getDefaultVadodaraArea() {

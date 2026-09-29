@@ -42,7 +42,9 @@ type AdminMatrimonyFilterKey =
   | 'familyType'
   | 'caste'
   | 'minAge'
-  | 'maxAge';
+  | 'maxAge'
+  | 'updatedRange'
+  | 'sort';
 
 const emptyFilters: Record<AdminMatrimonyFilterKey, string> = {
   gender: ALL_FILTERS,
@@ -56,6 +58,8 @@ const emptyFilters: Record<AdminMatrimonyFilterKey, string> = {
   caste: ALL_FILTERS,
   minAge: ALL_FILTERS,
   maxAge: ALL_FILTERS,
+  updatedRange: ALL_FILTERS,
+  sort: ALL_FILTERS,
 };
 
 const heightFilterOptions = [
@@ -101,6 +105,22 @@ const familyTypeFilterOptions = [
   { key: ALL_FILTERS, label: 'All family types' },
   { key: 'Joint', label: 'Joint' },
   { key: 'Nuclear', label: 'Nuclear' },
+];
+
+const profileDateFilterOptions = [
+  { key: ALL_FILTERS, label: 'Any time' },
+  { key: 'today', label: 'Today' },
+  { key: 'last7Days', label: 'Last 7 days' },
+  { key: 'thisMonth', label: 'This month' },
+  { key: 'last30Days', label: 'Last 30 days' },
+  { key: 'older', label: 'Older than 30 days' },
+];
+
+const sortFilterOptions = [
+  { key: ALL_FILTERS, label: 'Newest profiles' },
+  { key: 'oldest', label: 'Oldest profiles' },
+  { key: 'az', label: 'Name A to Z' },
+  { key: 'za', label: 'Name Z to A' },
 ];
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
@@ -151,14 +171,17 @@ function matchesCreatedPeriod(
     return createdTime >= todayStart.getTime() - (6 * DAY_IN_MS) && createdTime <= todayEnd.getTime();
   }
 
+  if (period === 'last30Days') {
+    return createdTime >= todayStart.getTime() - (29 * DAY_IN_MS) && createdTime <= todayEnd.getTime();
+  }
+
   if (period === 'thisMonth') {
     const monthStart = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1).getTime();
     return createdTime >= monthStart && createdTime <= todayEnd.getTime();
   }
 
   if (period === 'older') {
-    const monthStart = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1).getTime();
-    return createdTime < monthStart;
+    return createdTime < todayStart.getTime() - (30 * DAY_IN_MS);
   }
 
   if (!customFrom && !customTo) {
@@ -376,7 +399,10 @@ export function ApproveMatrimonyProfilesContent() {
     caste: filters.caste,
     minAge: filters.minAge,
     maxAge: filters.maxAge,
-  }), [filters]);
+    updatedRange: filters.updatedRange,
+    sort: filters.sort,
+    ...(activePeriodFilter !== 'all' && activePeriodFilter !== 'custom' ? { createdRange: activePeriodFilter } : {}),
+  }), [activePeriodFilter, filters]);
 
   const loadReviewTotals = useCallback(async () => {
     const requestId = ++reviewTotalsRequestIdRef.current;
@@ -540,6 +566,13 @@ export function ApproveMatrimonyProfilesContent() {
 
   const filterSections = [
     {
+      title: 'Sort',
+      activeKey: filters.sort,
+      icon: 'sort-by-alpha' as const,
+      items: sortFilterOptions,
+      onSelect: (key: string) => setFilters((current) => ({ ...current, sort: key })),
+    },
+    {
       title: 'Gender',
       activeKey: filters.gender,
       icon: 'wc' as const,
@@ -636,6 +669,7 @@ export function ApproveMatrimonyProfilesContent() {
         { key: 'today', label: t('filters.today') },
         { key: 'last7Days', label: t('filters.last7Days') },
         { key: 'thisMonth', label: t('filters.thisMonth') },
+        { key: 'last30Days', label: 'Last 30 days' },
         { key: 'older', label: t('filters.older') },
         { key: 'custom', label: t('filters.custom') },
       ],
@@ -661,6 +695,13 @@ export function ApproveMatrimonyProfilesContent() {
           />
         </View>
       ) : null,
+    },
+    {
+      title: 'Profile updated',
+      activeKey: filters.updatedRange,
+      icon: 'update' as const,
+      items: profileDateFilterOptions,
+      onSelect: (key: string) => setFilters((current) => ({ ...current, updatedRange: key })),
     },
   ];
 

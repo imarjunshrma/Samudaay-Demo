@@ -6,6 +6,7 @@ import { AppHeader, Button, SelectField, SelectionPopup, Text, TextField } from 
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { downloadAnalyticsReport, type AnalyticsExportFormat } from '@/src/features/finance/services/analytics-report-service';
+import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import { adminUserService, type AdminAppMembershipReportItem, type AdminAppSettings, type AdminUserRegistrationSummary } from '../services/admin-user-service';
 
@@ -145,25 +146,11 @@ export function AdminRegistrationAnalyticsContent() {
   const downloadReport = useCallback(async () => {
     setDownloadingReport(true);
     try {
-      await downloadAnalyticsReport({
-        title: 'Registration Membership Report',
-        subtitle: 'Invited users with app login, registration, KYC, and yearly payment status',
-        fileBaseName: 'registration-membership-report',
-        format: exportFormat,
-        summary: [
-          { label: 'Invited', value: String(reportSummary?.invited ?? summary?.invited ?? 0) },
-          { label: 'Registered', value: String(reportSummary?.registered ?? summary?.registered ?? 0) },
-          { label: 'Paid', value: String(reportSummary?.paid ?? summary?.paid ?? 0) },
-          { label: 'Unpaid', value: String(reportSummary?.unpaid ?? summary?.unpaid ?? 0) },
-          { label: 'Locked', value: String(reportSummary?.locked ?? summary?.locked ?? 0) },
-        ],
-        tables: [
-          {
-            title: 'Invited users',
-            columns: ['Name (English)', 'Name (Second Language)', 'Phone', 'Email', 'Invited At', 'App Login', 'Registered', 'Registration Date', 'KYC Status', 'Payment Required', 'Payment Status', 'Membership Status', 'Renewal Status', 'App Access Status', 'Locked', 'Amount Due', 'Amount Paid', 'Paid At', 'Membership Starts At', 'Expires At', 'Grace Ends At'],
-            rows: reportItems.map((item) => [
-          item.nameEnglish || item.name,
-          item.nameSecondLanguage || item.name,
+      const invitedUserRows = await Promise.all(reportItems.map(async (item) => {
+        const nameEnglish = item.nameEnglish || item.name;
+        return [
+          nameEnglish,
+          await resolveSecondaryLanguageText(nameEnglish, item.nameSecondLanguage),
           item.phone,
           item.email,
           item.invitedAt,
@@ -183,7 +170,26 @@ export function AdminRegistrationAnalyticsContent() {
           item.membershipStartsAt,
           item.expiresAt,
           item.graceEndsAt,
-            ]),
+        ];
+      }));
+
+      await downloadAnalyticsReport({
+        title: 'Registration Membership Report',
+        subtitle: 'Invited users with app login, registration, KYC, and yearly payment status',
+        fileBaseName: 'registration-membership-report',
+        format: exportFormat,
+        summary: [
+          { label: 'Invited', value: String(reportSummary?.invited ?? summary?.invited ?? 0) },
+          { label: 'Registered', value: String(reportSummary?.registered ?? summary?.registered ?? 0) },
+          { label: 'Paid', value: String(reportSummary?.paid ?? summary?.paid ?? 0) },
+          { label: 'Unpaid', value: String(reportSummary?.unpaid ?? summary?.unpaid ?? 0) },
+          { label: 'Locked', value: String(reportSummary?.locked ?? summary?.locked ?? 0) },
+        ],
+        tables: [
+          {
+            title: 'Invited users',
+            columns: ['Name (English)', 'Name (Second Language)', 'Phone', 'Email', 'Invited At', 'App Login', 'Registered', 'Registration Date', 'KYC Status', 'Payment Required', 'Payment Status', 'Membership Status', 'Renewal Status', 'App Access Status', 'Locked', 'Amount Due', 'Amount Paid', 'Paid At', 'Membership Starts At', 'Expires At', 'Grace Ends At'],
+            rows: invitedUserRows,
           },
         ],
       });

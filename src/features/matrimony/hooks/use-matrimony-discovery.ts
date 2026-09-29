@@ -46,6 +46,9 @@ export type MatrimonyDiscoveryFilters = {
   minAge?: string;
   maxAge?: string;
   community?: string;
+  createdRange?: string;
+  updatedRange?: string;
+  sort?: string;
 };
 
 function getDiscoveryQueryKey(search?: string, filters?: MatrimonyDiscoveryFilters) {

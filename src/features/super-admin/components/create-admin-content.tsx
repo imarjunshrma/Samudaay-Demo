@@ -27,13 +27,13 @@ const USER_TYPE_OPTIONS: {
   {
     key: 'member',
     title: 'Member',
-    description: 'Verified community member access',
+    description: 'Verified committee member access',
     icon: 'groups',
   },
   {
     key: 'community_member',
-    title: 'Community Member',
-    description: 'Same app access as a member, shown separately for community roster use',
+    title: 'Committee Member',
+    description: 'Same app access as a member, shown separately for committee roster use',
     icon: 'groups',
   },
   {
