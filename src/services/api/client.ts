@@ -2,6 +2,7 @@ import { apiConfig } from '@/src/constants';
 import { getActiveTenantRequestHeaders } from '@/src/core/config/community';
 import { getErrorMessage } from '@/src/services/error-message';
 import { isAuthExpirationError, notifyAuthExpired } from './auth-expiration';
+import { isCommunityUnavailableError, notifyCommunityUnavailable } from './community-availability';
 import { withAuthHeaders } from './interceptors';
 
 export interface ApiClientInit extends RequestInit {
@@ -40,6 +41,10 @@ export async function apiClient<TResponse>(input: string, init?: ApiClientInit):
         }
       } catch {
         // Fall back to the generic status-based message.
+      }
+
+      if (isCommunityUnavailableError(response.status, errorMessage)) {
+        notifyCommunityUnavailable();
       }
 
       if (isAuthExpirationError(response.status, errorMessage, Boolean(init?.token))) {

@@ -6,7 +6,7 @@ import { apiClient } from '@/src/services/api/client';
 import { apiEndpoints } from '@/src/services/api/endpoints';
 import { getBackendSessionContext, isBackendApiConfigured } from '@/src/features/auth/services/backend-session';
 import { createAndDeliverPdf } from '@/src/services/files/pdf-file';
-import { DONATION_RECEIPT_LOGO_URI } from '@/src/features/finance/services/donation-receipt-assets';
+import { getReceiptPrintContext } from '@/src/features/community/services/community-print-identity';
 import { communityConfig } from '@/src/core/config/community';
 
 export type AppMembershipAccess = {
@@ -93,6 +93,7 @@ function buildMembershipReceiptHtml(receipt: AppMembershipReceiptInput) {
   const tenantName = communityConfig.tenantName || communityConfig.brandName || 'Community';
   const tenantNameGu = communityConfig.tenantNameGu || tenantName;
   const tagline = communityConfig.tagline || 'Community Membership';
+  const logoUri = getReceiptPrintContext().logoUri;
   const paidOn = formatDate(receipt.createdAt);
   const membershipPeriod = `${formatDate(receipt.membershipStartsAt)} to ${formatDate(receipt.membershipEndsAt)}`;
 
@@ -254,10 +255,10 @@ function buildMembershipReceiptHtml(receipt: AppMembershipReceiptInput) {
       </head>
       <body>
         <main class="page">
-          <img class="watermark" src="${DONATION_RECEIPT_LOGO_URI}" alt="" />
+          ${logoUri ? `<img class="watermark" src="${logoUri}" alt="" />` : ''}
           <section class="content">
             <header class="header">
-              <img class="logo" src="${DONATION_RECEIPT_LOGO_URI}" alt="Community logo" />
+              ${logoUri ? `<img class="logo" src="${logoUri}" alt="Community logo" />` : ''}
               <div>
                 <div class="tenant-gu">${escapeHtml(tenantNameGu)}</div>
                 <div class="tenant-en">${escapeHtml(tenantName)}</div>

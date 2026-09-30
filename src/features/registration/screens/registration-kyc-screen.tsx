@@ -1,7 +1,7 @@
 import { Formik } from 'formik';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert, Pressable, View } from 'react-native';
 
 import { AppHeader, Button, DateField, FormScreenLayout, IconButton, OTPInput, PhoneInput, ProgressStepper, SelectField, Text, TextField } from '@/src/components';
 import { bloodGroupOptions } from '@/src/constants/blood-groups';
@@ -14,6 +14,8 @@ import { useAuthActions } from '@/src/features/auth/hooks/use-auth-actions';
 import { authService, OTP_RESEND_COOLDOWN_SECONDS } from '@/src/features/auth/services/auth-service';
 import { useSession } from '@/src/core/providers/session-provider';
 import { communityConfig } from '@/src/core/config/community';
+import { useCommunityGate } from '@/src/features/community/components/community-gate';
+import { useAppPreferences } from '@/src/core/providers/app-provider';
 import { apiClient, apiEndpoints, apiQueryKeys, useConfiguredApiQuery } from '@/src/services/api';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { registrationService } from '@/src/features/registration/services/registration-service';
@@ -111,6 +113,8 @@ export function RegistrationKycScreen() {
   const t = useTranslations('auth.registration-kyc');
   const { pickImage, captureImage, cropper } = useCroppedImagePicker();
   const { tenantName } = useLocalizedBrandText();
+  const communityGate = useCommunityGate();
+  const { language } = useAppPreferences();
   const { session, status, setSession, setStatus } = useSession();
   const [step, setStep] = useState<RegistrationStep>(() => (session ? 2 : 1));
   const [otpRequested, setOtpRequested] = useState(false);
@@ -266,6 +270,31 @@ export function RegistrationKycScreen() {
                     </Text>
 
                     <View style={{ gap: spacing[6] }}>
+                      {communityGate.selectionEnabled && !session ? (
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            padding: spacing[3],
+                            borderRadius: 12,
+                            borderWidth: 1,
+                            borderColor: colors.primary.border,
+                            backgroundColor: colors.primary.subtle,
+                          }}>
+                          <View style={{ flex: 1, paddingRight: spacing[3] }}>
+                            <Text variant="caption" color="#475569">{language === 'gu' ? 'સમુદાય' : 'Community'}</Text>
+                            <Text variant="body" style={{ fontWeight: '600' }}>{tenantName}</Text>
+                          </View>
+                          {!otpRequested ? (
+                            <Pressable accessibilityRole="button" onPress={communityGate.requestCommunityChange} hitSlop={8}>
+                              <Text variant="body" color={colors.primary.DEFAULT} style={{ fontWeight: '600' }}>
+                                {language === 'gu' ? 'બદલો' : 'Change'}
+                              </Text>
+                            </Pressable>
+                          ) : null}
+                        </View>
+                      ) : null}
                       {communityConfig.allowCommunitySwitch ? (
                         <SelectField
                           label={t('field.selectCommunity')}

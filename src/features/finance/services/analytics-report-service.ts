@@ -1,7 +1,7 @@
 import { createAndDeliverPdfFromHtml } from '@/src/services/files/pdf-file';
 import { createAndDeliverBase64File } from '@/src/services/files/report-file';
 import { communityConfig } from '@/src/core/config/community';
-import { DONATION_RECEIPT_LOGO_URI } from './donation-receipt-assets';
+import { getReportLogoUri } from '@/src/features/community/services/community-print-identity';
 
 export type AnalyticsExportFormat = 'pdf' | 'excel';
 
@@ -161,7 +161,7 @@ function renderReportHeader(title: string, subtitle?: string) {
   return `
     <header style="margin-bottom:24px;border-bottom:2px solid #f97316;padding-bottom:16px;">
       <div style="display:flex;align-items:center;gap:16px;">
-        <img src="${DONATION_RECEIPT_LOGO_URI}" alt="Community logo" style="width:56px;height:56px;object-fit:contain;" />
+        ${getReportLogoUri() ? `<img src="${getReportLogoUri()}" alt="Community logo" style="width:56px;height:56px;object-fit:contain;" />` : ''}
         <div>
           <div style="font-size:20px;font-weight:700;color:#111827;">${escapeHtml(tenantName)}</div>
           <h1 style="font-size:24px;margin:4px 0 0;">${escapeHtml(title)}</h1>

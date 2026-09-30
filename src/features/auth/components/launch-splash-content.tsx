@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 import { getDefaultRouteForSession } from '@/src/core/navigation/default-route';
 import { hasSeenOnboarding } from '@/src/core/storage/onboarding-storage';
-import { APP_LOGO_SOURCE, useLocalizedBrandText } from '@/src/core/config/brand';
+import { useLocalizedBrandText } from '@/src/core/config/brand';
 import { useSession } from '@/src/core/providers/session-provider';
 import { useTranslations } from '@/src/i18n/use-translations';
 
@@ -15,7 +16,7 @@ const PRIMARY = '#18a875';
 export function LaunchSplashContent() {
   const router = useRouter();
   const t = useTranslations('auth.launch-splash');
-  const { tenantName, tagline } = useLocalizedBrandText();
+  const { tenantName, tagline, logoSource } = useLocalizedBrandText();
   const { session, status } = useSession();
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export function LaunchSplashContent() {
           return;
         }
 
-        router.replace(seenOnboarding ? '/login' : '/welcome');
+        router.replace(COMMUNITY_SELECTION_ENABLED || seenOnboarding ? '/login' : '/welcome');
       })();
     }, 1200);
 
@@ -54,7 +55,7 @@ export function LaunchSplashContent() {
 
       <View style={styles.center}>
         <View style={styles.logoShell}>
-          <Image source={APP_LOGO_SOURCE} style={styles.logo} contentFit="contain" />
+          <Image source={logoSource} style={styles.logo} contentFit="contain" />
         </View>
 
         <View style={styles.copy}>

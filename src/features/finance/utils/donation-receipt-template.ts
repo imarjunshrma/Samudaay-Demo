@@ -1,4 +1,5 @@
 import type { DonationRecordItem } from '../services/donation-service';
+import type { CommunityPrintIdentity } from '@/src/features/community/services/community-print-identity';
 import { isVadodaraCity } from '@/src/services/location/vadodara-area-options';
 
 function numberToWords(amount: number): string {
@@ -113,11 +114,62 @@ function donationStatusDisplay(status: DonationRecordItem['status']): string {
   return 'Pending';
 }
 
+const DEFAULT_HEADER = `
+                <div class="trust-name">મોચી એકતા ચેરીટેબલ ટ્રસ્ટ, વડોદરા</div>
+                <div class="address-line">કાર્યાલય : C 1/1/21, સુમંત ફ્લેટ્સ, ગાય સર્કલ પાસે, દુર્ગા સ્વીટ અને ફર&zwnj;સ&zwnj;ાણની બ&zwnj;ાજુ&zwnj;મ&zwnj;ાં, અ&zwnj;ક&zwnj;ોટ&zwnj;ા, વ&zwnj;ડ&zwnj;ોદ&zwnj;રા</div>
+                <div class="reg-line">રજી. નં. : એ /3339 &nbsp;&nbsp;|&nbsp;&nbsp; ફોન : 98243 95362</div>`;
+
+const DEFAULT_BANK_DETAILS = `
+                <strong>Name :</strong> MOCHI EKTA CHARITABLE TRUST<br>
+                <strong>Bank :</strong> ICICI BANK LTD. &nbsp;|&nbsp; <strong>Branch :</strong> WAGHODIA ROAD<br>
+                <strong>A/c No. :</strong> 437701000533 &nbsp;|&nbsp; <strong>IFSC No. :</strong> ICIC0004377<br>
+                <strong>80 G Registration No. :</strong> AAGTM2486CE2021001 &nbsp;|&nbsp; <strong>PAN Card No. :</strong> AAGTM2486C`;
+
+function joinParts(parts: (string | null)[]) {
+  return parts.filter(Boolean).join(' &nbsp;|&nbsp; ');
+}
+
+// Header and bank block from the active community's configuration (Samudaay).
+function buildCommunityHeader(identity: CommunityPrintIdentity) {
+  const address = identity.addressLocal || identity.address;
+  const regLine = joinParts([
+    identity.registrationNumber ? `રજી. નં. : ${escapeHtml(identity.registrationNumber)}` : null,
+    identity.phoneNumber ? `ફોન : ${escapeHtml(identity.phoneNumber)}` : null,
+  ]);
+  return `
+                <div class="trust-name">${escapeHtml(identity.trustNameLocal || identity.trustName)}</div>
+                ${address ? `<div class="address-line">કાર્યાલય : ${escapeHtml(address)}</div>` : ''}
+                ${regLine ? `<div class="reg-line">${regLine}</div>` : ''}`;
+}
+
+function buildCommunityBankDetails(identity: CommunityPrintIdentity) {
+  const lines = [
+    `<strong>Name :</strong> ${escapeHtml((identity.bankAccountName || identity.trustName).toUpperCase())}`,
+    joinParts([
+      identity.bankName ? `<strong>Bank :</strong> ${escapeHtml(identity.bankName)}` : null,
+      identity.bankBranch ? `<strong>Branch :</strong> ${escapeHtml(identity.bankBranch)}` : null,
+    ]),
+    joinParts([
+      identity.bankAccountNumber ? `<strong>A/c No. :</strong> ${escapeHtml(identity.bankAccountNumber)}` : null,
+      identity.bankIfscCode ? `<strong>IFSC No. :</strong> ${escapeHtml(identity.bankIfscCode)}` : null,
+    ]),
+    joinParts([
+      identity.registration80GNumber ? `<strong>80 G Registration No. :</strong> ${escapeHtml(identity.registration80GNumber)}` : null,
+      identity.panNumber ? `<strong>PAN Card No. :</strong> ${escapeHtml(identity.panNumber)}` : null,
+    ]),
+  ].filter(Boolean);
+  return lines.join('<br>\n                ');
+}
+
 export function generateDonationReceiptHtml(
   record: DonationRecordItem,
-  logoUri: string,
-  qrUri: string,
+  logoUri: string | null,
+  qrUri: string | null,
+  identity: CommunityPrintIdentity | null = null,
 ): string {
+  const headerHtml = identity ? buildCommunityHeader(identity) : DEFAULT_HEADER;
+  const bankDetailsHtml = identity ? buildCommunityBankDetails(identity) : DEFAULT_BANK_DETAILS;
+  const trustTitle = identity ? identity.trustName : 'Samudaay';
   const date = record.createdAt ? new Date(record.createdAt) : new Date();
   const dd = String(date.getDate()).padStart(2, '0');
   const mm = String(date.getMonth() + 1).padStart(2, '0');
@@ -138,7 +190,7 @@ export function generateDonationReceiptHtml(
 <html lang="gu">
 <head>
 <meta charset="UTF-8">
-<title>Samudaay Receipt</title>
+<title>${escapeHtml(trustTitle)} Receipt</title>
 <style>
     @page { size: A4 landscape; margin: 4mm; }
     html {
@@ -405,20 +457,18 @@ export function generateDonationReceiptHtml(
 
 <div class="receipt-box">
     <!-- Watermark -->
-    <img class="watermark" src="${escapeHtml(logoUri)}" alt="">
+    ${logoUri ? `<img class="watermark" src="${escapeHtml(logoUri)}" alt="">` : ''}
 
     <div class="content">
         <!-- HEADER -->
         <div class="header">
             <div class="logo-wrap">
                 <div class="logo-circle">
-                    <img src="${escapeHtml(logoUri)}" alt="Samudaay Logo">
+                    ${logoUri ? `<img src="${escapeHtml(logoUri)}" alt="${escapeHtml(trustTitle)} Logo">` : ''}
                 </div>
             </div>
             <div class="header-center">
-                <div class="trust-name">મોચી એકતા ચેરીટેબલ ટ્રસ્ટ, વડોદરા</div>
-                <div class="address-line">કાર્યાલય : C 1/1/21, સુમંત ફ્લેટ્સ, ગાય સર્કલ પાસે, દુર્ગા સ્વીટ અને ફર&zwnj;સ&zwnj;ાણની બ&zwnj;ાજુ&zwnj;મ&zwnj;ાં, અ&zwnj;ક&zwnj;ોટ&zwnj;ા, વ&zwnj;ડ&zwnj;ોદ&zwnj;રા</div>
-                <div class="reg-line">રજી. નં. : એ /3339 &nbsp;&nbsp;|&nbsp;&nbsp; ફોન : 98243 95362</div>
+${headerHtml}
             </div>
             <!-- No QR in header per original -->
         </div>
@@ -537,15 +587,11 @@ export function generateDonationReceiptHtml(
 
         <!-- FOOTER: Bank details (left) + QR code (right) -->
         <div class="footer">
-            <div class="bank-details">
-                <strong>Name :</strong> MOCHI EKTA CHARITABLE TRUST<br>
-                <strong>Bank :</strong> ICICI BANK LTD. &nbsp;|&nbsp; <strong>Branch :</strong> WAGHODIA ROAD<br>
-                <strong>A/c No. :</strong> 437701000533 &nbsp;|&nbsp; <strong>IFSC No. :</strong> ICIC0004377<br>
-                <strong>80 G Registration No. :</strong> AAGTM2486CE2021001 &nbsp;|&nbsp; <strong>PAN Card No. :</strong> AAGTM2486C
+            <div class="bank-details">${bankDetailsHtml}
             </div>
-            <div class="qr-box">
+            ${qrUri ? `<div class="qr-box">
                 <img src="${escapeHtml(qrUri)}" alt="QR Code" style="width:100%;height:100%;object-fit:contain;">
-            </div>
+            </div>` : ''}
         </div>
     </div>
 </div>

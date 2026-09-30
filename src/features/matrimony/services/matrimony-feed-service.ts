@@ -9,7 +9,7 @@ import { colors } from '@/src/theme';
 import { invalidateTenantApiData } from '@/src/services/api/cache-invalidation';
 import { createAndDeliverPdf } from '@/src/services/files/pdf-file';
 import type { RazorpayCheckoutOptions, RazorpayPaymentError, RazorpayPaymentSuccess } from 'react-native-razorpay';
-import { DONATION_RECEIPT_LOGO_URI } from '@/src/features/finance/services/donation-receipt-assets';
+import { getReportLogoUri } from '@/src/features/community/services/community-print-identity';
 import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
 
 type MatrimonyDiscoveryItem = {
@@ -605,7 +605,7 @@ function buildMatrimonyInvoiceHtml(invoice: MatrimonyTransactionInvoiceInput) {
             <div class="hero">
               <div class="hero-top">
                 <div class="brand">
-                  <img src="${DONATION_RECEIPT_LOGO_URI}" alt="Community logo" />
+                  ${getReportLogoUri() ? `<img src="${getReportLogoUri()}" alt="Community logo" />` : ''}
                   <div>
                     <p class="eyebrow">Transaction Invoice</p>
                     <h1>Matrimony Subscription PDF</h1>

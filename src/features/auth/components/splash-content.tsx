@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 
-import { APP_LOGO_SOURCE, APP_SHORT_NAME, useLocalizedBrandText } from '@/src/core/config/brand';
+import { APP_SHORT_NAME, useLocalizedBrandText } from '@/src/core/config/brand';
 import { markOnboardingSeen } from '@/src/core/storage/onboarding-storage';
 import { useTranslations } from '@/src/i18n/use-translations';
 
@@ -26,11 +26,12 @@ type Slide = {
 };
 
 function HeroGraphic({ type }: { type: Slide['hero'] }) {
+  const { logoSource } = useLocalizedBrandText();
   if (type === 'logo') {
     return (
       <View style={styles.heroCircle}>
         <Image
-          source={APP_LOGO_SOURCE}
+          source={logoSource}
           style={styles.logo}
           resizeMode="contain"
         />

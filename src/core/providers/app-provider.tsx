@@ -3,6 +3,8 @@ import { useColorScheme } from 'react-native';
 
 import { AppQueryProvider } from '@/src/core/providers/query-provider';
 import { SessionProvider } from '@/src/core/providers/session-provider';
+import { CommunityGate } from '@/src/features/community/components/community-gate';
+import { CommunitySessionWatcher } from '@/src/features/community/components/community-session-watcher';
 import { storageKeys } from '@/src/constants/storageKeys';
 import { getSecureItem, setSecureItem } from '@/src/services/secure-storage';
 import { AppThemeProvider } from '@/src/theme';
@@ -81,9 +83,13 @@ export function AppProvider({ children }: PropsWithChildren) {
   return (
     <AppPreferencesContext.Provider value={value}>
       <AppQueryProvider>
-        <SessionProvider onSessionLanguageChange={setLanguage}>
-          <AppThemeProvider scheme={resolvedTheme}>{children}</AppThemeProvider>
-        </SessionProvider>
+        {/* Samudaay: the community is resolved before the session so every call hits the right tenant. */}
+        <CommunityGate>
+          <SessionProvider onSessionLanguageChange={setLanguage}>
+            <CommunitySessionWatcher />
+            <AppThemeProvider scheme={resolvedTheme}>{children}</AppThemeProvider>
+          </SessionProvider>
+        </CommunityGate>
       </AppQueryProvider>
     </AppPreferencesContext.Provider>
   );

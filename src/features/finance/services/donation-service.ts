@@ -1,6 +1,6 @@
 import { NativeModules, Platform, TurboModuleRegistry } from 'react-native';
 
-import { DONATION_RECEIPT_LOGO_URI, DONATION_RECEIPT_QR_URI } from './donation-receipt-assets';
+import { getReceiptPrintContext } from '@/src/features/community/services/community-print-identity';
 import { generateDonationReceiptHtml } from '../utils/donation-receipt-template';
 import { apiClient } from '@/src/services/api/client';
 import { invalidateTenantApiData } from '@/src/services/api/cache-invalidation';
@@ -1139,7 +1139,8 @@ export const donationService = {
   },
 
   async generateReceiptAndShare(record: DonationRecordItem) {
-    const html = generateDonationReceiptHtml(record, DONATION_RECEIPT_LOGO_URI, DONATION_RECEIPT_QR_URI);
+    const receipt = getReceiptPrintContext();
+    const html = generateDonationReceiptHtml(record, receipt.logoUri, receipt.qrUri, receipt.identity);
     const fileName = `receipt-${record.receiptNo || record.id}.pdf`;
 
     return createAndDeliverPdf({
@@ -1155,7 +1156,8 @@ export const donationService = {
   },
 
   async generateReceiptAndOpen(record: DonationRecordItem) {
-    const html = generateDonationReceiptHtml(record, DONATION_RECEIPT_LOGO_URI, DONATION_RECEIPT_QR_URI);
+    const receipt = getReceiptPrintContext();
+    const html = generateDonationReceiptHtml(record, receipt.logoUri, receipt.qrUri, receipt.identity);
     const fileName = `receipt-${record.receiptNo || record.id}.pdf`;
     const title = `Donation Receipt ${record.receiptNo || record.id}`;
 

@@ -257,7 +257,7 @@ export function DigitalIdCard({
 }: DigitalIdCardProps) {
   const cardRef = useRef<View>(null);
   const [isDownloading, setIsDownloading] = useState(false);
-  const { tenantName, logoSource } = useLocalizedBrandText();
+  const { tenantName, idCardLogoSource: logoSource } = useLocalizedBrandText();
   const communityName = tenantName || communityConfig.brandName || 'Community';
   const localizedLocation = useAppLanguageText(location);
   const resolvedPhoto = resolveCardPhotoUrl(photo);
