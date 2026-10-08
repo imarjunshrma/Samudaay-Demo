@@ -50,6 +50,7 @@ export interface CommunityAppConfig {
     receiptLogoUrl: string | null;
     reportLogoUrl: string | null;
     receiptQrUrl: string | null;
+    authorizedSignatureUrl: string | null;
   };
   theme: { themePreset: string | null; primaryColor: string | null; secondaryColor: string | null };
   bank: {

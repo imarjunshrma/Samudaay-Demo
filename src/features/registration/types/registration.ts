@@ -50,4 +50,10 @@ export interface KycQueueItem {
   documents: string[];
   submittedAt?: string;
   status: 'Pending' | 'Ready' | 'Rejected';
+  reviewedAt?: string | null;
+  reviewer?: {
+    id?: string | null;
+    name?: string | null;
+    email?: string | null;
+  } | null;
 }

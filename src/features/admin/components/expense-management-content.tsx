@@ -18,6 +18,7 @@ import type { FileValue } from '@/src/types';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { getBackendSessionContext } from '@/src/features/auth/services/backend-session';
+import { formatAuditActor } from '@/src/core/audit/audit-payload';
 import { getVisibleAdminBottomBarItems } from '@/src/core/navigation/admin-shell';
 import { useSession } from '@/src/core/providers/session-provider';
 import { isPdfDownloadCancelledError } from '@/src/services/files/pdf-file';
@@ -70,6 +71,22 @@ function mapExpenseNote(expense: ExpenseItem, recentlyLabel: string, communityEx
   }
 
   return expense.expenseDate ? formatExpenseDate(expense.expenseDate, recentlyLabel) : communityExpenseLabel;
+}
+
+function getExpenseAuditNote(expense: ExpenseItem) {
+  const latestReview = [...(expense.reviews ?? [])]
+    .filter((review) => review.reviewer || review.reviewedAt)
+    .sort((left, right) => new Date(right.reviewedAt || 0).getTime() - new Date(left.reviewedAt || 0).getTime())[0];
+
+  if (latestReview?.reviewer) {
+    return `${String(latestReview.status || expense.status).replace(/_/g, ' ')} by ${formatAuditActor(latestReview.reviewer)}${latestReview.reviewedAt ? ` • ${formatExpenseDate(latestReview.reviewedAt)}` : ''}`;
+  }
+
+  if (expense.approver) {
+    return `${String(expense.status || 'Reviewed').replace(/_/g, ' ')} by ${formatAuditActor(expense.approver)}${expense.approvedAt ? ` • ${formatExpenseDate(expense.approvedAt)}` : ''}`;
+  }
+
+  return undefined;
 }
 
 function normalizeExpenseStatus(status: string) {
@@ -1101,6 +1118,9 @@ export function ExpenseManagementContent({
                 const categoryKey = normalizeExpenseCategory(item.category);
                 const categoryLabel = getExpenseCategoryLabel(categoryKey, t);
                 const canDownloadReceipt = normalizedStatus === 'APPROVED' || normalizedStatus === 'PAID';
+                const auditNote = normalizedStatus === 'APPROVED' || normalizedStatus === 'REJECTED' || normalizedStatus === 'PAID'
+                  ? getExpenseAuditNote(item)
+                  : undefined;
                 const canEditRejected = isMemberView && normalizedStatus === 'REJECTED';
                 const actions = isMemberView && normalizedStatus === 'DRAFT'
                   ? [
@@ -1183,7 +1203,7 @@ export function ExpenseManagementContent({
                     category={categoryLabel}
                     date={formatExpenseDate(item.expenseDate, t('notes.recently'))}
                     requestedBy={!isMemberView && (item.creator?.name || item.creator?.email) ? `${t('queue.requestedBy')} ${item.creator?.name || item.creator?.email}` : undefined}
-                    note={mapExpenseNote(item, t('notes.recently'), t('notes.communityExpense'))}
+                    note={auditNote || mapExpenseNote(item, t('notes.recently'), t('notes.communityExpense'))}
                     amount={formatExpenseAmount(item.amount)}
                     statusLabel={statusLabel}
                     status={item.status}

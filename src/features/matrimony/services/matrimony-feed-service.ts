@@ -11,6 +11,8 @@ import { createAndDeliverPdf } from '@/src/services/files/pdf-file';
 import type { RazorpayCheckoutOptions, RazorpayPaymentError, RazorpayPaymentSuccess } from 'react-native-razorpay';
 import { getReportLogoUri } from '@/src/features/community/services/community-print-identity';
 import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
+import { buildDedicatedAppAuditPayload, type AuditActor } from '@/src/core/audit/audit-payload';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 
 type MatrimonyDiscoveryItem = {
   id: string;
@@ -23,6 +25,7 @@ type MatrimonyDiscoveryItem = {
   country?: string | null;
   state?: string | null;
   city?: string | null;
+  nativeCity?: string | null;
   maritalStatus?: string | null;
   height?: string | null;
   age?: number | null;
@@ -185,6 +188,7 @@ export type MatrimonyProfileRecord = {
   community?: string | null;
   area?: string | null;
   city?: string | null;
+  nativeCity?: string | null;
   state?: string | null;
   country?: string | null;
   preferredAgeMin?: number | null;
@@ -212,6 +216,13 @@ export type MatrimonyProfileRecord = {
   } | null;
   createdAt?: string | null;
   updatedAt?: string | null;
+  reviewedAt?: string | null;
+  approvedAt?: string | null;
+  rejectedAt?: string | null;
+  reviewer?: AuditActor | null;
+  reviewedBy?: AuditActor | null;
+  approvedBy?: AuditActor | null;
+  rejectedBy?: AuditActor | null;
 };
 
 export type MatrimonyProfileInput = {
@@ -234,6 +245,7 @@ export type MatrimonyProfileInput = {
   community?: string | null;
   area?: string | null;
   city?: string | null;
+  nativeCity?: string | null;
   state?: string | null;
   country?: string | null;
   preferredAgeMin?: number | null;
@@ -707,7 +719,9 @@ function mapProfileRecord(profile: {
   familyBackground?: string | null;
   caste?: string | null;
   community?: string | null;
+  area?: string | null;
   city?: string | null;
+  nativeCity?: string | null;
   state?: string | null;
   country?: string | null;
   preferredAgeMin?: number | null;
@@ -727,8 +741,16 @@ function mapProfileRecord(profile: {
     phone?: string | null;
     email?: string | null;
   } | null;
+  connection?: MatrimonyProfileRecord['connection'];
   createdAt?: string | null;
   updatedAt?: string | null;
+  reviewedAt?: string | null;
+  approvedAt?: string | null;
+  rejectedAt?: string | null;
+  reviewer?: AuditActor | null;
+  reviewedBy?: AuditActor | null;
+  approvedBy?: AuditActor | null;
+  rejectedBy?: AuditActor | null;
 }): MatrimonyProfileRecord {
   return {
     id: profile.id,
@@ -750,6 +772,7 @@ function mapProfileRecord(profile: {
     community: normalizeProfileText(profile.community) || null,
     area: normalizeProfileText(profile.area) || null,
     city: normalizeProfileText(profile.city) || null,
+    nativeCity: normalizeProfileText(profile.nativeCity) || null,
     state: normalizeProfileText(profile.state) || null,
     country: normalizeProfileText(profile.country) || null,
     preferredAgeMin: profile.preferredAgeMin ?? null,
@@ -781,6 +804,13 @@ function mapProfileRecord(profile: {
     connection: profile.connection || null,
     createdAt: profile.createdAt || null,
     updatedAt: profile.updatedAt || null,
+    reviewedAt: profile.reviewedAt || null,
+    approvedAt: profile.approvedAt || null,
+    rejectedAt: profile.rejectedAt || null,
+    reviewer: profile.reviewer || null,
+    reviewedBy: profile.reviewedBy || null,
+    approvedBy: profile.approvedBy || null,
+    rejectedBy: profile.rejectedBy || null,
   };
 }
 
@@ -1058,6 +1088,9 @@ export const matrimonyFeedService = {
     formData.append('community', payload.community || '');
     formData.append('area', payload.area || '');
     formData.append('city', payload.city || '');
+    if (COMMUNITY_SELECTION_ENABLED) {
+      formData.append('nativeCity', payload.nativeCity || '');
+    }
     formData.append('state', payload.state || '');
     formData.append('country', payload.country || '');
     formData.append('preferredAgeMin', payload.preferredAgeMin ? String(payload.preferredAgeMin) : '');
@@ -1100,7 +1133,7 @@ export const matrimonyFeedService = {
       const backendSession = await getBackendSessionContext();
       if (backendSession) {
         try {
-          const response = await apiClient<{ data: { id: string; userId: string; firstName: string; lastName?: string | null; dob?: string | null; age?: number | null; gender?: string | null; maritalStatus?: string | null; height?: string | null; education?: string | null; occupation?: string | null; familyType?: string | null; caste?: string | null; community?: string | null; city?: string | null; state?: string | null; country?: string | null; photoUrls?: unknown; userCommunity?: { user?: { memberId?: string | null } | null } | null; memberId?: string | null; tenantId: string; connection?: MatrimonyDiscoveryItem['connection'] }[] }>(
+          const response = await apiClient<{ data: { id: string; userId: string; firstName: string; lastName?: string | null; dob?: string | null; age?: number | null; gender?: string | null; maritalStatus?: string | null; height?: string | null; education?: string | null; occupation?: string | null; familyType?: string | null; caste?: string | null; community?: string | null; city?: string | null; nativeCity?: string | null; state?: string | null; country?: string | null; photoUrls?: unknown; userCommunity?: { user?: { memberId?: string | null } | null } | null; memberId?: string | null; tenantId: string; connection?: MatrimonyDiscoveryItem['connection'] }[] }>(
             apiEndpoints.communityMatrimonyProfiles(backendSession.tenantId),
             { token: backendSession.token },
           );
@@ -1117,6 +1150,7 @@ export const matrimonyFeedService = {
             country: normalizeProfileText(profile.country),
             state: normalizeProfileText(profile.state),
             city: normalizeProfileText(profile.city),
+            nativeCity: normalizeProfileText(profile.nativeCity),
             maritalStatus: normalizeProfileText(profile.maritalStatus),
             height: normalizeProfileText(profile.height),
             age: profile.age ?? null,
@@ -1148,6 +1182,7 @@ export const matrimonyFeedService = {
       country?: string;
       state?: string;
       city?: string;
+      nativeCity?: string;
       maritalStatus?: string;
       education?: string;
       height?: string;
@@ -1241,6 +1276,7 @@ export const matrimonyFeedService = {
       country?: string;
       state?: string;
       city?: string;
+      nativeCity?: string;
       maritalStatus?: string;
       education?: string;
       height?: string;
@@ -1275,7 +1311,7 @@ export const matrimonyFeedService = {
     });
 
     const response = await apiClient<{
-      data: { id: string; userId: string; firstName: string; lastName?: string | null; dob?: string | null; age?: number | null; gender?: string | null; maritalStatus?: string | null; height?: string | null; education?: string | null; occupation?: string | null; familyType?: string | null; caste?: string | null; community?: string | null; city?: string | null; state?: string | null; country?: string | null; photoUrls?: unknown; userCommunity?: { user?: { memberId?: string | null } | null } | null; memberId?: string | null; tenantId: string; connection?: MatrimonyDiscoveryItem['connection'] }[];
+      data: { id: string; userId: string; firstName: string; lastName?: string | null; dob?: string | null; age?: number | null; gender?: string | null; maritalStatus?: string | null; height?: string | null; education?: string | null; occupation?: string | null; familyType?: string | null; caste?: string | null; community?: string | null; city?: string | null; nativeCity?: string | null; state?: string | null; country?: string | null; photoUrls?: unknown; userCommunity?: { user?: { memberId?: string | null } | null } | null; memberId?: string | null; tenantId: string; connection?: MatrimonyDiscoveryItem['connection'] }[];
       pagination?: MatrimonyDiscoveryPageResponse['pagination'];
     }>(
       `${apiEndpoints.communityMatrimonyProfiles(backendSession.tenantId)}?${query.toString()}`,
@@ -1295,6 +1331,7 @@ export const matrimonyFeedService = {
         country: normalizeProfileText(profile.country),
         state: normalizeProfileText(profile.state),
         city: normalizeProfileText(profile.city),
+        nativeCity: normalizeProfileText(profile.nativeCity),
         maritalStatus: normalizeProfileText(profile.maritalStatus),
         height: normalizeProfileText(profile.height),
         age: profile.age ?? null,
@@ -1322,6 +1359,7 @@ export const matrimonyFeedService = {
             profile.caste,
             profile.location,
             profile.city,
+            profile.nativeCity,
             profile.state,
             profile.country,
             profile.community,
@@ -1419,12 +1457,13 @@ export const matrimonyFeedService = {
       throw new Error('Backend session not found.');
     }
 
+    const auditPayload = await buildDedicatedAppAuditPayload();
     return apiClient<{ data: MatrimonyProfileRecord }>(
       apiEndpoints.communityMatrimonyProfileReview(backendSession.tenantId, profileId, action),
       {
         method: 'PATCH',
         token: backendSession.token,
-        body: JSON.stringify({ remarks }),
+        body: JSON.stringify({ remarks, ...auditPayload }),
       },
     );
   },

@@ -166,6 +166,7 @@ export function generateDonationReceiptHtml(
   logoUri: string | null,
   qrUri: string | null,
   identity: CommunityPrintIdentity | null = null,
+  authorizedSignatureUri: string | null = null,
 ): string {
   const headerHtml = identity ? buildCommunityHeader(identity) : DEFAULT_HEADER;
   const bankDetailsHtml = identity ? buildCommunityBankDetails(identity) : DEFAULT_BANK_DETAILS;
@@ -428,6 +429,13 @@ export function generateDonationReceiptHtml(
         width: 160px;
         margin-bottom: 4px;
     }
+    .signature-image {
+        width: 150px;
+        height: 54px;
+        object-fit: contain;
+        display: block;
+        margin-bottom: 4px;
+    }
     .sig-label {
         font-weight: bold;
         font-size: 14px;
@@ -589,9 +597,16 @@ ${headerHtml}
         <div class="footer">
             <div class="bank-details">${bankDetailsHtml}
             </div>
+            <div class="footer-right">
+                <div class="received-by-block">
+                    ${authorizedSignatureUri ? `<img class="signature-image" src="${escapeHtml(authorizedSignatureUri)}" alt="Authorized signature">` : ''}
+                    <div class="sig-line"></div>
+                    <div class="sig-label">સહી <span class="eng">Authorized Signatory</span></div>
+                </div>
             ${qrUri ? `<div class="qr-box">
                 <img src="${escapeHtml(qrUri)}" alt="QR Code" style="width:100%;height:100%;object-fit:contain;">
             </div>` : ''}
+            </div>
         </div>
     </div>
 </div>

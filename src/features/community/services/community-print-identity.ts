@@ -23,13 +23,14 @@ export interface CommunityPrintIdentity {
 export interface ReceiptPrintContext {
   logoUri: string | null;
   qrUri: string | null;
+  authorizedSignatureUri: string | null;
   /** null = dedicated build: keep the template's built-in trust details. */
   identity: CommunityPrintIdentity | null;
 }
 
 export function getReceiptPrintContext(): ReceiptPrintContext {
   if (!COMMUNITY_SELECTION_ENABLED) {
-    return { logoUri: DONATION_RECEIPT_LOGO_URI, qrUri: DONATION_RECEIPT_QR_URI, identity: null };
+    return { logoUri: DONATION_RECEIPT_LOGO_URI, qrUri: DONATION_RECEIPT_QR_URI, authorizedSignatureUri: null, identity: null };
   }
 
   const config = communityStore.getState().appConfig;
@@ -37,6 +38,7 @@ export function getReceiptPrintContext(): ReceiptPrintContext {
   return {
     logoUri: assets.receiptLogo,
     qrUri: assets.receiptQr,
+    authorizedSignatureUri: assets.authorizedSignature,
     identity: {
       trustName: config?.general.trustName || communityConfig.tenantName || 'Community',
       trustNameLocal: config?.general.trustNameLocal ?? null,

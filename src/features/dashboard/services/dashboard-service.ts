@@ -96,6 +96,10 @@ function filterDashboardCards(
   options: { hideFinance?: boolean; hideRestrictedModules?: boolean } = {},
 ) {
   return cards.filter((card) => {
+    if (card.title.trim().toLowerCase() === 'saint' || card.route === 'asset://lalabapa-gondal') {
+      return false;
+    }
+
     if (options.hideFinance && (['Expenses', 'Finance'].includes(card.title) || card.route?.startsWith('/finance'))) {
       return false;
     }
@@ -120,7 +124,6 @@ const REQUIRED_MEMBER_HOME_CARDS: DashboardCardItem[] = [
   { title: 'Expenses', subtitle: 'View community expenses', status: 'Active', icon: 'receipt-long', route: '/finance/expenses' },
   { title: 'Birthdays', subtitle: 'Upcoming wishes', status: 'Active', icon: 'cake', route: '/member/birthday-reminders' },
   { title: 'Matrimony', subtitle: 'Find matches', status: 'Active', icon: 'favorite', route: '/member/matrimony' },
-  { title: 'Saint', subtitle: 'Open PDF', status: 'Active', icon: 'picture-as-pdf', route: 'asset://lalabapa-gondal' },
   { title: 'Publication', subtitle: "The Cobbler's Journal", status: 'Active', icon: 'newspaper', route: '/publications/archive' },
   { title: 'Chat', subtitle: 'Discussions', status: 'Active', icon: 'forum', route: '/communication/community-chats' },
 ];

@@ -16,6 +16,7 @@ import { translateLocationText } from '@/src/services/location/location-label-tr
 import { colors, radius, spacing, typography } from '@/src/theme';
 import { registrationService } from '@/src/features/registration/services/registration-service';
 import type { KycQueueItem } from '@/src/features/registration/types/registration';
+import { formatAuditActor } from '@/src/core/audit/audit-payload';
 import { AdminQuickInsightsSection } from './admin-quick-insights-section';
 import { AdminKycActionMenu } from './admin-kyc-action-menu';
 
@@ -667,6 +668,12 @@ export function AdminKycApprovalQueueContent() {
                     <Text style={{ color: colors.text.muted, fontSize: 12, marginTop: spacing[2] }}>
                       {formatDocuments(item.documents, t)}
                     </Text>
+                    {item.status !== 'Pending' && item.reviewer ? (
+                      <Text style={{ color: colors.text.secondary, fontSize: 12, marginTop: spacing[1] }}>
+                        {item.status === 'Ready' ? 'Approved' : 'Rejected'} by {formatAuditActor(item.reviewer)}
+                        {item.reviewedAt ? ` • ${formatReceivedLabel(item.reviewedAt, t)}` : ''}
+                      </Text>
+                    ) : null}
                   </View>
                 </View>
 

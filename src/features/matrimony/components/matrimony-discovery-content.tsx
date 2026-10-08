@@ -10,6 +10,7 @@ import { colors, radius, spacing, typography } from '@/src/theme';
 import { useMatrimonyDiscoveryProfiles, type MatrimonyDiscoveryFilters } from '@/src/features/matrimony/hooks/use-matrimony-discovery';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { useDebounce } from '@/src/hooks';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { DiscoveryCard } from './matrimony-blocks';
 import { matrimonyFeedService, type MatrimonyAccessRecord, type MatrimonyProfileRecord } from '../services/matrimony-feed-service';
@@ -27,6 +28,7 @@ const emptyFilters: Record<MatrimonyDiscoveryFilterKey, string> = {
   country: ALL_FILTERS,
   state: ALL_FILTERS,
   city: ALL_FILTERS,
+  nativeCity: ALL_FILTERS,
   maritalStatus: ALL_FILTERS,
   education: ALL_FILTERS,
   height: ALL_FILTERS,
@@ -107,6 +109,7 @@ const filterLabels: Record<MatrimonyDiscoveryFilterKey, string> = {
   country: 'Country',
   state: 'State',
   city: 'City',
+  nativeCity: 'Mud Gam',
   maritalStatus: 'Marital status',
   education: 'Highest education',
   height: 'Height',
@@ -262,6 +265,13 @@ export function MatrimonyDiscoveryContent({
       items: selectOptionsToFilterOptions(cityOptions, filters.state === ALL_FILTERS ? 'Select state first' : 'All cities'),
       onSelect: (key) => setFilters((current) => ({ ...current, city: key })),
     },
+    ...(COMMUNITY_SELECTION_ENABLED ? [{
+      title: 'Mud Gam (Native City)',
+      activeKey: filters.nativeCity,
+      icon: 'home-work' as const,
+      items: uniqueOptions(profiles.map((profile) => profile.nativeCity), 'All native cities'),
+      onSelect: (key: string) => setFilters((current) => ({ ...current, nativeCity: key })),
+    }] : []),
     {
       title: 'Status',
       activeKey: filters.maritalStatus,

@@ -9,6 +9,7 @@ import { useAppPreferences } from '@/src/core/providers/app-provider';
 import { ErrorState } from '@/src/components/feedback';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { translateLocationText } from '@/src/services/location/location-label-translation';
+import { formatAuditActor } from '@/src/core/audit/audit-payload';
 import { colors, spacing } from '@/src/theme';
 import { registrationService, type KycApprovalRecord } from '../services/registration-service';
 import { KycApprovalActions, KycApprovalDocumentsCard, KycApprovalNote, KycApprovalProfileCard, KycApprovalStatusCard, KycApprovalSummary } from './kyc-approval-blocks';
@@ -127,6 +128,14 @@ export function KycApprovalContent() {
       { label: t('field.aadhaarNumber'), value: record.aadhaarNumber || t('fallback.notProvided') },
       { label: t('field.panNumber'), value: record.panNumber || t('fallback.notProvided') },
       { label: t('field.passportNumber'), value: record.passportNumber || t('fallback.notProvided') },
+      ...(record.status !== 'Pending'
+        ? [{
+            label: 'Audit Trail',
+            value: record.reviewer
+              ? `${record.status === 'Ready' ? 'Approved' : 'Rejected'} by ${formatAuditActor(record.reviewer)}${record.reviewedAt ? ` on ${new Date(record.reviewedAt).toLocaleDateString(getDateLocale(language), { day: 'numeric', month: 'long', year: 'numeric' })}` : ''}`
+              : t('fallback.notProvided'),
+          }]
+        : []),
     ];
   }, [language, record, t]);
 

@@ -79,14 +79,13 @@ const manualSections: ManualSection[] = [
     ],
   },
   {
-    title: 'Publications and Saint PDF',
+    title: 'Publications',
     icon: 'newspaper',
-    summary: 'Read community publications and Saint PDF documents directly in the app browser.',
+    summary: 'Read community publications directly in the app browser.',
     steps: [
       'Open Publications to view published issues.',
       'Tap View to open the publication online.',
       'User access is view-only; download actions are reserved for admin workflows.',
-      'Use the Saint PDF shortcut from the dashboard to open the document directly.',
     ],
   },
   {

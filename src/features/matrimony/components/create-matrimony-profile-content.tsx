@@ -17,6 +17,7 @@ import {
   TextField,
 } from '@/src/components';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 import { getMemberBottomBarRoute, memberBottomBarItems } from '@/src/core/navigation/member-shell';
 import { useAppPreferences } from '@/src/core/providers/app-provider';
 import { useSafeNavigation } from '@/src/core/navigation/safe-navigation';
@@ -95,6 +96,7 @@ function getProfileDetailRows(profile: MatrimonyProfileRecord) {
     { label: 'Height', value: profile.height || 'Not provided' },
     { label: 'Education', value: profile.education || 'Not provided' },
     { label: 'Occupation', value: profile.occupation || 'Not provided' },
+    ...(COMMUNITY_SELECTION_ENABLED ? [{ label: 'Mud Gam (Native City)', value: profile.nativeCity || 'Not provided' }] : []),
     { label: 'Location', value: [profile.area, profile.city, profile.state, profile.country].filter(Boolean).join(', ') || 'Not provided' },
   ];
 }
@@ -194,6 +196,7 @@ export function CreateMatrimonyProfileContent({
   const [community, setCommunity] = useState(() => cachedProfile?.community || '');
   const [area, setArea] = useState(() => isVadodaraCity(cachedProfile?.city) ? resolveVadodaraArea(cachedProfile?.city || '', cachedProfile?.area) : cachedProfile?.area || '');
   const [city, setCity] = useState(() => cachedProfile?.city || '');
+  const [nativeCity, setNativeCity] = useState(() => cachedProfile?.nativeCity || '');
   const [stateName, setStateName] = useState(() => cachedProfile?.state || '');
   const [country, setCountry] = useState(() => cachedProfile?.country || 'India');
   const [preferredAgeMin, setPreferredAgeMin] = useState(() => (cachedProfile?.preferredAgeMin ? String(cachedProfile.preferredAgeMin) : ''));
@@ -337,6 +340,7 @@ export function CreateMatrimonyProfileContent({
             setCommunity(result.community || '');
             setArea(isVadodaraCity(result.city) ? resolveVadodaraArea(result.city || '', result.area) : result.area || '');
             setCity(result.city || '');
+            setNativeCity(result.nativeCity || '');
             setStateName(result.state || '');
             setCountry('India');
             setPreferredAgeMin(result.preferredAgeMin ? String(result.preferredAgeMin) : '');
@@ -457,6 +461,7 @@ export function CreateMatrimonyProfileContent({
         community: community.trim() || undefined,
         area: isVadodaraCity(city) ? area.trim() || resolveVadodaraArea(city) : undefined,
         city: city.trim() || undefined,
+        nativeCity: COMMUNITY_SELECTION_ENABLED ? nativeCity.trim() || undefined : profile?.nativeCity ?? undefined,
         state: stateName.trim() || undefined,
         country: country.trim() || undefined,
         preferredAgeMin: preferredAgeMin.trim() ? Number(preferredAgeMin) : undefined,
@@ -488,6 +493,7 @@ export function CreateMatrimonyProfileContent({
       setCommunity(result.community || '');
       setArea(isVadodaraCity(result.city) ? resolveVadodaraArea(result.city || '', result.area) : result.area || '');
       setCity(result.city || '');
+      setNativeCity(result.nativeCity || '');
       setStateName(result.state || '');
       setCountry('India');
       setPreferredAgeMin(result.preferredAgeMin ? String(result.preferredAgeMin) : '');
@@ -960,6 +966,16 @@ export function CreateMatrimonyProfileContent({
                     options={vadodaraAreaOptions}
                   />
                 ) : null}
+                {COMMUNITY_SELECTION_ENABLED ? (
+                  <TextField
+                    label="Mud Gam (Native City)"
+                    labelVariant="default"
+                    variant="registration"
+                    value={nativeCity}
+                    onChangeText={setNativeCity}
+                    placeholder="Mud Gam (Native City)"
+                  />
+                ) : null}
               </View>
 
               <View style={{ gap: spacing[4] }}>
@@ -1249,6 +1265,16 @@ export function CreateMatrimonyProfileContent({
                     value={area}
                     onSelect={setArea}
                     options={vadodaraAreaOptions}
+                  />
+                ) : null}
+                {COMMUNITY_SELECTION_ENABLED ? (
+                  <TextField
+                    label="Mud Gam (Native City)"
+                    labelVariant="default"
+                    variant="registration"
+                    value={nativeCity}
+                    onChangeText={setNativeCity}
+                    placeholder="Mud Gam (Native City)"
                   />
                 ) : null}
               </View>

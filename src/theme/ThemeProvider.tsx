@@ -1,7 +1,8 @@
 import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
-import { createContext, useContext, useMemo, type PropsWithChildren } from 'react';
+import { createContext, useContext, useMemo, useSyncExternalStore, type PropsWithChildren } from 'react';
 
-import { colors } from '@/src/theme/colors';
+import { communityStore } from '@/src/core/config/community';
+import { applyCommunityTheme, colors } from '@/src/theme/colors';
 import { iconSizes } from '@/src/theme/iconSizes';
 import { layout } from '@/src/theme/layout';
 import { motion } from '@/src/theme/motion';
@@ -30,10 +31,18 @@ export function AppThemeProvider({
   children,
   scheme = 'light',
 }: PropsWithChildren<{ scheme?: ThemeScheme }>) {
+  const { appConfig } = useSyncExternalStore(communityStore.subscribe, communityStore.getState, communityStore.getState);
+  applyCommunityTheme(appConfig?.theme);
+  const themeKey = `${appConfig?.theme.primaryColor || ''}:${appConfig?.theme.secondaryColor || ''}`;
+  const themedColors = useMemo(() => {
+    void themeKey;
+    return colors;
+  }, [themeKey]);
+
   const value = useMemo<ThemeContextValue>(
     () => ({
       scheme,
-      colors,
+      colors: themedColors,
       spacing,
       radius,
       shadows,
@@ -42,7 +51,7 @@ export function AppThemeProvider({
       layout,
       iconSizes,
     }),
-    [scheme],
+    [scheme, themedColors],
   );
 
   return (

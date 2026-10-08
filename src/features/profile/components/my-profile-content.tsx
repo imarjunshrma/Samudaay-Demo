@@ -10,6 +10,7 @@ import { isAdminLikeSession } from '@/src/core/navigation/default-route';
 import { useMemberMenuAction } from '@/src/core/navigation/use-member-menu-action';
 import { useSession } from '@/src/core/providers/session-provider';
 import { securityConfig } from '@/src/core/config/security';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 import { useAuthActions } from '@/src/features/auth/hooks/use-auth-actions';
 import { useProfile } from '../hooks';
 import { useLocalizedProfileText } from '../services/localized-profile-text';
@@ -245,6 +246,11 @@ export function MyProfileContent() {
                           <View style={{ flex: 1 }}><ProfileDetailRow label={t('fields.city')} value={profile?.city || t('fields.notProvided')} /></View>
                           <View style={{ flex: 1 }}><ProfileDetailRow label={t('fields.area')} value={profile?.area || t('fields.notProvided')} /></View>
                         </View>
+                        {COMMUNITY_SELECTION_ENABLED ? (
+                          <View style={{ flexDirection: 'row', gap: spacing[4] }}>
+                            <View style={{ flex: 1 }}><ProfileDetailRow label="Mud Gam (Native City)" value={profile?.nativeCity || t('fields.notProvided')} /></View>
+                          </View>
+                        ) : null}
                         <View style={{ flexDirection: 'row', gap: spacing[4] }}>
                           <View style={{ flex: 1 }}><ProfileDetailRow label={t('fields.pincode')} value={profile?.pincode || t('fields.notProvided')} /></View>
                         </View>

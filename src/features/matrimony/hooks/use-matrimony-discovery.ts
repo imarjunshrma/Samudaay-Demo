@@ -13,6 +13,7 @@ export type DiscoveryProfile = {
   country?: string | null;
   state?: string | null;
   city?: string | null;
+  nativeCity?: string | null;
   maritalStatus?: string | null;
   height?: string | null;
   age?: number | null;
@@ -37,6 +38,7 @@ export type MatrimonyDiscoveryFilters = {
   country?: string;
   state?: string;
   city?: string;
+  nativeCity?: string;
   maritalStatus?: string;
   education?: string;
   height?: string;

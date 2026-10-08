@@ -12,6 +12,7 @@ import {
 } from '@/src/services/firebase/firestore';
 import { readStoredSession, writeStoredSession } from '@/src/features/auth/services/session-storage';
 import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
+import { buildDedicatedAppAuditPayload, type AuditActor } from '@/src/core/audit/audit-payload';
 import type { KycQueueItem, RegistrationDraft } from '@/src/features/registration/types/registration';
 import type { FileValue } from '@/src/types';
 
@@ -80,6 +81,13 @@ type BackendRegistrationSummary = {
     slug: string;
   };
   kycDocuments?: BackendKycDocument[];
+  reviewedAt?: string | null;
+  approvedAt?: string | null;
+  rejectedAt?: string | null;
+  reviewer?: AuditActor | null;
+  reviewedBy?: AuditActor | null;
+  approvedBy?: AuditActor | null;
+  rejectedBy?: AuditActor | null;
 };
 
 export type KycApprovalRecord = {
@@ -103,6 +111,8 @@ export type KycApprovalRecord = {
   submittedAt?: string;
   status: 'Pending' | 'Ready' | 'Rejected';
   remarks?: string | null;
+  reviewedAt?: string | null;
+  reviewer?: AuditActor | null;
   documents: {
     id: string;
     title: string;
@@ -376,6 +386,30 @@ function mapDocuments(
   );
 }
 
+function resolveRegistrationAudit(record: BackendRegistrationSummary) {
+  const approved = record.status === 'ACTIVE' || record.status === 'APPROVED' || record.kycStatus === 'APPROVED';
+  const rejected = record.status === 'REJECTED' || record.kycStatus === 'REJECTED';
+
+  if (approved) {
+    return {
+      reviewedAt: record.approvedAt || record.reviewedAt || record.updatedAt || null,
+      reviewer: record.approvedBy || record.reviewedBy || record.reviewer || null,
+    };
+  }
+
+  if (rejected) {
+    return {
+      reviewedAt: record.rejectedAt || record.reviewedAt || record.updatedAt || null,
+      reviewer: record.rejectedBy || record.reviewedBy || record.reviewer || null,
+    };
+  }
+
+  return {
+    reviewedAt: record.reviewedAt || null,
+    reviewer: record.reviewedBy || record.reviewer || null,
+  };
+}
+
 async function mapBackendMembershipToDraft(membership: BackendRegistrationSummary): Promise<RegistrationDraft> {
   const approved = membership.status === 'ACTIVE' || membership.status === 'APPROVED' || membership.kycStatus === 'APPROVED';
   const rejected = membership.status === 'REJECTED' || membership.kycStatus === 'REJECTED';
@@ -420,6 +454,7 @@ async function mapBackendMembershipToDraft(membership: BackendRegistrationSummar
 function mapBackendSummaryToApprovalRecord(record: BackendRegistrationSummary): KycApprovalRecord {
   const approved = record.status === 'ACTIVE' || record.status === 'APPROVED' || record.kycStatus === 'APPROVED';
   const rejected = record.status === 'REJECTED' || record.kycStatus === 'REJECTED';
+  const audit = resolveRegistrationAudit(record);
   const memberName = [record.firstName, record.middleName, record.lastName]
     .filter(Boolean)
     .join(' ')
@@ -446,6 +481,8 @@ function mapBackendSummaryToApprovalRecord(record: BackendRegistrationSummary): 
     submittedAt: record.updatedAt || record.createdAt || undefined,
     status: approved ? 'Ready' : rejected ? 'Rejected' : 'Pending',
     remarks: record.remarks || null,
+    reviewedAt: audit.reviewedAt,
+    reviewer: audit.reviewer,
     documents: (record.kycDocuments ?? []).map((document) => {
       const status = normalizeBackendDocumentStatus(document.status, { approved, rejected });
       return {
@@ -859,6 +896,8 @@ export const registrationService = {
               city: record.city || 'Unknown',
               documents: mapDocuments(record.kycDocuments).map((document) => document.name),
               submittedAt: record.updatedAt || undefined,
+              reviewedAt: resolveRegistrationAudit(record).reviewedAt,
+              reviewer: resolveRegistrationAudit(record).reviewer,
               status:
                 record.status === 'ACTIVE' || record.status === 'APPROVED' || record.kycStatus === 'APPROVED'
                   ? 'Ready'
@@ -936,6 +975,8 @@ export const registrationService = {
                 city: record.city || 'Unknown',
                 documents: mapDocuments(record.kycDocuments).map((document) => document.name),
                 submittedAt: record.updatedAt || undefined,
+                reviewedAt: resolveRegistrationAudit(record).reviewedAt,
+                reviewer: resolveRegistrationAudit(record).reviewer,
                 status:
                   record.status === 'ACTIVE' || record.status === 'APPROVED' || record.kycStatus === 'APPROVED'
                     ? 'Ready'
@@ -1026,12 +1067,13 @@ export const registrationService = {
     if (isBackendEnabled()) {
       const context = await getBackendSessionContext();
       if (context) {
+        const auditPayload = await buildDedicatedAppAuditPayload();
         await apiClient<{ data: BackendRegistrationSummary }>(
           apiEndpoints.communityApprovalDecision(context.tenantId, id, 'approve'),
           {
             method: 'POST',
             token: context.token,
-            body: JSON.stringify({ tenantId: context.tenantId }),
+            body: JSON.stringify({ tenantId: context.tenantId, ...auditPayload }),
           },
         );
 
@@ -1053,6 +1095,7 @@ export const registrationService = {
     if (isBackendEnabled()) {
       const context = await getBackendSessionContext();
       if (context) {
+        const auditPayload = await buildDedicatedAppAuditPayload();
         await apiClient<{ data: BackendRegistrationSummary }>(
           apiEndpoints.communityApprovalDecision(context.tenantId, id, 'reject'),
           {
@@ -1062,6 +1105,7 @@ export const registrationService = {
               tenantId: context.tenantId,
               remarks: rejectionReason || undefined,
               rejectionReason: rejectionReason || undefined,
+              ...auditPayload,
             }),
           },
         );

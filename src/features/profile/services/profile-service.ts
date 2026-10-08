@@ -5,6 +5,8 @@ import { apiConfig } from '@/src/constants/apiConfig';
 import { getCurrentFirebaseUser } from '@/src/services/firebase/auth';
 import { getBackendSessionContext, isBackendApiConfigured } from '@/src/features/auth/services/backend-session';
 import { readStoredSession } from '@/src/features/auth/services/session-storage';
+import { buildDedicatedAppAuditPayload } from '@/src/core/audit/audit-payload';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 import type { FamilyMember, ProfileUpdateRequestItem, StudentRecord, UserProfile } from '@/src/features/profile/types/profile';
 import { resolveSecondaryLanguageText } from './secondary-language-text';
 
@@ -33,6 +35,7 @@ type BackendProfileResponse = {
   passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
+  nativeCity?: string | null;
   profileUpdateRequest?: UserProfile['profileUpdateRequest'];
 };
 
@@ -87,6 +90,7 @@ async function buildProfileWithSecondaryLanguage(source: {
   passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
+  nativeCity?: string | null;
   status: string | null;
   profilePhotoUrl: string | null;
   profileUpdateRequest?: UserProfile['profileUpdateRequest'];
@@ -130,6 +134,7 @@ async function buildProfileWithSecondaryLanguage(source: {
     passportNumber: source.passportNumber ?? null,
     bloodGroup: source.bloodGroup ?? null,
     subCommunity: source.subCommunity ?? null,
+    nativeCity: source.nativeCity ?? null,
     status: source.status,
     profilePhotoUrl: source.profilePhotoUrl,
     profileUpdateRequest: source.profileUpdateRequest ?? null,
@@ -339,6 +344,7 @@ async function mapBackendProfile(
     passportNumber: data.passportNumber ?? null,
     bloodGroup: data.bloodGroup ?? null,
     subCommunity: data.subCommunity ?? null,
+    nativeCity: data.nativeCity ?? null,
     status: data.status ?? fallback.status ?? null,
     profilePhotoUrl: resolveBackendMediaUrl(data.profilePic ?? fallback.profilePhotoUrl ?? null),
     profileUpdateRequest: data.profileUpdateRequest ?? null,
@@ -440,6 +446,9 @@ export const profileService = {
       formData.append('passportNumber', nextProfileToPersist.passportNumber ?? '');
       formData.append('bloodGroup', nextProfileToPersist.bloodGroup ?? '');
       formData.append('subCommunity', nextProfileToPersist.subCommunity ?? '');
+      if (COMMUNITY_SELECTION_ENABLED) {
+        formData.append('nativeCity', nextProfileToPersist.nativeCity ?? '');
+      }
       formData.append('file', {
         uri: nextProfileToPersist.profilePhoto.uri,
         name: nextProfileToPersist.profilePhoto.name,
@@ -483,6 +492,7 @@ export const profileService = {
           passportNumber: nextProfileToPersist.passportNumber,
           bloodGroup: nextProfileToPersist.bloodGroup,
           subCommunity: nextProfileToPersist.subCommunity,
+          ...(COMMUNITY_SELECTION_ENABLED ? { nativeCity: nextProfileToPersist.nativeCity } : {}),
         }),
       },
     );
@@ -582,12 +592,13 @@ export const profileService = {
       throw new Error('This request has been superseded by a newer update and can no longer be reviewed.');
     }
 
+    const auditPayload = await buildDedicatedAppAuditPayload();
     const response = await apiClient<{ data: { id: string; status: string } }>(
       apiEndpoints.communityProfileUpdateRequestDecision(backendSession.tenantId, requestId, action),
       {
         method: 'PATCH',
         token: backendSession.token,
-        body: JSON.stringify({ remarks: remarks ?? null }),
+        body: JSON.stringify({ remarks: remarks ?? null, ...auditPayload }),
       },
     );
     await invalidateTenantApiData(backendSession.tenantId);

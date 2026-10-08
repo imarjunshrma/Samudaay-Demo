@@ -16,6 +16,8 @@ import {
   Text,
 } from '@/src/components';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
+import { formatAuditActor } from '@/src/core/audit/audit-payload';
 import { useAppPreferences } from '@/src/core/providers/app-provider';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { useDebounce } from '@/src/hooks';
@@ -35,6 +37,7 @@ type AdminMatrimonyFilterKey =
   | 'gender'
   | 'state'
   | 'city'
+  | 'nativeCity'
   | 'maritalStatus'
   | 'education'
   | 'height'
@@ -50,6 +53,7 @@ const emptyFilters: Record<AdminMatrimonyFilterKey, string> = {
   gender: ALL_FILTERS,
   state: ALL_FILTERS,
   city: ALL_FILTERS,
+  nativeCity: ALL_FILTERS,
   maritalStatus: ALL_FILTERS,
   education: ALL_FILTERS,
   height: ALL_FILTERS,
@@ -279,6 +283,16 @@ function mapReviewProfile(profile: MatrimonyProfileRecord, status: MatrimonyStat
   const city = profile.city || 'Community';
   const state = profile.state || '';
   const requestType = profile.reviewRequestType === 'PROFILE_UPDATE' ? 'Update Request' : 'New Profile';
+  const auditActor = status === 'Approved'
+    ? profile.approvedBy || profile.reviewedBy || profile.reviewer
+    : status === 'Rejected'
+      ? profile.rejectedBy || profile.reviewedBy || profile.reviewer
+      : null;
+  const reviewedAt = status === 'Approved'
+    ? profile.approvedAt || profile.reviewedAt || profile.updatedAt
+    : status === 'Rejected'
+      ? profile.rejectedAt || profile.reviewedAt || profile.updatedAt
+      : null;
   const pendingReviewPhotos = Array.isArray(profile.pendingReviewData?.photoUrls)
     ? profile.pendingReviewData.photoUrls.filter((value): value is string => typeof value === 'string' && Boolean(value.trim()))
     : [];
@@ -294,6 +308,7 @@ function mapReviewProfile(profile: MatrimonyProfileRecord, status: MatrimonyStat
     submittedAt: profile.updatedAt || profile.createdAt || new Date().toISOString(),
     createdAt: profile.createdAt || profile.updatedAt || new Date().toISOString(),
     city,
+    nativeCity: profile.nativeCity || null,
     state,
     age,
     gender: profile.gender || null,
@@ -307,6 +322,8 @@ function mapReviewProfile(profile: MatrimonyProfileRecord, status: MatrimonyStat
     requestType,
     changeSummary: profile.reviewChangeSummary ?? [],
     rejectionReason: status === 'Rejected' ? profile.remarks || undefined : undefined,
+    auditLabel: auditActor ? `${status} by ${formatAuditActor(auditActor)}` : undefined,
+    auditDate: reviewedAt || undefined,
   };
 }
 
@@ -391,6 +408,7 @@ export function ApproveMatrimonyProfilesContent() {
     gender: filters.gender,
     state: filters.state,
     city: filters.city,
+    nativeCity: filters.nativeCity,
     maritalStatus: filters.maritalStatus,
     education: filters.education,
     height: filters.height,
@@ -491,6 +509,7 @@ export function ApproveMatrimonyProfilesContent() {
         (filters.gender === ALL_FILTERS || String(item.gender || '').toLowerCase().includes(filters.gender.toLowerCase())) &&
         (filters.state === ALL_FILTERS || String(item.state || '').toLowerCase().includes(filters.state.toLowerCase())) &&
         (filters.city === ALL_FILTERS || String(item.city || '').toLowerCase().includes(filters.city.toLowerCase())) &&
+        (filters.nativeCity === ALL_FILTERS || String(item.nativeCity || '').toLowerCase().includes(filters.nativeCity.toLowerCase())) &&
         maritalStatusMatchesFilter(item.maritalStatus, filters.maritalStatus) &&
         (filters.education === ALL_FILTERS || String(item.education || '').toLowerCase().includes(filters.education.toLowerCase())) &&
         (filters.height === ALL_FILTERS || String(item.height || '').toLowerCase().includes(filters.height.toLowerCase())) &&
@@ -504,7 +523,7 @@ export function ApproveMatrimonyProfilesContent() {
 
       const searchMatches =
         !term ||
-        `${item.name} ${item.profession} ${item.ageLocation} ${item.city} ${item.note ?? ''} ${item.rejectionReason ?? ''}`
+        `${item.name} ${item.profession} ${item.ageLocation} ${item.city} ${item.nativeCity ?? ''} ${item.note ?? ''} ${item.rejectionReason ?? ''}`
           .toLowerCase()
           .includes(term);
 
@@ -619,6 +638,13 @@ export function ApproveMatrimonyProfilesContent() {
       items: selectOptionsToFilterOptions(cityOptions, filters.state === ALL_FILTERS ? 'Select state first' : 'All cities'),
       onSelect: (key: string) => setFilters((current) => ({ ...current, city: key })),
     },
+    ...(COMMUNITY_SELECTION_ENABLED ? [{
+      title: 'Mud Gam (Native City)',
+      activeKey: filters.nativeCity,
+      icon: 'home-work' as const,
+      items: uniqueOptions(reviewProfiles.map((profile) => profile.nativeCity), 'All native cities'),
+      onSelect: (key: string) => setFilters((current) => ({ ...current, nativeCity: key })),
+    }] : []),
     {
       title: 'Status',
       activeKey: filters.maritalStatus,
@@ -922,6 +948,16 @@ export function ApproveMatrimonyProfilesContent() {
                         <Text variant="caption" style={{ color: colors.text.muted, marginTop: spacing[1] }}>
                           {formatRelativeLabel(item.submittedAt)}
                         </Text>
+                        {COMMUNITY_SELECTION_ENABLED && item.nativeCity ? (
+                          <Text variant="caption" style={{ color: colors.text.muted, marginTop: 2 }}>
+                            Mud Gam: {item.nativeCity}
+                          </Text>
+                        ) : null}
+                        {item.auditLabel ? (
+                          <Text variant="caption" style={{ color: colors.text.secondary, marginTop: 2 }}>
+                            {item.auditLabel}{item.auditDate ? ` • ${formatRelativeLabel(item.auditDate)}` : ''}
+                          </Text>
+                        ) : null}
                         {item.note ? (
                           <Text variant="caption" style={{ color: colors.text.secondary, marginTop: spacing[1] }}>
                             {item.note}

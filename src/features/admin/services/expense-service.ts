@@ -4,6 +4,7 @@ import { apiEndpoints } from '@/src/services/api/endpoints';
 import { apiConfig } from '@/src/constants';
 import { getBackendSessionContext, isBackendApiConfigured } from '@/src/features/auth/services/backend-session';
 import { getActiveTenantRequestHeaders } from '@/src/core/config/community';
+import { buildDedicatedAppAuditPayload } from '@/src/core/audit/audit-payload';
 import { withAuthHeaders } from '@/src/services/api/interceptors';
 import { downloadAndDeliverPdf } from '@/src/services/files/pdf-file';
 
@@ -293,6 +294,7 @@ export const expenseService = {
       throw new Error('Backend session is not available.');
     }
 
+    const auditPayload = await buildDedicatedAppAuditPayload();
     const response = await apiClient<{ data: ExpenseItem }>(
       `${apiEndpoints.communityExpenses(backendSession.tenantId)}/${encodeURIComponent(expenseId)}/status`,
       {
@@ -301,6 +303,7 @@ export const expenseService = {
         body: JSON.stringify({
           status,
           remarks: remarks || undefined,
+          ...auditPayload,
         }),
       },
     );

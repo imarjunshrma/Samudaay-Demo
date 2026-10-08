@@ -9,6 +9,7 @@ import { bloodGroupOptions } from '@/src/constants/blood-groups';
 import type { DialogVariant } from '@/src/components';
 import { useSafeNavigation } from '@/src/core/navigation/safe-navigation';
 import { isAdminLikeSession } from '@/src/core/navigation/default-route';
+import { COMMUNITY_SELECTION_ENABLED } from '@/src/core/config/community';
 import { useSession } from '@/src/core/providers/session-provider';
 import { useAppForm } from '@/src/hooks/useForm';
 import { useProfile } from '@/src/features/profile/hooks';
@@ -25,6 +26,7 @@ type ProfileEditValues = {
   fullNameEn: string;
   email: string;
   subCommunity: string;
+  nativeCity: string;
   gender: string;
   dob: Date | undefined;
   addressLine1: string;
@@ -95,6 +97,7 @@ export function ChangeProfileDetailsContent() {
       fullNameEn: profile?.fullNameEn || '',
       email: profile?.email || '',
       subCommunity: profile?.subCommunity || '',
+      nativeCity: profile?.nativeCity || '',
       gender: profile?.gender || '',
       dob: parseDate(profile?.dob),
       addressLine1: profile?.addressLine1 || '',
@@ -159,6 +162,7 @@ export function ChangeProfileDetailsContent() {
           fullNameEn: fullName || values.fullNameEn.trim(),
           email: values.email.trim(),
           subCommunity: values.subCommunity.trim(),
+          nativeCity: COMMUNITY_SELECTION_ENABLED ? values.nativeCity.trim() || null : profile?.nativeCity ?? null,
           gender: values.gender,
           dob: values.dob ? values.dob.toISOString() : null,
           addressLine1: values.addressLine1.trim(),
@@ -192,6 +196,7 @@ export function ChangeProfileDetailsContent() {
             fullNameEn: saved.fullNameEn,
             email: saved.email,
             subCommunity: saved.subCommunity || values.subCommunity,
+            nativeCity: saved.nativeCity || values.nativeCity,
             gender: saved.gender || values.gender,
             dob: parseDate(saved.dob) || values.dob,
             addressLine1: saved.addressLine1 || values.addressLine1,
@@ -349,6 +354,15 @@ export function ChangeProfileDetailsContent() {
                 variant="registration"
                 placeholder={t('edit.fields.subCommunity')}
               />
+              {COMMUNITY_SELECTION_ENABLED ? (
+                <TextField
+                  name="nativeCity"
+                  label="Mud Gam (Native City)"
+                  labelVariant="default"
+                  variant="registration"
+                  placeholder="Mud Gam (Native City)"
+                />
+              ) : null}
               <SelectField
                 name="gender"
                 label={t('edit.fields.gender')}

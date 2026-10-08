@@ -4,7 +4,7 @@ import { TouchableOpacity, View } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { FileUpload, FormLabel, Text, TextField } from '@/src/components';
+import { FileUpload, FormLabel, Text } from '@/src/components';
 import { useTranslations } from '@/src/i18n/use-translations';
 
 import { colors, spacing, typography } from '@/src/theme';

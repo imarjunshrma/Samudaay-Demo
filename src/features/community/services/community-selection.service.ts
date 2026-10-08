@@ -96,9 +96,10 @@ interface CommunityPrintAssets {
   receiptLogo: string | null;
   reportLogo: string | null;
   receiptQr: string | null;
+  authorizedSignature: string | null;
 }
 
-let printAssets: CommunityPrintAssets = { receiptLogo: null, reportLogo: null, receiptQr: null };
+let printAssets: CommunityPrintAssets = { receiptLogo: null, reportLogo: null, receiptQr: null, authorizedSignature: null };
 const dataUriCache = new Map<string, string>();
 
 async function toDataUri(url: string | null) {
@@ -133,15 +134,16 @@ async function toDataUri(url: string | null) {
 
 export async function preparePrintAssets(config: CommunityAppConfig | null) {
   if (!config) {
-    printAssets = { receiptLogo: null, reportLogo: null, receiptQr: null };
+    printAssets = { receiptLogo: null, reportLogo: null, receiptQr: null, authorizedSignature: null };
     return;
   }
-  const [receiptLogo, reportLogo, receiptQr] = await Promise.all([
+  const [receiptLogo, reportLogo, receiptQr, authorizedSignature] = await Promise.all([
     toDataUri(config.branding.receiptLogoUrl),
     toDataUri(config.branding.reportLogoUrl),
     toDataUri(config.branding.receiptQrUrl),
+    toDataUri(config.branding.authorizedSignatureUrl),
   ]);
-  printAssets = { receiptLogo, reportLogo, receiptQr };
+  printAssets = { receiptLogo, reportLogo, receiptQr, authorizedSignature };
 }
 
 export function getPrintAssets() {

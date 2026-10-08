@@ -1140,7 +1140,7 @@ export const donationService = {
 
   async generateReceiptAndShare(record: DonationRecordItem) {
     const receipt = getReceiptPrintContext();
-    const html = generateDonationReceiptHtml(record, receipt.logoUri, receipt.qrUri, receipt.identity);
+    const html = generateDonationReceiptHtml(record, receipt.logoUri, receipt.qrUri, receipt.identity, receipt.authorizedSignatureUri);
     const fileName = `receipt-${record.receiptNo || record.id}.pdf`;
 
     return createAndDeliverPdf({
@@ -1157,7 +1157,7 @@ export const donationService = {
 
   async generateReceiptAndOpen(record: DonationRecordItem) {
     const receipt = getReceiptPrintContext();
-    const html = generateDonationReceiptHtml(record, receipt.logoUri, receipt.qrUri, receipt.identity);
+    const html = generateDonationReceiptHtml(record, receipt.logoUri, receipt.qrUri, receipt.identity, receipt.authorizedSignatureUri);
     const fileName = `receipt-${record.receiptNo || record.id}.pdf`;
     const title = `Donation Receipt ${record.receiptNo || record.id}`;
 

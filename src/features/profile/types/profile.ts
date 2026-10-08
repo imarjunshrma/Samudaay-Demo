@@ -26,6 +26,7 @@ export interface UserProfile {
   passportNumber?: string | null;
   bloodGroup?: string | null;
   subCommunity?: string | null;
+  nativeCity?: string | null;
   status?: string | null;
   profilePhotoUrl?: string | null;
   profilePhoto?: FileValue | null;
@@ -45,6 +46,11 @@ export type ProfileUpdateRequestItem = {
   remarks?: string | null;
   createdAt?: string | Date | null;
   reviewedAt?: string | Date | null;
+  reviewer?: {
+    id?: string | null;
+    name?: string | null;
+    email?: string | null;
+  } | null;
   requester: {
     id: string;
     name: string;

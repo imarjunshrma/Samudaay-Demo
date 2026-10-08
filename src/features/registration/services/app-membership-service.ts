@@ -93,7 +93,9 @@ function buildMembershipReceiptHtml(receipt: AppMembershipReceiptInput) {
   const tenantName = communityConfig.tenantName || communityConfig.brandName || 'Community';
   const tenantNameGu = communityConfig.tenantNameGu || tenantName;
   const tagline = communityConfig.tagline || 'Community Membership';
-  const logoUri = getReceiptPrintContext().logoUri;
+  const receiptPrintContext = getReceiptPrintContext();
+  const logoUri = receiptPrintContext.logoUri;
+  const authorizedSignatureUri = receiptPrintContext.authorizedSignatureUri;
   const paidOn = formatDate(receipt.createdAt);
   const membershipPeriod = `${formatDate(receipt.membershipStartsAt)} to ${formatDate(receipt.membershipEndsAt)}`;
 
@@ -251,6 +253,13 @@ function buildMembershipReceiptHtml(receipt: AppMembershipReceiptInput) {
             border-top: 1.5px solid #293084;
             margin-bottom: 8px;
           }
+          .signature-image {
+            width: 160px;
+            height: 56px;
+            object-fit: contain;
+            margin: 0 auto 6px;
+            display: block;
+          }
         </style>
       </head>
       <body>
@@ -296,6 +305,7 @@ function buildMembershipReceiptHtml(receipt: AppMembershipReceiptInput) {
 
             <div class="signature">
               <div class="signature-box">
+                ${authorizedSignatureUri ? `<img class="signature-image" src="${authorizedSignatureUri}" alt="Authorized signature" />` : ''}
                 <div class="signature-line"></div>
                 Authorized Signatory
               </div>
