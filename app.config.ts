@@ -59,7 +59,7 @@ const config: ExpoConfig = {
   name: "Samudaay",
   slug: "samudaay",
   owner: "bhaumik.darji",
-  version: "3.0.2",
+  version: "3.0.3",
   orientation: "portrait",
   icon: "./assets/images/icon.png",
   scheme: "samudaay",

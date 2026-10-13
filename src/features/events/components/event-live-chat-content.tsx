@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, AppState, FlatList, Dimensions, Image, Modal, Platform, Pressable, Share, useWindowDimensions, View } from 'react-native';
+import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { ActivityIndicator, AppState, FlatList, Dimensions, Image, Modal, NativeScrollEvent, NativeSyntheticEvent, Platform, Pressable, Share, useWindowDimensions, View } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as Linking from 'expo-linking';
@@ -145,11 +145,18 @@ export function EventLiveChatContent() {
     return () => clearTimeout(timer);
   }, [selectedChatId, newestVisibleMessageId, chatIsFocused, chatAppState]);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+  const [hasLoadedInitialMessages, setHasLoadedInitialMessages] = useState(false);
   const [chatConnectionLost, setChatConnectionLost] = useState(false);
   const [hasOlderMessages, setHasOlderMessages] = useState(false);
   const [olderMessagesCursor, setOlderMessagesCursor] = useState<string | null>(null);
   const [isLoadingOlderMessages, setIsLoadingOlderMessages] = useState(false);
   const loadedOlderMessagesRef = useRef(false);
+  const chatScrollRef = useRef<ComponentRef<typeof KeyboardAwareScrollView> | null>(null);
+  const shouldScrollToLatestRef = useRef(false);
+  const shouldAnimateLatestScrollRef = useRef(false);
+  const isNearLatestRef = useRef(true);
+  const allowOlderPaginationRef = useRef(false);
+  const userHasDraggedChatRef = useRef(false);
   const [draftMessage, setDraftMessage] = useState('');
   const [draftImage, setDraftImage] = useState<{ uri: string; name?: string; type?: string } | null>(null);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
@@ -268,6 +275,7 @@ export function EventLiveChatContent() {
   const showEventStream = isEventChat && youtubeUrl && canAccessCurrentEventChat && !chatAccessBlocked;
   const visibleMembers = useMemo(() => selectedChat?.members ?? [], [selectedChat?.members]);
   const canManageChatMembers = Boolean(selectedChat?.canManageMembers);
+  const selectedChatMessageCount = Number(selectedChat?.messageCount || 0);
   const matrimonyOtherMember = isMatrimonyChat
     ? visibleMembers.find((member) => member.id && member.id !== session?.user.id) ?? null
     : null;
@@ -320,14 +328,26 @@ export function EventLiveChatContent() {
     if (!selectedChatId) {
       setMessages([]);
       setIsLoadingMessages(false);
+      setHasLoadedInitialMessages(false);
       setChatConnectionLost(false);
       loadedOlderMessagesRef.current = false;
+      shouldScrollToLatestRef.current = false;
+      shouldAnimateLatestScrollRef.current = false;
+      isNearLatestRef.current = true;
+      allowOlderPaginationRef.current = false;
+      userHasDraggedChatRef.current = false;
       return () => {
         active = false;
       };
     }
     loadedOlderMessagesRef.current = false;
+    shouldScrollToLatestRef.current = true;
+    shouldAnimateLatestScrollRef.current = false;
+    isNearLatestRef.current = true;
+    allowOlderPaginationRef.current = false;
+    userHasDraggedChatRef.current = false;
     setIsLoadingMessages(true);
+    setHasLoadedInitialMessages(false);
     setChatConnectionLost(false);
 
     const loadMessages = () => chatService.loadChatMessages(selectedChatId).then((result) => {
@@ -336,17 +356,23 @@ export function EventLiveChatContent() {
           if (!loadedOlderMessagesRef.current) {
             setHasOlderMessages(result.hasMore);
             setOlderMessagesCursor(result.nextCursor);
+            shouldScrollToLatestRef.current = true;
             return result.messages;
           }
 
           const existingIds = new Set(current.map((item) => item.id));
           const incoming = result.messages.filter((item) => !existingIds.has(item.id));
+          if (incoming.length) {
+            shouldScrollToLatestRef.current = isNearLatestRef.current;
+          }
           return incoming.length ? [...current, ...incoming] : current;
         });
+        setHasLoadedInitialMessages(true);
         setIsLoadingMessages(false);
       }
     }).catch(() => {
       if (active) {
+        setHasLoadedInitialMessages(true);
         setIsLoadingMessages(false);
       }
     });
@@ -354,7 +380,14 @@ export function EventLiveChatContent() {
     void chatService.subscribeToChat(selectedChatId, {
       onMessage: (message) => {
         if (active) {
-          setMessages((current) => (current.some((item) => item.id === message.id) ? current : [...current, message]));
+          setMessages((current) => {
+            if (current.some((item) => item.id === message.id)) {
+              return current;
+            }
+            shouldScrollToLatestRef.current = isNearLatestRef.current;
+            shouldAnimateLatestScrollRef.current = isNearLatestRef.current;
+            return [...current, message];
+          });
         }
       },
       onPresence: ({ userId, isOnline, lastSeenAt }) => {
@@ -407,7 +440,7 @@ export function EventLiveChatContent() {
   }, [selectedChatId]);
 
   const handleLoadOlderMessages = async () => {
-    if (!selectedChatId || !olderMessagesCursor || isLoadingOlderMessages) {
+    if (!selectedChatId || !olderMessagesCursor || isLoadingOlderMessages || !allowOlderPaginationRef.current) {
       return;
     }
 
@@ -415,6 +448,8 @@ export function EventLiveChatContent() {
     try {
       const result = await chatService.loadChatMessages(selectedChatId, { beforeMessageId: olderMessagesCursor });
       loadedOlderMessagesRef.current = true;
+      shouldScrollToLatestRef.current = false;
+      shouldAnimateLatestScrollRef.current = false;
       setMessages((current) => {
         const existingIds = new Set(current.map((item) => item.id));
         const older = result.messages.filter((item) => !existingIds.has(item.id));
@@ -425,6 +460,42 @@ export function EventLiveChatContent() {
     } finally {
       setIsLoadingOlderMessages(false);
     }
+  };
+
+  const handleChatScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
+    const distanceFromLatest = contentSize.height - (contentOffset.y + layoutMeasurement.height);
+    isNearLatestRef.current = distanceFromLatest < 96;
+
+    if (
+      contentOffset.y <= 48 &&
+      hasOlderMessages &&
+      !isLoadingOlderMessages &&
+      !isLoadingMessages &&
+      !isNearLatestRef.current &&
+      allowOlderPaginationRef.current &&
+      userHasDraggedChatRef.current
+    ) {
+      void handleLoadOlderMessages();
+    }
+  };
+
+  const handleChatScrollBeginDrag = () => {
+    userHasDraggedChatRef.current = true;
+  };
+
+  const handleChatContentSizeChange = () => {
+    if (!shouldScrollToLatestRef.current) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      chatScrollRef.current?.scrollToEnd?.({ animated: shouldAnimateLatestScrollRef.current });
+      shouldScrollToLatestRef.current = false;
+      shouldAnimateLatestScrollRef.current = false;
+      isNearLatestRef.current = true;
+      allowOlderPaginationRef.current = true;
+    });
   };
 
   const handlePickImage = async () => {
@@ -465,7 +536,14 @@ export function EventLiveChatContent() {
         ? await chatService.sendChatMessage(selectedChatId, text, draftImage)
         : await chatService.sendSocketChatMessage(selectedChatId, text);
       if (sent) {
-        setMessages((current) => (current.some((item) => item.id === sent.id) ? current : [...current, sent]));
+        setMessages((current) => {
+          if (current.some((item) => item.id === sent.id)) {
+            return current;
+          }
+          shouldScrollToLatestRef.current = true;
+          shouldAnimateLatestScrollRef.current = true;
+          return [...current, sent];
+        });
         setDraftMessage('');
         setDraftImage(null);
         return;
@@ -733,12 +811,18 @@ export function EventLiveChatContent() {
         ) : null}
 
         <KeyboardAwareScrollView
+          ref={chatScrollRef}
           bottomOffset={96 + composerSafeAreaBottom}
           keyboardDismissMode="interactive"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          onScroll={handleChatScroll}
+          onScrollBeginDrag={handleChatScrollBeginDrag}
+          scrollEventThrottle={16}
+          onContentSizeChange={handleChatContentSizeChange}
+          maintainVisibleContentPosition={{ minIndexForVisible: 0 }}
           contentContainerStyle={{ padding: spacing[4], gap: spacing[5], paddingBottom: 112 + composerSafeAreaBottom }}>
-          {isResolvingChat ? (
+          {isResolvingChat || (Boolean(selectedChatId) && isLoadingMessages && !hasLoadedInitialMessages && !messages.length) ? (
             <View style={{ gap: spacing[3] }}>
               <SkeletonBlock width="36%" height={14} radiusSize={radius.full} />
               {Array.from({ length: 4 }, (_, index) => (
@@ -760,19 +844,21 @@ export function EventLiveChatContent() {
           ) : (
             <>
               {hasOlderMessages ? (
-                <Pressable
-                  accessibilityRole="button"
-                  disabled={isLoadingOlderMessages}
-                  onPress={() => void handleLoadOlderMessages()}
-                  style={{ alignSelf: 'center', borderRadius: radius.full, backgroundColor: colors.background.surface, borderWidth: 1, borderColor: colors.primary.borderLight, paddingHorizontal: spacing[4], paddingVertical: spacing[2], opacity: isLoadingOlderMessages ? 0.6 : 1 }}>
+                <View
+                  style={{ alignSelf: 'center', minHeight: 34, minWidth: 176, borderRadius: radius.full, backgroundColor: colors.background.surface, borderWidth: 1, borderColor: colors.primary.borderLight, paddingHorizontal: spacing[4], paddingVertical: spacing[2], alignItems: 'center', justifyContent: 'center' }}>
                   {isLoadingOlderMessages ? (
-                    <SkeletonBlock width={128} height={14} radiusSize={radius.full} />
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
+                      <ActivityIndicator size="small" color={colors.primary.DEFAULT} />
+                      <Text variant="caption" color={colors.text.secondary}>
+                        Loading older...
+                      </Text>
+                    </View>
                   ) : (
                     <Text variant="caption" color={colors.text.primary}>
-                      Load older messages
+                      Scroll up for older messages
                     </Text>
                   )}
-                </Pressable>
+                </View>
               ) : null}
               {chatConnectionLost ? (
                 <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: spacing[2], borderRadius: radius.full, backgroundColor: colors.status.warningLight, borderWidth: 1, borderColor: colors.border.muted, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
@@ -814,10 +900,17 @@ export function EventLiveChatContent() {
                 <Image source={{ uri: message.mediaUrl }} style={{ alignSelf: 'flex-start', width: 220, height: 220, borderRadius: radius.lg, backgroundColor: colors.background.muted }} resizeMode="contain" />
               ) : null}
             </Pressable>
-              )) : (
+              )) : hasLoadedInitialMessages && selectedChatMessageCount === 0 ? (
             <View style={{ borderRadius: radius.lg, backgroundColor: colors.background.surface, borderWidth: 1, borderColor: colors.primary.borderLight, padding: spacing[4] }}>
               <Text variant="body" color={colors.text.secondary}>
                 No messages yet.
+              </Text>
+            </View>
+              ) : (
+            <View style={{ alignSelf: 'center', flexDirection: 'row', alignItems: 'center', gap: spacing[2], borderRadius: radius.full, backgroundColor: colors.background.surface, borderWidth: 1, borderColor: colors.primary.borderLight, paddingHorizontal: spacing[4], paddingVertical: spacing[2] }}>
+              <ActivityIndicator size="small" color={colors.primary.DEFAULT} />
+              <Text variant="caption" color={colors.text.secondary}>
+                Loading latest messages...
               </Text>
             </View>
               )}

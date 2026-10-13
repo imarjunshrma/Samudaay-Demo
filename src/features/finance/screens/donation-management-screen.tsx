@@ -17,7 +17,7 @@ import { useSession } from '@/src/core/providers/session-provider';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { useCountryStateCityOptions } from '@/src/features/registration/hooks/use-country-state-city-options';
 import { DonationListItem, OfflineDonationCard } from '../components/donation-management-blocks';
-import { useDonationRecords } from '@/src/features/finance/hooks';
+import { useDonationModuleVisibility, useDonationRecords } from '@/src/features/finance/hooks';
 import { donationService } from '@/src/features/finance/services/donation-service';
 import { isPdfDownloadCancelledError } from '@/src/services/files/pdf-file';
 import { isVadodaraCity, resolveVadodaraArea, vadodaraAreaOptions } from '@/src/services/location/vadodara-area-options';
@@ -231,6 +231,7 @@ export function DonationManagementScreen({
   const navigateBack = useBackNavigation();
   const t = useTranslations('finance.donation-management');
   const { session } = useSession();
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const isAdminMode = mode === 'admin';
   const memberTransactionsRoute = '/member/transactions';
   const viewAllRoute = isAdminMode ? '/admin/manage-donations' : memberTransactionsRoute;
@@ -548,6 +549,24 @@ export function DonationManagementScreen({
     }
   }, [donorType, selfDonorName]);
   const showInitialSkeleton = isLoading && !items.length;
+
+  if (!donationModuleEnabled) {
+    return (
+      <AppSafeAreaView style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
+        <AppHeader
+          title={t('title')}
+          variant="back-inline"
+          onLeftPress={() => navigateBack(isAdminMode ? '/admin/dashboard' : '/member')}
+        />
+        <View style={{ flex: 1, padding: spacing[4], justifyContent: 'center' }}>
+          <ErrorState
+            title="Contribution module is unavailable"
+            description="This module is currently hidden for this app."
+          />
+        </View>
+      </AppSafeAreaView>
+    );
+  }
 
   return (
     <AppSafeAreaView style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>

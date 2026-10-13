@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { FormikProvider } from 'formik';
 import { useFocusEffect } from '@react-navigation/native';
@@ -235,7 +235,7 @@ export function AdvertisementFormContent({ mode, promotionId }: AdvertisementFor
   const formik = useAppForm<PromotionFormValues>({
     initialValues,
     enableReinitialize: true,
-    validationSchema: formSchemas.promotion,
+    validationSchema: mode === 'edit' ? formSchemas.promotionEdit : formSchemas.promotion,
     onSubmit: async (values, helpers) => {
       helpers.setStatus(undefined);
       try {
@@ -262,8 +262,27 @@ export function AdvertisementFormContent({ mode, promotionId }: AdvertisementFor
 
     const next = new Date(formik.values.startAt);
     next.setHours(0, 0, 0, 0);
+    next.setDate(next.getDate() + 1);
     return next.getTime() > todayMinimumDate.getTime() ? next : todayMinimumDate;
   }, [formik.values.startAt, todayMinimumDate]);
+  const { setFieldValue } = formik;
+
+  useEffect(() => {
+    const startAt = formik.values.startAt;
+    const endAt = formik.values.endAt;
+    if (!startAt || !endAt) {
+      return;
+    }
+
+    const startDate = new Date(startAt);
+    startDate.setHours(0, 0, 0, 0);
+    const endDate = new Date(endAt);
+    endDate.setHours(0, 0, 0, 0);
+
+    if (endDate.getTime() <= startDate.getTime()) {
+      void setFieldValue('endAt', undefined, true);
+    }
+  }, [formik.values.startAt, formik.values.endAt, setFieldValue]);
 
   const contentTypeOptions = useMemo(
     () => [
@@ -638,6 +657,7 @@ export function AdvertisementFormContent({ mode, promotionId }: AdvertisementFor
                 labelVariant="default"
                 placeholder={t('form.placeholders.startDate')}
                 minimumDate={todayMinimumDate}
+                disabled={mode === 'edit'}
               />
               <DateField
                 name="endAt"

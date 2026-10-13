@@ -20,6 +20,7 @@ type DateFieldProps = {
   placeholder?: string;
   minimumDate?: Date;
   maximumDate?: Date;
+  disabled?: boolean;
   variant?: 'default' | 'registration';
   labelVariant?: 'uppercase' | 'default';
   required?: boolean;
@@ -73,6 +74,7 @@ function DateFieldBody({
   placeholder,
   minimumDate,
   maximumDate,
+  disabled = false,
   variant = 'default',
   labelVariant = 'uppercase',
   required = false,
@@ -80,7 +82,16 @@ function DateFieldBody({
   const { language } = useAppPreferences();
   const t = useTranslations();
   const [open, setOpen] = useState(false);
-  const resolvedValue = value ? new Date(value) : new Date();
+  const resolvedValue = (() => {
+    const nextValue = value ? new Date(value) : new Date();
+    if (minimumDate && nextValue.getTime() < minimumDate.getTime()) {
+      return minimumDate;
+    }
+    if (maximumDate && nextValue.getTime() > maximumDate.getTime()) {
+      return maximumDate;
+    }
+    return nextValue;
+  })();
   const pickerMode = getPickerMode(mode);
 
   return (
@@ -99,13 +110,15 @@ function DateFieldBody({
         </Text>
       ) : null}
       <Pressable
+        disabled={disabled}
         onPress={() => setOpen(true)}
         style={{
           minHeight: variant === 'registration' ? 48 : 52,
           borderRadius: variant === 'registration' ? radius.lg : radius.xl,
           borderWidth: 1,
           borderColor: error ? colors.status.error : colors.primary.borderLight,
-          backgroundColor: colors.background.surface,
+          backgroundColor: disabled ? colors.background.muted : colors.background.surface,
+          opacity: disabled ? 0.72 : 1,
           paddingHorizontal: spacing[3],
           flexDirection: 'row',
           alignItems: 'center',

@@ -5,6 +5,7 @@ import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 import { DigitalIdCard, Text } from '@/src/components';
 import { useMemberMenuAction } from '@/src/core/navigation/use-member-menu-action';
 import { useSession } from '@/src/core/providers/session-provider';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useLocalizedProfileText } from '@/src/features/profile/services/localized-profile-text';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
@@ -16,6 +17,13 @@ import {
   localizeDashboardIdentityCard,
 } from '../services/dashboard-display-translation';
 import { emptyDashboardSummary } from '../services/dashboard-service';
+
+
+function isDonationCard(card: { icon?: string; title?: string; route?: string | null }) {
+  const title = String(card.title || '').trim().toLowerCase();
+  const route = String(card.route || '').trim().toLowerCase();
+  return card.icon === 'volunteer-activism' || route.includes('donations') || title.includes('contribution') || title.includes('donation');
+}
 
 function chunkIntoRows<T>(items: readonly T[], size: number) {
   const rows: T[][] = [];
@@ -50,10 +58,15 @@ export function MemberDashboardIdCardScreen() {
   const t = useTranslations('dashboard.member-id-card');
   const { session } = useSession();
   const { dashboard } = useMemberDashboard();
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const summary = dashboard ?? emptyDashboardSummary;
   const localizedIdentityCard = localizeDashboardIdentityCard(summary.identityCard, t);
   const localizedMemberName = useLocalizedProfileText(localizedIdentityCard.memberName);
-  const localizedCards = localizeDashboardCards(summary.cards, summary.summary, t);
+  const localizedCards = localizeDashboardCards(
+    summary.cards.filter((card) => donationModuleEnabled || !isDonationCard(card)),
+    summary.summary,
+    t,
+  );
   const dashboardRows = chunkIntoRows(localizedCards, 2);
 
   return (

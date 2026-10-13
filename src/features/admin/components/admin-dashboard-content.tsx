@@ -7,6 +7,7 @@ import { AppSafeAreaView, Card, CardGridSkeleton, DetailPageSkeleton, Text } fro
 import { useLocalizedBrandText } from '@/src/core/config/brand';
 import { canAccessAdminNavKey } from '@/src/core/navigation/admin-shell';
 import { useSession } from '@/src/core/providers/session-provider';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
 import { adminService, type TenantSummary } from '../services/admin-service';
@@ -31,6 +32,7 @@ export function AdminDashboardContent() {
   const t = useTranslations('admin.dashboard');
   const { tenantName } = useLocalizedBrandText();
   const { session } = useSession();
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const [summary, setSummary] = useState<TenantSummary | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -97,7 +99,7 @@ export function AdminDashboardContent() {
     { key: 'roles', title: t('cards.permissions'), subtitle: t('cards.permissions.subtitle'), icon: 'lock-open' as const, onPress: () => router.push('/admin/permissions' as never) },
     { key: 'chats', title: t('cards.chats'), subtitle: t('cards.chats.subtitle'), icon: 'forum' as const, onPress: () => router.push('/admin/community-chats' as never) },
     { key: 'analytics', title: t('cards.analytics'), subtitle: t('cards.analytics.subtitle'), icon: 'trending-up' as const, onPress: () => router.push('/admin/analytics' as never) },
-  ].filter((item) => canAccessAdminNavKey(item.key, session));
+  ].filter((item) => canAccessAdminNavKey(item.key, session) && (donationModuleEnabled || item.key !== 'donations'));
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>

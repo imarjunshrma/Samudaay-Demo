@@ -300,12 +300,13 @@ export const promotionService = {
 
   async updatePromotion(id: string, values: PromotionFormValues): Promise<PromotionRecord> {
     const backendSession = await getSessionContext();
+    const { startAt: _startAt, ...payload } = toPromotionPayload(values);
     const response = await apiClient<{ data: PromotionRecord }>(
       apiEndpoints.communityAdvertisement(backendSession.tenantId, id),
       {
         method: 'PUT',
         token: backendSession.token,
-        body: JSON.stringify(toPromotionPayload(values)),
+        body: JSON.stringify(payload),
       },
     );
     return mapPromotionRecord(response.data);

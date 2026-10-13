@@ -5,6 +5,7 @@ import { useMemo } from 'react';
 import { AppSidebar } from '@/src/components/layout/AppSidebar/AppSidebar';
 import { useLocalizedBrandText } from '@/src/core/config/brand';
 import { useAuthActions } from '@/src/features/auth/hooks/use-auth-actions';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useSession } from '@/src/core/providers/session-provider';
 import { useSafeNavigation } from './safe-navigation';
 import { adminSidebarItems, getAdminNavKeyForPath, getAdminSidebarRoute, getVisibleAdminSidebarItems } from './admin-shell';
@@ -18,6 +19,7 @@ export function AdminDrawerContent(props: DrawerContentComponentProps) {
   const activeKey = getAdminNavKeyForPath(pathname);
   const profileName = session?.user.fullName || 'Admin';
   const profileImage = session?.user.profilePhotoUrl || undefined;
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const items = useMemo(
     () => {
       const visibleItems = getVisibleAdminSidebarItems(session);
@@ -32,9 +34,11 @@ export function AdminDrawerContent(props: DrawerContentComponentProps) {
       ];
       const nextItems = adminSidebarItems.filter((sidebarItem) => rawItems.some((item) => item.key === sidebarItem.key));
 
-      return nextItems.map((item) => ({ ...item, active: item.key === activeKey }));
+      return nextItems
+        .filter((item) => donationModuleEnabled || item.key !== 'donations')
+        .map((item) => ({ ...item, active: item.key === activeKey }));
     },
-    [activeKey, session],
+    [activeKey, donationModuleEnabled, session],
   );
 
   return (

@@ -6,6 +6,7 @@ import { getMemberBottomBarRoute, getMemberSidebarRoute, memberBottomBarItems } 
 import { isPlainUserSession } from '@/src/core/navigation/default-route';
 import { useSafeNavigation } from '@/src/core/navigation/safe-navigation';
 import { useSession } from '@/src/core/providers/session-provider';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { spacing } from '@/src/theme';
 import { MainNavigationBanners, MainNavigationHero, MainNavigationSidebar } from './dashboard-blocks';
@@ -21,6 +22,7 @@ export function MainNavigationMenuContent({
   const profileName = session?.user.fullName || t('profile.name');
   const profileImage = session?.user.profilePhotoUrl || undefined;
   const isNormalUser = isPlainUserSession(session);
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const navItemsBase: readonly {
     icon: string;
     label: string;
@@ -54,8 +56,8 @@ export function MainNavigationMenuContent({
     { key: 'matrimony', icon: 'favorite', label: t('nav.matrimony') },
     { key: 'notifications', icon: 'notifications', label: t('nav.notifications') },
     { key: 'profile', icon: 'person', label: t('nav.profile') },
-  ].filter((item) => !(isNormalUser && (item.key === 'finance' || item.key === 'expenses')));
-  const navItems = updated ? updatedSidebarItems : navItemsBase.filter((item) => !(isNormalUser && item.label === t('nav.transactions')));
+  ].filter((item) => !(isNormalUser && (item.key === 'finance' || item.key === 'expenses')) && (donationModuleEnabled || item.key !== 'donations'));
+  const navItems = updated ? updatedSidebarItems : navItemsBase.filter((item) => !(isNormalUser && item.label === t('nav.transactions')) && (donationModuleEnabled || item.label !== t('nav.donations')));
 
   return (
     <AppSafeAreaView style={{ flex: 1, backgroundColor: '#fdf9f6' }}>

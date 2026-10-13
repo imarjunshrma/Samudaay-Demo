@@ -6,6 +6,7 @@ import { isPlainUserSession } from '@/src/core/navigation/default-route';
 import { useMemberMenuAction } from '@/src/core/navigation/use-member-menu-action';
 import { useSession } from '@/src/core/providers/session-provider';
 import { useLocalizedProfileText } from '@/src/features/profile/services/localized-profile-text';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, spacing, typography } from '@/src/theme';
 import { useMemberDashboard } from '../hooks';
@@ -40,6 +41,13 @@ function formatUserTypeLabel(value?: string | null) {
   }
 }
 
+
+function isDonationCard(card: { icon?: string; title?: string; route?: string | null }) {
+  const title = String(card.title || '').trim().toLowerCase();
+  const route = String(card.route || '').trim().toLowerCase();
+  return card.icon === 'volunteer-activism' || route.includes('donations') || title.includes('contribution') || title.includes('donation');
+}
+
 function MemberDashboardSkeleton() {
   return (
     <View style={{ maxWidth: 672, width: '100%', alignSelf: 'center' }}>
@@ -70,6 +78,7 @@ function DashboardShell({ withPopup }: { withPopup: boolean }) {
   const t = useTranslations('dashboard.home');
   const { session } = useSession();
   const { dashboard, isLoading } = useMemberDashboard();
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const showInitialSkeleton = isLoading && !dashboard;
   const summary = dashboard ?? emptyDashboardSummary;
   const isNormalUser = isPlainUserSession(session);
@@ -85,7 +94,8 @@ function DashboardShell({ withPopup }: { withPopup: boolean }) {
             card.icon === 'campaign' ||
             card.route === '/publications/archive' ||
             card.route?.startsWith('/advertisements'))
-        ),
+        ) &&
+        (donationModuleEnabled || !isDonationCard(card)),
     ),
     summary.summary,
     t,

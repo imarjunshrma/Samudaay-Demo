@@ -54,7 +54,7 @@ export function getMemberBottomBarRoute(key: string) {
 
 export function getMemberSidebarItems(
   activeKey: string,
-  options?: { hideFinance?: boolean; hideCommunityDirectory?: boolean; hideRestrictedModules?: boolean },
+  options?: { hideFinance?: boolean; hideCommunityDirectory?: boolean; hideRestrictedModules?: boolean; hideDonations?: boolean },
 ): AppSidebarItem[] {
   return [
     { key: 'home', icon: 'dashboard', label: 'nav.dashboard', active: activeKey === 'home' },
@@ -84,6 +84,10 @@ export function getMemberSidebarItems(
     }
 
     if (options?.hideRestrictedModules && item.key === 'publications') {
+      return false;
+    }
+
+    if (options?.hideDonations && item.key === 'donations') {
       return false;
     }
 

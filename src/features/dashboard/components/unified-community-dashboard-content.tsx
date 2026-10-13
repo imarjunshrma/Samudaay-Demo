@@ -5,6 +5,7 @@ import { AppSafeAreaView, Text } from '@/src/components';
 import { isPlainUserSession } from '@/src/core/navigation/default-route';
 import { useSafeNavigation } from '@/src/core/navigation/safe-navigation';
 import { useSession } from '@/src/core/providers/session-provider';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useLocalizedProfileText } from '@/src/features/profile/services/localized-profile-text';
 import { colors, spacing, typography } from '@/src/theme';
 import { useMemberDashboard } from '../hooks';
@@ -22,6 +23,7 @@ export function UnifiedCommunityDashboardContent() {
   const { safeNavigateRoot, safePush } = useSafeNavigation();
   const { session } = useSession();
   const { dashboard } = useMemberDashboard();
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const summary = dashboard ?? emptyDashboardSummary;
   const isNormalUser = isPlainUserSession(session);
   const localizedMemberName = useLocalizedProfileText(summary.identityCard.memberName || 'Community');
@@ -36,7 +38,10 @@ export function UnifiedCommunityDashboardContent() {
     ['notifications', 'Notifications', summary.summary?.unreadNotices ? `${summary.summary.unreadNotices} unread` : 'Broadcast alerts', '/member/notifications'],
     ['trending-up', 'Overview', 'Performance insights', '/finance/finance-analytics'],
     ] as const
-  ).filter(([, title]) => !(isNormalUser && title === 'Publication'));
+  ).filter(([icon, title, , route]) => (
+    !(isNormalUser && title === 'Publication') &&
+    (donationModuleEnabled || (icon !== 'volunteer-activism' && !String(route).includes('donations') && !String(title).toLowerCase().includes('contribution') && !String(title).toLowerCase().includes('donation')))
+  ));
 
   return (
     <AppSafeAreaView edges={['top', 'left', 'right']} style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>

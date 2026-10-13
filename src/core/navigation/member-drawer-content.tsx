@@ -6,6 +6,7 @@ import { AppSidebar } from '@/src/components/layout/AppSidebar/AppSidebar';
 import { useLocalizedBrandText } from '@/src/core/config/brand';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { useAuthActions } from '@/src/features/auth/hooks/use-auth-actions';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useLocalizedProfileText } from '@/src/features/profile/services/localized-profile-text';
 import { useSession } from '@/src/core/providers/session-provider';
 import { isPlainUserSession } from './default-route';
@@ -63,6 +64,7 @@ export function MemberDrawerContent(props: DrawerContentComponentProps) {
   const hideFinance = isPlainUserSession(session);
   const hideCommunityDirectory = isPlainUserSession(session);
   const hideRestrictedModules = isPlainUserSession(session);
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const badge = (() => {
     switch (session?.user.communityMembershipStatus) {
       case 'PENDING':
@@ -85,7 +87,7 @@ export function MemberDrawerContent(props: DrawerContentComponentProps) {
       profileImage={profileImage}
       badge={badge}
       subtitle={tenantName}
-      items={getMemberSidebarItems(activeKey, { hideFinance, hideCommunityDirectory, hideRestrictedModules })}
+      items={getMemberSidebarItems(activeKey, { hideFinance, hideCommunityDirectory, hideRestrictedModules, hideDonations: !donationModuleEnabled })}
       onItemPress={(key) => {
         props.navigation.closeDrawer();
         if (key === 'user-manual') {

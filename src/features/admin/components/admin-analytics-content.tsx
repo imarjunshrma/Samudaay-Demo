@@ -7,6 +7,7 @@ import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
 import { AppHeader, DetailPageSkeleton, ListRowSkeleton, Text } from '@/src/components';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useTranslations } from '@/src/i18n/use-translations';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import {
@@ -37,6 +38,7 @@ export function AdminAnalyticsContent() {
   const navigateBack = useBackNavigation();
   const params = useLocalSearchParams<{ returnTo?: string }>();
   const t = useTranslations('admin.analytics');
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const returnTo = getRouteParamValue(params.returnTo);
   const analyticsReturnPath = buildAnalyticsReturnPath(returnTo);
   const [analytics, setAnalytics] = useState<TenantAnalytics | null>(null);
@@ -129,7 +131,7 @@ export function AdminAnalyticsContent() {
                 { title: 'Notification Analytics', subtitle: 'Broadcast delivery and engagement', icon: 'notifications', href: '/admin/notification-analytics' },
                 { title: 'Role Analytics', subtitle: 'Access distribution and assignments', icon: 'person-pin', href: '/admin/role-analytics' },
                 { title: 'Chat Analytics', subtitle: 'Community conversations and activity', icon: 'forum', href: '/admin/chat-analytics' },
-              ].map((item) => (
+              ].filter((item) => donationModuleEnabled || item.href !== '/admin/donation-analytics').map((item) => (
                 <TouchableOpacity
                   key={item.title}
                   accessibilityRole="button"

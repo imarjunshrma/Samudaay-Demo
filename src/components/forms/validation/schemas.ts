@@ -87,6 +87,130 @@ export const fieldSchemas = {
   fileOptional: Yup.mixed().nullable().test('file-size', fileSizeMessage, isAllowedFileSize),
 };
 
+function buildPromotionSchema(validateStartNotInPast: boolean) {
+  let schema = Yup.object({
+    title: Yup.string().trim().min(2, 'Title must be at least 2 characters').max(120, 'Title must be less than 120 characters').required('Advertisement title is required'),
+    description: Yup.string().max(600, 'Description must be less than 600 characters').optional(),
+    contentType: fieldSchemas.requiredSelect,
+    category: fieldSchemas.requiredSelect,
+    imageUrl: Yup.string()
+      .nullable()
+      .transform((value) => (value?.trim() ? value.trim() : null))
+      .test('image-url', 'Enter a valid image URL', (value) => isAbsoluteOrBackendRelativeUrl(value))
+      .optional(),
+    videoUrl: Yup.string().url('Enter a valid video URL').nullable().transform((value) => (value?.trim() ? value.trim() : null)).optional(),
+    redirectUrl: Yup.string().url('Enter a valid redirect URL').nullable().transform((value) => (value?.trim() ? value.trim() : null)).optional(),
+    startAt: fieldSchemas.dateOptional,
+    endAt: fieldSchemas.dateOptional,
+    pricingType: fieldSchemas.requiredSelect,
+    amount: Yup.string().matches(/^\d*(\.\d{0,2})?$/, { message: 'Enter a valid amount', excludeEmptyString: true }).optional(),
+    paymentReference: Yup.string().max(120, 'Payment reference must be less than 120 characters').optional(),
+    status: fieldSchemas.requiredSelect,
+    displayIntervalSeconds: Yup.string().matches(/^\d+$/, 'Display interval must be a number').required('Display interval is required'),
+    displayDurationSeconds: Yup.string().matches(/^\d+$/, 'Display duration must be a number').required('Display duration is required'),
+    skipEnabled: Yup.boolean().required(),
+    skipAfterSeconds: Yup.string().matches(/^\d+$/, 'Skip delay must be a number').required('Skip delay is required'),
+    maxAdsPerSession: Yup.string().matches(/^\d*$/, { message: 'Max shows per user must be a number', excludeEmptyString: true }).optional(),
+    priorityWeight: Yup.string().matches(/^\d*$/, { message: 'Priority weight must be a number', excludeEmptyString: true }).optional(),
+  })
+    .test('start-required', 'Start date is required', function (value) {
+      if (value?.startAt) {
+        return true;
+      }
+
+      return this.createError({
+        path: 'startAt',
+        message: 'Start date is required',
+      });
+    })
+    .test('end-required', 'End date is required', function (value) {
+      if (value?.endAt) {
+        return true;
+      }
+
+      return this.createError({
+        path: 'endAt',
+        message: 'End date is required',
+      });
+    })
+    .test('content-media', 'Provide valid media for the selected advertisement type', function (value) {
+      if (value?.contentType === 'IMAGE' && value.imageUrl) {
+        return true;
+      }
+      if (value?.contentType === 'VIDEO' && value.videoUrl) {
+        return true;
+      }
+      if (value?.contentType === 'TEXT') {
+        return true;
+      }
+      return this.createError({
+        path: value?.contentType === 'VIDEO' ? 'videoUrl' : 'imageUrl',
+        message: value?.contentType === 'VIDEO' ? 'Video advertisements require a valid video URL' : 'Image advertisements require an uploaded image',
+      });
+    })
+    .test('active-duration', 'Active advertisements require a valid duration', function (value) {
+      if (value?.status !== 'ACTIVE') {
+        return true;
+      }
+      if (value.startAt && value.endAt && value.endAt.getTime() > value.startAt.getTime()) {
+        return true;
+      }
+      return this.createError({
+        path: 'endAt',
+        message: 'Active advertisements require both start and end dates',
+      });
+    })
+    .test('end-after-start', 'End date must be after start date', function (value) {
+      if (!value?.startAt || !value?.endAt) {
+        return true;
+      }
+
+      if (value.endAt.getTime() > value.startAt.getTime()) {
+        return true;
+      }
+
+      return this.createError({
+        path: 'endAt',
+        message: 'End date must be after start date',
+      });
+    })
+    .test('skip-within-duration', 'Skip delay must be less than or equal to display duration', function (value) {
+      const duration = Number(value?.displayDurationSeconds || 0);
+      const skipAfter = Number(value?.skipAfterSeconds || 0);
+      if (!duration || !skipAfter || skipAfter <= duration) {
+        return true;
+      }
+      return this.createError({
+        path: 'skipAfterSeconds',
+        message: 'Skip delay must be less than or equal to display duration',
+      });
+    });
+
+  if (validateStartNotInPast) {
+    schema = schema.test('start-not-in-past', 'Start date cannot be in the past', function (value) {
+      if (!value?.startAt) {
+        return true;
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const startDate = new Date(value.startAt);
+      startDate.setHours(0, 0, 0, 0);
+
+      if (startDate.getTime() >= today.getTime()) {
+        return true;
+      }
+
+      return this.createError({
+        path: 'startAt',
+        message: 'Start date cannot be in the past',
+      });
+    });
+  }
+
+  return schema;
+}
+
 export const formSchemas = {
   registrationOTP: Yup.object({
     mobile: fieldSchemas.mobile,
@@ -303,120 +427,6 @@ export const formSchemas = {
       )
       .required(),
   }),
-  promotion: Yup.object({
-    title: Yup.string().trim().min(2, 'Title must be at least 2 characters').max(120, 'Title must be less than 120 characters').required('Advertisement title is required'),
-    description: Yup.string().max(600, 'Description must be less than 600 characters').optional(),
-    contentType: fieldSchemas.requiredSelect,
-    category: fieldSchemas.requiredSelect,
-    imageUrl: Yup.string()
-      .nullable()
-      .transform((value) => (value?.trim() ? value.trim() : null))
-      .test('image-url', 'Enter a valid image URL', (value) => isAbsoluteOrBackendRelativeUrl(value))
-      .optional(),
-    videoUrl: Yup.string().url('Enter a valid video URL').nullable().transform((value) => (value?.trim() ? value.trim() : null)).optional(),
-    redirectUrl: Yup.string().url('Enter a valid redirect URL').nullable().transform((value) => (value?.trim() ? value.trim() : null)).optional(),
-    startAt: fieldSchemas.dateOptional,
-    endAt: fieldSchemas.dateOptional,
-    pricingType: fieldSchemas.requiredSelect,
-    amount: Yup.string().matches(/^\d*(\.\d{0,2})?$/, { message: 'Enter a valid amount', excludeEmptyString: true }).optional(),
-    paymentReference: Yup.string().max(120, 'Payment reference must be less than 120 characters').optional(),
-    status: fieldSchemas.requiredSelect,
-    displayIntervalSeconds: Yup.string().matches(/^\d+$/, 'Display interval must be a number').required('Display interval is required'),
-    displayDurationSeconds: Yup.string().matches(/^\d+$/, 'Display duration must be a number').required('Display duration is required'),
-    skipEnabled: Yup.boolean().required(),
-    skipAfterSeconds: Yup.string().matches(/^\d+$/, 'Skip delay must be a number').required('Skip delay is required'),
-    maxAdsPerSession: Yup.string().matches(/^\d*$/, { message: 'Max shows per user must be a number', excludeEmptyString: true }).optional(),
-    priorityWeight: Yup.string().matches(/^\d*$/, { message: 'Priority weight must be a number', excludeEmptyString: true }).optional(),
-  })
-    .test('start-required', 'Start date is required', function (value) {
-      if (value?.startAt) {
-        return true;
-      }
-
-      return this.createError({
-        path: 'startAt',
-        message: 'Start date is required',
-      });
-    })
-    .test('end-required', 'End date is required', function (value) {
-      if (value?.endAt) {
-        return true;
-      }
-
-      return this.createError({
-        path: 'endAt',
-        message: 'End date is required',
-      });
-    })
-    .test('start-not-in-past', 'Start date cannot be in the past', function (value) {
-      if (!value?.startAt) {
-        return true;
-      }
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const startDate = new Date(value.startAt);
-      startDate.setHours(0, 0, 0, 0);
-
-      if (startDate.getTime() >= today.getTime()) {
-        return true;
-      }
-
-      return this.createError({
-        path: 'startAt',
-        message: 'Start date cannot be in the past',
-      });
-    })
-    .test('content-media', 'Provide valid media for the selected advertisement type', function (value) {
-      if (value?.contentType === 'IMAGE' && value.imageUrl) {
-        return true;
-      }
-      if (value?.contentType === 'VIDEO' && value.videoUrl) {
-        return true;
-      }
-      if (value?.contentType === 'TEXT') {
-        return true;
-      }
-      return this.createError({
-        path: value?.contentType === 'VIDEO' ? 'videoUrl' : 'imageUrl',
-        message: value?.contentType === 'VIDEO' ? 'Video advertisements require a valid video URL' : 'Image advertisements require an uploaded image',
-      });
-    })
-    .test('active-duration', 'Active advertisements require a valid duration', function (value) {
-      if (value?.status !== 'ACTIVE') {
-        return true;
-      }
-      if (value.startAt && value.endAt && value.endAt.getTime() > value.startAt.getTime()) {
-        return true;
-      }
-      return this.createError({
-        path: 'endAt',
-        message: 'Active advertisements require both start and end dates',
-      });
-    })
-    .test('end-after-start', 'End date must be after start date', function (value) {
-      if (!value?.startAt || !value?.endAt) {
-        return true;
-      }
-
-      if (value.endAt.getTime() > value.startAt.getTime()) {
-        return true;
-      }
-
-      return this.createError({
-        path: 'endAt',
-        message: 'End date must be after start date',
-      });
-    })
-    .test('skip-within-duration', 'Skip delay must be less than or equal to display duration', function (value) {
-      const duration = Number(value?.displayDurationSeconds || 0);
-      const skipAfter = Number(value?.skipAfterSeconds || 0);
-      if (!duration || !skipAfter || skipAfter <= duration) {
-        return true;
-      }
-      return this.createError({
-        path: 'skipAfterSeconds',
-        message: 'Skip delay must be less than or equal to display duration',
-      });
-    }),
+  promotion: buildPromotionSchema(true),
+  promotionEdit: buildPromotionSchema(false),
 };

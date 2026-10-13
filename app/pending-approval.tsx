@@ -78,7 +78,7 @@ export default function PendingApprovalScreen() {
                 ? 'Your account is active. Continue to the dashboard.'
                 : rejected
                 ? 'Please contact the community admin or update your registration details when requested.'
-                : 'An admin or Registration Manager will review your profile and KYC documents. You can use the app after approval. You can connect to +91 9824395362 and +91 9898620773 for any queries.'}
+                : 'An admin or Registration Manager will review your profile and KYC documents. You can use the app after approval.'}
             </Text>
             <View style={{ width: '100%', gap: spacing[3], marginTop: spacing[2] }}>
               {active ? (

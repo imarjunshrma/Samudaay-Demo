@@ -16,6 +16,7 @@ import {
   Text,
 } from '@/src/components';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
+import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { downloadAnalyticsReport, type AnalyticsExportFormat } from '@/src/features/finance/services/analytics-report-service';
 import { donationService, type DonationRecordItem } from '@/src/features/finance/services/donation-service';
 import { resolveSecondaryLanguageText } from '@/src/features/profile/services/secondary-language-text';
@@ -841,6 +842,7 @@ function InsightSection({
 
 export function AdminModuleAnalyticsContent({ moduleKey }: { moduleKey: AdminAnalyticsModuleKey }) {
   const navigateBack = useBackNavigation();
+  const { enabled: donationModuleEnabled } = useDonationModuleVisibility();
   const [data, setData] = useState<AnalyticsModuleData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -848,6 +850,13 @@ export function AdminModuleAnalyticsContent({ moduleKey }: { moduleKey: AdminAna
   const [showExportPopup, setShowExportPopup] = useState(false);
 
   const loadData = useCallback(async () => {
+    if (moduleKey === 'donation' && !donationModuleEnabled) {
+      setData(null);
+      setErrorMessage('Contribution module is currently hidden for this app.');
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setErrorMessage(null);
 
@@ -860,7 +869,7 @@ export function AdminModuleAnalyticsContent({ moduleKey }: { moduleKey: AdminAna
     } finally {
       setIsLoading(false);
     }
-  }, [moduleKey]);
+  }, [donationModuleEnabled, moduleKey]);
 
   useFocusEffect(
     useCallback(() => {
