@@ -28,6 +28,11 @@ const PAGE_SIZE = 20;
 const KYC_APPROVALS_RETURN_PATH = '/admin/kyc-approvals';
 const KYC_ANALYTICS_PATH = '/admin/analytics';
 
+function formatReviewTime(value: string) {
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? value : parsed.toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+}
+
 function getStatusTone(status: KycQueueItem['status']) {
   switch (status) {
     case 'Ready':
@@ -668,10 +673,11 @@ export function AdminKycApprovalQueueContent() {
                     <Text style={{ color: colors.text.muted, fontSize: 12, marginTop: spacing[2] }}>
                       {formatDocuments(item.documents, t)}
                     </Text>
-                    {item.status !== 'Pending' && item.reviewer ? (
+                    {item.status !== 'Pending' && (item.reviewer || item.reviewedAt) ? (
                       <Text style={{ color: colors.text.secondary, fontSize: 12, marginTop: spacing[1] }}>
-                        {item.status === 'Ready' ? 'Approved' : 'Rejected'} by {formatAuditActor(item.reviewer)}
-                        {item.reviewedAt ? ` • ${formatReceivedLabel(item.reviewedAt, t)}` : ''}
+                        {item.status === 'Ready' ? 'Approved' : 'Rejected'}
+                        {item.reviewer ? ` by ${formatAuditActor(item.reviewer)}` : ''}
+                        {item.reviewedAt ? ` • ${formatReviewTime(item.reviewedAt)}` : ''}
                       </Text>
                     ) : null}
                   </View>

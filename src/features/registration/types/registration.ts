@@ -26,6 +26,7 @@ export interface RegistrationDraft {
   area?: string;
   city?: string;
   state?: string;
+  nativeCity?: string;
   country?: string;
   pincode?: string;
   aadhaarNumber?: string;

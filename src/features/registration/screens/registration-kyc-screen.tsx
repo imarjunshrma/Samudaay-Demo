@@ -437,6 +437,7 @@ export function RegistrationKycScreen() {
                 area: '',
                 city: '',
                 state: '',
+                nativeCity: '',
                 country: inferredRegistrationCountry,
                 pincode: '',
                 aadhaarNumber: '',
@@ -467,6 +468,7 @@ export function RegistrationKycScreen() {
                   area: isVadodaraCity(values.city) ? values.area : '',
                   city: values.city,
                   state: values.state,
+                  nativeCity: values.nativeCity,
                   country: values.country,
                   pincode: values.pincode,
                   aadhaarNumber: values.aadhaarNumber.replace(/\D/g, '') || undefined,
@@ -714,6 +716,14 @@ export function RegistrationKycScreen() {
                     />
                   ) : null}
                   <TextField
+                    label="Mud Gam (Native Place)"
+                    value={values.nativeCity}
+                    onChangeText={(value) => setFieldValue('nativeCity', value)}
+                    placeholder="Mud Gam (Native Place)"
+                    variant="registration"
+                    labelVariant="default"
+                  />
+                  <TextField
                     label={t('field.pincode')}
                     value={values.pincode}
                     onChangeText={(value) => {
@@ -788,6 +798,7 @@ export function RegistrationKycScreen() {
                       setFieldTouched('addressLine2', true);
                       setFieldTouched('city', true);
                       setFieldTouched('state', true);
+                      setFieldTouched('nativeCity', true);
                       setFieldTouched('country', true);
                       setFieldTouched('pincode', true);
                       if (isIndiaCountry(values.country)) {

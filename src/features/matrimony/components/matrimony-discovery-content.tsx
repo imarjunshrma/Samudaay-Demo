@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { Button, Dialog, FilterChips, FilterSheet, InfiniteScrollList, Text, type DialogVariant, type FilterSheetSection } from '@/src/components';
+import { Button, DateField, Dialog, FilterChips, FilterSheet, InfiniteScrollList, Text, type DialogVariant, type FilterSheetSection } from '@/src/components';
 import { SearchInput } from '@/src/components/forms/SearchInput/SearchInput';
 import { colors, radius, spacing, typography } from '@/src/theme';
 import { useMatrimonyDiscoveryProfiles, type MatrimonyDiscoveryFilters } from '@/src/features/matrimony/hooks/use-matrimony-discovery';
@@ -39,7 +39,11 @@ const emptyFilters: Record<MatrimonyDiscoveryFilterKey, string> = {
   maxAge: ALL_FILTERS,
   community: ALL_FILTERS,
   createdRange: ALL_FILTERS,
+  createdFrom: ALL_FILTERS,
+  createdTo: ALL_FILTERS,
   updatedRange: ALL_FILTERS,
+  updatedFrom: ALL_FILTERS,
+  updatedTo: ALL_FILTERS,
   sort: ALL_FILTERS,
 };
 
@@ -121,8 +125,32 @@ const filterLabels: Record<MatrimonyDiscoveryFilterKey, string> = {
   community: 'Community',
   createdRange: 'Created',
   updatedRange: 'Updated',
+  createdFrom: 'Created from',
+  createdTo: 'Created to',
+  updatedFrom: 'Updated from',
+  updatedTo: 'Updated to',
   sort: 'Sort',
 };
+
+function startOfDay(value: Date) {
+  const date = new Date(value);
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function endOfDay(value: Date) {
+  const date = new Date(value);
+  date.setHours(23, 59, 59, 999);
+  return date;
+}
+
+function toApiStartOfDay(value: Date | null) {
+  return value ? startOfDay(value).toISOString() : ALL_FILTERS;
+}
+
+function toApiEndOfDay(value: Date | null) {
+  return value ? endOfDay(value).toISOString() : ALL_FILTERS;
+}
 
 function normalizeOption(value?: string | null) {
   return String(value ?? '').trim();
@@ -148,6 +176,9 @@ function resolveFilterValueLabel(key: MatrimonyDiscoveryFilterKey, value: string
 
 function compactFilters(filters: Record<MatrimonyDiscoveryFilterKey, string>): MatrimonyDiscoveryFilters {
   return Object.entries(filters).reduce<MatrimonyDiscoveryFilters>((next, [key, value]) => {
+    if ((key === 'createdRange' || key === 'updatedRange') && value === 'custom') {
+      return next;
+    }
     if (value && value !== ALL_FILTERS) {
       next[key as MatrimonyDiscoveryFilterKey] = value;
     }
@@ -167,6 +198,10 @@ export function MatrimonyDiscoveryContent({
   const debouncedSearch = useDebounce(search, 300);
   const effectiveSearch = search.trim() ? debouncedSearch : '';
   const [filters, setFilters] = useState<Record<MatrimonyDiscoveryFilterKey, string>>(emptyFilters);
+  const [customCreatedFrom, setCustomCreatedFrom] = useState<Date | null>(null);
+  const [customCreatedTo, setCustomCreatedTo] = useState<Date | null>(null);
+  const [customUpdatedFrom, setCustomUpdatedFrom] = useState<Date | null>(null);
+  const [customUpdatedTo, setCustomUpdatedTo] = useState<Date | null>(null);
   const [filterVisible, setFilterVisible] = useState(false);
   const { stateOptions, cityOptions } = useCountryStateCityOptions({
     countryName: 'India',
@@ -191,10 +226,28 @@ export function MatrimonyDiscoveryContent({
   const [access, setAccess] = useState<MatrimonyAccessRecord | null>(matrimonyScreenCache.access);
   const discoveryBlockedByApproval = myProfileLoaded && myProfile?.status === 'PENDING_APPROVAL';
   const discoveryBlockedBySubscription = access?.canView === false;
-  const appliedFilterCount = Object.values(filters).filter((value) => value !== ALL_FILTERS).length;
+  const appliedFilterCount = (Object.entries(filters) as [MatrimonyDiscoveryFilterKey, string][])
+    .filter(([key]) => !['createdFrom', 'createdTo', 'updatedFrom', 'updatedTo'].includes(key))
+    .filter(([, value]) => value !== ALL_FILTERS).length;
   const activeFilterParams = useMemo(() => compactFilters(filters), [filters]);
   const activeQueryKey = useMemo(() => getQueryKey(effectiveSearch, activeFilterParams), [activeFilterParams, effectiveSearch, getQueryKey]);
   const didRunQueryEffectRef = useRef(false);
+
+  const resetFilterKey = useCallback((key: string) => {
+    if (key === 'createdRange') {
+      setCustomCreatedFrom(null);
+      setCustomCreatedTo(null);
+      setFilters((current) => ({ ...current, createdRange: ALL_FILTERS, createdFrom: ALL_FILTERS, createdTo: ALL_FILTERS }));
+      return;
+    }
+    if (key === 'updatedRange') {
+      setCustomUpdatedFrom(null);
+      setCustomUpdatedTo(null);
+      setFilters((current) => ({ ...current, updatedRange: ALL_FILTERS, updatedFrom: ALL_FILTERS, updatedTo: ALL_FILTERS }));
+      return;
+    }
+    setFilters((current) => ({ ...current, [key]: ALL_FILTERS }));
+  }, []);
 
   const filterSections = useMemo<FilterSheetSection[]>(() => [
     {
@@ -208,15 +261,79 @@ export function MatrimonyDiscoveryContent({
       title: 'Profile created',
       activeKey: filters.createdRange,
       icon: 'event',
-      items: profileDateFilterOptions,
-      onSelect: (key) => setFilters((current) => ({ ...current, createdRange: key })),
+      items: [...profileDateFilterOptions, { key: 'custom', label: 'Custom date' }],
+      onSelect: (key) => setFilters((current) => ({
+        ...current,
+        createdRange: key,
+        createdFrom: key === 'custom' ? toApiStartOfDay(customCreatedFrom) : ALL_FILTERS,
+        createdTo: key === 'custom' ? toApiEndOfDay(customCreatedTo) : ALL_FILTERS,
+      })),
+      renderContent: () => filters.createdRange === 'custom' ? (
+        <View style={{ gap: spacing[3], marginTop: spacing[3] }}>
+          <DateField
+            label="From date"
+            labelVariant="default"
+            variant="registration"
+            value={customCreatedFrom ?? undefined}
+            onChange={(date) => {
+              setCustomCreatedFrom(date);
+              setFilters((current) => ({ ...current, createdFrom: toApiStartOfDay(date) }));
+            }}
+            maximumDate={customCreatedTo ?? new Date()}
+          />
+          <DateField
+            label="To date"
+            labelVariant="default"
+            variant="registration"
+            value={customCreatedTo ?? undefined}
+            onChange={(date) => {
+              setCustomCreatedTo(date);
+              setFilters((current) => ({ ...current, createdTo: toApiEndOfDay(date) }));
+            }}
+            minimumDate={customCreatedFrom ?? undefined}
+            maximumDate={new Date()}
+          />
+        </View>
+      ) : null,
     },
     {
       title: 'Profile updated',
       activeKey: filters.updatedRange,
       icon: 'update',
-      items: profileDateFilterOptions,
-      onSelect: (key) => setFilters((current) => ({ ...current, updatedRange: key })),
+      items: [...profileDateFilterOptions, { key: 'custom', label: 'Custom date' }],
+      onSelect: (key) => setFilters((current) => ({
+        ...current,
+        updatedRange: key,
+        updatedFrom: key === 'custom' ? toApiStartOfDay(customUpdatedFrom) : ALL_FILTERS,
+        updatedTo: key === 'custom' ? toApiEndOfDay(customUpdatedTo) : ALL_FILTERS,
+      })),
+      renderContent: () => filters.updatedRange === 'custom' ? (
+        <View style={{ gap: spacing[3], marginTop: spacing[3] }}>
+          <DateField
+            label="From date"
+            labelVariant="default"
+            variant="registration"
+            value={customUpdatedFrom ?? undefined}
+            onChange={(date) => {
+              setCustomUpdatedFrom(date);
+              setFilters((current) => ({ ...current, updatedFrom: toApiStartOfDay(date) }));
+            }}
+            maximumDate={customUpdatedTo ?? new Date()}
+          />
+          <DateField
+            label="To date"
+            labelVariant="default"
+            variant="registration"
+            value={customUpdatedTo ?? undefined}
+            onChange={(date) => {
+              setCustomUpdatedTo(date);
+              setFilters((current) => ({ ...current, updatedTo: toApiEndOfDay(date) }));
+            }}
+            minimumDate={customUpdatedFrom ?? undefined}
+            maximumDate={new Date()}
+          />
+        </View>
+      ) : null,
     },
     {
       title: 'Gender',
@@ -313,11 +430,12 @@ export function MatrimonyDiscoveryContent({
       items: uniqueOptions(profiles.map((profile) => profile.caste), 'All castes'),
       onSelect: (key) => setFilters((current) => ({ ...current, caste: key })),
     },
-  ], [cityOptions, filters, profiles, stateOptions]);
+  ], [cityOptions, customCreatedFrom, customCreatedTo, customUpdatedFrom, customUpdatedTo, filters, profiles, stateOptions]);
 
   const appliedFilterChips = useMemo(
     () =>
       (Object.entries(filters) as [MatrimonyDiscoveryFilterKey, string][])
+        .filter(([key]) => !['createdFrom', 'createdTo', 'updatedFrom', 'updatedTo'].includes(key))
         .filter(([, value]) => value !== ALL_FILTERS)
         .map(([key, value]) => ({
           key,
@@ -571,9 +689,13 @@ export function MatrimonyDiscoveryContent({
                     }
                     if (key === ALL_FILTERS) {
                       setFilters(emptyFilters);
+                      setCustomCreatedFrom(null);
+                      setCustomCreatedTo(null);
+                      setCustomUpdatedFrom(null);
+                      setCustomUpdatedTo(null);
                       return;
                     }
-                    setFilters((current) => ({ ...current, [key]: ALL_FILTERS }));
+                    resetFilterKey(key);
                   }}
                 />
                 <Text variant="h4" color={colors.text.primary} style={{ fontFamily: typography.fontFamily.bold }}>
@@ -736,7 +858,13 @@ export function MatrimonyDiscoveryContent({
             setFilterVisible(false);
             void reload({ page: 1, search: effectiveSearch, filters: activeFilterParams });
           }}
-          onReset={() => setFilters(emptyFilters)}
+          onReset={() => {
+            setFilters(emptyFilters);
+            setCustomCreatedFrom(null);
+            setCustomCreatedTo(null);
+            setCustomUpdatedFrom(null);
+            setCustomUpdatedTo(null);
+          }}
           applyLabel="Apply filters"
           resetLabel="Clear all"
         />

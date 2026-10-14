@@ -301,6 +301,7 @@ export const formSchemas = {
     email: fieldSchemas.emailOptional,
     city: Yup.string().max(60, 'City must be less than 60 characters').optional(),
     state: Yup.string().max(60, 'State must be less than 60 characters').optional(),
+    nativeCity: Yup.string().max(80, 'Mud Gam must be less than 80 characters').optional(),
     pincode: Yup.string().max(6, 'Enter valid 6-digit pincode').matches(/^\d{6}$/, 'Enter valid 6-digit pincode').optional().nullable(),
   }),
   donation: Yup.object({

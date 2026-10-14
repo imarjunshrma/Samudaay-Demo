@@ -1193,7 +1193,11 @@ export const matrimonyFeedService = {
       maxAge?: string;
       community?: string;
       createdRange?: string;
+      createdFrom?: string;
+      createdTo?: string;
       updatedRange?: string;
+      updatedFrom?: string;
+      updatedTo?: string;
       sort?: string;
     };
   }): Promise<{ items: MatrimonyProfileRecord[]; pagination: MatrimonyDiscoveryPageResponse['pagination'] }> {
@@ -1211,6 +1215,9 @@ export const matrimonyFeedService = {
     if (params?.limit) query.set('limit', String(params.limit));
     if (params?.search?.trim()) query.set('search', params.search.trim());
     Object.entries(params?.filters ?? {}).forEach(([key, value]) => {
+      if (value === undefined || value === null) {
+        return;
+      }
       const normalized = String(value ?? '').trim();
       if (normalized && normalized !== 'all') {
         query.set(key, normalized);
@@ -1287,7 +1294,11 @@ export const matrimonyFeedService = {
       maxAge?: string;
       community?: string;
       createdRange?: string;
+      createdFrom?: string;
+      createdTo?: string;
       updatedRange?: string;
+      updatedFrom?: string;
+      updatedTo?: string;
       sort?: string;
     };
   }): Promise<MatrimonyDiscoveryPageResponse> {
@@ -1304,6 +1315,9 @@ export const matrimonyFeedService = {
     if (params?.limit) query.set('limit', String(params.limit));
     if (params?.search?.trim()) query.set('search', params.search.trim());
     Object.entries(params?.filters ?? {}).forEach(([key, value]) => {
+      if (value === undefined || value === null) {
+        return;
+      }
       const normalized = String(value ?? '').trim();
       if (normalized && normalized !== 'all') {
         query.set(key, normalized);

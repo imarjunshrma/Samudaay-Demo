@@ -30,16 +30,17 @@ type UserFormState = {
   countryCode: string;
   city: string;
   state: string;
+  nativeCity: string;
   pincode: string;
 };
 type UserListItem = AdminNormalUserItem | { id: string; __skeleton: true };
 type UserFormErrors = Partial<Record<keyof UserFormState, string>>;
 
 const USER_IMPORT_SAMPLE_CSV = [
-  'name,phone,countryCode,email,city,state,pincode,bloodGroup',
-  'Demo Invited User 1,9876543210,91,demo.user1@example.com,Vadodara,Gujarat,390001,B+',
-  'Demo Invited User 2,9876543211,91,demo.user2@example.com,Ahmedabad,Gujarat,380001,O+',
-  'Demo Invited User 3,9876543212,91,demo.user3@example.com,Surat,Gujarat,395003,A+',
+  'name,phone,countryCode,email,city,state,nativeCity,pincode,bloodGroup',
+  'Demo Invited User 1,9876543210,91,demo.user1@example.com,Vadodara,Gujarat,Vadodara,390001,B+',
+  'Demo Invited User 2,9876543211,91,demo.user2@example.com,Ahmedabad,Gujarat,Ahmedabad,380001,O+',
+  'Demo Invited User 3,9876543212,91,demo.user3@example.com,Surat,Gujarat,Surat,395003,A+',
 ].join('\n');
 
 function splitAdminPhoneValue(value?: string, fallbackCountryCode = '91') {
@@ -82,6 +83,7 @@ function buildUserForm(user?: AdminNormalUserItem | null): UserFormState {
     countryCode: user?.countryCode || '91',
     city: user?.city || '',
     state: user?.state || '',
+    nativeCity: user?.nativeCity || '',
     pincode: user?.pincode || '',
   };
 }
@@ -321,6 +323,7 @@ export function AdminUsersContent() {
           email: form.email.trim(),
           city: form.city.trim(),
           state: form.state.trim(),
+          nativeCity: form.nativeCity.trim() || null,
           pincode: form.pincode.trim() || null,
         },
         { abortEarly: false },
@@ -333,7 +336,7 @@ export function AdminUsersContent() {
       const entries = validationError.inner?.length ? validationError.inner : [validationError];
       entries.forEach((entry) => {
         const fieldName = entry.path === 'fullName' ? 'name' : entry.path;
-        if (fieldName && entry.message && ['name', 'phone', 'countryCode', 'email', 'city', 'state', 'pincode'].includes(fieldName)) {
+        if (fieldName && entry.message && ['name', 'phone', 'countryCode', 'email', 'city', 'state', 'nativeCity', 'pincode'].includes(fieldName)) {
           nextErrors[fieldName as keyof UserFormState] = entry.message;
         }
       });
@@ -629,6 +632,7 @@ export function AdminUsersContent() {
           email: email || null,
           city: form.city.trim() || null,
           state: form.state.trim() || null,
+          nativeCity: form.nativeCity.trim() || null,
           pincode: form.pincode.trim() || null,
         });
         closeDetailModal();
@@ -649,6 +653,7 @@ export function AdminUsersContent() {
         email: email || null,
         city: form.city.trim() || null,
         state: form.state.trim() || null,
+        nativeCity: form.nativeCity.trim() || null,
         pincode: form.pincode.trim() || null,
       });
       const nextUser = {
@@ -660,6 +665,7 @@ export function AdminUsersContent() {
         email: email || null,
         city: form.city.trim() || null,
         state: form.state.trim() || null,
+        nativeCity: form.nativeCity.trim() || null,
         pincode: form.pincode.trim() || null,
       };
       setSelectedUser(nextUser);
@@ -1008,6 +1014,7 @@ export function AdminUsersContent() {
                       </View>
                       <View style={{ minWidth: '45%', flex: 1 }}>
                         <DetailLine label={t('details.location')} value={translateLocationText([selectedUser?.city, selectedUser?.state, selectedUser?.pincode].filter(Boolean).join(', '), language)} />
+                        <DetailLine label="Mud Gam (Native Place)" value={selectedUser?.nativeCity || '-'} />
                       </View>
                     </View>
                   </View>
@@ -1080,6 +1087,16 @@ export function AdminUsersContent() {
                           />
                         </View>
                       </View>
+                      <TextField
+                        label="Mud Gam (Native Place)"
+                        value={form.nativeCity}
+                        onChangeText={(nativeCity) => updateFormField('nativeCity', nativeCity)}
+                        error={formErrors.nativeCity}
+                        disabled={!canEditUser}
+                        placeholder="Mud Gam (Native Place)"
+                        variant="registration"
+                        labelVariant="default"
+                      />
                       <TextField
                         label={t('form.pincode')}
                         value={form.pincode}
@@ -1201,7 +1218,7 @@ export function AdminUsersContent() {
                     Required columns
                   </Text>
                   <Text style={{ color: colors.text.muted, fontSize: 12, lineHeight: 18 }}>
-                    name, phone, countryCode. Optional: email, city, state, pincode, bloodGroup.
+                    name, phone, countryCode. Optional: email, city, state, nativeCity, pincode, bloodGroup.
                   </Text>
                 </View>
 

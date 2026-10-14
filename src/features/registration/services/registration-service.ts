@@ -53,6 +53,7 @@ type BackendRegistrationSummary = {
   addressLine2?: string | null;
   city?: string | null;
   state?: string | null;
+  nativeCity?: string | null;
   country?: string | null;
   pincode?: string | null;
   aadhaarNumber?: string | null;
@@ -433,6 +434,7 @@ async function mapBackendMembershipToDraft(membership: BackendRegistrationSummar
     addressLine2: membership.addressLine2 ?? undefined,
     city: membership.city ?? undefined,
     state: membership.state ?? undefined,
+    nativeCity: membership.nativeCity ?? undefined,
     country: membership.country ?? undefined,
     pincode: membership.pincode ?? undefined,
     aadhaarNumber: membership.aadhaarNumber ?? undefined,
@@ -618,6 +620,7 @@ export const registrationService = {
       area: draft?.area ?? undefined,
       city: draft?.city ?? undefined,
       state: draft?.state ?? undefined,
+      nativeCity: draft?.nativeCity ?? undefined,
       country: draft?.country ?? undefined,
       pincode: draft?.pincode ?? undefined,
       bloodGroup: draft?.bloodGroup ?? undefined,
@@ -651,6 +654,7 @@ export const registrationService = {
               area: nextDraft.area || null,
               city: nextDraft.city || null,
               state: nextDraft.state || null,
+              nativeCity: nextDraft.nativeCity || null,
               country: nextDraft.country || null,
               pincode: nextDraft.pincode || null,
               aadhaarNumber: nextDraft.aadhaarNumber || null,

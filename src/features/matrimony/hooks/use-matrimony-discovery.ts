@@ -49,7 +49,11 @@ export type MatrimonyDiscoveryFilters = {
   maxAge?: string;
   community?: string;
   createdRange?: string;
+  createdFrom?: string;
+  createdTo?: string;
   updatedRange?: string;
+  updatedFrom?: string;
+  updatedTo?: string;
   sort?: string;
 };
 

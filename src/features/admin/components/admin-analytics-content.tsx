@@ -2,10 +2,10 @@ import { useCallback, useRef, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, TouchableOpacity, View } from 'react-native';
 import { AppSafeAreaView } from '@/src/components/layout/AppSafeAreaView';
 
-import { AppHeader, DetailPageSkeleton, ListRowSkeleton, Text } from '@/src/components';
+import { AppHeader, DetailPageSkeleton, ListRowSkeleton, SelectionPopup, Text } from '@/src/components';
 import { useBackNavigation } from '@/src/core/navigation/back-navigation';
 import { useDonationModuleVisibility } from '@/src/features/finance/hooks';
 import { useTranslations } from '@/src/i18n/use-translations';
@@ -20,6 +20,40 @@ import {
   AdminAnalyticsTransactionsCard,
 } from './admin-analytics-blocks';
 import { analyticsService, type TenantAnalytics } from '@/src/features/finance/services';
+import { downloadAnalyticsReport, type AnalyticsExportFormat } from '@/src/features/finance/services/analytics-report-service';
+import { adminUserService, type AdminAuditLogItem } from '../services/admin-user-service';
+
+const auditReports = [
+  { entityType: 'KYC', title: 'KYC approval audit', fileName: 'kyc-approval-audit' },
+  { entityType: 'EXPENSE', title: 'Expense approval audit', fileName: 'expense-approval-audit' },
+  { entityType: 'MATRIMONY_PROFILE', title: 'Matrimony approval audit', fileName: 'matrimony-approval-audit' },
+] as const;
+
+type AuditReport = (typeof auditReports)[number];
+
+function auditRow(item: AdminAuditLogItem) {
+  const personColumns = [
+    item.createdAt || '',
+    item.action,
+    item.subject?.name || '',
+    item.subject?.memberId || '',
+    item.subject?.phone || '',
+    item.subject?.email || '',
+  ];
+  const expenseColumns = item.entityType === 'EXPENSE' ? [
+    item.subject?.title || '', item.subject?.amount || '',
+    item.subject?.category || '', item.subject?.expenseDate || '',
+  ] : [];
+  return [
+    ...personColumns,
+    ...expenseColumns,
+    item.actor?.name || item.actor?.email || item.actor?.phone || '',
+    item.previousStatus || '',
+    item.nextStatus || '',
+    item.remarks || '',
+    item.entityId,
+  ];
+}
 
 function getRouteParamValue(value?: string | string[]) {
   return Array.isArray(value) ? value[0] : value;
@@ -43,6 +77,9 @@ export function AdminAnalyticsContent() {
   const analyticsReturnPath = buildAnalyticsReturnPath(returnTo);
   const [analytics, setAnalytics] = useState<TenantAnalytics | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedAuditReport, setSelectedAuditReport] = useState<AuditReport | null>(null);
+  const [auditFormat, setAuditFormat] = useState<AnalyticsExportFormat>('pdf');
+  const [exportingAudit, setExportingAudit] = useState(false);
   const hasLoadedRef = useRef(false);
 
   const loadAnalytics = useCallback(async () => {
@@ -87,6 +124,46 @@ export function AdminAnalyticsContent() {
     </View>
   );
 
+  const downloadAuditReport = async () => {
+    if (!selectedAuditReport || exportingAudit) return;
+    setExportingAudit(true);
+    try {
+      const items: AdminAuditLogItem[] = [];
+      let page = 1;
+      while (true) {
+        const response = await adminUserService.loadAdminAuditLogs({ entityType: selectedAuditReport.entityType, page, limit: 250 });
+        items.push(...response.items);
+        if (!response.pagination.hasNextPage || !response.items.length) break;
+        page += 1;
+      }
+      if (!items.length) {
+        Alert.alert(selectedAuditReport.title, 'No approval or rejection decisions have been recorded yet.');
+        return;
+      }
+      await downloadAnalyticsReport({
+        title: selectedAuditReport.title,
+        subtitle: `Generated ${new Date().toLocaleString('en-IN')}`,
+        fileBaseName: `${selectedAuditReport.fileName}-${new Date().toISOString().slice(0, 10)}`,
+        format: auditFormat,
+        summary: [{ label: 'Recorded actions', value: String(items.length) }],
+        tables: [{
+          title: 'Approval decisions',
+          columns: [
+            'Action date and time', 'Action', 'Name', 'Member ID', 'Mobile number', 'Email',
+            ...(selectedAuditReport.entityType === 'EXPENSE' ? ['Expense title', 'Amount', 'Category', 'Expense date'] : []),
+            'Action done by', 'Previous status', 'New status', 'Remarks', 'Record ID',
+          ],
+          rows: items.map(auditRow),
+        }],
+      });
+      setSelectedAuditReport(null);
+    } catch (error) {
+      Alert.alert('Export failed', error instanceof Error ? error.message : 'Unable to download the audit report.');
+    } finally {
+      setExportingAudit(false);
+    }
+  };
+
   return (
     <AppSafeAreaView style={{ flex: 1, backgroundColor: colors.background.DEFAULT }}>
       <View style={{ flex: 1 }}>
@@ -114,6 +191,31 @@ export function AdminAnalyticsContent() {
                 <AdminAnalyticsTransactionsCard analytics={analytics} analyticsReturnPath={analyticsReturnPath} />
                 <AdminAnalyticsAnnualSummaryCard analytics={analytics} analyticsReturnPath={analyticsReturnPath} />
               </View>
+            </View>
+
+            <View style={{ gap: spacing[3] }}>
+              <Text variant="h3" style={{ color: colors.text.primary, fontFamily: typography.fontFamily.bold }}>
+                Approval audit reports
+              </Text>
+              {auditReports.map((report) => (
+                <TouchableOpacity
+                  key={report.entityType}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Download ${report.title}`}
+                  activeOpacity={0.85}
+                  onPress={() => setSelectedAuditReport(report)}
+                  style={{
+                    flexDirection: 'row', alignItems: 'center', gap: spacing[3], padding: spacing[4],
+                    borderRadius: radius.xl, backgroundColor: colors.background.surface,
+                    borderWidth: 1, borderColor: colors.primary.borderLight,
+                  }}>
+                  <MaterialIcons name="history" size={22} color={colors.primary.DEFAULT} />
+                  <Text style={{ flex: 1, color: colors.text.primary, fontFamily: typography.fontFamily.bold, fontSize: 14 }}>
+                    {report.title}
+                  </Text>
+                  <MaterialIcons name="file-download" size={20} color={colors.text.muted} />
+                </TouchableOpacity>
+              ))}
             </View>
 
             <View style={{ gap: spacing[3] }}>
@@ -173,6 +275,17 @@ export function AdminAnalyticsContent() {
           </View>
           )}
         </ScrollView>
+        <SelectionPopup
+          visible={selectedAuditReport !== null}
+          title={selectedAuditReport?.title || 'Approval audit report'}
+          subtitle="Choose the report format."
+          options={[{ key: 'pdf', label: 'PDF statement' }, { key: 'excel', label: 'Excel XLSX' }]}
+          selectedKey={auditFormat}
+          onSelect={(key) => setAuditFormat(key === 'excel' ? 'excel' : 'pdf')}
+          onClose={() => { if (!exportingAudit) setSelectedAuditReport(null); }}
+          onConfirm={() => { void downloadAuditReport(); }}
+          confirmLabel={exportingAudit ? 'Downloading...' : 'Download'}
+        />
       </View>
     </AppSafeAreaView>
   );

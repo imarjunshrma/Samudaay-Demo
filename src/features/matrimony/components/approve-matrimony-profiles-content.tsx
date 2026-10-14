@@ -49,6 +49,8 @@ type AdminMatrimonyFilterKey =
   | 'updatedRange'
   | 'sort';
 
+type DateRangeFilterKey = MatrimonyPeriodFilterKey;
+
 const emptyFilters: Record<AdminMatrimonyFilterKey, string> = {
   gender: ALL_FILTERS,
   state: ALL_FILTERS,
@@ -150,8 +152,8 @@ function getTime(value?: string | null) {
 }
 
 function matchesCreatedPeriod(
-  createdAt: string,
-  period: MatrimonyPeriodFilterKey,
+  value: string,
+  period: DateRangeFilterKey,
   customFrom: Date | null,
   customTo: Date | null,
 ) {
@@ -159,8 +161,8 @@ function matchesCreatedPeriod(
     return true;
   }
 
-  const createdTime = getTime(createdAt);
-  if (createdTime === null) {
+  const valueTime = getTime(value);
+  if (valueTime === null) {
     return false;
   }
 
@@ -168,24 +170,24 @@ function matchesCreatedPeriod(
   const todayEnd = endOfDay(new Date());
 
   if (period === 'today') {
-    return createdTime >= todayStart.getTime() && createdTime <= todayEnd.getTime();
+    return valueTime >= todayStart.getTime() && valueTime <= todayEnd.getTime();
   }
 
   if (period === 'last7Days') {
-    return createdTime >= todayStart.getTime() - (6 * DAY_IN_MS) && createdTime <= todayEnd.getTime();
+    return valueTime >= todayStart.getTime() - (6 * DAY_IN_MS) && valueTime <= todayEnd.getTime();
   }
 
   if (period === 'last30Days') {
-    return createdTime >= todayStart.getTime() - (29 * DAY_IN_MS) && createdTime <= todayEnd.getTime();
+    return valueTime >= todayStart.getTime() - (29 * DAY_IN_MS) && valueTime <= todayEnd.getTime();
   }
 
   if (period === 'thisMonth') {
     const monthStart = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1).getTime();
-    return createdTime >= monthStart && createdTime <= todayEnd.getTime();
+    return valueTime >= monthStart && valueTime <= todayEnd.getTime();
   }
 
   if (period === 'older') {
-    return createdTime < todayStart.getTime() - (30 * DAY_IN_MS);
+    return valueTime < todayStart.getTime() - (30 * DAY_IN_MS);
   }
 
   if (!customFrom && !customTo) {
@@ -194,7 +196,15 @@ function matchesCreatedPeriod(
 
   const fromTime = customFrom ? startOfDay(customFrom).getTime() : Number.NEGATIVE_INFINITY;
   const toTime = customTo ? endOfDay(customTo).getTime() : Number.POSITIVE_INFINITY;
-  return createdTime >= Math.min(fromTime, toTime) && createdTime <= Math.max(fromTime, toTime);
+  return valueTime >= Math.min(fromTime, toTime) && valueTime <= Math.max(fromTime, toTime);
+}
+
+function toApiStartOfDay(value: Date | null) {
+  return value ? startOfDay(value).toISOString() : undefined;
+}
+
+function toApiEndOfDay(value: Date | null) {
+  return value ? endOfDay(value).toISOString() : undefined;
 }
 
 function normalizeOption(value?: string | null) {
@@ -365,6 +375,8 @@ export function ApproveMatrimonyProfilesContent() {
   const [activePeriodFilter, setActivePeriodFilter] = useState<MatrimonyPeriodFilterKey>('all');
   const [customCreatedFrom, setCustomCreatedFrom] = useState<Date | null>(null);
   const [customCreatedTo, setCustomCreatedTo] = useState<Date | null>(null);
+  const [customUpdatedFrom, setCustomUpdatedFrom] = useState<Date | null>(null);
+  const [customUpdatedTo, setCustomUpdatedTo] = useState<Date | null>(null);
   const [filters, setFilters] = useState<Record<AdminMatrimonyFilterKey, string>>(emptyFilters);
   const [filterVisible, setFilterVisible] = useState(false);
   const [rejectPopupVisible, setRejectPopupVisible] = useState(false);
@@ -417,10 +429,12 @@ export function ApproveMatrimonyProfilesContent() {
     caste: filters.caste,
     minAge: filters.minAge,
     maxAge: filters.maxAge,
-    updatedRange: filters.updatedRange,
     sort: filters.sort,
     ...(activePeriodFilter !== 'all' && activePeriodFilter !== 'custom' ? { createdRange: activePeriodFilter } : {}),
-  }), [activePeriodFilter, filters]);
+    ...(activePeriodFilter === 'custom' ? { createdFrom: toApiStartOfDay(customCreatedFrom), createdTo: toApiEndOfDay(customCreatedTo) } : {}),
+    ...(filters.updatedRange !== 'all' && filters.updatedRange !== 'custom' ? { updatedRange: filters.updatedRange } : {}),
+    ...(filters.updatedRange === 'custom' ? { updatedFrom: toApiStartOfDay(customUpdatedFrom), updatedTo: toApiEndOfDay(customUpdatedTo) } : {}),
+  }), [activePeriodFilter, customCreatedFrom, customCreatedTo, customUpdatedFrom, customUpdatedTo, filters]);
 
   const loadReviewTotals = useCallback(async () => {
     const requestId = ++reviewTotalsRequestIdRef.current;
@@ -520,6 +534,7 @@ export function ApproveMatrimonyProfilesContent() {
         (filters.maxAge === ALL_FILTERS || item.age === null || item.age <= Number(filters.maxAge));
 
       const periodMatches = matchesCreatedPeriod(item.createdAt, activePeriodFilter, customCreatedFrom, customCreatedTo);
+      const updatedPeriodMatches = matchesCreatedPeriod(item.submittedAt, filters.updatedRange as DateRangeFilterKey, customUpdatedFrom, customUpdatedTo);
 
       const searchMatches =
         !term ||
@@ -527,9 +542,9 @@ export function ApproveMatrimonyProfilesContent() {
           .toLowerCase()
           .includes(term);
 
-      return tabMatches && profileFilterMatches && periodMatches && searchMatches;
+      return tabMatches && profileFilterMatches && periodMatches && updatedPeriodMatches && searchMatches;
     });
-  }, [activePeriodFilter, activeTab, customCreatedFrom, customCreatedTo, effectiveSearch, filters, reviewProfiles]);
+  }, [activePeriodFilter, activeTab, customCreatedFrom, customCreatedTo, customUpdatedFrom, customUpdatedTo, effectiveSearch, filters, reviewProfiles]);
 
   const reviewCounts = useMemo(
     () => reviewTotals,
@@ -726,8 +741,29 @@ export function ApproveMatrimonyProfilesContent() {
       title: 'Profile updated',
       activeKey: filters.updatedRange,
       icon: 'update' as const,
-      items: profileDateFilterOptions,
+      items: [...profileDateFilterOptions, { key: 'custom', label: t('filters.custom') }],
       onSelect: (key: string) => setFilters((current) => ({ ...current, updatedRange: key })),
+      renderContent: () => filters.updatedRange === 'custom' ? (
+        <View style={{ gap: spacing[3], marginTop: spacing[3] }}>
+          <DateField
+            label={t('filters.fromDate')}
+            labelVariant="default"
+            variant="registration"
+            value={customUpdatedFrom ?? undefined}
+            onChange={setCustomUpdatedFrom}
+            maximumDate={customUpdatedTo ?? new Date()}
+          />
+          <DateField
+            label={t('filters.toDate')}
+            labelVariant="default"
+            variant="registration"
+            value={customUpdatedTo ?? undefined}
+            onChange={setCustomUpdatedTo}
+            minimumDate={customUpdatedFrom ?? undefined}
+            maximumDate={new Date()}
+          />
+        </View>
+      ) : null,
     },
   ];
 
@@ -1103,6 +1139,8 @@ export function ApproveMatrimonyProfilesContent() {
             setActivePeriodFilter('all');
             setCustomCreatedFrom(null);
             setCustomCreatedTo(null);
+            setCustomUpdatedFrom(null);
+            setCustomUpdatedTo(null);
           }}
           applyLabel={t('filters.apply')}
           resetLabel={t('filters.reset')}

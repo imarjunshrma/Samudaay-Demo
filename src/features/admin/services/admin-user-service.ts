@@ -20,6 +20,7 @@ export type AdminNormalUserItem = {
   registered?: boolean | null;
   city?: string | null;
   state?: string | null;
+  nativeCity?: string | null;
   pincode?: string | null;
   memberId?: string | null;
   profilePic?: string | null;
@@ -107,6 +108,17 @@ export type AdminAuditLogItem = {
   nextStatus?: string | null;
   remarks?: string | null;
   metadata?: Record<string, unknown> | null;
+  subject?: {
+    name?: string | null;
+    memberId?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    userId?: string | null;
+    title?: string | null;
+    amount?: string | null;
+    category?: string | null;
+    expenseDate?: string | null;
+  } | null;
   createdAt?: string | null;
   actor?: {
     id: string;
@@ -231,6 +243,7 @@ export const adminUserService = {
         registered: Boolean(user.registered || user.joinStatus === 'REGISTERED'),
         city: user.city ?? null,
         state: user.state ?? null,
+      nativeCity: user.nativeCity ?? null,
         pincode: user.pincode ?? null,
         memberId: user.memberId ?? null,
         profilePic: resolveBackendMediaUrl(user.profilePic) ?? null,
@@ -265,6 +278,7 @@ export const adminUserService = {
       registered: Boolean(user.registered || user.joinStatus === 'REGISTERED'),
       city: user.city ?? null,
       state: user.state ?? null,
+      nativeCity: user.nativeCity ?? null,
       pincode: user.pincode ?? null,
       memberId: user.memberId ?? null,
       profilePic: resolveBackendMediaUrl(user.profilePic) ?? null,
@@ -272,7 +286,7 @@ export const adminUserService = {
     };
   },
 
-  async createUser(payload: { name: string; email?: string | null; phone: string; countryCode?: string | null; city?: string | null; state?: string | null; pincode?: string | null }) {
+  async createUser(payload: { name: string; email?: string | null; phone: string; countryCode?: string | null; city?: string | null; state?: string | null; nativeCity?: string | null; pincode?: string | null }) {
     if (!isBackendApiConfigured()) {
       throw new Error('Backend API is not configured.');
     }
@@ -290,6 +304,7 @@ export const adminUserService = {
           email: payload.email,
           city: payload.city,
           state: payload.state,
+          nativeCity: payload.nativeCity,
           pincode: payload.pincode,
           userType: 'user',
         }),
@@ -443,7 +458,7 @@ export const adminUserService = {
     return response.data;
   },
 
-  async updateUser(userId: string, payload: { name: string; email?: string | null; phone: string; countryCode?: string | null; city?: string | null; state?: string | null; pincode?: string | null; status?: string | null }) {
+  async updateUser(userId: string, payload: { name: string; email?: string | null; phone: string; countryCode?: string | null; city?: string | null; state?: string | null; nativeCity?: string | null; pincode?: string | null; status?: string | null }) {
     if (!isBackendApiConfigured()) {
       throw new Error('Backend API is not configured.');
     }

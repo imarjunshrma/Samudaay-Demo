@@ -10,6 +10,7 @@ export interface DirectoryMemberItem extends ListItem {
   memberId?: string | null;
   city: string;
   state: string;
+  nativeCity?: string | null;
   pincode: string;
   avatarUrl?: string | null;
   phone?: string | null;
@@ -45,6 +46,7 @@ type BackendDirectoryMember = {
   location?: string;
   city?: string;
   state?: string;
+  nativeCity?: string | null;
   pincode?: string;
   role?: string;
   userType?: string;
@@ -98,6 +100,7 @@ export interface DirectoryMemberFormValues {
   email: string;
   city: string;
   state: string;
+  nativeCity: string;
   pincode: string;
 }
 
@@ -166,6 +169,7 @@ function mapDirectoryMemberItem(item: BackendDirectoryMember): DirectoryMemberIt
     registered: Boolean(item.registered || item.joinStatus === 'REGISTERED'),
     city: item.city || '',
     state: item.state || '',
+    nativeCity: item.nativeCity || '',
     pincode: item.pincode || '',
     avatarUrl: resolveBackendMediaUrl(item.profilePic) || null,
     phone,

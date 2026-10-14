@@ -24,6 +24,7 @@ function buildInitialValues(member?: DirectoryMemberItem | null): DirectoryMembe
     email: member?.email || '',
     city: member?.city || '',
     state: member?.state || '',
+    nativeCity: member?.nativeCity || '',
     pincode: member?.pincode || '',
   };
 }
@@ -196,6 +197,14 @@ export function AdminDirectoryMemberFormContent({ memberId, mode }: AdminDirecto
               name="city"
               label={t('labels.city')}
               placeholder={t('placeholders.city')}
+              variant="registration"
+              labelVariant="default"
+            />
+
+            <TextField
+              name="nativeCity"
+              label="Mud Gam (Native Place)"
+              placeholder="Mud Gam (Native Place)"
               variant="registration"
               labelVariant="default"
             />
